@@ -435,9 +435,7 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys) {
     as.character(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
   }
 
-  if (!.checkBaseUrl(baseUrl)) {
-    stop("Base URL not valid, should be like http://server.org:80/WebAPI")
-  }
+  .checkBaseUrl(baseUrl)
 
   sourceId <- .getSourceIdFromKey(baseUrl = baseUrl, sourceKey = sourceKey)
 

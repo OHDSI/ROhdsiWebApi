@@ -51,9 +51,7 @@ getWebApiVersion <- function(baseUrl) {
 }
 
 .getSourceIdFromKey <- function(baseUrl, sourceKey) {
-  if (!.checkBaseUrl(baseUrl)) {
-    stop("Base URL not valid, should be like http://server.org:80/WebAPI")
-  }
+  .checkBaseUrl(baseUrl)
   
   url <- sprintf("%1s/source/%2s", baseUrl, sourceKey)
   
