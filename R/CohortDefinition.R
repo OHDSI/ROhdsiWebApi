@@ -518,3 +518,34 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
   rownames(df) <- c()
   df
 }
+
+#' Get cohort inclusion rules and person counts
+#'
+#' @details
+#' Obtains the inclusion rules from a cohort definition and summarizes the person counts per rule
+#'
+#' @param baseUrl         The base URL for the WebApi instance, for example:
+#'                        "http://server.org:80/WebAPI".
+#' @param cohortId        The Atlas cohort definition id for the cohort
+#' @param sourceKey       The source key for a CDM instance in WebAPI, as defined in the Configuration page
+#' 
+#' @export
+getCohortInclusionRulesAndCounts <- function(baseUrl, 
+                                             cohortId, 
+                                             sourceKey) {
+  url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0",
+                 baseUrl, cohortId, sourceKey)
+  json <- httr::GET(url)
+  json <- httr::content(json) 
+  
+  results <- lapply(json$inclusionRuleStats, function(j) {
+    list(ruleId = j$id,
+         description = j$name,
+         indexPersonCount = json$summary$baseCount,
+         rulePersonCount = j$countSatisfying,
+         rulePercentSatisfied = j$percentSatisfying,
+         rulePercentToGain = j$percentExcluded,
+         matchRate = json$summary$percentMatched)  
+  })
+  do.call(rbind.data.frame, results)
+}

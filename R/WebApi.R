@@ -65,3 +65,32 @@ getWebApiVersion <- function(baseUrl) {
 .formatName <- function(name) {
   gsub("_", " ", gsub("\\[(.*?)\\]_", "", gsub(" ", "_", name)))
 }
+
+
+#' Get the data sources in the WebAPI instance
+#'
+#' @details
+#' Obtains the data sources configured in the WebAPI instance
+#'
+#' @param baseUrl      The base URL for the WebApi instance, for example:
+#'                     "http://server.org:80/WebAPI".
+#'
+#' @return
+#' A data frame of data source information
+#'
+#' @export
+getCdmSources <- function(baseUrl) {
+  url <- sprintf("%s/source/sources", baseUrl)
+  request <- httr::GET(url)
+  httr::stop_for_status(request)
+  sources <- httr::content(request)
+  
+  sourceDetails <- lapply(sources, function(s) {
+    list(sourceKey = s$sourceKey,
+         cdmDatabaseSchema = s$daimons[[1]]$tableQualifier,
+         vocabDatabaseSchema = s$daimons[[2]]$tableQualifier,
+         resultsDatabaseSchema = s$daimons[[3]]$tableQualifier)
+  })
+  
+  sourceDf <- do.call(rbind.data.frame, sourceDetails)
+}

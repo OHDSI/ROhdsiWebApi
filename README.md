@@ -54,6 +54,9 @@ Cohort Definition Functions
 
 * **Invoke Cohort Set Generation**
   + Invokes the generation of a set of cohort definitions across a set of CDMs set up in WebAPI.
+  
+* **Get Cohort Inclusion Rules and Person Counts**
+  + Obtains a summary of the inclusion rules and person counts for a cohort definition
 
 Cohort Characterization Functions
 ==================================
