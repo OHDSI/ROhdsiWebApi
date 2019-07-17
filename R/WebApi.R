@@ -86,11 +86,13 @@ getCdmSources <- function(baseUrl) {
   sources <- httr::content(request)
   
   sourceDetails <- lapply(sources, function(s) {
-    list(sourceKey = s$sourceKey,
+    list(sourceName = s$sourceName,
+         sourceKey = s$sourceKey,
+         sourceDialect = s$sourceDialect,
          cdmDatabaseSchema = s$daimons[[1]]$tableQualifier,
          vocabDatabaseSchema = s$daimons[[2]]$tableQualifier,
          resultsDatabaseSchema = s$daimons[[3]]$tableQualifier)
   })
   
-  sourceDf <- do.call(rbind.data.frame, sourceDetails)
+  do.call(rbind.data.frame, sourceDetails)
 }
