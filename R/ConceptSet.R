@@ -54,6 +54,8 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
 #' @param setId           The concept set id in Atlas.
 #' @param baseUrl         The base URL for the WebApi instance, for example:
 #'                        "http://server.org:80/WebAPI".
+#' @param asDataFrame     (OPTIONAL) Get expression as data frame
+#' 
 #' @return 
 #' A JSON list object representing the concept set
 #' 
@@ -67,12 +69,61 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
 #'                        
 #' @export
 getConceptSetExpression <- function(baseUrl, 
-                                    setId) {
+                                    setId,
+                                    asDataFrame = FALSE) {
   .checkBaseUrl(baseUrl)
   
   url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, setId)
   json <- httr::GET(url)
-  httr::content(json)
+  json <- httr::content(json)
+  
+  if (asDataFrame) {
+    .setExpressionToDf(json = json)
+  } else {
+    json
+  }
+}
+
+.setExpressionToDf <- function(json) {
+  
+  lists <- lapply(json$items, function(j) {
+    as.data.frame(j)
+  })
+  
+  do.call("rbind", lists)
+}
+
+.getIncludedConceptsDf <- function(baseUrl, vocabSourceKey, includedConcepts) {
+  url <- sprintf("%s/vocabulary/%s/lookup/identifiers",
+                 baseUrl,
+                 vocabSourceKey)
+  body <- RJSONIO::toJSON(includedConcepts, digits = 23)
+  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
+  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
+  req <- httr::content(req)
+  
+  lists <- lapply(req, function(r) {
+    as.data.frame(r)
+  })
+  
+  do.call("rbind", lists)
+}
+
+
+.getMappedConceptsDf <- function(baseUrl, vocabSourceKey, includedConcepts) {
+  url <- sprintf("%s/vocabulary/%s/lookup/mapped",
+                 baseUrl,
+                 vocabSourceKey)
+  body <- RJSONIO::toJSON(includedConcepts, digits = 23)
+  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
+  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
+  req <- httr::content(req)
+  
+  lists <- lapply(req, function(r) {
+    as.data.frame(r)
+  })
+  
+  do.call("rbind", lists)
 }
 
 #' Insert a set of concept sets' concept ids into package
@@ -138,6 +189,8 @@ getSetExpressionConceptIds <- function(baseUrl,
   }
   
   url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabSourceKey)
+  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
+  webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- httr::POST(url, body = expression, config = httr::add_headers(httpheader))

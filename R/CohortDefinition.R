@@ -312,21 +312,18 @@ getPriorityVocabKey <- function(baseUrl) {
 }
 
 
-
-
-
-
-#' Get a list of concept sets and concepts from a cohort definition
+#' Get a list of concept sets and included/mapped concepts from a cohort definition
 #' 
 #' @details 
-#' For a given cohort definition id, get all concept sets and resolve all concepts from each
+#' For a given cohort definition id, get all concept sets and resolve all concepts into 
+#' an included concepts data frame and mapped concepts data frame from each
 #' 
 #' @param baseUrl         The base URL for the WebApi instance, for example:
 #'                        "http://server.org:80/WebAPI".
 #' @param definitionId    The cohort id to fetch concept sets and concepts from
 #' 
 #' @return 
-#' A list of concept sets, set names, and concepts
+#' A list of concept sets, set names, and concept data frames
 #' 
 #' @examples
 #' \dontrun{
@@ -360,14 +357,20 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl,
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   
   lapply(json$ConceptSets, function(j) {
-    body <- RJSONIO::toJSON(j$expression, digits = 23)
-    req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
-    req <- httr::content(req)
-    concepts <- unlist(req)  
+    
+    includedConcepts <- getSetExpressionConceptIds(baseUrl = baseUrl, 
+                                                   expression = RJSONIO::toJSON(j$expression), 
+                                                   vocabSourceKey = vocabSourceKey)
     list(
       id = j$id,
       name = j$name,
-      concepts = concepts
+      includedConceptsDf = .getIncludedConceptsDf(baseUrl = baseUrl,
+                                                  vocabSourceKey = vocabSourceKey,
+                                                  includedConcepts = includedConcepts),
+      mappedConceptsDf = .getMappedConceptsDf(baseUrl = baseUrl, 
+                                          vocabSourceKey = vocabSourceKey,
+                                          includedConcepts = includedConcepts),
+      expression = .setExpressionToDf(j$expression)
     )
   })
 }
