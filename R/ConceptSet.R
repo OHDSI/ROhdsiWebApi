@@ -120,11 +120,13 @@ getConceptSetExpression <- function(baseUrl,
   req <- httr::content(req)
   
   lists <- lapply(req, function(r) {
-    as.data.frame(r)
+    modList <- .convertNulltoNA(r)
+    as.data.frame(modList, stringsAsFactors = FALSE)
   })
   
   do.call("rbind", lists)
 }
+
 
 #' Insert a set of concept sets' concept ids into package
 #'
