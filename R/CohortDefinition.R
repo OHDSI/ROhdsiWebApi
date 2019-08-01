@@ -278,7 +278,7 @@ getCohortDefinitionSql <- function(baseUrl,
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
   
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
-  if (compareVersion(a = "2.7.2", b = webApiVersion) == 1) {
+  if (compareVersion(a = "2.7.2", b = webApiVersion) == 0) {
     body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(json$expression), 
                                  options = list(generateStats = TRUE)), digits = 23)  
   } else {
@@ -327,7 +327,7 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl,
   
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   
-  if (compareVersion(a = "2.7.2", webApiVersion) == 1) {
+  if (compareVersion(a = "2.7.2", webApiVersion) == 0) {
     json <- RJSONIO::fromJSON(json$expression)  
   } else 
     json <- json$expression
