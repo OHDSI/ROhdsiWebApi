@@ -2,7 +2,7 @@
 % Please edit documentation in R/CohortDefinition.R
 \name{getConceptSetsAndConceptsFromCohort}
 \alias{getConceptSetsAndConceptsFromCohort}
-\title{Get a list of concept sets and concepts from a cohort definition}
+\title{Get a list of concept sets and included/mapped concepts from a cohort definition}
 \usage{
 getConceptSetsAndConceptsFromCohort(baseUrl, definitionId,
   vocabSourceKey = NULL)
@@ -14,13 +14,14 @@ getConceptSetsAndConceptsFromCohort(baseUrl, definitionId,
 \item{definitionId}{The cohort id to fetch concept sets and concepts from}
 }
 \value{
-A list of concept sets, set names, and concepts
+A list of concept sets, set names, and concept data frames
 }
 \description{
-Get a list of concept sets and concepts from a cohort definition
+Get a list of concept sets and included/mapped concepts from a cohort definition
 }
 \details{
-For a given cohort definition id, get all concept sets and resolve all concepts from each
+For a given cohort definition id, get all concept sets and resolve all concepts into 
+an included concepts data frame and mapped concepts data frame from each
 }
 \examples{
 \dontrun{

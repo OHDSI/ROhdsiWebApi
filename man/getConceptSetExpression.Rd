@@ -4,13 +4,15 @@
 \alias{getConceptSetExpression}
 \title{Get a concept set expression}
 \usage{
-getConceptSetExpression(baseUrl, setId)
+getConceptSetExpression(baseUrl, setId, asDataFrame = FALSE)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
 
 \item{setId}{The concept set id in Atlas.}
+
+\item{asDataFrame}{(OPTIONAL) Get expression as data frame}
 }
 \value{
 A JSON list object representing the concept set

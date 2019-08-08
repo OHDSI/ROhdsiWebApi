@@ -4,13 +4,17 @@
 \alias{getCohortDefinitionSql}
 \title{Get a cohort definition's SQL from WebAPI}
 \usage{
-getCohortDefinitionSql(baseUrl, definitionId)
+getCohortDefinitionSql(baseUrl, definitionId, generateStats = TRUE)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
 
 \item{definitionId}{The cohort definition id in Atlas.}
+
+\item{generateStats}{Should the SQL include the code for generating inclusion rule statistics?
+Note that if TRUE, several additional tables are expected to exists as
+described in the details. By default this is TRUE.}
 }
 \value{
 The templated SQL to generate the cohort
