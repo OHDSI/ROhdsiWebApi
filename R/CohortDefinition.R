@@ -269,11 +269,13 @@ getCohortDefinitionSql <- function(baseUrl,
   
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   if (compareVersion(a = "2.7.2", b = webApiVersion) == 0) {
-    body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(json$expression), 
-                                 options = list(generateStats = generateStats)), digits = 23)  
-  } else {
     body <- RJSONIO::toJSON(list(expression = json$expression, 
-                                 options = list(generateStats = generateStats)), digits = 23)  }
+                                 options = list(generateStats = generateStats)), digits = 23)
+        
+  } else {
+    body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(json$expression), 
+                                 options = list(generateStats = generateStats)), digits = 23)
+  }
   
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
   (httr::content(req))$templateSql
@@ -318,9 +320,10 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl,
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   
   if (compareVersion(a = "2.7.2", webApiVersion) == 0) {
-    json <- RJSONIO::fromJSON(json$expression)  
-  } else 
     json <- json$expression
+  } else {
+    json <- RJSONIO::fromJSON(json$expression)  
+  }
   
   url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabSourceKey)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
