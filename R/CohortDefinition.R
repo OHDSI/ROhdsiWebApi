@@ -268,7 +268,7 @@ getCohortDefinitionSql <- function(baseUrl,
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
   
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
-  if (compareVersion(a = "2.7.2", b = webApiVersion) == 1) {
+  if (compareVersion(a = "2.7.2", b = webApiVersion) == 0) {
     body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(json$expression), 
                                  options = list(generateStats = generateStats)), digits = 23)  
   } else {
@@ -279,27 +279,6 @@ getCohortDefinitionSql <- function(baseUrl,
   (httr::content(req))$templateSql
 }
 
-
-
-#' Get Priority Vocab Source Key
-#'
-#' @details
-#' Obtains the source key of the default OMOP Vocab in Atlas.
-#'
-#' @param baseUrl   The base URL for the WebApi instance, for example:
-#'                  "http://server.org:80/WebAPI".
-#'
-#' @return
-#' A string with the source key of the default OMOP Vocab in Atlas.
-#'
-#' @export
-getPriorityVocabKey <- function(baseUrl) {
-  .checkBaseUrl(baseUrl)
-  url <- gsub("@baseUrl", baseUrl, "@baseUrl/source/priorityVocabulary")
-  json <- httr::GET(url)
-  json <- httr::content(json)
-  json$sourceKey
-}
 
 
 #' Get a list of concept sets and included/mapped concepts from a cohort definition
@@ -338,7 +317,7 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl,
   
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   
-  if (compareVersion(a = "2.7.2", webApiVersion) == 1) {
+  if (compareVersion(a = "2.7.2", webApiVersion) == 0) {
     json <- RJSONIO::fromJSON(json$expression)  
   } else 
     json <- json$expression
@@ -360,7 +339,8 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl,
       mappedConceptsDf = .getMappedConceptsDf(baseUrl = baseUrl, 
                                           vocabSourceKey = vocabSourceKey,
                                           includedConcepts = includedConcepts),
-      expression = .setExpressionToDf(j$expression)
+      setExpression = .setExpressionToDf(j$expression),
+      jsonExpression = j$expression
     )
   })
 }
@@ -376,19 +356,26 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl,
 #' @param baseUrl         The base URL for the WebApi instance, for example:
 #'                        "http://server.org:80/WebAPI".
 #' @param definitionIds   A list of cohort definition Ids
-#' @param sourceKeys      A list of CDM source keys. These can be found in Atlas -> Configure.
+#' @param sourceKeys      (OPTIONAL) A list of CDM source keys. These can be found in Atlas -> Configure. 
+#'                        Otherwise, all CDM source keys will be used.
 #'
 #' @return
 #' A data frame of cohort generation statuses, start times, and execution durations per definition id
 #' and source key.
 #'
 #' @export
-getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys) {
+getCohortGenerationStatuses <- function(baseUrl, 
+                                        definitionIds, 
+                                        sourceKeys = NULL) {
   .checkBaseUrl(baseUrl)
   
   checkSourceKeys <- function(baseUrl, sourceKeys) {
     sourceIds <- lapply(X = sourceKeys, .getSourceIdFromKey, baseUrl = baseUrl)
     return(!(-1 %in% sourceIds))
+  }
+  
+  if (missing(sourceKeys)) {
+    sourceKeys <- (getCdmSources(baseUrl = baseUrl))$sourceKey
   }
 
   if (!checkSourceKeys(baseUrl = baseUrl, sourceKeys = sourceKeys)) {

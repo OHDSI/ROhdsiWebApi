@@ -32,6 +32,35 @@
   }
 }
 
+.convertNulltoNA <- function(thisList) {
+  for (n in names(thisList)) {
+    if (is.null(thisList[n][[1]])) {
+      thisList[n] <- NA
+    }
+  }
+  thisList
+}
+
+#' Get Priority Vocab Source Key
+#'
+#' @details
+#' Obtains the source key of the default OMOP Vocab in Atlas.
+#'
+#' @param baseUrl   The base URL for the WebApi instance, for example:
+#'                  "http://server.org:80/WebAPI".
+#'
+#' @return
+#' A string with the source key of the default OMOP Vocab in Atlas.
+#'
+#' @export
+getPriorityVocabKey <- function(baseUrl) {
+  .checkBaseUrl(baseUrl)
+  url <- gsub("@baseUrl", baseUrl, "@baseUrl/source/priorityVocabulary")
+  json <- httr::GET(url)
+  json <- httr::content(json)
+  json$sourceKey
+}
+
 #' Get the version of the WebAPI
 #'
 #' @details
@@ -80,6 +109,7 @@ getWebApiVersion <- function(baseUrl) {
 #'
 #' @export
 getCdmSources <- function(baseUrl) {
+  
   url <- sprintf("%s/source/sources", baseUrl)
   request <- httr::GET(url)
   httr::stop_for_status(request)
@@ -89,9 +119,9 @@ getCdmSources <- function(baseUrl) {
     list(sourceName = s$sourceName,
          sourceKey = s$sourceKey,
          sourceDialect = s$sourceDialect,
-         cdmDatabaseSchema = s$daimons[[1]]$tableQualifier,
-         vocabDatabaseSchema = s$daimons[[2]]$tableQualifier,
-         resultsDatabaseSchema = s$daimons[[3]]$tableQualifier)
+         cdmDatabaseSchema = ifelse(length(s$daimons) > 1, s$daimons[[1]]$tableQualifier, NA),
+         vocabDatabaseSchema = ifelse(length(s$daimons) >= 2, s$daimons[[2]]$tableQualifier, NA),
+         resultsDatabaseSchema = ifelse(length(s$daimons) == 3, s$daimons[[3]]$tableQualifier, NA))
   })
   
   do.call(rbind.data.frame, sourceDetails)
