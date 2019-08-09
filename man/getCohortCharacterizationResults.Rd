@@ -5,7 +5,8 @@
 \title{Get Cohort Characterization Results}
 \usage{
 getCohortCharacterizationResults(baseUrl, characterizationId,
-  generationId = NULL, sourceKey, domains = c(), analysisNames = c())
+  generationId = NULL, sourceKey, cohortIds = c(), domains = c(),
+  analysisNames = c())
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
@@ -18,9 +19,14 @@ By default, the latest execution is retrieved}
 
 \item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the Configuration page}
 
-\item{domains}{(OPTIONAL) Which feature domains would you like to retrieve?}
+\item{cohortIds}{(OPTIONAL) Which cohort definition ids would you like to retrieve? 
+By default, all cohorts are retrieved.}
 
-\item{analysisNames}{(OPTIONAL) Which feature analysis names would you like to retrieve?}
+\item{domains}{(OPTIONAL) Which feature domains would you like to retrieve?
+By default, all domains are retrieved.}
+
+\item{analysisNames}{(OPTIONAL) Which feature analysis names would you like to retrieve?
+By default, all analyses are retrieved.}
 }
 \description{
 Get Cohort Characterization Results

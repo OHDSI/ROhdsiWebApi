@@ -27,16 +27,21 @@
 #' @param generationId          Used to specify the id of a particular generation of a cohort characterization.
 #'                              By default, the latest execution is retrieved
 #' @param sourceKey             The source key for a CDM instance in WebAPI, as defined in the Configuration page
+#' @param cohortIds             (OPTIONAL) Which cohort definition ids would you like to retrieve? 
+#'                              By default, all cohorts are retrieved.
 #' @param domains               (OPTIONAL) Which feature domains would you like to retrieve?
+#'                              By default, all domains are retrieved.
 #' @param analysisNames         (OPTIONAL) Which feature analysis names would you like to retrieve?
+#'                              By default, all analyses are retrieved.
 #' 
 #' @export                             
 getCohortCharacterizationResults <- function(baseUrl, 
-                                       characterizationId, 
-                                       generationId = NULL,
-                                       sourceKey,
-                                       domains = c(),
-                                       analysisNames = c()) {
+                                             characterizationId, 
+                                             generationId = NULL,
+                                             sourceKey,
+                                             cohortIds = c(),
+                                             domains = c(),
+                                             analysisNames = c()) {
   if (is.null(generationId)) {
     generationId <- .getLatestGenerationId(baseUrl = baseUrl, characterizationId = characterizationId, sourceKey = sourceKey)  
   }
@@ -62,7 +67,7 @@ getCohortCharacterizationResults <- function(baseUrl,
   })
   
   distResultsDf <- do.call("rbind", distResults)
-  prevResultDf <- do.call("rbind", prevResults)
+  prevResultsDf <- do.call("rbind", prevResults)
   
   if (length(domains) > 0 | length(analysisNames) > 0) {
     features <- lapply(designJson$featureAnalyses, function(f) {
@@ -84,11 +89,16 @@ getCohortCharacterizationResults <- function(baseUrl,
     prevResultsDf <- prevResultsDf[prevResultsDf$id %in% featureDf$id,]
   }
   
+  if (length(cohortIds) > 0) {
+    distResultsDf <- distResultsDf[distResultsDf$cohortId %in% cohortIds,]
+    prevResultsDf <- prevResultsDf[prevResultsDf$cohortId %in% cohortIds,]
+  }
+  
   list(sourceKey = sourceKey,
        characterizationId = characterizationId,
        generationId = generationId,
        distribution = distResultsDf,
-       prevalence = prevResultDf)
+       prevalence = prevResultsDf)
 }
 
 .getLatestGenerationId <- function(baseUrl, characterizationId, sourceKey) {
