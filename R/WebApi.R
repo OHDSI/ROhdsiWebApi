@@ -116,12 +116,30 @@ getCdmSources <- function(baseUrl) {
   sources <- httr::content(request)
   
   sourceDetails <- lapply(sources, function(s) {
+    cdmDatabaseSchema <- NA
+    vocabDatabaseSchema <- NA
+    resultsDatabaseSchema <- NA
+    if (length(s$daimons) > 0) {
+      for(i in 1:length(s$daimons)) {
+        if (!is.na(s$daimons[[i]]$daimonType)) {
+          if (toupper(s$daimons[[i]]$daimonType) == toupper("cdm")) {
+            cdmDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          }
+          if (toupper(s$daimons[[i]]$daimonType) == toupper("vocabulary")) {
+            vocabDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          }
+          if (toupper(s$daimons[[i]]$daimonType) == toupper("results")) {
+            resultsDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          }
+        }
+      }
+    }
     list(sourceName = s$sourceName,
          sourceKey = s$sourceKey,
          sourceDialect = s$sourceDialect,
-         cdmDatabaseSchema = ifelse(length(s$daimons) > 1, s$daimons[[1]]$tableQualifier, NA),
-         vocabDatabaseSchema = ifelse(length(s$daimons) >= 2, s$daimons[[2]]$tableQualifier, NA),
-         resultsDatabaseSchema = ifelse(length(s$daimons) == 3, s$daimons[[3]]$tableQualifier, NA))
+         cdmDatabaseSchema = cdmDatabaseSchema,
+         vocabDatabaseSchema = vocabDatabaseSchema,
+         resultsDatabaseSchema = resultsDatabaseSchema)
   })
   
   do.call(rbind.data.frame, sourceDetails)
