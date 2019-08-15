@@ -135,11 +135,12 @@ getCdmSources <- function(baseUrl) {
       }
     }
     data.frame(sourceName = s$sourceName,
-         sourceKey = s$sourceKey,
-         sourceDialect = s$sourceDialect,
-         cdmDatabaseSchema = cdmDatabaseSchema,
-         vocabDatabaseSchema = vocabDatabaseSchema,
-         resultsDatabaseSchema = resultsDatabaseSchema)
+               sourceKey = s$sourceKey,
+               sourceDialect = s$sourceDialect,
+               cdmDatabaseSchema = cdmDatabaseSchema,
+               vocabDatabaseSchema = vocabDatabaseSchema,
+               resultsDatabaseSchema = resultsDatabaseSchema,
+               stringsAsFactors = FALSE)
   })
   
   do.call(rbind, sourceDetails)
