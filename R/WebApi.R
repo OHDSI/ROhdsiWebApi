@@ -134,7 +134,7 @@ getCdmSources <- function(baseUrl) {
         }
       }
     }
-    list(sourceName = s$sourceName,
+    data.frame(sourceName = s$sourceName,
          sourceKey = s$sourceKey,
          sourceDialect = s$sourceDialect,
          cdmDatabaseSchema = cdmDatabaseSchema,
@@ -142,5 +142,5 @@ getCdmSources <- function(baseUrl) {
          resultsDatabaseSchema = resultsDatabaseSchema)
   })
   
-  do.call(rbind.data.frame, sourceDetails)
+  do.call(rbind, sourceDetails)
 }

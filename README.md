@@ -69,3 +69,6 @@ WebAPI Functions
 
 * **Get WebAPI Version**
   + Obtains the version number of the WebAPI instance
+
+* **Get CDM sources **
+  + Obtains all sources configured in the WebAPI instance
