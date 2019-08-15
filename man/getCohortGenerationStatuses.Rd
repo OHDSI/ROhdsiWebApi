@@ -4,7 +4,7 @@
 \alias{getCohortGenerationStatuses}
 \title{Get Cohort Generation Statuses}
 \usage{
-getCohortGenerationStatuses(baseUrl, definitionIds, sourceKeys)
+getCohortGenerationStatuses(baseUrl, definitionIds, sourceKeys = NULL)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
@@ -12,7 +12,8 @@ getCohortGenerationStatuses(baseUrl, definitionIds, sourceKeys)
 
 \item{definitionIds}{A list of cohort definition Ids}
 
-\item{sourceKeys}{A list of CDM source keys. These can be found in Atlas -> Configure.}
+\item{sourceKeys}{(OPTIONAL) A list of CDM source keys. These can be found in Atlas -> Configure. 
+Otherwise, all CDM source keys will be used.}
 }
 \value{
 A data frame of cohort generation statuses, start times, and execution durations per definition id

@@ -32,6 +32,35 @@
   }
 }
 
+.convertNulltoNA <- function(thisList) {
+  for (n in names(thisList)) {
+    if (is.null(thisList[n][[1]])) {
+      thisList[n] <- NA
+    }
+  }
+  thisList
+}
+
+#' Get Priority Vocab Source Key
+#'
+#' @details
+#' Obtains the source key of the default OMOP Vocab in Atlas.
+#'
+#' @param baseUrl   The base URL for the WebApi instance, for example:
+#'                  "http://server.org:80/WebAPI".
+#'
+#' @return
+#' A string with the source key of the default OMOP Vocab in Atlas.
+#'
+#' @export
+getPriorityVocabKey <- function(baseUrl) {
+  .checkBaseUrl(baseUrl)
+  url <- gsub("@baseUrl", baseUrl, "@baseUrl/source/priorityVocabulary")
+  json <- httr::GET(url)
+  json <- httr::content(json)
+  json$sourceKey
+}
+
 #' Get the version of the WebAPI
 #'
 #' @details
@@ -80,6 +109,7 @@ getWebApiVersion <- function(baseUrl) {
 #'
 #' @export
 getCdmSources <- function(baseUrl) {
+  
   url <- sprintf("%s/source/sources", baseUrl)
   request <- httr::GET(url)
   httr::stop_for_status(request)
@@ -91,14 +121,16 @@ getCdmSources <- function(baseUrl) {
     resultsDatabaseSchema <- NA
     if (length(s$daimons) > 0) {
       for(i in 1:length(s$daimons)) {
-        if (toupper(s$daimons[[i]]$daimonType) == toupper("cdm")) {
-          cdmDatabaseSchema <- s$daimons[[i]]$tableQualifier
-        }
-        if (toupper(s$daimons[[i]]$daimonType) == toupper("vocabulary")) {
-          vocabDatabaseSchema <- s$daimons[[i]]$tableQualifier
-        }
-        if (toupper(s$daimons[[i]]$daimonType) == toupper("results")) {
-          resultsDatabaseSchema <- s$daimons[[i]]$tableQualifier
+        if (!is.na(s$daimons[[i]]$daimonType)) {
+          if (toupper(s$daimons[[i]]$daimonType) == toupper("cdm")) {
+            cdmDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          }
+          if (toupper(s$daimons[[i]]$daimonType) == toupper("vocabulary")) {
+            vocabDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          }
+          if (toupper(s$daimons[[i]]$daimonType) == toupper("results")) {
+            resultsDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          }
         }
       }
     }
