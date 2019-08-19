@@ -52,8 +52,8 @@ getCohortCharacterizationResults <- function(baseUrl,
   resultUrl <- sprintf("%s/cohort-characterization/generation/%d/result", baseUrl, generationId)
   resultJson <- httr::content(httr::GET(resultUrl))
   
-  distResults <- resultJson[sapply(resultJson, function(r) r$resultType == "DISTRIBUTION") ]
-  prevResults <- resultJson[sapply(resultJson, function(r) r$resultType == "PREVALENCE") ]
+  distResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "DISTRIBUTION") ]
+  prevResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "PREVALENCE") ]
   
   
   distResults <- lapply(distResults, function(r) {
@@ -107,7 +107,7 @@ getCohortCharacterizationResults <- function(baseUrl,
   results <- httr::content(json)
   
   generations <- results[sapply(results, function(r) {
-    r$status == "COMPLETED" & r$sourceKey == sourceKey
+    toupper(r$status) == "COMPLETED" & r$sourceKey == sourceKey
   })]
   
   df <- do.call(rbind.data.frame, generations)
@@ -115,7 +115,7 @@ getCohortCharacterizationResults <- function(baseUrl,
   if (nrow(df) > 0) {
     df$id
   } else {
-    stop("Please generate the cohort characterization")
+    stop("Cohort characterization results not found. Please generate the cohort characterization.")
   }
 }
 
