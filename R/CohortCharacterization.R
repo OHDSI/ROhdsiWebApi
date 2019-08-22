@@ -55,6 +55,23 @@ getCohortCharacterizationResults <- function(baseUrl,
   distResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "DISTRIBUTION") ]
   prevResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "PREVALENCE") ]
   
+  if (length(cohortIds) > 0) {
+    distResults <- distResults[sapply(distResults, function(r) r$cohortId %in% cohortIds)]
+    prevResults <- distResults[sapply(prevResults, function(r) r$cohortId %in% cohortIds)]
+  }
+  
+  if (length(domains) > 0) {
+    featureAnalyses <- designJson$featureAnalyses
+    featureAnalyses <- featureAnalyses[sapply(featureAnalyses, function(f) f$domain %in% domains)]
+    featureIds <- lapply(featureAnalyses, function(f) f$id)
+    prevResults <- prevResults[sapply(prevResults, function(r) r$id %in% featureIds)]
+    distResults <- distResults[sapply(distResults, function(r) r$id %in% featureIds)]
+  }
+  
+  if (length(analysisNames) > 0) {
+    distResults <- distResults[sapply(distResults, function(r) r$analysisName %in% analysisNames)] 
+    prevResults <- prevResults[sapply(prevResults, function(r) r$analysisName %in% analysisNames)] 
+  }
   
   distResults <- lapply(distResults, function(r) {
     r[sapply(r, is.null)] <- NA
@@ -66,33 +83,8 @@ getCohortCharacterizationResults <- function(baseUrl,
     as.data.frame(r)
   })
   
-  distResultsDf <- do.call("rbind", distResults)
-  prevResultsDf <- do.call("rbind", prevResults)
-  
-  if (length(domains) > 0 | length(analysisNames) > 0) {
-    features <- lapply(designJson$featureAnalyses, function(f) {
-      f[sapply(f, is.null)] <- NA
-      as.data.frame(f)
-    })
-    
-    featureDf <- do.call("rbind", features)
-    
-    if (length(domains) > 0) {
-      featureDf <- featureDf[featureDf$domain %in% domains,]
-    }
-    
-    if (length(analysisNames) > 0) {
-      featureDf <- featureDf[featureDf$name %in% analysisNames,]
-    }  
-    
-    distResultsDf <- distResultsDf[distResultsDf$id %in% featureDf$id,]
-    prevResultsDf <- prevResultsDf[prevResultsDf$id %in% featureDf$id,]
-  }
-  
-  if (length(cohortIds) > 0) {
-    distResultsDf <- distResultsDf[distResultsDf$cohortId %in% cohortIds,]
-    prevResultsDf <- prevResultsDf[prevResultsDf$cohortId %in% cohortIds,]
-  }
+  distResultsDf <- do.call(rbind, distResults)
+  prevResultsDf <- do.call(rbind, prevResults)
   
   list(sourceKey = sourceKey,
        characterizationId = characterizationId,
