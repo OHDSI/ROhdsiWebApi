@@ -56,35 +56,46 @@ getCohortCharacterizationResults <- function(baseUrl,
   prevResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "PREVALENCE") ]
   
   if (length(cohortIds) > 0) {
-    distResults <- distResults[sapply(distResults, function(r) r$cohortId %in% cohortIds)]
-    prevResults <- distResults[sapply(prevResults, function(r) r$cohortId %in% cohortIds)]
+    if (length(distResults) > 0) {
+      distResults <- distResults[sapply(distResults, function(r) r$cohortId %in% cohortIds)]
+    }
+    if (length(prevResults) > 0) {
+      prevResults <- distResults[sapply(prevResults, function(r) r$cohortId %in% cohortIds)]
+    }
   }
   
   if (length(domains) > 0) {
     featureAnalyses <- designJson$featureAnalyses
     featureAnalyses <- featureAnalyses[sapply(featureAnalyses, function(f) f$domain %in% domains)]
     featureIds <- lapply(featureAnalyses, function(f) f$id)
-    prevResults <- prevResults[sapply(prevResults, function(r) r$id %in% featureIds)]
-    distResults <- distResults[sapply(distResults, function(r) r$id %in% featureIds)]
+    if (length(prevResults) > 0) {
+      prevResults <- prevResults[sapply(prevResults, function(r) r$id %in% featureIds)]
+    }
+    if (length(distResults) > 0) {
+      distResults <- distResults[sapply(distResults, function(r) r$id %in% featureIds)]
+    }
   }
   
   if (length(analysisNames) > 0) {
-    distResults <- distResults[sapply(distResults, function(r) r$analysisName %in% analysisNames)] 
-    prevResults <- prevResults[sapply(prevResults, function(r) r$analysisName %in% analysisNames)] 
+    if (length(distResults) > 0) {
+      distResults <- distResults[sapply(distResults, function(r) r$analysisName %in% analysisNames)] 
+    }
+    if (length(prevResults) > 0) {
+      prevResults <- prevResults[sapply(prevResults, function(r) r$analysisName %in% analysisNames)] 
+    }
   }
   
   distResults <- lapply(distResults, function(r) {
-    r[sapply(r, is.null)] <- NA
-    as.data.frame(r)
+    r <- .convertNulltoNA(r)
+    tibble::as_tibble(r)
   })
-
   prevResults <- lapply(prevResults, function(r) {
-    r[sapply(r, is.null)] <- NA
-    as.data.frame(r)
+    r <- .convertNulltoNA(r)
+    tibble::as_tibble(r)
   })
   
-  distResultsDf <- do.call(rbind, distResults)
-  prevResultsDf <- do.call(rbind, prevResults)
+  distResultsDf <- as.data.frame(dplyr::bind_rows(distResults))
+  prevResultsDf <- as.data.frame(dplyr::bind_rows(prevResults))
   
   list(sourceKey = sourceKey,
        characterizationId = characterizationId,

@@ -22,7 +22,8 @@ Imports:
     XML,
     jsonlite,
     dplyr,
-    magrittr
+    magrittr,
+    tibble
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi
