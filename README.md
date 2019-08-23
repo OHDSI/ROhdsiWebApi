@@ -20,7 +20,10 @@ Features
 
 Support
 =======
-* We use the <a href="../../issues">GitHub issue tracker</a> for all bugs/issues/enhancements
+
+* Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a>
+* We use the <a href="https://github.com/OHDSI/ROhdsiWebApi/issues">GitHub issue tracker</a> for all bugs/issues/enhancements 
+ 
  
 License
 =======
