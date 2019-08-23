@@ -1,0 +1,45 @@
+template:
+  params:
+    bootswatch: cosmo
+
+home:
+  links:
+  - text: Ask a question
+    href: http://forums.ohdsi.org
+
+reference:
+  - title: "WebAPI"
+    desc: >
+      Functions for interfacing with WebAPI
+    contents:
+      - getPriorityVocabKey
+      - getWebApiVersion
+      - getCdmSources
+  - title: "Concept Set"
+    desc: >
+      Functions for interfacing with concept sets in Atlas
+    contents:
+      - getConceptSetName
+      - getConceptSetExpression
+      - insertConceptSetConceptIdsInPackage
+      - getSetExpressionConceptIds
+      - getConceptSetConceptIds
+      - createConceptSetWorkbook
+  - title: "Cohort Defintion"
+    desc: >
+      Functions for interfacing with cohort definitions in Atlas
+    contents:
+      - getCohortDefinitionExpression
+      - insertCohortDefinitionInPackage
+      - insertCohortDefinitionSetInPackage
+      - getCohortDefinitionName
+      - getCohortDefinitionSql
+      - getConceptSetsAndConceptsFromCohort
+      - getCohortGenerationStatuses
+      - invokeCohortSetGeneration
+      - getCohortInclusionRulesAndCounts
+  - title: "Cohort Characterization"
+    desc: >
+      Functions for interfacing with cohort definitions in Atlas
+    contents:
+      - getCohortCharacterizationResults
