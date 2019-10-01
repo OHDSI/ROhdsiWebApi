@@ -571,7 +571,7 @@ getCohortInclusionRulesAndCounts <- function(baseUrl,
                         baseUrl, cohortId, sourceKey)
   jsonByEvent <- httr::GET(urlByEvent)
   jsonByEvent <- httr::content(jsonByEvent) 
-  jsonByEventTreeMapData <- jsonByEvent$treemapData
+  jsonByEventTreeMapData <- RJSONIO::fromJSON(jsonByEvent$treemapData)
   
   
   urlByPerson <- sprintf("%s/cohortdefinition/%d/report/%s?mode=1",
@@ -601,11 +601,38 @@ getCohortInclusionRulesAndCounts <- function(baseUrl,
   })
   inclusionRuleStatsByPersonDf <- do.call(rbind.data.frame, inclusionRuleStatsByPersonDf)
   
+  #Thanks to Chris Knoll for recursive function to flatten tree
+  flattenTree <- function(node, accumulated) {
+    if(is.null(node$children)) {
+      accumulated$name <- c(accumulated$name, node$name);
+      accumulated$size <- c(accumulated$size, node$size);
+      return(accumulated)
+    } else {
+      for (child in node$children) {
+        accumulated <- flattenTree(child, accumulated)
+      }
+      return(accumulated)
+    }
+  }
+  
+  # call recursive flattenTree, store results in result
+  treeMapResultByEvent <- list(name = c(), size=c())
+  treeMapResultByEvent <- flattenTree(jsonByEventTreeMapData, treeMapResultByEvent)
+  treeMapResultByEventDf <- data.frame(bits=treeMapResultByEvent$name, size = treeMapResultByEvent$size)
+  
+  treeMapResultByPerson <- list(name = c(), size=c())
+  treeMapResultByPerson <- flattenTree(jsonByPersonTreeMapData, treeMapResultByPerson)
+  treeMapResultByPersonDf <- data.frame(bits=treeMapResultByPerson$name, size = treeMapResultByPerson$size)
+  
+
+  #output
   resultsByEvent <- list(summary = summaryByEventDf, 
-                         inclusionRuleStats = inclusionRuleStatsByEventDf
+                         inclusionRuleStats = inclusionRuleStatsByEventDf,
+                         treeMapResultByEvent = treeMapResultByEventDf
   )
   resultsByPerson <- list(summary = summaryByPersonDf, 
-                          inclusionRuleStats = inclusionRuleStatsByPersonDf
+                          inclusionRuleStats = inclusionRuleStatsByPersonDf,
+                          treeMapResultByPerson = treeMapResultByPersonDf
   )
   results <- list(resultsByEvent = resultsByEvent, resultsByPerson = resultsByPerson
   )
