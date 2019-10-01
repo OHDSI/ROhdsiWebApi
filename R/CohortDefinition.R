@@ -350,6 +350,57 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl,
 
 
 
+#' Get a list of concept set expression from a cohort definition
+#' 
+#' @details 
+#' For a given cohort definition id, get all concept set expressions 
+#' 
+#' 
+#' @param baseUrl         The base URL for the WebApi instance, for example:
+#'                        "http://server.org:80/WebAPI".
+#' @param definitionId    The cohort id to fetch concept set expressions
+#' 
+#' @return 
+#' A list of concept set expressions
+#' 
+#' @examples
+#' \dontrun{
+#' # This will obtain a list of concept set expressions from a cohort id:
+#'
+#' getConceptSetExpressionFromCohort(baseUrl = "http://server.org:80/WebAPI",
+#'                         definitionId = 123)
+#' }
+#' 
+#' @export
+getConceptSetExpressionFromCohort <- function(baseUrl,
+                                                definitionId) {
+  
+  .checkBaseUrl(baseUrl)
+  
+  json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
+  
+  webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
+  
+  if (compareVersion(a = "2.7.2", webApiVersion) == 0) {
+    json <- json$expression
+  } else {
+    json <- RJSONIO::fromJSON(json$expression)  
+  }
+  
+  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
+  
+ lapply(json$ConceptSets, function(j) {
+    
+    list(
+      id = j$id,
+      name = j$name,
+      setExpression = .setExpressionToDf(j$expression)
+    )
+  })
+}
+
+
+
 #' Get Cohort Generation Statuses
 #'
 #' @details
