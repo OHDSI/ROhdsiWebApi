@@ -553,10 +553,10 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
   df
 }
 
-#' Get cohort inclusion rules and person counts
+#' Get cohort inclusion rule counts for events and persons
 #'
 #' @details
-#' Obtains the inclusion rules from a cohort definition and summarizes the person counts per rule
+#' Obtains the inclusion rules from a cohort definition and summarizes the event and person counts per rule
 #'
 #' @param baseUrl         The base URL for the WebApi instance, for example:
 #'                        "http://server.org:80/WebAPI".
@@ -567,19 +567,46 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
 getCohortInclusionRulesAndCounts <- function(baseUrl, 
                                              cohortId, 
                                              sourceKey) {
-  url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0",
-                 baseUrl, cohortId, sourceKey)
-  json <- httr::GET(url)
-  json <- httr::content(json) 
+  urlByEvent <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0",
+                        baseUrl, cohortId, sourceKey)
+  jsonByEvent <- httr::GET(urlByEvent)
+  jsonByEvent <- httr::content(jsonByEvent) 
+  jsonByEventTreeMapData <- jsonByEvent$treemapData
   
-  results <- lapply(json$inclusionRuleStats, function(j) {
-    list(ruleId = j$id,
-         description = j$name,
-         indexPersonCount = json$summary$baseCount,
-         rulePersonCount = j$countSatisfying,
-         rulePercentSatisfied = j$percentSatisfying,
-         rulePercentToGain = j$percentExcluded,
-         matchRate = json$summary$percentMatched)  
+  
+  urlByPerson <- sprintf("%s/cohortdefinition/%d/report/%s?mode=1",
+                         baseUrl, cohortId, sourceKey)
+  jsonByPerson <- httr::GET(urlByPerson)
+  jsonByPerson <- httr::content(jsonByPerson) 
+  jsonByPersonTreeMapData <- RJSONIO::fromJSON(jsonByPerson$treemapData)
+  
+  summaryByEventDf <- as.data.frame(jsonByEvent$summary)
+  summaryByPersonDf <- as.data.frame(jsonByPerson$summary)
+  
+  inclusionRuleStatsByEventDf <- lapply(jsonByEvent$inclusionRuleStats, function(j) {
+    list(id = j$id,
+         name = j$name,
+         countSatisfying = j$countSatisfying,
+         percentSatisfying = j$percentSatisfying,
+         percentExcluded = j$percentExcluded)  
   })
-  do.call(rbind.data.frame, results)
+  inclusionRuleStatsByEventDf <- do.call(rbind.data.frame, inclusionRuleStatsByEventDf)
+  
+  inclusionRuleStatsByPersonDf <- lapply(jsonByPerson$inclusionRuleStats, function(j) {
+    list(id = j$id,
+         name = j$name,
+         countSatisfying = j$countSatisfying,
+         percentSatisfying = j$percentSatisfying,
+         percentExcluded = j$percentExcluded)  
+  })
+  inclusionRuleStatsByPersonDf <- do.call(rbind.data.frame, inclusionRuleStatsByPersonDf)
+  
+  resultsByEvent <- list(summary = summaryByEventDf, 
+                         inclusionRuleStats = inclusionRuleStatsByEventDf
+  )
+  resultsByPerson <- list(summary = summaryByPersonDf, 
+                          inclusionRuleStats = inclusionRuleStatsByPersonDf
+  )
+  results <- list(resultsByEvent = resultsByEvent, resultsByPerson = resultsByPerson
+  )
 }

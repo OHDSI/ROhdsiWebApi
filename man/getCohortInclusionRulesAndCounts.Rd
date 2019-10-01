@@ -2,7 +2,7 @@
 % Please edit documentation in R/CohortDefinition.R
 \name{getCohortInclusionRulesAndCounts}
 \alias{getCohortInclusionRulesAndCounts}
-\title{Get cohort inclusion rules and person counts}
+\title{Get cohort inclusion rule counts for events and persons}
 \usage{
 getCohortInclusionRulesAndCounts(baseUrl, cohortId, sourceKey)
 }
@@ -15,8 +15,8 @@ getCohortInclusionRulesAndCounts(baseUrl, cohortId, sourceKey)
 \item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the Configuration page}
 }
 \description{
-Get cohort inclusion rules and person counts
+Get cohort inclusion rule counts for events and persons
 }
 \details{
-Obtains the inclusion rules from a cohort definition and summarizes the person counts per rule
+Obtains the inclusion rules from a cohort definition and summarizes the event and person counts per rule
 }
