@@ -17,29 +17,27 @@
 # limitations under the License.
 
 #' Get a cohort definition expression
-#' 
-#' @details 
+#'
+#' @details
 #' Obtain the JSON expression from WebAPI for a given cohort id
-#' 
-#' @param definitionId    The number indicating which cohort definition to fetch.
-#' @param baseUrl         The base URL for the WebApi instance, for example:
-#'                        "http://server.org:80/WebAPI".
-#' @return 
+#'
+#' @param definitionId   The number indicating which cohort definition to fetch.
+#' @param baseUrl        The base URL for the WebApi instance, for example:
+#'                       "http://server.org:80/WebAPI".
+#' @return
 #' A JSON list object representing the cohort definition
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' # This will obtain a cohort definition's JSON expression:
 #'
-#' getCohortDefinitionExpression(definitionId = 282, 
-#'                               baseUrl = "http://server.org:80/WebAPI")
+#' getCohortDefinitionExpression(definitionId = 282, baseUrl = "http://server.org:80/WebAPI")
 #' }
-#'                        
+#'
 #' @export
-getCohortDefinitionExpression <- function(definitionId, 
-                                          baseUrl) {
+getCohortDefinitionExpression <- function(definitionId, baseUrl) {
   .checkBaseUrl(baseUrl)
-  
+
   url <- paste(baseUrl, "cohortdefinition", definitionId, sep = "/")
   json <- httr::GET(url)
   httr::content(json)
@@ -49,9 +47,9 @@ getCohortDefinitionExpression <- function(definitionId,
 #'
 #' @details
 #' Load a cohort definition from a WebApi instance and insert it into this package. This will fetch
-#' the json object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the template SQL and store it
-#' in another folder (defaults to the 'inst/sql/sql_server' folder). Both folders will be created if they don't exist. 
-#' 
+#' the json object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the
+#' template SQL and store it in another folder (defaults to the 'inst/sql/sql_server' folder). Both
+#' folders will be created if they don't exist.
 #' When using generateStats = TRUE, the following tables are required to exist when executing the SQL:
 #' cohort_inclusion, cohort_inclusion_result, cohort_inclusion_stats, and cohort_summary_stats. Also
 #' note that the cohort_inclusion table should be populated with the names of the rules prior to
@@ -72,7 +70,7 @@ getCohortDefinitionExpression <- function(definitionId,
 #' \dontrun{
 #' # This will create 'inst/cohorts/Angioedema.json' and 'inst/sql/sql_server/Angioedema.sql':
 #'
-#' insertCohortDefinitionInPackage(definitionId = 282, 
+#' insertCohortDefinitionInPackage(definitionId = 282,
 #'                                 name = "Angioedema",
 #'                                 baseUrl = "http://server.org:80/WebAPI")
 #' }
@@ -85,7 +83,7 @@ insertCohortDefinitionInPackage <- function(definitionId,
                                             baseUrl,
                                             generateStats = FALSE) {
   .checkBaseUrl(baseUrl)
-  
+
   # Fetch JSON object
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
   object <- jsonlite::fromJSON(json$expression)
@@ -98,9 +96,11 @@ insertCohortDefinitionInPackage <- function(definitionId,
   jsonFileName <- file.path(jsonFolder, paste(name, "json", sep = "."))
   jsonlite::write_json(object, jsonFileName, pretty = TRUE)
   writeLines(paste("- Created JSON file:", jsonFileName))
-  
+
   # Fetch SQL
-  sql <- getCohortDefinitionSql(baseUrl = baseUrl, definitionId = definitionId, generateStats = generateStats)
+  sql <- getCohortDefinitionSql(baseUrl = baseUrl,
+                                definitionId = definitionId,
+                                generateStats = generateStats)
   if (!file.exists(sqlFolder)) {
     dir.create(sqlFolder, recursive = TRUE)
   }
@@ -111,8 +111,8 @@ insertCohortDefinitionInPackage <- function(definitionId,
 
 #' Insert a set of cohort definitions into package
 #'
-#' @param fileName                Name of a CSV file specifying the cohorts to insert. See details for the expected file
-#'                                format.
+#' @param fileName                Name of a CSV file specifying the cohorts to insert. See details for
+#'                                the expected file format.
 #' @param baseUrl                 The base URL for the WebApi instance, for example:
 #'                                "http://server.org:80/WebAPI".
 #' @param jsonFolder              Path to the folder where the JSON representations will be saved.
@@ -144,7 +144,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
                                                generateStats = FALSE,
                                                packageName) {
   .checkBaseUrl(baseUrl)
-  
+
   if (insertCohortCreationR && !insertTableSql)
     stop("Need to insert table SQL in order to generate R code")
   if (insertCohortCreationR && generateStats && jsonFolder != "inst/cohorts")
@@ -153,9 +153,9 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
     stop("When generating R code, the sqlFolder must be 'inst/sql/sql_server'")
   if (insertCohortCreationR && !grepl("inst", fileName))
     stop("When generating R code, the input CSV file must be in the inst folder.")
-  
+
   cohortsToCreate <- read.csv(fileName)
-  
+
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Inserting cohort:", cohortsToCreate$name[i]))
@@ -166,13 +166,13 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
                                     sqlFolder = sqlFolder,
                                     generateStats = generateStats)
   }
-  
+
   # Insert SQL to create empty cohort table
   if (insertTableSql) {
     writeLines("Creating SQL to create empty cohort table")
     .insertSqlForCohortTableInPackage(statsTables = generateStats, sqlFolder = sqlFolder)
   }
-  
+
   # Store information on inclusion rules
   if (generateStats) {
     writeLines("Storing information on inclusion rules")
@@ -183,7 +183,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
     write.csv(rules, csvFileName, row.names = FALSE)
     writeLines(paste("- Created CSV file:", csvFileName))
   }
-  
+
   # Generate R code to create cohorts
   if (insertCohortCreationR) {
     writeLines("Generating R code to create cohorts")
@@ -262,9 +262,9 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 #' @export
 getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
   .checkBaseUrl(baseUrl)
-  
+
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
-  
+
   if (formatName) {
     .formatName(json$name)
   } else {
@@ -277,43 +277,40 @@ getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
 #'
 #' @details
 #' Obtains the template SQL of a cohort.
-#' 
 #' When using generateStats = TRUE, the following tables are required to exist when executing the SQL:
 #' cohort_inclusion, cohort_inclusion_result, cohort_inclusion_stats, and cohort_summary_stats. Also
 #' note that the cohort_inclusion table should be populated with the names of the rules prior to
 #' executing the cohort definition SQL.
 #'
-#' @param baseUrl                 The base URL for the WebApi instance, for example:
-#'                                "http://server.org:80/WebAPI".
-#' @param definitionId            The cohort definition id in Atlas.
-#' @param generateStats           Should the SQL include the code for generating inclusion rule statistics?
-#'                                Note that if TRUE, several additional tables are expected to exists as
-#'                                described in the details. By default this is TRUE.
+#' @param baseUrl         The base URL for the WebApi instance, for example:
+#'                        "http://server.org:80/WebAPI".
+#' @param definitionId    The cohort definition id in Atlas.
+#' @param generateStats   Should the SQL include the code for generating inclusion rule statistics?
+#'                        Note that if TRUE, several additional tables are expected to exists as
+#'                        described in the details. By default this is TRUE.
 #'
 #' @return
 #' The templated SQL to generate the cohort
 #'
 #' @export
-getCohortDefinitionSql <- function(baseUrl, 
-                                   definitionId,
-                                   generateStats = TRUE) {
+getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) {
   .checkBaseUrl(baseUrl)
-  
+
   url <- sprintf("%1s/cohortdefinition/sql", baseUrl)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  
+
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
-  
+
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   if (compareVersion(a = "2.7.2", b = webApiVersion) == 0) {
-    body <- RJSONIO::toJSON(list(expression = json$expression, 
+    body <- RJSONIO::toJSON(list(expression = json$expression,
                                  options = list(generateStats = generateStats)), digits = 23)
-    
+
   } else {
-    body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(json$expression), 
+    body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(json$expression),
                                  options = list(generateStats = generateStats)), digits = 23)
   }
-  
+
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
   (httr::content(req))$templateSql
 }
@@ -321,68 +318,63 @@ getCohortDefinitionSql <- function(baseUrl,
 
 
 #' Get a list of concept sets and included/mapped concepts from a cohort definition
-#' 
-#' @details 
-#' For a given cohort definition id, get all concept sets and resolve all concepts into 
-#' an included concepts data frame and mapped concepts data frame from each
-#' 
-#' @param baseUrl         The base URL for the WebApi instance, for example:
-#'                        "http://server.org:80/WebAPI".
-#' @param definitionId    The cohort id to fetch concept sets and concepts from
-#' @param vocabSourceKey  The vocabulary key to use.
-#' 
-#' @return 
+#'
+#' @details
+#' For a given cohort definition id, get all concept sets and resolve all concepts into an included
+#' concepts data frame and mapped concepts data frame from each
+#'
+#' @param baseUrl          The base URL for the WebApi instance, for example:
+#'                         "http://server.org:80/WebAPI".
+#' @param definitionId     The cohort id to fetch concept sets and concepts from
+#' @param vocabSourceKey   The vocabulary key to use.
+#'
+#' @return
 #' A list of concept sets, set names, and concept data frames
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' # This will obtain a list of concept sets and concepts from a cohort id:
 #'
-#' getConceptsFromCohortId(baseUrl = "http://server.org:80/WebAPI",
-#'                         definitionId = 123)
+#' getConceptsFromCohortId(baseUrl = "http://server.org:80/WebAPI", definitionId = 123)
 #' }
-#' 
+#'
 #' @export
-getConceptSetsAndConceptsFromCohort <- function(baseUrl,
-                                                definitionId, 
-                                                vocabSourceKey = NULL) {
-  
+getConceptSetsAndConceptsFromCohort <- function(baseUrl, definitionId, vocabSourceKey = NULL) {
+
   .checkBaseUrl(baseUrl)
-  
+
   if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
     vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
   }
-  
+
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
-  
+
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
-  
+
   if (compareVersion(a = "2.7.2", webApiVersion) == 0) {
     json <- json$expression
   } else {
-    json <- RJSONIO::fromJSON(json$expression)  
+    json <- RJSONIO::fromJSON(json$expression)
   }
-  
+
   url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabSourceKey)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  
+
   lapply(json$ConceptSets, function(j) {
-    
-    includedConcepts <- getSetExpressionConceptIds(baseUrl = baseUrl, 
-                                                   expression = RJSONIO::toJSON(j$expression), 
+
+    includedConcepts <- getSetExpressionConceptIds(baseUrl = baseUrl,
+                                                   expression = RJSONIO::toJSON(j$expression),
                                                    vocabSourceKey = vocabSourceKey)
-    list(
-      id = j$id,
-      name = j$name,
-      includedConceptsDf = .getIncludedConceptsDf(baseUrl = baseUrl,
-                                                  vocabSourceKey = vocabSourceKey,
-                                                  includedConcepts = includedConcepts),
-      mappedConceptsDf = .getMappedConceptsDf(baseUrl = baseUrl, 
-                                              vocabSourceKey = vocabSourceKey,
-                                              includedConcepts = includedConcepts),
-      setExpression = .setExpressionToDf(j$expression),
-      jsonExpression = j$expression
-    )
+    list(id = j$id,
+         name = j$name,
+         includedConceptsDf = .getIncludedConceptsDf(baseUrl = baseUrl,
+                                                     vocabSourceKey = vocabSourceKey,
+                                                     includedConcepts = includedConcepts),
+         mappedConceptsDf = .getMappedConceptsDf(baseUrl = baseUrl,
+                                                 vocabSourceKey = vocabSourceKey,
+                                                 includedConcepts = includedConcepts),
+         setExpression = .setExpressionToDf(j$expression),
+         jsonExpression = j$expression)
   })
 }
 
@@ -397,41 +389,39 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl,
 #' @param baseUrl         The base URL for the WebApi instance, for example:
 #'                        "http://server.org:80/WebAPI".
 #' @param definitionIds   A list of cohort definition Ids
-#' @param sourceKeys      (OPTIONAL) A list of CDM source keys. These can be found in Atlas -> Configure. 
-#'                        Otherwise, all CDM source keys will be used.
+#' @param sourceKeys      (OPTIONAL) A list of CDM source keys. These can be found in Atlas ->
+#'                        Configure. Otherwise, all CDM source keys will be used.
 #'
 #' @return
 #' A data frame of cohort generation statuses, start times, and execution durations per definition id
 #' and source key.
 #'
 #' @export
-getCohortGenerationStatuses <- function(baseUrl, 
-                                        definitionIds, 
-                                        sourceKeys = NULL) {
+getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NULL) {
   .checkBaseUrl(baseUrl)
-  
+
   checkSourceKeys <- function(baseUrl, sourceKeys) {
     sourceIds <- lapply(X = sourceKeys, .getSourceIdFromKey, baseUrl = baseUrl)
     return(!(-1 %in% sourceIds))
   }
-  
+
   if (missing(sourceKeys)) {
     sourceKeys <- (getCdmSources(baseUrl = baseUrl))$sourceKey
   }
-  
+
   if (!checkSourceKeys(baseUrl = baseUrl, sourceKeys = sourceKeys)) {
     stop("One or more source keys is invalid, please check Atlas -> Configure page.")
   }
-  
+
   tuples <- list(definitionIds, sourceKeys)
   df <- expand.grid(tuples, KEEP.OUT.ATTRS = FALSE)
   colnames(df) <- c("definitionId", "sourceKey")
-  
+
   statuses <- apply(X = df, MARGIN = 1, function(row) {
     result <- .getCohortGenerationStatus(baseUrl = baseUrl,
                                          definitionId = row["definitionId"],
                                          sourceKey = row["sourceKey"])
-    
+
     status <- list(sourceKey = row["sourceKey"],
                    definitionId = row["definitionId"],
                    definitionName = getCohortDefinitionName(baseUrl = baseUrl,
@@ -443,7 +433,7 @@ getCohortGenerationStatuses <- function(baseUrl,
                    personCount = result$personCount)
     return(status)
   })
-  
+
   df <- do.call(rbind, lapply(statuses, data.frame, stringsAsFactors = FALSE))
   rownames(df) <- c()
   df
@@ -454,25 +444,25 @@ getCohortGenerationStatuses <- function(baseUrl,
     sec <- milliseconds/1000
     as.character(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
   }
-  
+
   .checkBaseUrl(baseUrl)
-  
+
   sourceId <- .getSourceIdFromKey(baseUrl = baseUrl, sourceKey = sourceKey)
-  
+
   url <- sprintf("%1s/cohortdefinition/%2s/info", baseUrl, definitionId)
-  
+
   response <- httr::GET(url)
   response <- httr::content(response)
-  
+
   if (length(response) == 0) {
     return(list(status = "NA", startTime = "NA", executionDuration = "NA", personCount = "NA"))
   }
-  
+
   json <- response[sapply(response, function(j) j$id$sourceId == sourceId)]
   if (length(json) == 0) {
     return(list(status = "NA", startTime = "NA", executionDuration = "NA", personCount = "NA"))
   }
-  
+
   return(list(status = json[[1]]$status,
               startTime = millisecondsToDate(milliseconds = json[[1]]$startTime),
               executionDuration = ifelse(is.null(json[[1]]$executionDuration),
@@ -509,20 +499,20 @@ getCohortGenerationStatuses <- function(baseUrl,
 #' @export
 invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
   .checkBaseUrl(baseUrl)
-  
+
   checkSourceKeys <- function(baseUrl, sourceKeys) {
     sourceIds <- lapply(X = sourceKeys, .getSourceIdFromKey, baseUrl = baseUrl)
     return(!(-1 %in% sourceIds))
   }
-  
+
   if (!checkSourceKeys(baseUrl = baseUrl, sourceKeys = sourceKeys)) {
     stop("One or more source keys is invalid, please check Atlas -> Configure page.")
   }
-  
+
   tuples <- list(definitionIds, sourceKeys)
   df <- expand.grid(tuples, KEEP.OUT.ATTRS = FALSE)
   colnames(df) <- c("definitionId", "sourceKey")
-  
+
   statuses <- apply(X = df, MARGIN = 1, function(row) {
     list(sourceKey = row["sourceKey"],
          definitionId = row["definitionId"],
@@ -533,7 +523,7 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
                                           sourceKey = row["sourceKey"],
                                           definitionId = row["definitionId"]))
   })
-  
+
   df <- do.call(rbind, lapply(statuses, data.frame, stringsAsFactors = FALSE))
   rownames(df) <- c()
   df
@@ -544,20 +534,16 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
 #' @details
 #' Obtains the inclusion rules from a cohort definition and summarizes the person counts per rule
 #'
-#' @param baseUrl         The base URL for the WebApi instance, for example:
-#'                        "http://server.org:80/WebAPI".
-#' @param cohortId        The Atlas cohort definition id for the cohort
-#' @param sourceKey       The source key for a CDM instance in WebAPI, as defined in the Configuration page
-#' 
+#' @param baseUrl     The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
+#' @param cohortId    The Atlas cohort definition id for the cohort
+#' @param sourceKey   The source key for a CDM instance in WebAPI, as defined in the Configuration page
+#'
 #' @export
-getCohortInclusionRulesAndCounts <- function(baseUrl, 
-                                             cohortId, 
-                                             sourceKey) {
-  url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0",
-                 baseUrl, cohortId, sourceKey)
+getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
+  url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0", baseUrl, cohortId, sourceKey)
   json <- httr::GET(url)
-  json <- httr::content(json) 
-  
+  json <- httr::content(json)
+
   results <- lapply(json$inclusionRuleStats, function(j) {
     list(ruleId = j$id,
          description = j$name,
@@ -565,7 +551,7 @@ getCohortInclusionRulesAndCounts <- function(baseUrl,
          rulePersonCount = j$countSatisfying,
          rulePercentSatisfied = j$percentSatisfying,
          rulePercentToGain = j$percentExcluded,
-         matchRate = json$summary$percentMatched)  
+         matchRate = json$summary$percentMatched)
   })
   do.call(rbind.data.frame, results)
 }

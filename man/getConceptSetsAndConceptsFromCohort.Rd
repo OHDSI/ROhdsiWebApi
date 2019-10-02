@@ -22,15 +22,14 @@ A list of concept sets, set names, and concept data frames
 Get a list of concept sets and included/mapped concepts from a cohort definition
 }
 \details{
-For a given cohort definition id, get all concept sets and resolve all concepts into 
-an included concepts data frame and mapped concepts data frame from each
+For a given cohort definition id, get all concept sets and resolve all concepts into an included
+concepts data frame and mapped concepts data frame from each
 }
 \examples{
 \dontrun{
 # This will obtain a list of concept sets and concepts from a cohort id:
 
-getConceptsFromCohortId(baseUrl = "http://server.org:80/WebAPI",
-                        definitionId = 123)
+getConceptsFromCohortId(baseUrl = "http://server.org:80/WebAPI", definitionId = 123)
 }
 
 }

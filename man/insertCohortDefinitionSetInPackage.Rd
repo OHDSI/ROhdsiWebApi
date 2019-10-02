@@ -12,8 +12,8 @@
   generateStats = FALSE, packageName)
 }
 \arguments{
-\item{fileName}{Name of a CSV file specifying the cohorts to insert. See details for the expected file
-format.}
+\item{fileName}{Name of a CSV file specifying the cohorts to insert. See details for
+the expected file format.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}

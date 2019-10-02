@@ -21,15 +21,13 @@
   patterns <- list("https?:\\/\\/[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})+(\\/.*)?\\/WebAPI$",
                    "https?:\\/\\/(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})+(\\/.*)?\\/WebAPI$")
   results <- lapply(patterns, function(p) {
-    result <- grepl(pattern = p, 
-                    x = baseUrl, 
-                    ignore.case = FALSE)
+    result <- grepl(pattern = p, x = baseUrl, ignore.case = FALSE)
     return(result)
   })
   success <- any(as.logical(results))
-  
+
   if (!success) {
-    stop("Base URL not valid, should be like http://server.org:80/WebAPI")  
+    stop("Base URL not valid, should be like http://server.org:80/WebAPI")
   }
 }
 
@@ -47,8 +45,7 @@
 #' @details
 #' Obtains the source key of the default OMOP Vocab in Atlas.
 #'
-#' @param baseUrl   The base URL for the WebApi instance, for example:
-#'                  "http://server.org:80/WebAPI".
+#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
 #'
 #' @return
 #' A string with the source key of the default OMOP Vocab in Atlas.
@@ -67,8 +64,7 @@ getPriorityVocabKey <- function(baseUrl) {
 #' @details
 #' Obtains the WebAPI version number
 #'
-#' @param baseUrl      The base URL for the WebApi instance, for example:
-#'                     "http://server.org:80/WebAPI".
+#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
 #'
 #' @return
 #' The WebAPI version
@@ -82,9 +78,9 @@ getWebApiVersion <- function(baseUrl) {
 
 .getSourceIdFromKey <- function(baseUrl, sourceKey) {
   .checkBaseUrl(baseUrl)
-  
+
   url <- sprintf("%1s/source/%2s", baseUrl, sourceKey)
-  
+
   json <- httr::GET(url)
   json <- httr::content(json)
   if (is.null(json$sourceId))
@@ -102,35 +98,34 @@ getWebApiVersion <- function(baseUrl) {
 #' @details
 #' Obtains the data sources configured in the WebAPI instance
 #'
-#' @param baseUrl      The base URL for the WebApi instance, for example:
-#'                     "http://server.org:80/WebAPI".
+#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
 #'
 #' @return
 #' A data frame of data source information
 #'
 #' @export
 getCdmSources <- function(baseUrl) {
-  
+
   url <- sprintf("%s/source/sources", baseUrl)
   request <- httr::GET(url)
   httr::stop_for_status(request)
   sources <- httr::content(request)
-  
+
   sourceDetails <- lapply(sources, function(s) {
     cdmDatabaseSchema <- NA
     vocabDatabaseSchema <- NA
     resultsDatabaseSchema <- NA
     if (length(s$daimons) > 0) {
-      for(i in 1:length(s$daimons)) {
+      for (i in 1:length(s$daimons)) {
         if (!is.na(s$daimons[[i]]$daimonType)) {
           if (toupper(s$daimons[[i]]$daimonType) == toupper("cdm")) {
-            cdmDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          cdmDatabaseSchema <- s$daimons[[i]]$tableQualifier
           }
           if (toupper(s$daimons[[i]]$daimonType) == toupper("vocabulary")) {
-            vocabDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          vocabDatabaseSchema <- s$daimons[[i]]$tableQualifier
           }
           if (toupper(s$daimons[[i]]$daimonType) == toupper("results")) {
-            resultsDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          resultsDatabaseSchema <- s$daimons[[i]]$tableQualifier
           }
         }
       }
@@ -143,6 +138,6 @@ getCdmSources <- function(baseUrl) {
                resultsDatabaseSchema = resultsDatabaseSchema,
                stringsAsFactors = FALSE)
   })
-  
+
   do.call(rbind, sourceDetails)
 }

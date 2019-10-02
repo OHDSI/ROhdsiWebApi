@@ -27,8 +27,7 @@ Obtain the JSON expression from WebAPI for a given concept set
 \dontrun{
 # This will obtain a concept set's JSON expression:
 
-getConceptSetExpression(setId = 282, 
-                        baseUrl = "http://server.org:80/WebAPI")
+getConceptSetExpression(setId = 282, baseUrl = "http://server.org:80/WebAPI")
 }
-                       
+
 }

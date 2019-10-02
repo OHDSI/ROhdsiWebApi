@@ -10,8 +10,7 @@ insertConceptSetConceptIdsInPackage(fileName, baseUrl)
 \item{fileName}{Name of a CSV file in the inst/settings folder of the package specifying the
 concept sets to insert. See details for the expected file format.}
 
-\item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+\item{baseUrl}{The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".}
 }
 \description{
 Insert a set of concept sets' concept ids into package

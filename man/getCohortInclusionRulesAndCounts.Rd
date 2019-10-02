@@ -7,8 +7,7 @@
 getCohortInclusionRulesAndCounts(baseUrl, cohortId, sourceKey)
 }
 \arguments{
-\item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+\item{baseUrl}{The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".}
 
 \item{cohortId}{The Atlas cohort definition id for the cohort}
 

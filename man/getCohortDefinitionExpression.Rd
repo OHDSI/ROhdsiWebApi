@@ -25,8 +25,7 @@ Obtain the JSON expression from WebAPI for a given cohort id
 \dontrun{
 # This will obtain a cohort definition's JSON expression:
 
-getCohortDefinitionExpression(definitionId = 282, 
-                              baseUrl = "http://server.org:80/WebAPI")
+getCohortDefinitionExpression(definitionId = 282, baseUrl = "http://server.org:80/WebAPI")
 }
-                       
+
 }

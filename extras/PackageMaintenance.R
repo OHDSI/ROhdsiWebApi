@@ -17,17 +17,12 @@
 # limitations under the License.
 
 # Format and check code
-OhdsiRTools::formatRFolder()
+OhdsiRTools::formatRFolder("R")
 OhdsiRTools::checkUsagePackage("ROhdsiWebApi")
 OhdsiRTools::updateCopyrightYearFolder()
 
 # Create manual and vignette
-if (.Platform$OS.type == "unix") {
-  system("rm extras/OhdsiRTools.pdf")
-  system("R CMD Rd2pdf ./ --output=extras/OhdsiRTools.pdf")
-} else {
-  shell("rm extras/OhdsiRTools.pdf")
-  shell("R CMD Rd2pdf ./ --output=extras/OhdsiRTools.pdf")
-}
+unlink("extras/OhdsiRTools.pdf")
+shell("R CMD Rd2pdf ./ --output=extras/OhdsiRTools.pdf")
 
 pkgdown::build_site()
