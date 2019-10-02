@@ -24,6 +24,7 @@
     result <- grepl(pattern = p, 
                     x = baseUrl, 
                     ignore.case = FALSE)
+    return(result)
   })
   success <- any(as.logical(results))
   

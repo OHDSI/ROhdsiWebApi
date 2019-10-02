@@ -1,8 +1,14 @@
 library(testthat)
 
-test_that("Execute WebApi functions", {
-  baseUrl <- paste0("http://", paste("api", "ohdsi", "org", sep = "."), ":80/WebAPI")
-  
+baseUrl <- paste0("http://", paste("api", "ohdsi", "org", sep = "."), ":80/WebAPI")
+
+test_that("Test getCdmSources", {
   cdmSources <- getCdmSources(baseUrl = baseUrl)
-  expect_true(length(cdmSources) > 0)
+  expect_gt(length(cdmSources), 0)
 })
+
+test_that("Test getWebApiVersion", {
+  version <- getWebApiVersion(baseUrl = baseUrl)
+  expect_equal(length(strsplit(version, "\\.")[[1]]), 3)
+})
+

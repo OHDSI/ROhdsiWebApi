@@ -4,17 +4,25 @@
 \alias{insertCohortDefinitionSetInPackage}
 \title{Insert a set of cohort definitions into package}
 \usage{
-insertCohortDefinitionSetInPackage(fileName, baseUrl,
+
+  insertCohortDefinitionSetInPackage(fileName = "inst/settings/CohortsToCreate.csv",
+  baseUrl, jsonFolder = "inst/cohorts",
+  sqlFolder = "inst/sql/sql_server", rFileName = "R/CreateCohorts.R",
   insertTableSql = TRUE, insertCohortCreationR = TRUE,
   generateStats = FALSE, packageName)
 }
 \arguments{
-\item{fileName}{Name of a CSV file in the inst/settings folder of the package
-specifying the cohorts to insert. See details for the expected file
+\item{fileName}{Name of a CSV file specifying the cohorts to insert. See details for the expected file
 format.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
+
+\item{jsonFolder}{Path to the folder where the JSON representations will be saved.}
+
+\item{sqlFolder}{Path to the folder where the SQL representations will be saved.}
+
+\item{rFileName}{Name of R file to generate when \code{insertCohortCreationR = TRUE}.}
 
 \item{insertTableSql}{Should the SQL for creating the cohort table be inserted into the
 package as well? This file will be called CreateCohortTable.sql.}

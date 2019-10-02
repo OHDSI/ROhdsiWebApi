@@ -20,7 +20,8 @@ Imports:
     openxlsx (>= 4.0.17),
     jsonlite,
     dplyr,
-    tibble
+    tibble,
+    SqlRender
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi

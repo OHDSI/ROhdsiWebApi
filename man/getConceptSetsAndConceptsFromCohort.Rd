@@ -12,6 +12,8 @@ getConceptSetsAndConceptsFromCohort(baseUrl, definitionId,
 "http://server.org:80/WebAPI".}
 
 \item{definitionId}{The cohort id to fetch concept sets and concepts from}
+
+\item{vocabSourceKey}{The vocabulary key to use.}
 }
 \value{
 A list of concept sets, set names, and concept data frames

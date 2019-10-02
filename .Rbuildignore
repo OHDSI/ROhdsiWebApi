@@ -1,2 +1,10 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.gitattributes
+extras
+.travis.yml
+^\.git
+deploy.sh
+compare_versions
+_pkgdown.yml
+docs

@@ -161,8 +161,6 @@ insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
 
 #' Get Concepts from a Concept Set Expression
 #' 
-#' @details 
-#' 
 #' @param baseUrl          The base URL for the WebApi instance, for example:
 #'                         "http://server.org:80/WebAPI".
 #' @param expression       A JSON string that represents the concept set expression
