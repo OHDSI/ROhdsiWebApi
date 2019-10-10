@@ -397,7 +397,7 @@ getConceptSetExpressionFromCohort <- function(baseUrl,
 
   conceptSetExpressionWithHeader <- data.frame()
   for (i in 1:length(ConceptSets)) {
-      ConceptSetHeaders <- data.frame(conceptSetId = ConceptSets[[i]]$id, conceptSetName = ConceptSets[[i]]$name, conceptSetNameFormat = .formatName(ConceptSets[[i]]$name))
+      ConceptSetHeaders <- data.frame(cohortId = cohortId, conceptSetId = ConceptSets[[i]]$id, conceptSetName = ConceptSets[[i]]$name, conceptSetNameFormat = .formatName(ConceptSets[[i]]$name))
       ConceptSetExpression <- ConceptSets[[i]]$setExpression
       ConceptSetExpression <- .renameDfNamesToCamelCase(ConceptSetExpression)
       resultDf <- merge(
