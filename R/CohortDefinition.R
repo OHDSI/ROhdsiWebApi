@@ -46,9 +46,13 @@ getCohortDefinitionExpression <- function(cohortId,
   json <- httr::GET(url)
   json <- httr::content(json)
   json <- .convertNulltoNA(json)
+  json <- as.data.frame(json)
+  colnames(json)[colnames(json)=="id"] <- "cohortId"
+  colnames(json)[colnames(json)=="name"] <- "cohortName"
+  colnames(json)[colnames(json)=="description"] <- "cohortDescription"
+  json$cohortNameFormat <- .formatName(json$cohortName)
+  return(json)
 }
-
-
 
 
 #' Load a cohort definition and insert it into this package
