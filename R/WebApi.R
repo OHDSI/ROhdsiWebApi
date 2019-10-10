@@ -41,6 +41,16 @@
   thisList
 }
 
+.renameDfNamesToCamelCase <- function(df) {
+  require(SqlRender)
+  colnames(df) = gsub("concept\\.", "", colnames(df))
+  colNamesWithUnderScore <- str_detect(string = colnames(df), pattern = '_')
+  colnames(df)[colNamesWithUnderScore] <- SqlRender::snakeCaseToCamelCase(colnames(df)[colNamesWithUnderScore])
+  return(df)
+}
+
+
+
 #' Get Priority Vocab Source Key
 #'
 #' @details
@@ -92,6 +102,10 @@ getWebApiVersion <- function(baseUrl) {
 }
 
 .formatName <- function(name) {
+  gsub("_", " ", gsub("\\[(.*?)\\]_", "", gsub(" ", "_", name)))
+}
+
+.formatDfName <- function(name) {
   gsub("_", " ", gsub("\\[(.*?)\\]_", "", gsub(" ", "_", name)))
 }
 

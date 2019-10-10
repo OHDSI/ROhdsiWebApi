@@ -381,25 +381,34 @@ getConceptSetExpressionFromCohort <- function(baseUrl,
   json <- getCohortDefinitionExpression(cohortId = cohortId, baseUrl = baseUrl)
   
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
-  
   if (compareVersion(a = "2.7.2", webApiVersion) == 0) {
     json <- json$expression
   } else {
     json <- RJSONIO::fromJSON(json$expression)  
   }
   
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  
- lapply(json$ConceptSets, function(j) {
-    
+  ConceptSets <- lapply(json$ConceptSets, function(j) {
     list(
       id = j$id,
       name = j$name,
       setExpression = .setExpressionToDf(j$expression)
     )
   })
-}
 
+  conceptSetExpressionWithHeader <- data.frame()
+  for (i in 1:length(ConceptSets)) {
+      ConceptSetHeaders <- data.frame(conceptSetId = ConceptSets[[i]]$id, conceptSetName = ConceptSets[[i]]$name, conceptSetNameFormat = .formatName(ConceptSets[[i]]$name))
+      ConceptSetExpression <- ConceptSets[[i]]$setExpression
+      ConceptSetExpression <- .renameDfNamesToCamelCase(ConceptSetExpression)
+      resultDf <- merge(
+                          ConceptSetHeaders,
+                          ConceptSetExpression
+       )
+      conceptSetExpressionWithHeader <- rbind(conceptSetExpressionWithHeader, resultDf)
+  }
+
+  return(conceptSetExpressionWithHeader)
+}
 
 
 #' Get Cohort Generation Statuses
