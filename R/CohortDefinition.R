@@ -325,9 +325,6 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl,
     json <- RJSONIO::fromJSON(json$expression)  
   }
   
-  url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabSourceKey)
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  
   lapply(json$ConceptSets, function(j) {
     
     includedConcepts <- getSetExpressionConceptIds(baseUrl = baseUrl, 
@@ -394,15 +391,15 @@ getCohortGenerationStatuses <- function(baseUrl,
                                          definitionId = row["definitionId"],
                                          sourceKey = row["sourceKey"])
 
-    status <- list(sourceKey = row["sourceKey"],
-                   definitionId = row["definitionId"],
-                   definitionName = getCohortDefinitionName(baseUrl = baseUrl,
-                                                            definitionId = row["definitionId"],
-                                                            formatName = FALSE),
-                   status = result$status,
-                   startTime = result$startTime,
-                   executionDuration = result$executionDuration,
-                   personCount = result$personCount)
+    list(sourceKey = row["sourceKey"],
+         definitionId = row["definitionId"],
+         definitionName = getCohortDefinitionName(baseUrl = baseUrl,
+                                                  definitionId = row["definitionId"],
+                                                  formatName = FALSE),
+         status = result$status,
+         startTime = result$startTime,
+         executionDuration = result$executionDuration,
+               personCount = result$personCount)
   })
 
   df <- do.call(rbind, lapply(statuses, data.frame, stringsAsFactors = FALSE))

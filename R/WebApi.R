@@ -21,9 +21,9 @@
   patterns <- list("https?:\\/\\/[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})+(\\/.*)?\\/WebAPI$",
                    "https?:\\/\\/(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})+(\\/.*)?\\/WebAPI$")
   results <- lapply(patterns, function(p) {
-    result <- grepl(pattern = p, 
-                    x = baseUrl, 
-                    ignore.case = FALSE)
+    grepl(pattern = p, 
+          x = baseUrl, 
+          ignore.case = FALSE)
   })
   success <- any(as.logical(results))
   
