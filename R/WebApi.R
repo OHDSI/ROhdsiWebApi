@@ -136,8 +136,6 @@ getCdmSources <- function(baseUrl) {
     }
     data.frame(sourceName = s$sourceName,
                sourceKey = s$sourceKey,
-               sourceNameShort = gsub("\\s*\\([^\\)]+\\)","",as.character(s$sourceName)),
-               sourceVersion = gsub("(?<=\\()[^()]*(?=\\))(*SKIP)(*F)|.", "", as.character(s$sourceName), perl=T),
                sourceDialect = s$sourceDialect,
                cdmDatabaseSchema = cdmDatabaseSchema,
                vocabDatabaseSchema = vocabDatabaseSchema,
