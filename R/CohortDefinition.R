@@ -556,6 +556,6 @@ getCohortInclusionRulesAndCounts <- function(baseUrl,
   resultsByPerson <- list(summary = summaryByPersonDf, 
                           inclusionRuleStats = inclusionRuleStatsByPersonDf
   )
-  results <- list(resultsByEvent = resultsByEvent, resultsByPerson = resultsByPerson
+  list(resultsByEvent = resultsByEvent, resultsByPerson = resultsByPerson
   )
 }
