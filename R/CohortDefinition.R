@@ -414,18 +414,19 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NUL
   }
 
   tuples <- list(definitionIds, sourceKeys)
-  df <- expand.grid(tuples, KEEP.OUT.ATTRS = FALSE)
+  df <- expand.grid(tuples, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   colnames(df) <- c("definitionId", "sourceKey")
 
   statuses <- apply(X = df, MARGIN = 1, function(row) {
+    definitionId <- as.integer(row["definitionId"])
     result <- .getCohortGenerationStatus(baseUrl = baseUrl,
-                                         definitionId = row["definitionId"],
+                                         definitionId = definitionId,
                                          sourceKey = row["sourceKey"])
 
     status <- list(sourceKey = row["sourceKey"],
-                   definitionId = row["definitionId"],
+                   definitionId = definitionId,
                    definitionName = getCohortDefinitionName(baseUrl = baseUrl,
-                                                            definitionId = row["definitionId"],
+                                                            definitionId = definitionId,
                                                             formatName = FALSE),
                    status = result$status,
                    startTime = result$startTime,
@@ -510,18 +511,18 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
   }
 
   tuples <- list(definitionIds, sourceKeys)
-  df <- expand.grid(tuples, KEEP.OUT.ATTRS = FALSE)
+  df <- expand.grid(tuples, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   colnames(df) <- c("definitionId", "sourceKey")
 
   statuses <- apply(X = df, MARGIN = 1, function(row) {
     list(sourceKey = row["sourceKey"],
-         definitionId = row["definitionId"],
+         definitionId = as.integer(row["definitionId"]),
          definitionName = getCohortDefinitionName(baseUrl = baseUrl,
                                                   definitionId = row["definitionId"],
                                                   formatName = FALSE),
          result = .invokeCohortGeneration(baseUrl = baseUrl,
                                           sourceKey = row["sourceKey"],
-                                          definitionId = row["definitionId"]))
+                                          definitionId = as.integer(row["definitionId"])))
   })
 
   df <- do.call(rbind, lapply(statuses, data.frame, stringsAsFactors = FALSE))
