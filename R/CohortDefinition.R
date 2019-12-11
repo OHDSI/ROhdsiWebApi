@@ -530,29 +530,87 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
   df
 }
 
-#' Get cohort inclusion rules and person counts
+#' Get cohort inclusion rule counts for events and persons
 #'
 #' @details
-#' Obtains the inclusion rules from a cohort definition and summarizes the person counts per rule
+#' Obtains the inclusion rules from a cohort definition and summarizes the event and person counts per rule
 #'
-#' @param baseUrl     The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
-#' @param cohortId    The Atlas cohort definition id for the cohort
-#' @param sourceKey   The source key for a CDM instance in WebAPI, as defined in the Configuration page
-#'
+#' @param baseUrl         The base URL for the WebApi instance, for example:
+#'                        "http://server.org:80/WebAPI".
+#' @param cohortId        The Atlas cohort definition id for the cohort
+#' @param sourceKey       The source key for a CDM instance in WebAPI, as defined in the Configuration page
+#' 
 #' @export
-getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
-  url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0", baseUrl, cohortId, sourceKey)
-  json <- httr::GET(url)
-  json <- httr::content(json)
-
-  results <- lapply(json$inclusionRuleStats, function(j) {
-    list(ruleId = j$id,
-         description = j$name,
-         indexPersonCount = json$summary$baseCount,
-         rulePersonCount = j$countSatisfying,
-         rulePercentSatisfied = j$percentSatisfying,
-         rulePercentToGain = j$percentExcluded,
-         matchRate = json$summary$percentMatched)
+getCohortInclusionRulesAndCounts <- function(baseUrl, 
+                                             cohortId, 
+                                             sourceKey) {
+  urlByEvent <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0",
+                        baseUrl, cohortId, sourceKey)
+  jsonByEvent <- httr::GET(urlByEvent)
+  jsonByEvent <- httr::content(jsonByEvent) 
+  jsonByEventTreeMapData <- RJSONIO::fromJSON(jsonByEvent$treemapData)
+  
+  
+  urlByPerson <- sprintf("%s/cohortdefinition/%d/report/%s?mode=1",
+                         baseUrl, cohortId, sourceKey)
+  jsonByPerson <- httr::GET(urlByPerson)
+  jsonByPerson <- httr::content(jsonByPerson) 
+  jsonByPersonTreeMapData <- RJSONIO::fromJSON(jsonByPerson$treemapData)
+  
+  summaryByEventDf <- as.data.frame(jsonByEvent$summary)
+  summaryByPersonDf <- as.data.frame(jsonByPerson$summary)
+  
+  inclusionRuleStatsByEventDf <- lapply(jsonByEvent$inclusionRuleStats, function(j) {
+    list(id = j$id,
+         name = j$name,
+         countSatisfying = j$countSatisfying,
+         percentSatisfying = j$percentSatisfying,
+         percentExcluded = j$percentExcluded)  
   })
-  do.call(rbind.data.frame, results)
+  inclusionRuleStatsByEventDf <- do.call(rbind.data.frame, inclusionRuleStatsByEventDf)
+  
+  inclusionRuleStatsByPersonDf <- lapply(jsonByPerson$inclusionRuleStats, function(j) {
+    list(id = j$id,
+         name = j$name,
+         countSatisfying = j$countSatisfying,
+         percentSatisfying = j$percentSatisfying,
+         percentExcluded = j$percentExcluded)  
+  })
+  inclusionRuleStatsByPersonDf <- do.call(rbind.data.frame, inclusionRuleStatsByPersonDf)
+  
+  #Thanks to Chris Knoll for recursive function to flatten tree
+  flattenTree <- function(node, accumulated) {
+    if(is.null(node$children)) {
+      accumulated$name <- c(accumulated$name, node$name);
+      accumulated$size <- c(accumulated$size, node$size);
+      return(accumulated)
+    } else {
+      for (child in node$children) {
+        accumulated <- flattenTree(child, accumulated)
+      }
+      return(accumulated)
+    }
+  }
+  
+  # call recursive flattenTree, store results in result
+  treeMapResultByEvent <- list(name = c(), size=c())
+  treeMapResultByEvent <- flattenTree(jsonByEventTreeMapData, treeMapResultByEvent)
+  treeMapResultByEventDf <- data.frame(bits=treeMapResultByEvent$name, size = treeMapResultByEvent$size)
+  
+  treeMapResultByPerson <- list(name = c(), size=c())
+  treeMapResultByPerson <- flattenTree(jsonByPersonTreeMapData, treeMapResultByPerson)
+  treeMapResultByPersonDf <- data.frame(bits=treeMapResultByPerson$name, size = treeMapResultByPerson$size)
+  
+  
+  #output
+  resultsByEvent <- list(summary = summaryByEventDf, 
+                         inclusionRuleStats = inclusionRuleStatsByEventDf,
+                         treeMapResultByEvent = treeMapResultByEventDf
+  )
+  resultsByPerson <- list(summary = summaryByPersonDf, 
+                          inclusionRuleStats = inclusionRuleStatsByPersonDf,
+                          treeMapResultByPerson = treeMapResultByPersonDf
+  )
+  list(resultsByEvent = resultsByEvent, resultsByPerson = resultsByPerson
+  )
 }
