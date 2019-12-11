@@ -54,6 +54,7 @@ getCohortCharacterizationResults <- function(baseUrl,
 
   resultUrl <- sprintf("%s/cohort-characterization/generation/%d/result", baseUrl, generationId)
   resultJson <- httr::content(httr::GET(resultUrl))
+  featureAnalyses <- designJson[['featureAnalyses']]
 
   distResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "DISTRIBUTION")]
   prevResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "PREVALENCE")]
@@ -96,15 +97,21 @@ getCohortCharacterizationResults <- function(baseUrl,
     r <- .convertNulltoNA(r)
     tibble::as_tibble(r)
   })
+  featureAnalyses <- lapply(featureAnalyses, function(r) {
+    r <- .convertNulltoNA(r)
+    tibble::as_tibble(r)
+  })
 
   distResultsDf <- as.data.frame(dplyr::bind_rows(distResults))
   prevResultsDf <- as.data.frame(dplyr::bind_rows(prevResults))
+  featureAnalysesDf <- as.data.frame(dplyr::bind_rows(featureAnalyses))
 
   list(sourceKey = sourceKey,
        characterizationId = characterizationId,
        generationId = generationId,
        distribution = distResultsDf,
-       prevalence = prevResultsDf)
+       prevalence = prevResultsDf,
+       featureAnalyses = featureAnalysesDf)
 }
 
 .getLatestGenerationId <- function(baseUrl, characterizationId, sourceKey) {
