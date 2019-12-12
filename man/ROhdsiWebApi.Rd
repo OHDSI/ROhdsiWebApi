@@ -3,7 +3,6 @@
 \docType{package}
 \name{ROhdsiWebApi}
 \alias{ROhdsiWebApi}
-\alias{ROhdsiWebApi-package}
 \title{ROhdsiWebApi}
 \description{
 ROhdsiWebApi

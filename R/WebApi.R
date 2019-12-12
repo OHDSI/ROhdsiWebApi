@@ -130,7 +130,8 @@ getCdmSources <- function(baseUrl) {
         }
       }
     }
-    data.frame(sourceName = s$sourceName,
+    data.frame(sourceId = s$sourceId,
+               sourceName = s$sourceName,
                sourceKey = s$sourceKey,
                sourceDialect = s$sourceDialect,
                cdmDatabaseSchema = cdmDatabaseSchema,
