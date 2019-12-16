@@ -1,4 +1,4 @@
-# @file CohortDefinition
+# @file dataSources
 #
 # Copyright 2019 Observational Health Data Sciences and Informatics
 #
@@ -78,10 +78,6 @@ listReportType <- c('dashboard', 'datadensity', 'person', 'visit', 'condition', 
                     'procedure', 'drug', 'drugera', 'measurement', 'observation', 'death', 'achillesheel'
                     )
 listDataSourceResults <- list()
-
-i = 1
-j = 1
-k = 3
 
 for (i in (1:length(listSourceKeys))){
   for (j in (1:length(listReportType))){
