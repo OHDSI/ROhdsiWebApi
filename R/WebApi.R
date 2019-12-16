@@ -142,3 +142,37 @@ getCdmSources <- function(baseUrl) {
 
   do.call(rbind, sourceDetails)
 }
+
+#' Renames all columns in Data Frame from snake_Case to camelCase
+#'
+#' @details
+#' Renames all columns in Data Frame from snake_Case to camelCase
+#'
+#' @param df   The dataFrame that needs renaming
+#'
+#' @return
+#' A data frame with snake_Case names, changed to camelCase
+#'
+#' @export
+renameDfNamesFromSnakeCaseToCamelCase <- function(df) {
+  require(SqlRender)
+  colnames(df) = gsub("concept\\.", "", colnames(df))
+  colNamesWithUnderScore <- str_detect(string = colnames(df), pattern = '_')
+  colnames(df)[colNamesWithUnderScore] <- SqlRender::snakeCaseToCamelCase(colnames(df)[colNamesWithUnderScore])
+  return(df)
+}
+
+#' Formats name by removing prefix. If the prefix starts with '[' and ends with ']'
+#'
+#' @details
+#' Formats name by removing prefix. If the prefix starts with '[' and ends with ']'
+#'
+#' @param name   Name needing formatting
+#'
+#' @return
+#' renamed name
+#'
+#' @export
+formatDfName <- function(name) {
+  gsub("_", " ", gsub("\\[(.*?)\\]_", "", gsub(" ", "_", name)))
+}
