@@ -180,9 +180,6 @@ getSetExpressionConceptIds <- function(baseUrl, expression, vocabSourceKey = NUL
 
   url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabSourceKey)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
-
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- httr::POST(url, body = expression, config = httr::add_headers(httpheader))
   req <- httr::content(req)
   unlist(req)
