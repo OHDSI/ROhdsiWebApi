@@ -17,6 +17,67 @@
 # limitations under the License.
 
 
+#' Get Cohort Characterization Specification
+#'
+#' @param baseUrl              The base URL for the WebApi instance, for example:
+#'                             "http://server.org:80/WebAPI".
+#' @param characterizationId   The id of the cohort characterization in Atlas
+#' @param generationId         (OPTIONAL) Used to specify the id of a particular generation of a cohort
+#'                             characterization. By default, the latest execution is retrieved
+#'
+#' @export
+getCohortCharacterizationSpecification <- function(baseUrl,
+                                             characterizationId,
+                                             generationId = NULL) {
+  if (is.null(generationId)) {
+    designUrl <- sprintf("%s/cohort-characterization/%d/design", baseUrl, characterizationId)
+    generationId <- NA
+  }
+  else {
+    designUrl <- sprintf("%s/cohort-characterization/generation/%d/design", baseUrl, generationId)
+  }
+  designJson <- httr::content(httr::GET(designUrl))
+  
+  cohorts <- designJson[['cohorts']]
+  for (i in (1:length(cohorts))) {
+    cohorts[[i]]$expression <- NULL #TO DO parse cohort expression
+  }
+  cohorts <- lapply(cohorts, function(r) {
+    r <- .convertNulltoNA(r)
+  })
+  cohortsDf <- as.data.frame(dplyr::bind_rows(cohorts))
+  
+  featureAnalyses <- designJson[['featureAnalyses']]
+  featureAnalyses <- lapply(featureAnalyses, function(r) {
+    r <- .convertNulltoNA(r)
+  })
+  featureAnalysesDf <- as.data.frame(dplyr::bind_rows(featureAnalyses))
+  
+  
+  
+  stratas <- designJson[['stratas']]
+  stratas <- lapply(stratas, function(r) {
+    r <- .convertNulltoNA(r)
+  })
+  stratasDf <- as.data.frame(dplyr::bind_rows(stratas))
+  
+  
+  parameters <- designJson[['parameters']]
+  parameters <- lapply(parameters, function(r) {
+    r <- .convertNulltoNA(r)
+  })
+  parametersDf <- as.data.frame(dplyr::bind_rows(parameters))
+  
+  list(
+        characterizationId = characterizationId,
+         generationId = generationId,
+         designJson = designJson,
+         featureAnalyses = featureAnalysesDf,
+         cohorts = cohortsDf,
+         stratas = stratasDf,
+         parameters = parametersDf
+       )
+}
 
 
 #' Get Cohort Characterization Results
