@@ -4,9 +4,15 @@
 \alias{getCohortCharacterizationResults}
 \title{Get Cohort Characterization Results}
 \usage{
-getCohortCharacterizationResults(baseUrl, characterizationId,
-  generationId = NULL, sourceKey, cohortIds = c(), domains = c(),
-  analysisNames = c())
+getCohortCharacterizationResults(
+  baseUrl,
+  characterizationId,
+  generationId = NULL,
+  sourceKey,
+  cohortIds = c(),
+  domains = c(),
+  analysisNames = c()
+)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:

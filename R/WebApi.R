@@ -142,3 +142,39 @@ getCdmSources <- function(baseUrl) {
 
   do.call(rbind, sourceDetails)
 }
+
+
+#' Get the WebApi configuration for the WebApi instance.
+#'
+#' @details
+#' Get the WebApi configuration for the WebApi instance.
+#'
+#' @param baseUrl        The base URL for the WebApi instance, for example:
+#'                       "http://server.org:80/WebAPI".
+#' @param sourceKeys     A list of string names for the source keys as in
+#'                       configuration page of Atlas.
+#' @return
+#' A list representing the WebApi configuration for the CDM Schema
+#'
+#' @examples
+#' \dontrun{
+#' #
+#'
+#' getConfiguration(baseUrl = "http://server.org:80/WebAPI", sourceKeys = c('source1', 'source2'))
+#' }
+#'
+#' @export
+getConfiguration <- function(baseUrl,sourceKeys){
+  require(dplyr)
+  .checkWebApiBaseUrl(baseUrl)
+  
+  a <- .getCdmSources(baseUrl)
+  a$parsed <- a$parsed %>%
+    dplyr::filter(toupper(sourceKey) %in% toupper(sourceKeys))
+  
+  result <- list(
+    native = a$native,
+    parsed = a$parsed
+  )
+  result
+}

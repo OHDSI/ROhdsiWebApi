@@ -4,12 +4,17 @@
 \alias{insertCohortDefinitionSetInPackage}
 \title{Insert a set of cohort definitions into package}
 \usage{
-
-  insertCohortDefinitionSetInPackage(fileName = "inst/settings/CohortsToCreate.csv",
-  baseUrl, jsonFolder = "inst/cohorts",
-  sqlFolder = "inst/sql/sql_server", rFileName = "R/CreateCohorts.R",
-  insertTableSql = TRUE, insertCohortCreationR = TRUE,
-  generateStats = FALSE, packageName)
+insertCohortDefinitionSetInPackage(
+  fileName = "inst/settings/CohortsToCreate.csv",
+  baseUrl,
+  jsonFolder = "inst/cohorts",
+  sqlFolder = "inst/sql/sql_server",
+  rFileName = "R/CreateCohorts.R",
+  insertTableSql = TRUE,
+  insertCohortCreationR = TRUE,
+  generateStats = FALSE,
+  packageName
+)
 }
 \arguments{
 \item{fileName}{Name of a CSV file specifying the cohorts to insert. See details for
