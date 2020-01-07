@@ -14,11 +14,11 @@ library(ROhdsiWebApi)
 ##################
 ##### configuration (Achilles) ###########
 rdsFileName[['configuration']] <-
- ROhdsiWebApi::getConfiguration(baseUrl = baseUrl,
+ ROhdsiWebApi::getSourceKeyConfiguration(baseUrl = baseUrl,
                                    sourceKeys = sourceKeys
                                    )
 ##### data sources (Achilles) ###########
 rdsFileName[['dataSources']] <-
- ROhdsiWebApi::getDataSource(baseUrl = baseUrl,
+ ROhdsiWebApi::getDataSourceReportsDataForSourceKeys(baseUrl = baseUrl,
                                 sourceKeys = sourceKeys
                                 )

@@ -144,28 +144,40 @@ getCdmSources <- function(baseUrl) {
 }
 
 
-#' Get the WebApi configuration for the WebApi instance.
+#' Get configuration information for source keys.
 #'
 #' @details
-#' Get the WebApi configuration for the WebApi instance.
+#' Source keys are commonly used as aliases to identify a data source. 
+#' A data source is uniquely identified a combination of sourceName and/or CDM name.
+#' sourceName/CDM name may also have version information. 
+#' WebApi calls rely on sourceKey for query. But relying on aliases
+#' is not reliable, as the underlying data source may change.
+#' This function, will give the configuration information for data sources
+#' given source keys. It may be used to unambigously identify the data source
+#' in a study.
 #'
 #' @param baseUrl        The base URL for the WebApi instance, for example:
 #'                       "http://server.org:80/WebAPI".
 #' @param sourceKeys     A list of string names for the source keys as in
 #'                       configuration page of Atlas.
 #' @return
-#' A list representing the WebApi configuration for the CDM Schema
+#' A list of two objects called native and parsed. Native is the json 
+#' specification, and parsed is the simplified version returned as a data.frame
+#' object. The data.frame object may be used for creating reports.
 #'
 #' @examples
 #' \dontrun{
 #' #
 #'
-#' getConfiguration(baseUrl = "http://server.org:80/WebAPI", sourceKeys = c('source1', 'source2'))
+#' getSourceKeyConfiguration(baseUrl = "http://server.org:80/WebAPI", 
+#'                                      sourceKeys = c('source1', 'source2')
+#'                                    )$parsed
+#' would return a data.frame with items like sourceId, sourceName, sourceDialect,
+#' sourceKey, priority, CDM, CEM.
 #' }
 #'
 #' @export
-getConfiguration <- function(baseUrl,sourceKeys){
-  require(dplyr)
+getSourceKeyConfiguration <- function(baseUrl,sourceKeys){
   .checkWebApiBaseUrl(baseUrl)
   
   a <- .getCdmSources(baseUrl)

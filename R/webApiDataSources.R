@@ -33,14 +33,27 @@
 #' \dontrun{
 #' # This will obtain pre-computed summary regarding dataSource
 #'
-#' getDataSourceReportForSourceKey(baseUrl = "http://server.org:80/WebAPI", dataSource = 'dataSource', reportType = 'dashboard')
+#' getDataSourceReportDataForSourceKey(baseUrl = "http://server.org:80/WebAPI", dataSource = 'dataSource', reportType = 'dashboard')
 #' }
 #'
 #' @export
 
-getDataSourceReportForSourceKey <- function(baseUrl,
-                                            sourceKey,
-                                            reportType){
+getDataSourceReportDataForSourceKey <- function(baseUrl,
+                                       sourceKey,
+                                       reportType){
+  .checkWebApiBaseUrl(baseUrl)
+  
+  reportTypes <- c('dashboard', 'datadensity', 'person', 'visit', 'condition', 'conditionera',
+                   'procedure', 'drug', 'drugera', 'measurement', 'observation', 'death', 'achillesheel'
+  )
+  compare <- .isVectorContained(vectorToCompare = reportType, vectorReference = reportTypes)
+  if (!isTRUE(compare)) {
+    stop(paste0(compare, " is not an accepted report type. Choose from : ", paste(reportTypes, collapse = ", ")))
+  }
+  
+  if (length(sourceKey) > 1) {stop("More than one sourceKey provided")}
+  if (length(reportType) > 1) {stop("More than one reportType provided")}
+  
   url <- sprintf("%s/cdmresults/%s/%s", baseUrl, sourceKey, reportType)
   .getApiResponseParse(url)
 }
@@ -61,13 +74,12 @@ getDataSourceReportForSourceKey <- function(baseUrl,
 #' \dontrun{
 #' # This will obtain pre-computed summary regarding dataSource
 #'
-#' getDataSource(baseUrl = "http://server.org:80/WebAPI", cdmDatabaseSchemas = c('schema1','schema2')
+#' getDataSourceReportsDataForSourceKeys(baseUrl = "http://server.org:80/WebAPI", cdmDatabaseSchemas = c('schema1','schema2')
 #' }
 #'
 #' @export
 
-getDataSource <- function(baseUrl,sourceKeys){
-  require(dplyr)
+getDataSourceReportsDataForSourceKeys <- function(baseUrl,sourceKeys){
   .checkWebApiBaseUrl(baseUrl)
 
   #validate source keys
@@ -77,13 +89,10 @@ getDataSource <- function(baseUrl,sourceKeys){
                       'procedure', 'drug', 'drugera', 'measurement', 'observation', 'death', 'achillesheel'
                       )
 
-  writeLines(paste0('Downloading Achilles data into R'))
+  writeLines(paste('Downloading Achilles data into R'))
   result <- list() #i = 1
   for (i in (1:length(sourceKeys))) {
     sourceKey = sourceKeys[[i]]
-    configuration <- getConfiguration(baseUrl = baseUrl,
-                                                       sourceKeys = sourceKey
-                                                    )$parsed
 
     writeLines(paste0('Working on SourceKey = ', sourceKey))
     for (j in (1:length(reportTypes))) {
@@ -91,12 +100,11 @@ getDataSource <- function(baseUrl,sourceKeys){
       writeLines(paste0('    Downloading = ', reportType))
 
       result[[sourceKey]][[reportType]] <-
-        ROhdsiWebApi::getDataSourceReportForSourceKey(baseUrl = baseUrl
+        ROhdsiWebApi::getDataSourceReportDataForSourceKey(baseUrl = baseUrl
                                                          , sourceKey = sourceKey
                                                          , reportType = reportType
                                                         )
-
-
+      
       jsonParsed <- result[[sourceKey]][[reportType]]$parsed
 
       jsonNames <- names(jsonParsed)
