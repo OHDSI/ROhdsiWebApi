@@ -71,7 +71,7 @@
 }
 
 # checks if url conforms with expected structure for base url
-.checkWebApiBaseUrl <- function(baseUrl){
+.checkBaseUrl <- function(baseUrl){
   require(rex)
   
   valid_chars <- rex(except_some_of(".", "/", " ", "-"))
@@ -117,7 +117,7 @@
 
 # get valid source keys
 .getValidSourceKeys <- function(baseUrl,sourceKeys){
-  .checkWebApiBaseUrl(baseUrl)
+  .checkBaseUrl(baseUrl)
   require(dplyr)
   .getCdmSources(baseUrl) %$%
     parsed %>%
@@ -129,7 +129,7 @@
 
 # get CDM sources
 .getCdmSources <- function(baseUrl) {
-  .checkWebApiBaseUrl(baseUrl)
+  .checkBaseUrl(baseUrl)
   require(dplyr)
   require(tidyr)
   url <- sprintf("%s/source/sources", baseUrl)
@@ -145,7 +145,7 @@
     dplyr::select(-sourceDaimonId) %>%
     base::replace(is.na(.), "") %>%
     dplyr::group_by(sourceId) %>%
-    dplyr::summarise_all(max)%>%
+    dplyr::summarise_all(max) %>%
     dplyr::mutate_all(na_if,"")
   
   result$parsed <- result$parsed %>%
@@ -157,7 +157,7 @@
 
 # Parse API to native (json) and parsed (r-friendly format)
 .getApiResponseParse <- function(url){#url <- baseUrl
-  .checkWebApiBaseUrl(baseUrl)
+  .checkBaseUrl(baseUrl)
   require(httr)
   require(jsonlite)
   
@@ -174,14 +174,4 @@
     )
     result
   }
-}
-
-# get valid source keys in webapi
-.getValidSourceKeys <- function(baseUrl,sourceKeys){
-  .checkWebApiBaseUrl(baseUrl)
-  .getCdmSources(baseUrl) %$%
-    parsed %>%
-    dplyr::filter(toupper(sourceKey) %in% toupper(sourceKeys)) %>%
-    dplyr::select(sourceKey) %>%
-    pull()
 }

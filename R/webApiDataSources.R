@@ -41,7 +41,7 @@
 getDataSourceReportDataForSourceKey <- function(baseUrl,
                                        sourceKey,
                                        reportType){
-  .checkWebApiBaseUrl(baseUrl)
+  .checkBaseUrl(baseUrl)
   
   reportTypes <- c('dashboard', 'datadensity', 'person', 'visit', 'condition', 'conditionera',
                    'procedure', 'drug', 'drugera', 'measurement', 'observation', 'death', 'achillesheel'
@@ -80,7 +80,7 @@ getDataSourceReportDataForSourceKey <- function(baseUrl,
 #' @export
 
 getDataSourceReportsDataForSourceKeys <- function(baseUrl,sourceKeys){
-  .checkWebApiBaseUrl(baseUrl)
+  .checkBaseUrl(baseUrl)
 
   #validate source keys
   sourceKeys <- .getValidSourceKeys(baseUrl, sourceKeys)

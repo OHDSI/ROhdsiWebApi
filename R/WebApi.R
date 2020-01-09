@@ -17,21 +17,21 @@
 # limitations under the License.
 
 
-.checkBaseUrl <- function(baseUrl) {
-  patterns <- list("https?:\\/\\/[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})+(\\/.*)?\\/WebAPI$",
-                   "https?:\\/\\/(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})+(\\/.*)?\\/WebAPI$")
-  results <- lapply(patterns, function(p) {
-    grepl(pattern = p, 
-          x = baseUrl, 
-          ignore.case = FALSE)
-  })
-  success <- any(as.logical(results))
-
-  if (!success) {
-    stop("Base URL not valid, should be like http://server.org:80/WebAPI")
-  }
-}
-
+# .checkBaseUrl <- function(baseUrl) {
+#   patterns <- list("https?:\\/\\/[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})+(\\/.*)?\\/WebAPI$",
+#                    "https?:\\/\\/(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})+(\\/.*)?\\/WebAPI$")
+#   results <- lapply(patterns, function(p) {
+#     grepl(pattern = p, 
+#           x = baseUrl, 
+#           ignore.case = FALSE)
+#   })
+#   success <- any(as.logical(results))
+# 
+#   if (!success) {
+#     stop("Base URL not valid, should be like http://server.org:80/WebAPI")
+#   }
+# }
+# 
 .convertNulltoNA <- function(thisList) {
   for (n in names(thisList)) {
     if (is.null(thisList[n][[1]])) {
@@ -178,7 +178,7 @@ getCdmSources <- function(baseUrl) {
 #'
 #' @export
 getSourceKeyConfiguration <- function(baseUrl,sourceKeys){
-  .checkWebApiBaseUrl(baseUrl)
+  .checkBaseUrl(baseUrl)
   
   a <- .getCdmSources(baseUrl)
   a$parsed <- a$parsed %>%
