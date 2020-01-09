@@ -20,7 +20,7 @@
 .convertNullToNARecursive <- function(x) {
   nullToNARecursive <- function(x, fn)
   {
-    if(is.list(x)) {
+    if (is.list(x)) {
       lapply(x, nullToNARecursive, fn)
     } else if (is.data.frame(x)) {
       x[is.null(x)] <- NA
@@ -28,7 +28,7 @@
       fn(x)
     }
   }
-  nullToNARecursive(x, function(x) if(is.null(x)) NA else x)
+  nullToNARecursive(x, function(x) if (is.null(x)) NA else x)
 }
 
 
@@ -119,7 +119,7 @@
 .getValidSourceKeys <- function(baseUrl,sourceKeys){
   .checkBaseUrl(baseUrl)
   require(dplyr)
-  .getCdmSources(baseUrl) %$%
+  .getSourceAndDaimonConfiguration(baseUrl) %$%
     parsed %>%
     dplyr::filter(toupper(sourceKey) %in% toupper(sourceKeys)) %>%
     dplyr::select(sourceKey) %>%
@@ -127,8 +127,8 @@
 }
 
 
-# get CDM sources
-.getCdmSources <- function(baseUrl) {
+# get source and daimon
+.getSourceAndDaimonConfiguration <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
   require(dplyr)
   require(tidyr)

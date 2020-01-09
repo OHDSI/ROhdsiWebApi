@@ -180,7 +180,7 @@ getCdmSources <- function(baseUrl) {
 getSourceKeyConfiguration <- function(baseUrl,sourceKeys){
   .checkBaseUrl(baseUrl)
   
-  a <- .getCdmSources(baseUrl)
+  a <- .getSourceAndDaimonConfiguration(baseUrl)
   a$parsed <- a$parsed %>%
     dplyr::filter(toupper(sourceKey) %in% toupper(sourceKeys))
   
