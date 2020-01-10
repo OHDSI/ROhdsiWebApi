@@ -15,17 +15,18 @@ License: Apache License 2.0
 Depends:
     R (>= 3.1.0),
 Imports:
-    RJSONIO,
-    httr (>= 1.3.1),
-    openxlsx (>= 4.0.17),
-    jsonlite,
     dplyr,
+    httr (>= 1.3.1),
+    jsonlite,
+    openxlsx (>= 4.0.17),
+    rex,
+    RJSONIO,
+    SqlRender,
     tibble,
-    SqlRender
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi
 BugReports: https://github.com/OHDSI/ROhdsiWebApi/issues    
 NeedsCompilation: no
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Encoding: UTF-8
