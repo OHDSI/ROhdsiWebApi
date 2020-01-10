@@ -72,11 +72,10 @@
 
 # checks if url conforms with expected structure for base url
 .checkBaseUrl <- function(baseUrl){
-  require(rex)
   
-  valid_chars <- rex(except_some_of(".", "/", " ", "-"))
+  valid_chars <- rex::rex(except_some_of(".", "/", " ", "-"))
   
-  baseUrlRegEx <- rex(
+  baseUrlRegEx <- rex::rex(
     start,
     
     # protocol identifier (optional) + //
@@ -118,20 +117,17 @@
 # get valid source keys
 .getValidSourceKeys <- function(baseUrl,sourceKeys){
   .checkBaseUrl(baseUrl)
-  require(dplyr)
   .getSourceAndDaimonConfiguration(baseUrl) %$%
     parsed %>%
     dplyr::filter(toupper(sourceKey) %in% toupper(sourceKeys)) %>%
     dplyr::select(sourceKey) %>%
-    pull()
+    dplyr::pull()
 }
 
 
 # get source and daimon
 .getSourceAndDaimonConfiguration <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  require(dplyr)
-  require(tidyr)
   url <- sprintf("%s/source/sources", baseUrl)
   result <- .getApiResponseParse(url)
   
@@ -146,7 +142,7 @@
     base::replace(is.na(.), "") %>%
     dplyr::group_by(sourceId) %>%
     dplyr::summarise_all(max) %>%
-    dplyr::mutate_all(na_if,"")
+    dplyr::mutate_all(dplyr::na_if,"")
   
   result$parsed <- result$parsed %>%
     dplyr::select(-daimons) %>%
@@ -158,10 +154,8 @@
 # Parse API to native (json) and parsed (r-friendly format)
 .getApiResponseParse <- function(url){#url <- baseUrl
   .checkBaseUrl(baseUrl)
-  require(httr)
-  require(jsonlite)
   
-  if (http_type(httr::GET(url)) != "application/json") {
+  if (httr::http_type(httr::GET(url)) != "application/json") {
     stop(paste0(url, " API for did not return json"), call. = FALSE)
   } else {
     
