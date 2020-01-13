@@ -120,13 +120,13 @@ getCdmSources <- function(baseUrl) {
       for (i in 1:length(s$daimons)) {
         if (!is.na(s$daimons[[i]]$daimonType)) {
           if (toupper(s$daimons[[i]]$daimonType) == toupper("cdm")) {
-          cdmDatabaseSchema <- s$daimons[[i]]$tableQualifier
+            cdmDatabaseSchema <- s$daimons[[i]]$tableQualifier
           }
           if (toupper(s$daimons[[i]]$daimonType) == toupper("vocabulary")) {
-          vocabDatabaseSchema <- s$daimons[[i]]$tableQualifier
+            vocabDatabaseSchema <- s$daimons[[i]]$tableQualifier
           }
           if (toupper(s$daimons[[i]]$daimonType) == toupper("results")) {
-          resultsDatabaseSchema <- s$daimons[[i]]$tableQualifier
+            resultsDatabaseSchema <- s$daimons[[i]]$tableQualifier
           }
         }
       }
