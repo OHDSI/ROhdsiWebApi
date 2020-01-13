@@ -1,6 +1,6 @@
 # @file CohortCharacterization
 #
-# Copyright 2019 Observational Health Data Sciences and Informatics
+# Copyright 2020 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 # 
@@ -20,41 +20,44 @@
 
 
 #' Get Cohort Characterization Results
-#' 
-#' @param baseUrl               The base URL for the WebApi instance, for example:
-#'                              "http://server.org:80/WebAPI".
-#' @param characterizationId    The id of the cohort characterization in Atlas
-#' @param generationId          Used to specify the id of a particular generation of a cohort characterization.
-#'                              By default, the latest execution is retrieved
-#' @param sourceKey             The source key for a CDM instance in WebAPI, as defined in the Configuration page
-#' @param cohortIds             (OPTIONAL) Which cohort definition ids would you like to retrieve? 
-#'                              By default, all cohorts are retrieved.
-#' @param domains               (OPTIONAL) Which feature domains would you like to retrieve?
-#'                              By default, all domains are retrieved.
-#' @param analysisNames         (OPTIONAL) Which feature analysis names would you like to retrieve?
-#'                              By default, all analyses are retrieved.
-#' 
-#' @export                             
-getCohortCharacterizationResults <- function(baseUrl, 
-                                             characterizationId, 
+#'
+#' @param baseUrl              The base URL for the WebApi instance, for example:
+#'                             "http://server.org:80/WebAPI".
+#' @param characterizationId   The id of the cohort characterization in Atlas
+#' @param generationId         Used to specify the id of a particular generation of a cohort
+#'                             characterization. By default, the latest execution is retrieved
+#' @param sourceKey            The source key for a CDM instance in WebAPI, as defined in the
+#'                             Configuration page
+#' @param cohortIds            (OPTIONAL) Which cohort definition ids would you like to retrieve? By
+#'                             default, all cohorts are retrieved.
+#' @param domains              (OPTIONAL) Which feature domains would you like to retrieve? By default,
+#'                             all domains are retrieved.
+#' @param analysisNames        (OPTIONAL) Which feature analysis names would you like to retrieve? By
+#'                             default, all analyses are retrieved.
+#'
+#' @export
+getCohortCharacterizationResults <- function(baseUrl,
+                                             characterizationId,
                                              generationId = NULL,
                                              sourceKey,
                                              cohortIds = c(),
                                              domains = c(),
                                              analysisNames = c()) {
   if (is.null(generationId)) {
-    generationId <- .getLatestGenerationId(baseUrl = baseUrl, characterizationId = characterizationId, sourceKey = sourceKey)  
+    generationId <- .getLatestGenerationId(baseUrl = baseUrl,
+                                           characterizationId = characterizationId,
+                                           sourceKey = sourceKey)
   }
-  
+
   designUrl <- sprintf("%s/cohort-characterization/generation/%d/design", baseUrl, generationId)
   designJson <- httr::content(httr::GET(designUrl))
-  
+
   resultUrl <- sprintf("%s/cohort-characterization/generation/%d/result", baseUrl, generationId)
   resultJson <- httr::content(httr::GET(resultUrl))
-  
-  distResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "DISTRIBUTION") ]
-  prevResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "PREVALENCE") ]
-  
+
+  distResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "DISTRIBUTION")]
+  prevResults <- resultJson[sapply(resultJson, function(r) toupper(r$resultType) == "PREVALENCE")]
+
   if (length(cohortIds) > 0) {
     if (length(distResults) > 0) {
       distResults <- distResults[sapply(distResults, function(r) r$cohortId %in% cohortIds)]
@@ -63,7 +66,7 @@ getCohortCharacterizationResults <- function(baseUrl,
       prevResults <- distResults[sapply(prevResults, function(r) r$cohortId %in% cohortIds)]
     }
   }
-  
+
   if (length(domains) > 0) {
     featureAnalyses <- designJson$featureAnalyses
     featureAnalyses <- featureAnalyses[sapply(featureAnalyses, function(f) f$domain %in% domains)]
@@ -75,16 +78,16 @@ getCohortCharacterizationResults <- function(baseUrl,
       distResults <- distResults[sapply(distResults, function(r) r$id %in% featureIds)]
     }
   }
-  
+
   if (length(analysisNames) > 0) {
     if (length(distResults) > 0) {
-      distResults <- distResults[sapply(distResults, function(r) r$analysisName %in% analysisNames)] 
+      distResults <- distResults[sapply(distResults, function(r) r$analysisName %in% analysisNames)]
     }
     if (length(prevResults) > 0) {
-      prevResults <- prevResults[sapply(prevResults, function(r) r$analysisName %in% analysisNames)] 
+      prevResults <- prevResults[sapply(prevResults, function(r) r$analysisName %in% analysisNames)]
     }
   }
-  
+
   distResults <- lapply(distResults, function(r) {
     r <- .convertNulltoNA(r)
     tibble::as_tibble(r)
@@ -93,10 +96,10 @@ getCohortCharacterizationResults <- function(baseUrl,
     r <- .convertNulltoNA(r)
     tibble::as_tibble(r)
   })
-  
+
   distResultsDf <- as.data.frame(dplyr::bind_rows(distResults))
   prevResultsDf <- as.data.frame(dplyr::bind_rows(prevResults))
-  
+
   list(sourceKey = sourceKey,
        characterizationId = characterizationId,
        generationId = generationId,
@@ -108,13 +111,13 @@ getCohortCharacterizationResults <- function(baseUrl,
   url <- sprintf("%s/cohort-characterization/%d/generation", baseUrl, characterizationId)
   json <- httr::GET(url)
   results <- httr::content(json)
-  
+
   generations <- results[sapply(results, function(r) {
     toupper(r$status) == "COMPLETED" & r$sourceKey == sourceKey
   })]
-  
+
   df <- do.call(rbind.data.frame, generations)
-  df <- df[which.max(df$id),]
+  df <- df[which.max(df$id), ]
   if (nrow(df) > 0) {
     df$id
   } else {

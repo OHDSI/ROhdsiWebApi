@@ -1,6 +1,6 @@
 # @file ConceptSet
 #
-# Copyright 2019 Observational Health Data Sciences and Informatics
+# Copyright 2020 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 # 
@@ -37,7 +37,7 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
   url <- gsub("@baseUrl", baseUrl, gsub("@setId", setId, "@baseUrl/conceptset/@setId"))
   json <- httr::GET(url)
   json <- httr::content(json)
-  
+
   if (formatName) {
     .formatName(json$name)
   } else {
@@ -47,36 +47,33 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
 
 
 #' Get a concept set expression
-#' 
-#' @details 
+#'
+#' @details
 #' Obtain the JSON expression from WebAPI for a given concept set
-#' 
-#' @param setId           The concept set id in Atlas.
-#' @param baseUrl         The base URL for the WebApi instance, for example:
-#'                        "http://server.org:80/WebAPI".
-#' @param asDataFrame     (OPTIONAL) Get expression as data frame
-#' 
-#' @return 
+#'
+#' @param setId         The concept set id in Atlas.
+#' @param baseUrl       The base URL for the WebApi instance, for example:
+#'                      "http://server.org:80/WebAPI".
+#' @param asDataFrame   (OPTIONAL) Get expression as data frame
+#'
+#' @return
 #' A JSON list object representing the concept set
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' # This will obtain a concept set's JSON expression:
 #'
-#' getConceptSetExpression(setId = 282, 
-#'                         baseUrl = "http://server.org:80/WebAPI")
+#' getConceptSetExpression(setId = 282, baseUrl = "http://server.org:80/WebAPI")
 #' }
-#'                        
+#'
 #' @export
-getConceptSetExpression <- function(baseUrl, 
-                                    setId,
-                                    asDataFrame = FALSE) {
+getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
   .checkBaseUrl(baseUrl)
-  
+
   url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, setId)
   json <- httr::GET(url)
   json <- httr::content(json)
-  
+
   if (asDataFrame) {
     .setExpressionToDf(json = json)
   } else {
@@ -85,45 +82,41 @@ getConceptSetExpression <- function(baseUrl,
 }
 
 .setExpressionToDf <- function(json) {
-  
+
   lists <- lapply(json$items, function(j) {
     as.data.frame(j)
   })
-  
+
   do.call("rbind", lists)
 }
 
 .getIncludedConceptsDf <- function(baseUrl, vocabSourceKey, includedConcepts) {
-  url <- sprintf("%s/vocabulary/%s/lookup/identifiers",
-                 baseUrl,
-                 vocabSourceKey)
+  url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabSourceKey)
   body <- RJSONIO::toJSON(includedConcepts, digits = 23)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
   req <- httr::content(req)
-  
+
   lists <- lapply(req, function(r) {
     as.data.frame(r)
   })
-  
+
   do.call("rbind", lists)
 }
 
 
 .getMappedConceptsDf <- function(baseUrl, vocabSourceKey, includedConcepts) {
-  url <- sprintf("%s/vocabulary/%s/lookup/mapped",
-                 baseUrl,
-                 vocabSourceKey)
+  url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabSourceKey)
   body <- RJSONIO::toJSON(includedConcepts, digits = 23)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
   req <- httr::content(req)
-  
+
   lists <- lapply(req, function(r) {
     modList <- .convertNulltoNA(r)
     as.data.frame(modList, stringsAsFactors = FALSE)
   })
-  
+
   do.call("rbind", lists)
 }
 
@@ -132,8 +125,7 @@ getConceptSetExpression <- function(baseUrl,
 #'
 #' @param fileName   Name of a CSV file in the inst/settings folder of the package specifying the
 #'                   concept sets to insert. See details for the expected file format.
-#' @param baseUrl    The base URL for the WebApi instance, for example:
-#'                   "http://server.org:80/WebAPI".
+#' @param baseUrl    The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
 #'
 #' @details
 #' The CSV file should have: \describe{ \item{atlasId}{The concept set Id in ATLAS.} }
@@ -141,12 +133,12 @@ getConceptSetExpression <- function(baseUrl,
 #' @export
 insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
   .checkBaseUrl(baseUrl)
-  
+
   conceptSetsToCreate <- read.csv(file.path("inst/settings", fileName))
   if (!file.exists("inst/conceptsets")) {
     dir.create("inst/conceptsets", recursive = TRUE)
   }
-  
+
   for (i in 1:nrow(conceptSetsToCreate)) {
     writeLines(paste("Inserting concept set:", conceptSetsToCreate$atlasId[i]))
     df <- as.data.frame(getConceptSetConceptIds(baseUrl = baseUrl,
@@ -160,17 +152,15 @@ insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
 
 
 #' Get Concepts from a Concept Set Expression
-#' 
-#' @details 
-#' 
+#'
 #' @param baseUrl          The base URL for the WebApi instance, for example:
 #'                         "http://server.org:80/WebAPI".
 #' @param expression       A JSON string that represents the concept set expression
 #' @param vocabSourceKey   The source key of the Vocabulary. By default, the priority Vocabulary is
 #'                         used.
-#' @return 
+#' @return
 #' A list of concept ids
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' # This will obtain the concept ids from a concept set expression:
@@ -178,18 +168,16 @@ insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
 #' getSetExpressionConceptIds(baseUrl = "http://server.org:80/WebAPI",
 #'                            expression = someJsonExpression)
 #' }
-#' 
+#'
 #' @export
-getSetExpressionConceptIds <- function(baseUrl,
-                                       expression,
-                                       vocabSourceKey = NULL) {
-  
+getSetExpressionConceptIds <- function(baseUrl, expression, vocabSourceKey = NULL) {
+
   .checkBaseUrl(baseUrl)
-  
+
   if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
     vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
   }
-  
+
   url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabSourceKey)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- httr::POST(url, body = expression, config = httr::add_headers(httpheader))
@@ -215,25 +203,28 @@ getSetExpressionConceptIds <- function(baseUrl,
 #' @export
 getConceptSetConceptIds <- function(baseUrl, setId, vocabSourceKey = NULL) {
   .checkBaseUrl(baseUrl)
-  
+
   if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
     vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
   }
-  
-  expression <- RJSONIO::toJSON(getConceptSetExpression(baseUrl = baseUrl, setId = setId), digits = 23)
-  getSetExpressionConceptIds(baseUrl = baseUrl, expression = expression, vocabSourceKey = vocabSourceKey)
+
+  expression <- RJSONIO::toJSON(getConceptSetExpression(baseUrl = baseUrl, setId = setId),
+                                digits = 23)
+  getSetExpressionConceptIds(baseUrl = baseUrl,
+                             expression = expression,
+                             vocabSourceKey = vocabSourceKey)
 }
 
 
 #' Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook
 #'
-#' @param conceptSetIds A vector of concept set IDs.
-#' @param workFolder    Directory location where the workbook will be saved, defaults to working
-#'                      directory.
-#' @param baseUrl       The base URL for the WebApi instance, for example:
-#'                      "http://server.org:80/WebAPI".
-#' @param included      Should included concepts be included in the workbook?
-#' @param mapped        Should mapped concepts be included in the workbook?                   
+#' @param conceptSetIds   A vector of concept set IDs.
+#' @param workFolder      Directory location where the workbook will be saved, defaults to working
+#'                        directory.
+#' @param baseUrl         The base URL for the WebApi instance, for example:
+#'                        "http://server.org:80/WebAPI".
+#' @param included        Should included concepts be included in the workbook?
+#' @param mapped          Should mapped concepts be included in the workbook?
 #'
 #' @return
 #' A xlsx workbook (conceptSetExpressions.xlsx) that includes a list of all concept set IDs and names
@@ -241,29 +232,26 @@ getConceptSetConceptIds <- function(baseUrl, setId, vocabSourceKey = NULL) {
 #' concepts worksheet for each concept set are avaialble.
 #'
 #' @export
-createConceptSetWorkbook <- function(conceptSetIds, 
-                                     workFolder = NULL, 
-                                     baseUrl, 
+createConceptSetWorkbook <- function(conceptSetIds,
+                                     workFolder = NULL,
+                                     baseUrl,
                                      included = FALSE,
                                      mapped = FALSE) {
   .checkBaseUrl(baseUrl)
-  
+
   if (is.null(workFolder))
     workFolder <- getwd()
-  
+
   if (!is.vector(conceptSetIds))
     stop("conceptSetIds argument must be a numeric vector")
-  
+
   conceptSetNames <- NULL
   for (i in conceptSetIds) {
-    conceptSetNames <- c(conceptSetNames, 
-                         getConceptSetName(baseUrl = baseUrl,
-                                           setId = i,
-                                           formatName = FALSE))
+    conceptSetNames <- c(conceptSetNames,
+                         getConceptSetName(baseUrl = baseUrl, setId = i, formatName = FALSE))
   }
-  conceptSets <- data.frame(conceptSetId = conceptSetIds,
-                            conceptSetName = conceptSetNames)
-  
+  conceptSets <- data.frame(conceptSetId = conceptSetIds, conceptSetName = conceptSetNames)
+
   wb <- openxlsx::createWorkbook()
   openxlsx::addWorksheet(wb = wb, sheetName = "conceptSetIds")
   openxlsx::writeDataTable(wb = wb,
@@ -276,7 +264,7 @@ createConceptSetWorkbook <- function(conceptSetIds,
                          sheet = "conceptSetIds",
                          cols = 1:ncol(conceptSets),
                          widths = "auto")
-  
+
   createSheet <- function(fileNumber, label) {
     concepts <- read.csv(file = substring(files[fileNumber], first = 3),
                          header = FALSE,
@@ -298,31 +286,31 @@ createConceptSetWorkbook <- function(conceptSetIds,
                            cols = 1:ncol(concepts),
                            widths = "auto")
   }
-  
+
   for (i in conceptSetIds) {
     url <- paste(baseUrl, "conceptset", i, "export", sep = "/")
     httr::set_config(httr::config(ssl_verifypeer = 0L))
     r <- httr::GET(url = url)
     bin <- httr::content(r, "raw")
     base::writeBin(object = bin, con = file.path(workFolder, paste0(i, "_conceptSet.zip")))
-    files <- utils::unzip(zipfile = file.path(workFolder, paste0(i, "_conceptSet.zip")), overwrite = TRUE)
-    
+    files <- utils::unzip(zipfile = file.path(workFolder, paste0(i, "_conceptSet.zip")),
+                          overwrite = TRUE)
+
     # concept set
     createSheet(1, "concepts")
-    
+
     # included concepts
     if (included)
       createSheet(2, "included")
-    
+
     # mapped concepts
     if (mapped)
       createSheet(3, "mapped")
-    
+
     # remove zip
     file.remove(file.path(workFolder, paste0(i, "_conceptSet.zip")))
   }
   file.remove(files[1], files[2], files[3])
-  openxlsx::saveWorkbook(wb = wb,
-                         file = file.path(workFolder, "conceptSetExpressions.xlsx"),
-                         overwrite = TRUE)
+  openxlsx::saveWorkbook(wb = wb, file = file.path(workFolder,
+                                                   "conceptSetExpressions.xlsx"), overwrite = TRUE)
 }

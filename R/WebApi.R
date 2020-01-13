@@ -1,6 +1,6 @@
 # @file WebApi
 #
-# Copyright 2019 Observational Health Data Sciences and Informatics
+# Copyright 2020 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 # 
@@ -26,9 +26,9 @@
           ignore.case = FALSE)
   })
   success <- any(as.logical(results))
-  
+
   if (!success) {
-    stop("Base URL not valid, should be like http://server.org:80/WebAPI")  
+    stop("Base URL not valid, should be like http://server.org:80/WebAPI")
   }
 }
 
@@ -46,8 +46,7 @@
 #' @details
 #' Obtains the source key of the default OMOP Vocab in Atlas.
 #'
-#' @param baseUrl   The base URL for the WebApi instance, for example:
-#'                  "http://server.org:80/WebAPI".
+#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
 #'
 #' @return
 #' A string with the source key of the default OMOP Vocab in Atlas.
@@ -66,8 +65,7 @@ getPriorityVocabKey <- function(baseUrl) {
 #' @details
 #' Obtains the WebAPI version number
 #'
-#' @param baseUrl      The base URL for the WebApi instance, for example:
-#'                     "http://server.org:80/WebAPI".
+#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
 #'
 #' @return
 #' The WebAPI version
@@ -81,9 +79,9 @@ getWebApiVersion <- function(baseUrl) {
 
 .getSourceIdFromKey <- function(baseUrl, sourceKey) {
   .checkBaseUrl(baseUrl)
-  
+
   url <- sprintf("%1s/source/%2s", baseUrl, sourceKey)
-  
+
   json <- httr::GET(url)
   json <- httr::content(json)
   if (is.null(json$sourceId))
@@ -101,26 +99,25 @@ getWebApiVersion <- function(baseUrl) {
 #' @details
 #' Obtains the data sources configured in the WebAPI instance
 #'
-#' @param baseUrl      The base URL for the WebApi instance, for example:
-#'                     "http://server.org:80/WebAPI".
+#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
 #'
 #' @return
 #' A data frame of data source information
 #'
 #' @export
 getCdmSources <- function(baseUrl) {
-  
+
   url <- sprintf("%s/source/sources", baseUrl)
   request <- httr::GET(url)
   httr::stop_for_status(request)
   sources <- httr::content(request)
-  
+
   sourceDetails <- lapply(sources, function(s) {
     cdmDatabaseSchema <- NA
     vocabDatabaseSchema <- NA
     resultsDatabaseSchema <- NA
     if (length(s$daimons) > 0) {
-      for(i in 1:length(s$daimons)) {
+      for (i in 1:length(s$daimons)) {
         if (!is.na(s$daimons[[i]]$daimonType)) {
           if (toupper(s$daimons[[i]]$daimonType) == toupper("cdm")) {
             cdmDatabaseSchema <- s$daimons[[i]]$tableQualifier
@@ -142,6 +139,6 @@ getCdmSources <- function(baseUrl) {
                resultsDatabaseSchema = resultsDatabaseSchema,
                stringsAsFactors = FALSE)
   })
-  
+
   do.call(rbind, sourceDetails)
 }

@@ -1,15 +1,15 @@
 Package: ROhdsiWebApi
 Type: Package
 Title: R package to allow interactivity with a WebApi instance
-Version: 0.0.2
-Date: 2019-08-22
+Version: 0.0.3
+Date: 2020-01-13
 Authors@R: c(
-    person("Ajit", "Londhe", email = "alondhe2@its.jnj.com", role = c("aut", "cre")),
+    person("Ajit", "Londhe", email = "alondhe@amgen.com", role = c("aut", "cre")),
     person("Martijn", "Schuemie", role = c("aut")),
     person("Frank", "DeFalco", role = c("aut")),
     person("Observational Health Data Science and Informatics", role = c("cph"))
   )
-Maintainer: Ajit Londhe <alondhe2@its.jnj.com>
+Maintainer: Ajit Londhe <alondhe@amgen.com>
 Description: Includes R wrappers for calling WebAPI web services.
 License: Apache License 2.0
 Depends:
@@ -20,11 +20,12 @@ Imports:
     openxlsx (>= 4.0.17),
     jsonlite,
     dplyr,
-    tibble
+    tibble,
+    SqlRender
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi
 BugReports: https://github.com/OHDSI/ROhdsiWebApi/issues    
 NeedsCompilation: no
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Encoding: UTF-8

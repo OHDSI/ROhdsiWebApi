@@ -4,8 +4,13 @@
 \alias{createConceptSetWorkbook}
 \title{Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook}
 \usage{
-createConceptSetWorkbook(conceptSetIds, workFolder = NULL, baseUrl,
-  included = FALSE, mapped = FALSE)
+createConceptSetWorkbook(
+  conceptSetIds,
+  workFolder = NULL,
+  baseUrl,
+  included = FALSE,
+  mapped = FALSE
+)
 }
 \arguments{
 \item{conceptSetIds}{A vector of concept set IDs.}

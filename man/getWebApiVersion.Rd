@@ -7,8 +7,7 @@
 getWebApiVersion(baseUrl)
 }
 \arguments{
-\item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+\item{baseUrl}{The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".}
 }
 \value{
 The WebAPI version

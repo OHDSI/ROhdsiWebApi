@@ -21,9 +21,6 @@ A list of concept ids
 \description{
 Get Concepts from a Concept Set Expression
 }
-\details{
-
-}
 \examples{
 \dontrun{
 # This will obtain the concept ids from a concept set expression:
