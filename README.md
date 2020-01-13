@@ -54,8 +54,3 @@ ROhdsiWebApi is being developed in R Studio.
 ### Development status
 
 Beta
-
-Acknowledgements
-================
-
-This project is supported in part through the National Science Foundation grant IIS 1251151.
