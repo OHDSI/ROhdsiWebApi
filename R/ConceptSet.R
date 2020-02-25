@@ -251,6 +251,7 @@ createConceptSetWorkbook <- function(conceptSetIds,
                          getConceptSetName(baseUrl = baseUrl, setId = i, formatName = FALSE))
   }
   conceptSets <- data.frame(conceptSetId = conceptSetIds, conceptSetName = conceptSetNames)
+  names(conceptSets) <- SqlRender::camelCaseToTitleCase(names(conceptSets))
 
   wb <- openxlsx::createWorkbook()
   openxlsx::addWorksheet(wb = wb, sheetName = "conceptSetIds")
@@ -264,53 +265,123 @@ createConceptSetWorkbook <- function(conceptSetIds,
                          sheet = "conceptSetIds",
                          cols = 1:ncol(conceptSets),
                          widths = "auto")
-
-  createSheet <- function(fileNumber, label) {
-    concepts <- read.csv(file = substring(files[fileNumber], first = 3),
-                         header = FALSE,
-                         sep = ",",
-                         strip.white = TRUE,
-                         blank.lines.skip = TRUE,
-                         skipNul = TRUE)
-    names(concepts) <- as.character(apply(concepts[1, ], 1, paste))
-    concepts <- concepts[-1, ]
-    openxlsx::addWorksheet(wb = wb, sheetName = paste(label, i, sep = "_"))
+  
+  createSheet <- function(data, label, setId) {
+    openxlsx::addWorksheet(wb = wb, sheetName = paste(label, setId, sep = "_"))
     openxlsx::writeDataTable(wb = wb,
-                             sheet = paste(label, i, sep = "_"),
-                             x = concepts,
+                             sheet = paste(label, setId, sep = "_"),
+                             x = data,
                              colNames = TRUE,
                              rowNames = FALSE,
                              withFilter = FALSE)
     openxlsx::setColWidths(wb = wb,
-                           sheet = paste(label, i, sep = "_"),
-                           cols = 1:ncol(concepts),
+                           sheet = paste(label, setId, sep = "_"),
+                           cols = 1:ncol(data),
                            widths = "auto")
   }
 
   for (i in conceptSetIds) {
-    url <- paste(baseUrl, "conceptset", i, "export", sep = "/")
-    httr::set_config(httr::config(ssl_verifypeer = 0L))
-    r <- httr::GET(url = url)
-    bin <- httr::content(r, "raw")
-    base::writeBin(object = bin, con = file.path(workFolder, paste0(i, "_conceptSet.zip")))
-    files <- utils::unzip(zipfile = file.path(workFolder, paste0(i, "_conceptSet.zip")),
-                          overwrite = TRUE)
-
-    # concept set
-    createSheet(1, "concepts")
-
-    # included concepts
-    if (included)
-      createSheet(2, "included")
-
-    # mapped concepts
-    if (mapped)
-      createSheet(3, "mapped")
-
-    # remove zip
-    file.remove(file.path(workFolder, paste0(i, "_conceptSet.zip")))
+    resolvedConcepts <- resolveConceptSetId(baseUrl = baseUrl, setId = i)
+    
+    data = resolvedConcepts$expression
+    names(data) = SqlRender::camelCaseToTitleCase(names(data))
+    createSheet(data = data, label = "concepts", setId = i)
+    
+    if (included) {
+      data = resolvedConcepts$includedConcepts
+      names(data) = SqlRender::camelCaseToTitleCase(names(data))
+      createSheet(data = data, label = "included", setId = i)
+    }
+    
+    if (mapped) { 
+      data = resolvedConcepts$mappedConcepts
+      names(data) = SqlRender::camelCaseToTitleCase(names(data))
+      createSheet(data = data, label = "mapped", setId = i)
+    }
+    
   }
-  file.remove(files[1], files[2], files[3])
   openxlsx::saveWorkbook(wb = wb, file = file.path(workFolder,
                                                    "conceptSetExpressions.xlsx"), overwrite = TRUE)
 }
+
+
+
+#' Get resolved concept set expression
+#'
+#' @details
+#' Given a concept set JSON expression, return the included and/or mapped concept details
+#'
+#' @param baseUrl           The base URL for the WebApi instance, for example:
+#'                          "http://server.org:80/WebAPI".
+#' @param setId             The concept set id in Atlas.
+#' @param formatName        Should the name be formatted to remove prefixes and underscores?
+#' @return
+#' A list of data frame objects with concept set expression, included conceptset, mapped conceptsets.
+#'
+#' @examples
+#' \dontrun{
+#' # This will obtain resolved concept set expression:
+#'
+#' resolveConceptSet(baseUrl = "http://server.org:80/WebAPI", setId = 213423)
+#' }
+#'
+#' @export
+resolveConceptSetId <-
+  function(baseUrl,
+           setId,
+           formatName = FALSE) {
+    .checkBaseUrl(baseUrl)
+    
+    readCsv <- function(file) {
+      concepts <- read.csv(
+        file = substring(file, first = 3),
+        header = FALSE,
+        sep = ",",
+        strip.white = TRUE,
+        blank.lines.skip = TRUE,
+        skipNul = TRUE
+      )
+      names(concepts) <- as.character(apply(concepts[1, ], 1, paste))
+      concepts <- concepts[-1, ]
+    }
+    
+    url <- paste(baseUrl, "conceptset", setId, "export", sep = "/")
+    httr::set_config(httr::config(ssl_verifypeer = 0L))
+    r <- httr::GET(url = url)
+    bin <- httr::content(r, "raw")
+    
+    tmpdir = tempdir()
+    dir.create(file.path(tmpdir), showWarnings = FALSE)
+    tempFile <-
+      tempfile(
+        pattern = paste0("conceptSet_", setId),
+        fileext = ".zip"
+      )
+    base::writeBin(object = bin, con = file.path(tempFile))
+    files <-
+      utils::unzip(zipfile = file.path(tempFile),
+                   overwrite = TRUE,
+                   exdir = tmpdir)
+    # concept set
+    concepts <- readCsv(files[1]) %>% tibble::as_tibble()
+    names(concepts) <- snakecase::to_lower_camel_case(names(concepts))
+    
+    included <- readCsv(files[2]) %>% tibble::as_tibble()
+    names(included) <- snakecase::to_lower_camel_case(names(included))
+    
+    mapped <- readCsv(files[3]) %>% tibble::as_tibble()
+    names(mapped) <- snakecase::to_lower_camel_case(names(mapped))
+    
+    name <- getConceptSetName(baseUrl, setId = setId, formatName = formatName)
+    # remove zip
+    unlink(tmpdir, recursive = TRUE, force = TRUE)
+    
+    return(
+      list(
+        name = name,
+        expression = concepts,
+        includedConcepts = included,
+        mappedConcepts = mapped
+      )
+    )
+  }
