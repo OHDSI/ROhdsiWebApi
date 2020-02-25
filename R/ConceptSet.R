@@ -355,7 +355,8 @@ resolveConceptSetId <-
     tempFile <-
       tempfile(
         pattern = paste0("conceptSet_", setId),
-        fileext = ".zip"
+        fileext = ".zip",
+        tempdir = tempdir
       )
     base::writeBin(object = bin, con = file.path(tempFile))
     files <-
