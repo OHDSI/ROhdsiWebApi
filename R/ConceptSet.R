@@ -332,8 +332,8 @@ resolveConceptSetId <-
            formatName = FALSE) {
     .checkBaseUrl(baseUrl)
     
-    .readCsv <- function(file) {
-      concepts <- readr::read_csv(file = file)
+    .readCsv <- function(fileToRead) {
+      concepts <- readr::read_csv(file = fileToRead)
       names(concepts) <-
         snakecase::to_lower_camel_case(names(concepts))
       return(concepts)
@@ -358,14 +358,17 @@ resolveConceptSetId <-
                    overwrite = TRUE,
                    exdir = tmpdir)
     # concept set
-    concepts <- .readCsv(files[1])
-    included <- .readCsv(files[2])
-    mapped <- .readCsv(files[3])
+    concepts <- .readCsv(fileToRead = files[1])
+    included <- .readCsv(fileToRead = files[2])
+    mapped <- .readCsv(fileToRead = files[3])
     
     conceptName <-
       getConceptSetName(baseUrl, setId = setId, formatName = formatName)
     # remove zip and unzipped files
-    unlink(tmpdir, recursive = TRUE, force = TRUE)
+    unlink(tempFile)
+    unlink(files[1])
+    unlink(files[2])
+    unlink(files[3])
     
     return(
       list(
