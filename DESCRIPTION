@@ -23,7 +23,8 @@ Imports:
     tibble,
     SqlRender,
     snakecase,
-    magrittr
+    magrittr, 
+    readr
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi

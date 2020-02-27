@@ -332,17 +332,11 @@ resolveConceptSetId <-
            formatName = FALSE) {
     .checkBaseUrl(baseUrl)
     
-    readCsv <- function(file) {
-      concepts <- read.csv(
-        file = substring(file, first = 3),
-        header = FALSE,
-        sep = ",",
-        strip.white = TRUE,
-        blank.lines.skip = TRUE,
-        skipNul = TRUE
-      )
-      names(concepts) <- as.character(apply(concepts[1, ], 1, paste))
-      concepts <- concepts[-1, ]
+    .readCsv <- function(file) {
+      concepts <- readr::read_csv(file = file)
+      names(concepts) <-
+        snakecase::to_lower_camel_case(names(concepts))
+      return(concepts)
     }
     
     url <- paste(baseUrl, "conceptset", setId, "export", sep = "/")
@@ -364,22 +358,18 @@ resolveConceptSetId <-
                    overwrite = TRUE,
                    exdir = tmpdir)
     # concept set
-    concepts <- readCsv(files[1]) %>% tibble::as_tibble()
-    names(concepts) <- snakecase::to_lower_camel_case(names(concepts))
+    concepts <- .readCsv(files[1])
+    included <- .readCsv(files[2])
+    mapped <- .readCsv(files[3])
     
-    included <- readCsv(files[2]) %>% tibble::as_tibble()
-    names(included) <- snakecase::to_lower_camel_case(names(included))
-    
-    mapped <- readCsv(files[3]) %>% tibble::as_tibble()
-    names(mapped) <- snakecase::to_lower_camel_case(names(mapped))
-    
-    name <- getConceptSetName(baseUrl, setId = setId, formatName = formatName)
-    # remove zip
+    conceptName <-
+      getConceptSetName(baseUrl, setId = setId, formatName = formatName)
+    # remove zip and unzipped files
     unlink(tmpdir, recursive = TRUE, force = TRUE)
     
     return(
       list(
-        name = name,
+        name = conceptName,
         expression = concepts,
         includedConcepts = included,
         mappedConcepts = mapped
