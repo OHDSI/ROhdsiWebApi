@@ -3,13 +3,13 @@
 # Copyright 2020 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,11 +33,14 @@
 #' @export
 getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
   .checkBaseUrl(baseUrl)
-
-  url <- gsub("@baseUrl", baseUrl, gsub("@setId", setId, "@baseUrl/conceptset/@setId"))
+  
+  url <-
+    gsub("@baseUrl",
+         baseUrl,
+         gsub("@setId", setId, "@baseUrl/conceptset/@setId"))
   json <- httr::GET(url)
   json <- httr::content(json)
-
+  
   if (formatName) {
     .formatName(json$name)
   } else {
@@ -67,58 +70,76 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
 #' }
 #'
 #' @export
-getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
-  .checkBaseUrl(baseUrl)
-
-  url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, setId)
-  json <- httr::GET(url)
-  json <- httr::content(json)
-
-  if (asDataFrame) {
-    .setExpressionToDf(json = json)
-  } else {
-    json
+getConceptSetExpression <-
+  function(baseUrl, setId, asDataFrame = FALSE) {
+    .checkBaseUrl(baseUrl)
+    
+    url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, setId)
+    json <- httr::GET(url)
+    json <- httr::content(json)
+    
+    if (asDataFrame) {
+      .setExpressionToDf(json = json)
+    } else {
+      json
+    }
   }
-}
 
 .setExpressionToDf <- function(json) {
-
   lists <- lapply(json$items, function(j) {
     as.data.frame(j)
   })
-
+  
   do.call("rbind", lists)
 }
 
-.getIncludedConceptsDf <- function(baseUrl, vocabSourceKey, includedConcepts) {
-  url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabSourceKey)
-  body <- RJSONIO::toJSON(includedConcepts, digits = 23)
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
-  req <- httr::content(req)
+.getIncludedConceptsDf <-
+  function(baseUrl,
+           vocabSourceKey,
+           includedConcepts) {
+    url <-
+      sprintf("%s/vocabulary/%s/lookup/identifiers",
+              baseUrl,
+              vocabSourceKey)
+    body <- RJSONIO::toJSON(includedConcepts, digits = 23)
+    httpheader <-
+      c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
+    req <-
+      httr::POST(url,
+                 body = body,
+                 config = httr::add_headers(httpheader))
+    req <- httr::content(req)
+    
+    lists <- lapply(req, function(r) {
+      as.data.frame(r)
+    })
+    
+    do.call("rbind", lists)
+  }
 
-  lists <- lapply(req, function(r) {
-    as.data.frame(r)
-  })
 
-  do.call("rbind", lists)
-}
-
-
-.getMappedConceptsDf <- function(baseUrl, vocabSourceKey, includedConcepts) {
-  url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabSourceKey)
-  body <- RJSONIO::toJSON(includedConcepts, digits = 23)
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
-  req <- httr::content(req)
-
-  lists <- lapply(req, function(r) {
-    modList <- .convertNulltoNA(r)
-    as.data.frame(modList, stringsAsFactors = FALSE)
-  })
-
-  do.call("rbind", lists)
-}
+.getMappedConceptsDf <-
+  function(baseUrl,
+           vocabSourceKey,
+           includedConcepts) {
+    url <-
+      sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabSourceKey)
+    body <- RJSONIO::toJSON(includedConcepts, digits = 23)
+    httpheader <-
+      c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
+    req <-
+      httr::POST(url,
+                 body = body,
+                 config = httr::add_headers(httpheader))
+    req <- httr::content(req)
+    
+    lists <- lapply(req, function(r) {
+      modList <- .convertNulltoNA(r)
+      as.data.frame(modList, stringsAsFactors = FALSE)
+    })
+    
+    do.call("rbind", lists)
+  }
 
 
 #' Insert a set of concept sets' concept ids into package
@@ -133,20 +154,30 @@ getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
 #' @export
 insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
   .checkBaseUrl(baseUrl)
-
-  conceptSetsToCreate <- read.csv(file.path("inst/settings", fileName))
+  
+  conceptSetsToCreate <-
+    read.csv(file.path("inst/settings", fileName))
   if (!file.exists("inst/conceptsets")) {
     dir.create("inst/conceptsets", recursive = TRUE)
   }
-
+  
   for (i in 1:nrow(conceptSetsToCreate)) {
     writeLines(paste("Inserting concept set:", conceptSetsToCreate$atlasId[i]))
-    df <- as.data.frame(getConceptSetConceptIds(baseUrl = baseUrl,
-                                                setId = conceptSetsToCreate$atlasId[i]))
+    df <- as.data.frame(
+      getConceptSetConceptIds(baseUrl = baseUrl,
+                              setId = conceptSetsToCreate$atlasId[i])
+    )
     names(df) <- c("CONCEPT_ID")
-    fileConn <- file(file.path("inst/conceptsets",
-                               paste(conceptSetsToCreate$atlasId[i], "csv", sep = ".")))
-    write.csv(x = df, file = fileConn, row.names = FALSE, quote = FALSE)
+    fileConn <- file(file.path(
+      "inst/conceptsets",
+      paste(conceptSetsToCreate$atlasId[i], "csv", sep = ".")
+    ))
+    write.csv(
+      x = df,
+      file = fileConn,
+      row.names = FALSE,
+      quote = FALSE
+    )
   }
 }
 
@@ -170,20 +201,27 @@ insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
 #' }
 #'
 #' @export
-getSetExpressionConceptIds <- function(baseUrl, expression, vocabSourceKey = NULL) {
-
-  .checkBaseUrl(baseUrl)
-
-  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
-    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
+getSetExpressionConceptIds <-
+  function(baseUrl, expression, vocabSourceKey = NULL) {
+    .checkBaseUrl(baseUrl)
+    
+    if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
+      vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
+    }
+    
+    url <-
+      sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression",
+              baseUrl,
+              vocabSourceKey)
+    httpheader <-
+      c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
+    req <-
+      httr::POST(url,
+                 body = expression,
+                 config = httr::add_headers(httpheader))
+    req <- httr::content(req)
+    unlist(req)
   }
-
-  url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabSourceKey)
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  req <- httr::POST(url, body = expression, config = httr::add_headers(httpheader))
-  req <- httr::content(req)
-  unlist(req)
-}
 
 
 #' Get Concept Set Concept Ids
@@ -201,19 +239,21 @@ getSetExpressionConceptIds <- function(baseUrl, expression, vocabSourceKey = NUL
 #' A list of concept Ids.
 #'
 #' @export
-getConceptSetConceptIds <- function(baseUrl, setId, vocabSourceKey = NULL) {
-  .checkBaseUrl(baseUrl)
-
-  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
-    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
+getConceptSetConceptIds <-
+  function(baseUrl, setId, vocabSourceKey = NULL) {
+    .checkBaseUrl(baseUrl)
+    
+    if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
+      vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
+    }
+    
+    expression <-
+      RJSONIO::toJSON(getConceptSetExpression(baseUrl = baseUrl, setId = setId),
+                      digits = 23)
+    getSetExpressionConceptIds(baseUrl = baseUrl,
+                               expression = expression,
+                               vocabSourceKey = vocabSourceKey)
   }
-
-  expression <- RJSONIO::toJSON(getConceptSetExpression(baseUrl = baseUrl, setId = setId),
-                                digits = 23)
-  getSetExpressionConceptIds(baseUrl = baseUrl,
-                             expression = expression,
-                             vocabSourceKey = vocabSourceKey)
-}
 
 
 #' Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook
@@ -238,70 +278,98 @@ createConceptSetWorkbook <- function(conceptSetIds,
                                      included = FALSE,
                                      mapped = FALSE) {
   .checkBaseUrl(baseUrl)
-
+  
   if (is.null(workFolder))
     workFolder <- getwd()
-
+  
   if (!is.vector(conceptSetIds))
     stop("conceptSetIds argument must be a numeric vector")
-
+  
   conceptSetNames <- NULL
   for (i in conceptSetIds) {
-    conceptSetNames <- c(conceptSetNames,
-                         getConceptSetName(baseUrl = baseUrl, setId = i, formatName = FALSE))
+    conceptSetNames <- c(
+      conceptSetNames,
+      getConceptSetName(
+        baseUrl = baseUrl,
+        setId = i,
+        formatName = FALSE
+      )
+    )
   }
-  conceptSets <- data.frame(conceptSetId = conceptSetIds, conceptSetName = conceptSetNames)
-  names(conceptSets) <- SqlRender::camelCaseToTitleCase(names(conceptSets))
-
+  conceptSets <-
+    data.frame(conceptSetId = conceptSetIds, conceptSetName = conceptSetNames)
+  names(conceptSets) <-
+    SqlRender::camelCaseToTitleCase(names(conceptSets))
+  
   wb <- openxlsx::createWorkbook()
   openxlsx::addWorksheet(wb = wb, sheetName = "conceptSetIds")
-  openxlsx::writeDataTable(wb = wb,
-                           sheet = "conceptSetIds",
-                           x = conceptSets,
-                           colNames = TRUE,
-                           rowNames = FALSE,
-                           withFilter = FALSE)
-  openxlsx::setColWidths(wb = wb,
-                         sheet = "conceptSetIds",
-                         cols = 1:ncol(conceptSets),
-                         widths = "auto")
+  openxlsx::writeDataTable(
+    wb = wb,
+    sheet = "conceptSetIds",
+    x = conceptSets,
+    colNames = TRUE,
+    rowNames = FALSE,
+    withFilter = FALSE
+  )
+  openxlsx::setColWidths(
+    wb = wb,
+    sheet = "conceptSetIds",
+    cols = 1:ncol(conceptSets),
+    widths = "auto"
+  )
   
   createSheet <- function(data, label, setId) {
-    openxlsx::addWorksheet(wb = wb, sheetName = paste(label, setId, sep = "_"))
-    openxlsx::writeDataTable(wb = wb,
-                             sheet = paste(label, setId, sep = "_"),
-                             x = data,
-                             colNames = TRUE,
-                             rowNames = FALSE,
-                             withFilter = FALSE)
-    openxlsx::setColWidths(wb = wb,
-                           sheet = paste(label, setId, sep = "_"),
-                           cols = 1:ncol(data),
-                           widths = "auto")
+    openxlsx::addWorksheet(wb = wb,
+                           sheetName = paste(label, setId, sep = "_"))
+    openxlsx::writeDataTable(
+      wb = wb,
+      sheet = paste(label, setId, sep = "_"),
+      x = data,
+      colNames = TRUE,
+      rowNames = FALSE,
+      withFilter = FALSE
+    )
+    openxlsx::setColWidths(
+      wb = wb,
+      sheet = paste(label, setId, sep = "_"),
+      cols = 1:ncol(data),
+      widths = "auto"
+    )
   }
-
+  
   for (i in conceptSetIds) {
-    resolvedConcepts <- resolveConceptSetId(baseUrl = baseUrl, setId = i)
+    resolvedConcepts <-
+      resolveConceptSetId(baseUrl = baseUrl, setId = i)
     
     data = resolvedConcepts$expression
     names(data) = SqlRender::camelCaseToTitleCase(names(data))
-    createSheet(data = data, label = "concepts", setId = i)
+    createSheet(data = data,
+                label = "concepts",
+                setId = i)
     
     if (included) {
       data = resolvedConcepts$includedConcepts
       names(data) = SqlRender::camelCaseToTitleCase(names(data))
-      createSheet(data = data, label = "included", setId = i)
+      createSheet(data = data,
+                  label = "included",
+                  setId = i)
     }
     
-    if (mapped) { 
+    if (mapped) {
       data = resolvedConcepts$mappedConcepts
       names(data) = SqlRender::camelCaseToTitleCase(names(data))
-      createSheet(data = data, label = "mapped", setId = i)
+      createSheet(data = data,
+                  label = "mapped",
+                  setId = i)
     }
     
   }
-  openxlsx::saveWorkbook(wb = wb, file = file.path(workFolder,
-                                                   "conceptSetExpressions.xlsx"), overwrite = TRUE)
+  openxlsx::saveWorkbook(
+    wb = wb,
+    file = file.path(workFolder,
+                     "conceptSetExpressions.xlsx"),
+    overwrite = TRUE
+  )
 }
 
 
@@ -333,7 +401,12 @@ resolveConceptSetId <-
     .checkBaseUrl(baseUrl)
     
     .readCsv <- function(fileToRead) {
-      concepts <- readr::read_csv(file = fileToRead)
+      concepts <-
+        readr::read_csv(
+          file = fileToRead,
+          guess_max = 1e7,
+          col_types = readr::cols()
+        )
       names(concepts) <-
         snakecase::to_lower_camel_case(names(concepts))
       return(concepts)

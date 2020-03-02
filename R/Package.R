@@ -1,4 +1,4 @@
-# @file Package.R
+# @file ROhdsiWebApi.R
 #
 # Copyright 2020 Observational Health Data Sciences and Informatics
 #
