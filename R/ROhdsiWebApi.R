@@ -1,4 +1,4 @@
-# @file ROhdsiWebApi
+# @file ROhdsiWebApi.R
 #
 # Copyright 2020 Observational Health Data Sciences and Informatics
 #
@@ -21,4 +21,5 @@
 #' @docType package
 #' @name ROhdsiWebApi
 #' @importFrom utils compareVersion read.csv write.csv
+#' @import magrittr
 NULL
