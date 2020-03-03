@@ -408,7 +408,11 @@ resolveConceptSetId <-
           col_types = readr::cols()
         )
       names(concepts) <-
-        snakecase::to_lower_camel_case(names(concepts))
+        names(concepts) %>%
+        stringr::str_squish() %>%
+        stringr::str_to_lower() %>%
+        stringr::str_to_title() %>%
+        stringr::str_replace_all(pattern = " ", replacement = "")
       return(concepts)
     }
     

@@ -22,9 +22,9 @@ Imports:
     dplyr,
     tibble,
     SqlRender,
-    snakecase,
     magrittr, 
-    readr
+    readr,
+    stringr
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi
