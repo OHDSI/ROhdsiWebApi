@@ -18,18 +18,18 @@
 
 
 .checkBaseUrl <- function(baseUrl) {
-  patterns <- list("https?:\\/\\/[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})+(\\/.*)?\\/WebAPI$",
-                   "https?:\\/\\/(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]{1,5})+(\\/.*)?\\/WebAPI$")
-  results <- lapply(patterns, function(p) {
-    grepl(pattern = p, 
-          x = baseUrl, 
-          ignore.case = FALSE)
+  success <- tryCatch({
+    getWebApiVersion(baseUrl = baseUrl)
+    TRUE
+  }, error = function(e) {
+    FALSE
   })
-  success <- any(as.logical(results))
 
   if (!success) {
-    stop("Base URL not valid, should be like http://server.org:80/WebAPI")
+    stop("Base URL not valid, please verify it is like http://server.org:80/WebAPI")
   }
+  
+  success
 }
 
 .convertNulltoNA <- function(thisList) {
