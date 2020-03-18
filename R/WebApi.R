@@ -29,7 +29,7 @@
     stop("Base URL not valid, please verify it is like http://server.org:80/WebAPI")
   }
   
-  success
+  return(success)
 }
 
 .convertNulltoNA <- function(thisList) {
