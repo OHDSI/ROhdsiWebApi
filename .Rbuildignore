@@ -8,3 +8,4 @@ deploy.sh
 compare_versions
 _pkgdown.yml
 docs
+man-roxygen

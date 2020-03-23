@@ -16,6 +16,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Get a cohort definition
+#'
+#' @details
+#' Obtain the cohort definition from WebAPI for a given cohort id
+#'
+#' @template BaseUrl
+#' 
+#' @param cohortId   The number indicating which cohort definition to fetch.
+#' 
+#' @return
+#' An R object representing the cohort definition
+#'
+#' @examples
+#' \dontrun{
+#' getCohortDefinition(cohortId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#'
+#' @export
+getCohortDefinition <- function(cohortId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  
+  url <- paste(baseUrl, "cohortdefinition", cohortId, sep = "/")
+  json <- httr::GET(url)
+  data <- httr::content(json)
+  if (!is.null(data$payload$message)) {
+    stop(data$payload$message)
+  }
+  data$expression <- RJSONIO::fromJSON(data$expression)
+  return(data)
+}
+
 #' Get a cohort definition expression
 #'
 #' @details
