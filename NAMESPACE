@@ -2,6 +2,7 @@
 
 export(convertConceptSetToTable)
 export(createConceptSetWorkbook)
+export(deleteCohortDefinition)
 export(getCdmSources)
 export(getCohortCharacterizationResults)
 export(getCohortDefinition)
