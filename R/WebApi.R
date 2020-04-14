@@ -142,3 +142,99 @@ getCdmSources <- function(baseUrl) {
 
   do.call(rbind, sourceDetails)
 }
+
+
+
+
+#' Retrieve the details of all Atlas definitions, by atlas functional category.
+#'
+#' @details
+#' Obtains the details of Atlas study definitions such as id, name, created/modified details, hash object, etc.
+#' The following atlas function categories are supported. Concept-set, Cohort-definition,
+#' Cohort-characterization, Pathway-analysis, Incidence rate (ir), estimation and prediction.
+#' This function is useful to retrieve the current definitions in one atlas instance and comparing it
+#' to another atlas instance, or for version control.
+#'
+#'
+#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
+#'
+#' @return
+#' A data frame of atlas study definitions with details. Note: modifiedDate and createdDate are
+#' returned as text/character (to be worked on in future version).
+#'
+#' @export
+getAtlasDefinitionDetails <- function(baseUrl) {
+  atlasCategories <- c('conceptset',
+                       'cohortdefinition',
+                       'ir',
+                       'estimation',
+                       'prediction')
+  
+  listOfAtlasIds <- list()
+  for (i in (1:length(atlasCategories))) {
+    #i  = 1
+    atlasCategory <- atlasCategories[[i]]
+    url <-
+      paste(baseUrl, atlasCategory, '?size=100000000', sep = "/")
+    request <- httr::GET(url)
+    httr::stop_for_status(request)
+    listOfAtlasIds[[atlasCategory]] <- httr::content(request) %>%
+      purrr::map(function(x)
+        purrr::map(x, function(y)
+          ifelse(is.null(y), NA, y))) %>% # convert NULL to NA in list
+      dplyr::bind_rows() %>%
+      dplyr::mutate(atlasCategory = atlasCategory) %>%
+      dplyr::mutate(createdDate = as.character(createdDate),
+                    modifiedDate = as.character(modifiedDate))
+  }
+  
+  # there is difference in how webApi returns for 'cohort-characterization' and 'pathway-analysis'
+  # the return are nested within 'content'
+  atlasCategories <- c('cohort-characterization',
+                       'pathway-analysis')
+  for (i in (1:length(atlasCategories))) {
+    atlasCategory <- atlasCategories[[i]]
+    url <-
+      paste(baseUrl, atlasCategory, '?size=100000000', sep = "/")
+    request <- httr::GET(url)
+    httr::stop_for_status(request)
+    listOfAtlasIds[[atlasCategory]] <-
+      httr::content(request)$content %>%
+      purrr::map(function(x)
+        purrr::map(x, function(y)
+          ifelse(is.null(y), NA, y))) %>%  # convert NULL to NA in list
+      dplyr::bind_rows()
+    
+    if (atlasCategory == 'cohort-characterization') {
+      listOfAtlasIds[[atlasCategory]] <-
+        listOfAtlasIds[[atlasCategory]] %>%
+        dplyr::rename(
+          createdDate = createdAt,
+          modifiedDate = updatedAt,
+          modifiedBy = updatedBy
+        )
+    }
+    
+    listOfAtlasIds[[atlasCategory]] <-
+      listOfAtlasIds[[atlasCategory]] %>%
+      dplyr::mutate(atlasCategory = atlasCategory) %>%
+      dplyr::mutate(createdDate = as.character(createdDate),
+                    modifiedDate = as.character(modifiedDate))
+  }
+  # to do: createdDate and modifiedDate are in character format. Need to make them date/time.
+  # but this does not appear to be consistent.
+  listOfAtlasIds <- dplyr::bind_rows(listOfAtlasIds) %>%
+    dplyr::mutate(
+      atlasCategory = dplyr::case_when(
+        atlasCategory == 'conceptset' ~ 'conceptSets',
+        atlasCategory == 'cohortdefinition' ~ 'cohortDefinitions',
+        atlasCategory == 'ir' ~ 'incidenceRates',
+        atlasCategory == 'estimation' ~ 'estimation',
+        atlasCategory == 'prediction' ~ 'prediction',
+        atlasCategory == 'cohort-characterization' ~ 'characterizations',
+        atlasCategory == 'pathway-analysis' ~ 'cohortPathways'
+      )
+    ) %>%
+    dplyr::mutate(atlasCategory = SqlRender::camelCaseToTitleCase(atlasCategory))
+  return(listOfAtlasIds)
+}

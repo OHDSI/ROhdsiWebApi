@@ -21,11 +21,12 @@ Imports:
     jsonlite,
     dplyr,
     tibble,
-    SqlRender
+    SqlRender,
+    magrittr
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi
 BugReports: https://github.com/OHDSI/ROhdsiWebApi/issues    
 NeedsCompilation: no
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Encoding: UTF-8
