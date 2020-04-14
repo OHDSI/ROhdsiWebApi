@@ -125,3 +125,89 @@ getCohortCharacterizationResults <- function(baseUrl,
   }
 }
 
+
+#' Get a characterization definition expression
+#'
+#' @details
+#' Obtain the characterization definition expression from WebAPI for a given characterization id/generation id
+#'
+#' @template BaseUrl
+#' 
+#' @param characterizationId   The number indicating which characterization definition to fetch.
+#' @param generationId        (OPTIONAL) Used to specify the id of a particular generation of a cohort
+#'                             characterization. If generationId is provided, then characterizationId is ignored.
+#' 
+#' @return
+#' A JSON object representing the characterizationId/generationId definition returned by webApi.
+#' A warning will be shown if the characterizationId/generationId does not exist.
+#'
+#' @examples
+#' \dontrun{
+#' getCharacterizationDefinitionExpression(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#'
+#' @export
+getCharacterizationDefinitionExpression <- function(baseUrl, characterizationId, generationId = NULL) {
+  # .checkBaseUrl(baseUrl)
+  if (is.null(generationId)) {
+    url <- sprintf("%s/cohort-characterization/%d/design", baseUrl, characterizationId)
+  } else {
+    url <- sprintf("%s/cohort-characterization/generation/%d/design", baseUrl, generationId)
+  }
+  json <- httr::GET(url)
+  data <- httr::content(json)
+  if (!is.null(data$payload$message)) {
+    stop(data$payload$message)
+  }
+  return(data)
+}
+
+
+#' Delete a cohort characterization definition and results
+#'
+#' @details
+#' Deletes cohort characterization definition and results from WebAPI for a given characterization id
+#'
+#' @template BaseUrl
+#' 
+#' @param cohortId    The number indicating which cohort characterization definition to delete.
+#' @param silent      [OPTIONAL, Default = FALSE] If TRUE, function will work silently without showing any warning or error message.
+#' @param stopOnError [OPTIONAL, Default = FALSE] If silent silent = TRUE, then this will be ignored.
+#' 
+#' @return
+#' NA. A status message will be shown.
+#'
+#' @examples
+#' \dontrun{
+#' deleteCohortDefinition(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#'
+#' @export
+deleteCharacterizationDefinition <- function(characterizationId, baseUrl, silent = FALSE, stopOnError = FALSE) {
+  .checkBaseUrl(baseUrl)
+  
+  characterizationDefinition <- tryCatch(ROhdsiWebApi::getCharacterizationDefinitionExpression(characterizationId = characterizationId, 
+                                                                                               baseUrl = baseUrl),
+                                         error=function(e) e, 
+                                         warning=function(w) w
+  )
+  thereIsAWarning <- stringr::str_detect(string = tolower(paste0("",characterizationDefinition$message)), pattern = as.character(characterizationId))
+  
+  if (!silent) {
+    if (thereIsAWarning) {
+      warning(paste0("", characterizationDefinition$message))
+    } else {
+      url <- sprintf("%s/cohort-characterization/%d", baseUrl, characterizationId)
+      response <- httr::DELETE(url)
+      response <- httr::http_status(response)
+      if (!stringr::str_detect(string = tolower(response$category), pattern = 'success')) {
+        if (stopOnError) {
+          stop("Deleting characterization definition id:", characterizationId, " failed.")
+        } else {
+          warning("Deleting characterization definition id:", characterizationId, " failed.")
+        }
+      }
+    }
+  }
+  return(NA)
+}
