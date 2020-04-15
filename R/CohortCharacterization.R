@@ -129,7 +129,7 @@ getCohortCharacterizationResults <- function(baseUrl,
 #' Get a characterization definition expression
 #'
 #' @details
-#' Obtain the characterization definition expression from WebAPI for a given characterization id/generation id
+#' Obtain the characterization definition expression from WebAPI as R-object for a given characterization id/generation id
 #'
 #' @template BaseUrl
 #' 
@@ -138,24 +138,25 @@ getCohortCharacterizationResults <- function(baseUrl,
 #'                             characterization. If generationId is provided, then characterizationId is ignored.
 #' 
 #' @return
-#' A JSON object representing the characterizationId/generationId definition returned by webApi.
+#' A R-object representing the characterizationId/generationId definition returned by webApi.
 #' A warning will be shown if the characterizationId/generationId does not exist.
 #'
 #' @examples
 #' \dontrun{
-#' getCharacterizationDefinitionExpression(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' getCharacterizationDefinition(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #'
 #' @export
-getCharacterizationDefinitionExpression <- function(baseUrl, characterizationId, generationId = NULL) {
-  # .checkBaseUrl(baseUrl)
+getCharacterizationDefinition <- function(baseUrl, characterizationId, generationId = NULL) {
+  .checkBaseUrl(baseUrl)
   if (is.null(generationId)) {
     url <- sprintf("%s/cohort-characterization/%d/design", baseUrl, characterizationId)
   } else {
     url <- sprintf("%s/cohort-characterization/generation/%d/design", baseUrl, generationId)
   }
   json <- httr::GET(url)
-  data <- httr::content(json)
+  data <- httr::content(json, as = 'text', encoding = 'UTF-8')
+  data <- RJSONIO::fromJSON(data)
   if (!is.null(data$payload$message)) {
     stop(data$payload$message)
   }
@@ -170,7 +171,7 @@ getCharacterizationDefinitionExpression <- function(baseUrl, characterizationId,
 #'
 #' @template BaseUrl
 #' 
-#' @param cohortId    The number indicating which cohort characterization definition to delete.
+#' @param characterizationId   The number indicating which characterization definition to fetch.
 #' @param silent      [OPTIONAL, Default = FALSE] If TRUE, function will work silently without showing any warning or error message.
 #' @param stopOnError [OPTIONAL, Default = FALSE] If silent silent = TRUE, then this will be ignored.
 #' 
@@ -186,7 +187,7 @@ getCharacterizationDefinitionExpression <- function(baseUrl, characterizationId,
 deleteCharacterizationDefinition <- function(characterizationId, baseUrl, silent = FALSE, stopOnError = FALSE) {
   .checkBaseUrl(baseUrl)
   
-  characterizationDefinition <- tryCatch(ROhdsiWebApi::getCharacterizationDefinitionExpression(characterizationId = characterizationId, 
+  characterizationDefinition <- tryCatch(ROhdsiWebApi::getCharacterizationDefinition(characterizationId = characterizationId, 
                                                                                                baseUrl = baseUrl),
                                          error=function(e) e, 
                                          warning=function(w) w

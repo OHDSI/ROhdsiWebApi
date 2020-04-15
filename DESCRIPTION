@@ -21,7 +21,8 @@ Imports:
     jsonlite,
     dplyr,
     tibble,
-    SqlRender
+    SqlRender,
+    stringr
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi

@@ -12,14 +12,14 @@ deleteCharacterizationDefinition(
 )
 }
 \arguments{
+\item{characterizationId}{The number indicating which characterization definition to fetch.}
+
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
 
 \item{silent}{[OPTIONAL, Default = FALSE] If TRUE, function will work silently without showing any warning or error message.}
 
 \item{stopOnError}{[OPTIONAL, Default = FALSE] If silent silent = TRUE, then this will be ignored.}
-
-\item{cohortId}{The number indicating which cohort characterization definition to delete.}
 }
 \value{
 NA. A status message will be shown.
