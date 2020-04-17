@@ -236,7 +236,7 @@ getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
 insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
   .checkBaseUrl(baseUrl)
 
-  conceptSetsToCreate <- read.csv(file.path("inst/settings", fileName))
+  conceptSetsToCreate <- readr::read_csv(file.path("inst/settings", fileName), col_types = readr::cols())
   if (!file.exists("inst/conceptsets")) {
     dir.create("inst/conceptsets", recursive = TRUE)
   }
