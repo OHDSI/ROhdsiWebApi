@@ -21,4 +21,5 @@
 #' @docType package
 #' @name ROhdsiWebApi
 #' @importFrom utils compareVersion read.csv write.csv
+#' @import magrittr
 NULL
