@@ -163,7 +163,7 @@ getCdmSources <- function(baseUrl) {
 #' returned as text/character (to be worked on in future version).
 #'
 #' @export
-getAtlasDefinitionDetails <- function(baseUrl) {
+getAtlasDefinitionsDetails <- function(baseUrl) {
   atlasCategories <- c('conceptset',
                        'cohortdefinition',
                        'ir',
