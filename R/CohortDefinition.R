@@ -583,3 +583,54 @@ getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
   })
   do.call(rbind.data.frame, results)
 }
+
+
+
+#' Delete a cohort definition
+#'
+#' @details
+#' Deletes cohort definition from WebAPI for a given cohort id
+#'
+#' @template BaseUrl
+#' 
+#' @param cohortId    The number indicating which cohort definition to fetch.
+#' @param silent      [OPTIONAL, Default = FALSE] If TRUE, function will work silently without showing any warning or error message.
+#' @param stopOnError [OPTIONAL, Default = FALSE] If silent silent = TRUE, then this will be ignored.
+#' 
+#' @return
+#' NA. A status message will be shown.
+#'
+#' @examples
+#' \dontrun{
+#' deleteCohortDefinition(cohortId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#'
+#' @export
+deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnError = FALSE) {
+  .checkBaseUrl(baseUrl)
+  
+  cohortDefinition <- tryCatch(ROhdsiWebApi::getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl),
+                               error=function(e) e, 
+                               warning=function(w) w
+  )
+  thereIsAWarning <- stringr::str_detect(string = tolower(paste0("",cohortDefinition$message)), pattern = as.character(cohortId))
+  
+  if (!silent) {
+    if (thereIsAWarning) {
+      warning(paste0("", cohortDefinition$message))
+    } else {
+      url <- paste(baseUrl, "cohortdefinition", cohortId, sep = "/")
+      response <- httr::DELETE(url)
+      response <- httr::http_status(response)
+      if (!stringr::str_detect(string = tolower(response$category), pattern = 'success')) {
+        if (stopOnError) {
+          stop("Deleting cohort definition id:", cohortId, " failed.")
+        } else {
+          warning("Deleting cohort definition id:", cohortId, " failed.")
+        }
+      }
+    }
+  }
+  return(NA)
+}
+

@@ -4,6 +4,3 @@
 \name{ROhdsiWebApi}
 \alias{ROhdsiWebApi}
 \title{ROhdsiWebApi}
-\description{
-ROhdsiWebApi
-}
