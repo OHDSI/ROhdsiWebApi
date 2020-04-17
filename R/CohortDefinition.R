@@ -16,6 +16,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Get a cohort definition
+#'
+#' @details
+#' Obtain the cohort definition from WebAPI for a given cohort id
+#'
+#' @template BaseUrl
+#' 
+#' @param cohortId   The number indicating which cohort definition to fetch.
+#' 
+#' @return
+#' An R object representing the cohort definition
+#'
+#' @examples
+#' \dontrun{
+#' getCohortDefinition(cohortId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#'
+#' @export
+getCohortDefinition <- function(cohortId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  
+  url <- paste(baseUrl, "cohortdefinition", cohortId, sep = "/")
+  json <- httr::GET(url)
+  data <- httr::content(json)
+  if (!is.null(data$payload$message)) {
+    stop(data$payload$message)
+  }
+  data$expression <- RJSONIO::fromJSON(data$expression)
+  return(data)
+}
+
 #' Get a cohort definition expression
 #'
 #' @details
@@ -154,7 +185,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   if (insertCohortCreationR && !grepl("inst", fileName))
     stop("When generating R code, the input CSV file must be in the inst folder.")
 
-  cohortsToCreate <- read.csv(fileName)
+  cohortsToCreate <- readr::read_csv(fileName, col_types = readr::cols())
 
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
@@ -552,3 +583,54 @@ getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
   })
   do.call(rbind.data.frame, results)
 }
+
+
+
+#' Delete a cohort definition
+#'
+#' @details
+#' Deletes cohort definition from WebAPI for a given cohort id
+#'
+#' @template BaseUrl
+#' 
+#' @param cohortId    The number indicating which cohort definition to fetch.
+#' @param silent      [OPTIONAL, Default = FALSE] If TRUE, function will work silently without showing any warning or error message.
+#' @param stopOnError [OPTIONAL, Default = FALSE] If silent silent = TRUE, then this will be ignored.
+#' 
+#' @return
+#' NA. A status message will be shown.
+#'
+#' @examples
+#' \dontrun{
+#' deleteCohortDefinition(cohortId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#'
+#' @export
+deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnError = FALSE) {
+  .checkBaseUrl(baseUrl)
+  
+  cohortDefinition <- tryCatch(ROhdsiWebApi::getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl),
+                               error=function(e) e, 
+                               warning=function(w) w
+  )
+  thereIsAWarning <- stringr::str_detect(string = tolower(paste0("",cohortDefinition$message)), pattern = as.character(cohortId))
+  
+  if (!silent) {
+    if (thereIsAWarning) {
+      warning(paste0("", cohortDefinition$message))
+    } else {
+      url <- paste(baseUrl, "cohortdefinition", cohortId, sep = "/")
+      response <- httr::DELETE(url)
+      response <- httr::http_status(response)
+      if (!stringr::str_detect(string = tolower(response$category), pattern = 'success')) {
+        if (stopOnError) {
+          stop("Deleting cohort definition id:", cohortId, " failed.")
+        } else {
+          warning("Deleting cohort definition id:", cohortId, " failed.")
+        }
+      }
+    }
+  }
+  return(NA)
+}
+

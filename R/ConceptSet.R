@@ -1,5 +1,3 @@
-# @file ConceptSet
-#
 # Copyright 2020 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
@@ -16,6 +14,110 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Get a concept set 
+#'
+#' @details
+#' Obtain a concept set from WebAPI
+#' 
+#' @template BaseUrl
+#'
+#' @param conceptSetId  The concept set ID in Atlas.
+#'
+#' @return
+#' An R object representing the concept set
+#'
+#' @examples
+#' \dontrun{
+#' conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#'
+#' @export
+getConceptSet <- function(baseUrl, conceptSetId) {
+  .checkBaseUrl(baseUrl)
+  
+  url <- sprintf("%1s/conceptset/%2s", baseUrl, conceptSetId)
+  metaData <- httr::GET(url)
+  metaData <- httr::content(metaData)
+  if (!is.null(metaData$payload$message)) {
+    stop(metaData$payload$message)
+  }
+  
+  url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, conceptSetId)
+  data <- httr::GET(url)
+  data <- httr::content(data)
+  
+  metaData$expression <- data
+  return(metaData)
+}
+
+#' Resolve a concept set to the included standard concept IDs
+#' 
+#' @template VocabSourceKey
+#' 
+#' @template BaseUrl
+#'
+#' @param conceptSet       A concept set as obtained through the \code{\link{getConceptSet}} function.
+#' @return
+#' A list of standard concept ids
+#'
+#' @examples
+#' \dontrun{
+#' conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' conceptIds <- resolveConceptSet(conceptSet = conceptSet,
+#'                                 baseUrl = "http://server.org:80/WebAPI")
+#' }
+#'
+#' @export
+resolveConceptSet <- function(conceptSet, baseUrl, vocabSourceKey = NULL) {
+  
+  .checkBaseUrl(baseUrl)
+  
+  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
+    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
+  }
+  
+  url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabSourceKey)
+  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
+  expression <- RJSONIO::toJSON(conceptSet$expression)
+  data <- httr::POST(url, body = expression, config = httr::add_headers(httpheader))
+  data <- httr::content(data)
+  if (!is.null(data$payload$message)) {
+    stop(data$payload$message)
+  }
+  data <- unlist(data)
+  return(data)
+}
+
+
+#' Convert a concept set to a table
+#' 
+#' @template ConceptSet
+#' 
+#' @template SnakeCaseToCamelCase
+#' 
+#' @return
+#' A tibble representing the concept set expression.
+#'
+#' @examples
+#' \dontrun{
+#' conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' conceptIds <- resolveConceptSet(conceptSet = conceptSet,
+#'                                 baseUrl = "http://server.org:80/WebAPI")
+#' }
+#'
+#' @export
+convertConceptSetToTable <- function(conceptSet, snakeCaseToCamelCase = TRUE) {
+  lists <- lapply(conceptSet$expression$items, function(x) {
+    x <- append(x$concept, x)
+    x$concept <- NULL
+    return(tibble::as_tibble(x))
+  })
+  result <- dplyr::bind_rows(lists)
+  if (snakeCaseToCamelCase) {
+    colnames(result) <- SqlRender::snakeCaseToCamelCase(colnames(result))
+  }
+  return(result)
+}
 
 #' Get a concept set's name from WebAPI
 #'
@@ -134,7 +236,7 @@ getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
 insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
   .checkBaseUrl(baseUrl)
 
-  conceptSetsToCreate <- read.csv(file.path("inst/settings", fileName))
+  conceptSetsToCreate <- readr::read_csv(file.path("inst/settings", fileName), col_types = readr::cols())
   if (!file.exists("inst/conceptsets")) {
     dir.create("inst/conceptsets", recursive = TRUE)
   }
