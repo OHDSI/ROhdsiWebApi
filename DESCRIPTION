@@ -22,7 +22,8 @@ Imports:
     dplyr,
     tibble,
     SqlRender,
-    stringr
+    stringr,
+    readr
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi
