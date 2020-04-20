@@ -55,7 +55,7 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
     idx <- sapply(x, is.null)
     idx <- names(idx)[idx]
     x[idx] <- NA
-    tibble::as.tibble(x)
+    tibble::as_tibble(x)
   })
   result <- dplyr::bind_rows(lists)
   if (snakeCaseToCamelCase) {
