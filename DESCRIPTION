@@ -23,7 +23,9 @@ Imports:
     tibble,
     SqlRender,
     stringr,
-    readr
+    readr,
+    magrittr,
+    purrr
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi
