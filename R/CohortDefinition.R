@@ -395,12 +395,12 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl, definitionId, vocabSour
                                                    vocabSourceKey = vocabSourceKey)
     list(id = j$id,
          name = j$name,
-         includedConceptsDf = .getIncludedConceptsDf(baseUrl = baseUrl,
-                                                     vocabSourceKey = vocabSourceKey,
-                                                     includedConcepts = includedConcepts),
-         mappedConceptsDf = .getMappedConceptsDf(baseUrl = baseUrl,
-                                                 vocabSourceKey = vocabSourceKey,
-                                                 includedConcepts = includedConcepts),
+         includedConcepts = .getIncludedConceptsDf(baseUrl = baseUrl,
+                                                   vocabSourceKey = vocabSourceKey,
+                                                   includedConcepts = includedConcepts),
+         mappedConcepts = .getMappedConceptsDf(baseUrl = baseUrl,
+                                               vocabSourceKey = vocabSourceKey,
+                                               includedConcepts = includedConcepts),
          setExpression = .setExpressionToDf(j$expression),
          jsonExpression = j$expression)
   })
