@@ -238,3 +238,62 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
     dplyr::mutate(atlasCategory = SqlRender::camelCaseToTitleCase(atlasCategory))
   return(listOfAtlasIds)
 }
+
+
+
+#' Post a atlas study definition
+#'
+#' @details
+#' Posts a definition JSON into WebAPI
+#'
+#' @template BaseUrl 
+#' @param name             A valid name for atlas study definition.Please make sure that the
+#'                         name is unique in the target webapi - otherwise, an error might be thrown.
+#' @param definitionType   Currently only 'cohort' is supported and this corresponds to 'Cohort-definition'.
+#' @param jsonExpression   A valid JSON expression for an atlas study definition. Note: this is
+#'                         expected to be a JSON object. Atlas names should be specified seperately
+#'                         and are not part of this JSON expression. AtlasId's will be assigned by WebApi.                       
+#' @return                 This function will return a dataframe object with one row
+#'                         describing the posted atlas study definitions and its details.
+#'                         See \code{\link{getAtlasDefinitionsDetails}}. 
+#'                         If unsuccessful a STOP message will be shown.
+#'
+#' @examples
+#' \dontrun{
+#' validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
+#' validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
+#' postAtlasDefinition(name = 'new atlas cohort name', 
+#'                      baseUrl = "http://server.org:80/WebAPI", 
+#'                      jsonExpression = validJsonExpression)
+#' }
+#' @export
+postAtlasDefinition <- function(baseUrl, 
+                                name,
+                                definitionType = 'cohort',
+                                jsonExpression) {
+  .checkBaseUrl(baseUrl)
+  
+  if (definitionType == 'cohort') {
+    json_body <- paste0("{\"name\":\"",
+                        as.character(name),
+                        "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
+                        jsonExpression,
+                        "}")
+    # POST the JSON
+    response <- httr::POST(url = paste0(baseUrl, "/cohortdefinition/"),
+                           body = json_body,
+                           config = httr::add_headers(.headers =c('Content-Type' = 'application/json')))
+    # Expect a "200" response that it worked
+    if (response$status_code != 200) {
+      stop(paste0("Post attempt failed for cohort : ", name))
+    } else {
+      atlasDefinitionDetails <- getAtlasDefinitionsDetails(baseUrl = baseUrl) %>% 
+        dplyr::filter(atlasCategory == 'Cohort Definitions',
+                      name == !!name
+        )
+      return(atlasDefinitionDetails)
+    }
+  } else {
+    stop(paste0('definitionType = ', definitionType, " is not supported in this version. Post attempt failed."))
+  }
+}
