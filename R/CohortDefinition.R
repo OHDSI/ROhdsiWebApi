@@ -47,32 +47,6 @@ getCohortDefinition <- function(cohortId, baseUrl) {
   return(data)
 }
 
-#' Get a cohort definition expression
-#'
-#' @details
-#' Obtain the JSON expression from WebAPI for a given cohort id
-#'
-#' @param definitionId   The number indicating which cohort definition to fetch.
-#' @param baseUrl        The base URL for the WebApi instance, for example:
-#'                       "http://server.org:80/WebAPI".
-#' @return
-#' A JSON list object representing the cohort definition
-#'
-#' @examples
-#' \dontrun{
-#' # This will obtain a cohort definition's JSON expression:
-#'
-#' getCohortDefinitionExpression(definitionId = 282, baseUrl = "http://server.org:80/WebAPI")
-#' }
-#'
-#' @export
-getCohortDefinitionExpression <- function(definitionId, baseUrl) {
-  .checkBaseUrl(baseUrl)
-
-  url <- paste(baseUrl, "cohortdefinition", definitionId, sep = "/")
-  json <- httr::GET(url)
-  httr::content(json)
-}
 
 #' Load a cohort definition and insert it into this package
 #'
@@ -277,33 +251,6 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 }
 
 
-#' Get a cohort definition's name from WebAPI
-#'
-#' @details
-#' Obtains the name of a cohort.
-#'
-#' @param baseUrl        The base URL for the WebApi instance, for example:
-#'                       "http://server.org:80/WebAPI".
-#' @param definitionId   The cohort definition id in Atlas.
-#' @param formatName     Should the name be formatted to remove prefixes and underscores?
-#'
-#' @return
-#' The name of the cohort.
-#'
-#' @export
-getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
-  .checkBaseUrl(baseUrl)
-
-  json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
-
-  if (formatName) {
-    .formatName(json$name)
-  } else {
-    json$name
-  }
-}
-
-
 #' Get a cohort definition's SQL from WebAPI
 #'
 #' @details
@@ -345,67 +292,6 @@ getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) 
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
   (httr::content(req))$templateSql
 }
-
-
-
-#' Get a list of concept sets and included/mapped concepts from a cohort definition
-#'
-#' @details
-#' For a given cohort definition id, get all concept sets and resolve all concepts into an included
-#' concepts data frame and mapped concepts data frame from each
-#'
-#' @param baseUrl          The base URL for the WebApi instance, for example:
-#'                         "http://server.org:80/WebAPI".
-#' @param definitionId     The cohort id to fetch concept sets and concepts from
-#' @param vocabSourceKey   The vocabulary key to use.
-#'
-#' @return
-#' A list of concept sets, set names, and concept data frames
-#'
-#' @examples
-#' \dontrun{
-#' # This will obtain a list of concept sets and concepts from a cohort id:
-#'
-#' getConceptsFromCohortId(baseUrl = "http://server.org:80/WebAPI", definitionId = 123)
-#' }
-#'
-#' @export
-getConceptSetsAndConceptsFromCohort <- function(baseUrl, definitionId, vocabSourceKey = NULL) {
-
-  .checkBaseUrl(baseUrl)
-
-  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
-    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
-  }
-
-  json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
-
-  webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
-
-  if (compareVersion(a = "2.7.2", webApiVersion) == 0) {
-    json <- json$expression
-  } else {
-    json <- RJSONIO::fromJSON(json$expression)
-  }
-
-  lapply(json$ConceptSets, function(j) {
-
-    includedConcepts <- getSetExpressionConceptIds(baseUrl = baseUrl,
-                                                   expression = RJSONIO::toJSON(j$expression),
-                                                   vocabSourceKey = vocabSourceKey)
-    list(id = j$id,
-         name = j$name,
-         includedConcepts = .getIncludedConceptsDf(baseUrl = baseUrl,
-                                                   vocabSourceKey = vocabSourceKey,
-                                                   includedConcepts = includedConcepts),
-         mappedConcepts = .getMappedConceptsDf(baseUrl = baseUrl,
-                                               vocabSourceKey = vocabSourceKey,
-                                               includedConcepts = includedConcepts),
-         setExpression = .setExpressionToDf(j$expression),
-         jsonExpression = j$expression)
-  })
-}
-
 
 
 #' Get Cohort Generation Statuses
