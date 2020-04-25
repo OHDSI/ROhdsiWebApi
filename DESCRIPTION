@@ -25,7 +25,10 @@ Imports:
     stringr,
     readr,
     magrittr,
-    purrr
+    purrr,
+    checkmate,
+    jsonlite,
+    lubridate
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi
