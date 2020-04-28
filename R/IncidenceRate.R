@@ -48,3 +48,45 @@ getIncidenceRateDefinitions <- function(baseUrl,
   data$modifiedDate <- .millisecondsToDate(data$modifiedDate)
   return(data)
 }
+
+
+#' Get incident rate generation information.
+#'
+#' @details
+#' Get incident rate generation information.
+#'
+#' @param baseUrl         The base URL for the WebApi instance, for example:
+#'                        "http://server.org:80/WebAPI".
+#' @param incidenceRateId The Atlas ID for incidence rate analysis.
+#' @return                An R-object
+#'
+#' @examples
+#' \dontrun{
+#' getIncidenceRateGenerationInformation <- function(baseUrl "http://server.org:80/WebAPI",
+#'                                          incidenceRateId = 296)
+#'                                          )
+#' }
+#' @export
+getIncidenceRateGenerationInformation <- function(baseUrl,
+                                                  incidenceRateId) {
+  .checkBaseUrl(baseUrl)
+  #generation
+  url <- sprintf("%1s/ir/%2s/info", baseUrl, incidenceRateId)
+  url <- httr::GET(url)
+  json <- httr::content(url, as = "text", type = "application/json", encoding = 'UTF-8')
+  if (json == '[]') {
+    stop(paste0("Please check if incident rate id:", incidenceRateId, "exists."))
+  }
+  data <- jsonlite::fromJSON(txt = json, simplifyVector = TRUE, simplifyDataFrame = TRUE, flatten = TRUE)
+  data$summaryList <- NULL
+  names(data) <- names(data) %>%
+    stringr::str_replace_all(pattern = 'executionInfo.', replacement = '') %>%
+    stringr::str_replace_all(pattern = 'id.', replacement = '')  
+  
+  data <- data %>%
+    dplyr::mutate(
+      startTime = millisecondsToDate(startTime)
+    ) %>%
+    dplyr::as_tibble()
+  return(data)
+}

@@ -245,3 +245,23 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
   sec <- milliseconds/1000
   as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone())
 }
+
+# Parse API to native (json) and parsed (r-friendly format)
+.getApiResponseParse <- function(url){
+  .checkBaseUrl(baseUrl)
+  getUrl <- httr::GET(url)
+  if (httr::http_type(getUrl) != "application/json") {
+    stop(paste0(url, " API for did not return json"), call. = FALSE)
+  } 
+  native <- httr::content(getUrl, as = 'text', type = "application/json", encoding = 'UTF-8')
+  if (stringr::str_detect(string = native, pattern = "An exception ocurred")) {
+    stop(paste0(url, " API call returned an Exception error"), call. = FALSE)
+  } else {
+    parsed <- jsonlite::fromJSON(txt = native, simplifyVector = TRUE, simplifyDataFrame = TRUE)
+  }
+  result <- list(
+    native = native,
+    parsed = parsed
+  )
+  return(result)
+}
