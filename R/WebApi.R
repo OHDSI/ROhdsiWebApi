@@ -246,22 +246,16 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
   as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone())
 }
 
-# Parse API to native (json) and parsed (r-friendly format)
-.getApiResponseParse <- function(url){
-  .checkBaseUrl(baseUrl)
-  getUrl <- httr::GET(url)
-  if (httr::http_type(getUrl) != "application/json") {
-    stop(paste0(url, " API for did not return json"), call. = FALSE)
-  } 
-  native <- httr::content(getUrl, as = 'text', type = "application/json", encoding = 'UTF-8')
-  if (stringr::str_detect(string = native, pattern = "An exception ocurred")) {
-    stop(paste0(url, " API call returned an Exception error"), call. = FALSE)
+# recursively flattens tree based structure.
+.flattenTree <- function(node, accumulated) {
+  if (is.null(node$children)) {
+    accumulated$name <- c(accumulated$name, node$name);
+    accumulated$size <- c(accumulated$size, node$size);
+    return(accumulated)
   } else {
-    parsed <- jsonlite::fromJSON(txt = native, simplifyVector = TRUE, simplifyDataFrame = TRUE)
+    for (child in node$children) {
+      accumulated <- .flattenTree(child, accumulated)
+    }
+    return(accumulated)
   }
-  result <- list(
-    native = native,
-    parsed = parsed
-  )
-  return(result)
 }
