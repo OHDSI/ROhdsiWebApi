@@ -68,7 +68,14 @@ getCohortDefinition <- function(cohortId, baseUrl) {
 #' @export
 getCohortDefinitionExpression <- function(definitionId, baseUrl) {
   .checkBaseUrl(baseUrl)
-
+  .Deprecated(new = "getCohortDefinition", 
+              package="ROhdsiWebApi", 
+              msg = "This function has been deprecated. As an alternative please use the following
+              steps as in the example below:
+              1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
+              2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
+              3) save validJsonExpression object as .txt",
+              old = as.character(sys.call(sys.parent()))[1L])
   url <- paste(baseUrl, "cohortdefinition", definitionId, sep = "/")
   json <- httr::GET(url)
   httr::content(json)
@@ -293,6 +300,10 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 #' @export
 getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
   .checkBaseUrl(baseUrl)
+  .Deprecated(new = "getCohortDefinition", 
+              package="ROhdsiWebApi", 
+              msg = "This function has been deprecated. As an alternative please use getCohortDefinition",
+              old = as.character(sys.call(sys.parent()))[1L])
 
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
 
