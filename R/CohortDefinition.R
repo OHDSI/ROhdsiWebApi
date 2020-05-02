@@ -125,17 +125,16 @@ insertCohortDefinitionInPackage <- function(definitionId,
   checkmate::assertLogical(generateStats)
   checkmate::reportAssertions(errorMessage)
 
-  # Fetch JSON object
-  json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
-  object <- jsonlite::fromJSON(json$expression)
+  object <- getCohortDefinition(cohortId = definitionId, 
+                                baseUrl = baseUrl)
   if (is.null(name)) {
-    name <- json$name
+    name <- object$name
   }
   if (!file.exists(jsonFolder)) {
     dir.create(jsonFolder, recursive = TRUE)
   }
   jsonFileName <- file.path(jsonFolder, paste(name, "json", sep = "."))
-  jsonlite::write_json(object, jsonFileName, pretty = TRUE)
+  jsonlite::write_json(object$expression, jsonFileName, pretty = TRUE)
   writeLines(paste("- Created JSON file:", jsonFileName))
 
   # Fetch SQL
