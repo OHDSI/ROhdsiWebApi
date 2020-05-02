@@ -43,6 +43,24 @@ getCohortCharacterizationResults <- function(baseUrl,
                                              cohortIds = c(),
                                              domains = c(),
                                              analysisNames = c()) {
+  
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(characterizationId)
+  if (!is.null(generationId)) {
+    checkmate::assertInt(generationId)
+  }
+  checkmate::assertScalar(sourceKey)
+  if (!length(cohortIds) == 0) {
+    checkmate::assertInteger(cohortIds)
+  }
+  if (!length(domains) == 0) {
+    checkmate::assertCharacter(domains)
+  }
+  if (!length(analysisNames) == 0) {
+    checkmate::assertCharacter(analysisNames)
+  }
+  checkmate::reportAssertions(errorMessage)
+  
   if (is.null(generationId)) {
     generationId <- .getLatestGenerationId(baseUrl = baseUrl,
                                            characterizationId = characterizationId,
@@ -149,6 +167,14 @@ getCohortCharacterizationResults <- function(baseUrl,
 #' @export
 getCharacterizationDefinition <- function(baseUrl, characterizationId, generationId = NULL) {
   .checkBaseUrl(baseUrl)
+  
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(characterizationId)
+  if (!is.null(generationId)) {
+    checkmate::assertInt(generationId)
+  }
+  checkmate::reportAssertions(errorMessage)
+  
   if (is.null(generationId)) {
     url <- sprintf("%s/cohort-characterization/%d/design", baseUrl, characterizationId)
   } else {
@@ -186,6 +212,12 @@ getCharacterizationDefinition <- function(baseUrl, characterizationId, generatio
 #' @export
 deleteCharacterizationDefinition <- function(characterizationId, baseUrl, silent = FALSE, stopOnError = FALSE) {
   .checkBaseUrl(baseUrl)
+  
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(characterizationId)
+  checkmate::assertLogical(silent)
+  checkmate::assertLogical(stopOnError)
+  checkmate::reportAssertions(errorMessage)
   
   characterizationDefinition <- tryCatch(ROhdsiWebApi::getCharacterizationDefinition(characterizationId = characterizationId, 
                                                                                                baseUrl = baseUrl),

@@ -25,7 +25,8 @@ Imports:
     stringr,
     readr,
     magrittr,
-    purrr
+    purrr,
+    checkmate
 Suggests:
     testthat
 URL: https://github.com/OHDSI/ROhdsiWebApi
