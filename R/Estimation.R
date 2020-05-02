@@ -16,8 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
 #' Get the estimation specification
 #'
 #' @details
@@ -41,7 +39,12 @@ getEstimation <- function(baseUrl, estimationId){
   checkmate::assertInt(estimationId)
   checkmate::reportAssertions(errorMessage)
   
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(estimationId)
+  checkmate::reportAssertions(errorMessage)
+  
   url <- sprintf("%s/estimation/%d/", baseUrl, estimationId)
+
   json <- httr::GET(url)
   data <- httr::content(json)
   data$expression <- data$specification #this expression cannot be imported back - why?
