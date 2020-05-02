@@ -36,6 +36,9 @@
 #' @export
 getCohortDefinition <- function(cohortId, baseUrl) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId)
+  checkmate::reportAssertions(errorMessage)
   
   url <- paste(baseUrl, "cohortdefinition", cohortId, sep = "/")
   json <- httr::GET(url)
@@ -68,6 +71,9 @@ getCohortDefinition <- function(cohortId, baseUrl) {
 #' @export
 getCohortDefinitionExpression <- function(definitionId, baseUrl) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(definitionId)
+  checkmate::reportAssertions(errorMessage)
 
   url <- paste(baseUrl, "cohortdefinition", definitionId, sep = "/")
   json <- httr::GET(url)
@@ -114,6 +120,10 @@ insertCohortDefinitionInPackage <- function(definitionId,
                                             baseUrl,
                                             generateStats = FALSE) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(definitionId)
+  checkmate::assertLogical(generateStats)
+  checkmate::reportAssertions(errorMessage)
 
   # Fetch JSON object
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
@@ -175,6 +185,13 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
                                                generateStats = FALSE,
                                                packageName) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertLogical(insertTableSql)
+  checkmate::assertLogical(insertCohortCreationR)
+  checkmate::assertLogical(generateStats)
+  checkmate::assertScalar(packageName)
+  checkmate::assertCharacter(packageName)
+  checkmate::reportAssertions(errorMessage)
 
   if (insertCohortCreationR && !insertTableSql)
     stop("Need to insert table SQL in order to generate R code")
@@ -293,6 +310,10 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 #' @export
 getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertLogical(formatName)
+  checkmate::assertInt(definitionId)
+  checkmate::reportAssertions(errorMessage)
 
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
 
@@ -326,6 +347,10 @@ getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
 #' @export
 getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertLogical(generateStats)
+  checkmate::assertInt(definitionId)
+  checkmate::reportAssertions(errorMessage)
 
   url <- sprintf("%1s/cohortdefinition/sql", baseUrl)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
@@ -346,7 +371,6 @@ getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) 
   (httr::content(req))$templateSql
 }
 
-
 #' Get Cohort Generation Statuses
 #'
 #' @details
@@ -366,6 +390,9 @@ getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) 
 #' @export
 getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NULL) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInteger(definitionIds)
+  checkmate::reportAssertions(errorMessage)
 
   checkSourceKeys <- function(baseUrl, sourceKeys) {
     sourceIds <- lapply(X = sourceKeys, .getSourceIdFromKey, baseUrl = baseUrl)
@@ -466,6 +493,10 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NUL
 #' @export
 invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInteger(definitionIds)
+  checkmate::assertInteger(sourceKeys)
+  checkmate::reportAssertions(errorMessage)
 
   checkSourceKeys <- function(baseUrl, sourceKeys) {
     sourceIds <- lapply(X = sourceKeys, .getSourceIdFromKey, baseUrl = baseUrl)
@@ -507,6 +538,13 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
 #'
 #' @export
 getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId)
+  checkmate::assertScalar(sourceKey)
+  checkmate::assertCharacter(sourceKey)
+  checkmate::reportAssertions(errorMessage)
+  
   url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0", baseUrl, cohortId, sourceKey)
   json <- httr::GET(url)
   json <- httr::content(json)
@@ -547,6 +585,13 @@ getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
 #' @export
 deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnError = FALSE) {
   .checkBaseUrl(baseUrl)
+  
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId)
+  checkmate::assertScalar(sourceKey)
+  checkmate::assertCharacter(sourceKey)
+  checkmate::assertLogical(silent)
+  checkmate::reportAssertions(errorMessage)
   
   cohortDefinition <- tryCatch(ROhdsiWebApi::getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl),
                                error=function(e) e, 

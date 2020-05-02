@@ -38,6 +38,10 @@
 getEstimation <- function(estimationId, baseUrl) {
   .checkBaseUrl(baseUrl)
   
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(estimationId)
+  checkmate::reportAssertions(errorMessage)
+  
   url <- paste(baseUrl, "estimation", estimationId, sep = "/")
   json <- httr::GET(url)
   data <- httr::content(json)

@@ -40,6 +40,10 @@
 getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToCamelCase = TRUE) {
   
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInteger(conceptIds)
+  checkmate::assertLogical(snakeCaseToCamelCase)
+  checkmate::reportAssertions(errorMessage)
   
   if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
     vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
@@ -91,6 +95,10 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
 getSourceConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToCamelCase = TRUE) {
   
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInteger(conceptIds)
+  checkmate::assertLogical(snakeCaseToCamelCase)
+  checkmate::reportAssertions(errorMessage)
   
   if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
     vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
