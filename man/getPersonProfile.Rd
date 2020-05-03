@@ -16,7 +16,7 @@ Configuration page}
 \item{personId}{The personId of the person whoose profile is being reviewed}
 
 \item{indexCohortId}{<OPTIONAL> Do you want to use a particular cohortId as the index cohort?
-If left NULL, the cohortId will identify the earliest cohort for the person , by 
+If left NULL, the WebApi will identify the earliest cohort for the person by 
 cohort start date and use it as the index cohort. 
 WebApi uses the cohort start date of the index cohort to calculate the person's 
 index age (ageAtIndex). WebApi will also return the relative position, in days, 
