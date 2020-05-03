@@ -37,7 +37,7 @@
 getCohortDefinition <- function(cohortId, baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(cohortId)
+  checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   url <- paste(baseUrl, "cohortdefinition", cohortId, sep = "/")
@@ -72,7 +72,7 @@ getCohortDefinition <- function(cohortId, baseUrl) {
 getCohortDefinitionExpression <- function(definitionId, baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(definitionId)
+  checkmate::assertInt(definitionId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   url <- paste(baseUrl, "cohortdefinition", definitionId, sep = "/")
@@ -121,8 +121,8 @@ insertCohortDefinitionInPackage <- function(definitionId,
                                             generateStats = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(definitionId)
-  checkmate::assertLogical(generateStats)
+  checkmate::assertInt(definitionId, add = errorMessage)
+  checkmate::assertLogical(generateStats, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   # Fetch JSON object
@@ -186,11 +186,11 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
                                                packageName) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertLogical(insertTableSql)
-  checkmate::assertLogical(insertCohortCreationR)
-  checkmate::assertLogical(generateStats)
-  checkmate::assertScalar(packageName)
-  checkmate::assertCharacter(packageName)
+  checkmate::assertLogical(insertTableSql, add = errorMessage)
+  checkmate::assertLogical(insertCohortCreationR, add = errorMessage)
+  checkmate::assertLogical(generateStats, add = errorMessage)
+  checkmate::assertScalar(packageName, add = errorMessage)
+  checkmate::assertCharacter(packageName, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (insertCohortCreationR && !insertTableSql)
@@ -311,8 +311,8 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertLogical(formatName)
-  checkmate::assertInt(definitionId)
+  checkmate::assertLogical(formatName, add = errorMessage)
+  checkmate::assertInt(definitionId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
@@ -348,8 +348,8 @@ getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
 getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertLogical(generateStats)
-  checkmate::assertInt(definitionId)
+  checkmate::assertLogical(generateStats, add = errorMessage)
+  checkmate::assertInt(definitionId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   url <- sprintf("%1s/cohortdefinition/sql", baseUrl)
@@ -399,7 +399,7 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl, definitionId, vocabSour
 
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(definitionId)
+  checkmate::assertInt(definitionId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
@@ -456,7 +456,7 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl, definitionId, vocabSour
 getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NULL) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(definitionIds)
+  checkmate::assertInteger(definitionIds, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   checkSourceKeys <- function(baseUrl, sourceKeys) {
@@ -559,8 +559,8 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NUL
 invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(definitionIds)
-  checkmate::assertInteger(sourceKeys)
+  checkmate::assertInteger(definitionIds, add = errorMessage)
+  checkmate::assertInteger(sourceKeys, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   checkSourceKeys <- function(baseUrl, sourceKeys) {
@@ -605,9 +605,9 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
 getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(cohortId)
-  checkmate::assertScalar(sourceKey)
-  checkmate::assertCharacter(sourceKey)
+  checkmate::assertInt(cohortId, add = errorMessage)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
+  checkmate::assertCharacter(sourceKey, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0", baseUrl, cohortId, sourceKey)
@@ -652,10 +652,10 @@ deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnErro
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(cohortId)
-  checkmate::assertScalar(sourceKey)
-  checkmate::assertCharacter(sourceKey)
-  checkmate::assertLogical(silent)
+  checkmate::assertInt(cohortId, add = errorMessage)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
+  checkmate::assertCharacter(sourceKey, add = errorMessage)
+  checkmate::assertLogical(silent, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   cohortDefinition <- tryCatch(ROhdsiWebApi::getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl),

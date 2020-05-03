@@ -39,7 +39,7 @@ getEstimation <- function(estimationId, baseUrl) {
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(estimationId)
+  checkmate::assertInt(estimationId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   url <- paste(baseUrl, "estimation", estimationId, sep = "/")
