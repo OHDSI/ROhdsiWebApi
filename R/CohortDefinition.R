@@ -36,6 +36,9 @@
 #' @export
 getCohortDefinition <- function(cohortId, baseUrl) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId)
+  checkmate::reportAssertions(errorMessage)
   
   url <- paste(baseUrl, "cohortdefinition", cohortId, sep = "/")
   json <- httr::GET(url)
@@ -57,6 +60,11 @@ getCohortDefinition <- function(cohortId, baseUrl) {
 #'                       "http://server.org:80/WebAPI".
 #' @return
 #' A JSON list object representing the cohort definition
+#' This function has been deprecated. As an alternative please use the following
+#' steps as in the example below:
+#'   1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
+#'   2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
+#'   3) save validJsonExpression object as .txt"
 #'
 #' @examples
 #' \dontrun{
@@ -76,6 +84,10 @@ getCohortDefinitionExpression <- function(definitionId, baseUrl) {
               2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
               3) save validJsonExpression object as .txt",
               old = as.character(sys.call(sys.parent()))[1L])
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(definitionId)
+  checkmate::reportAssertions(errorMessage)
+
   url <- paste(baseUrl, "cohortdefinition", definitionId, sep = "/")
   json <- httr::GET(url)
   httr::content(json)
@@ -121,18 +133,21 @@ insertCohortDefinitionInPackage <- function(definitionId,
                                             baseUrl,
                                             generateStats = FALSE) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(definitionId)
+  checkmate::assertLogical(generateStats)
+  checkmate::reportAssertions(errorMessage)
 
-  # Fetch JSON object
-  json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
-  object <- jsonlite::fromJSON(json$expression)
+  object <- getCohortDefinition(cohortId = definitionId, 
+                                baseUrl = baseUrl)
   if (is.null(name)) {
-    name <- json$name
+    name <- object$name
   }
   if (!file.exists(jsonFolder)) {
     dir.create(jsonFolder, recursive = TRUE)
   }
   jsonFileName <- file.path(jsonFolder, paste(name, "json", sep = "."))
-  jsonlite::write_json(object, jsonFileName, pretty = TRUE)
+  jsonlite::write_json(object$expression, jsonFileName, pretty = TRUE)
   writeLines(paste("- Created JSON file:", jsonFileName))
 
   # Fetch SQL
@@ -182,6 +197,13 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
                                                generateStats = FALSE,
                                                packageName) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertLogical(insertTableSql)
+  checkmate::assertLogical(insertCohortCreationR)
+  checkmate::assertLogical(generateStats)
+  checkmate::assertScalar(packageName)
+  checkmate::assertCharacter(packageName)
+  checkmate::reportAssertions(errorMessage)
 
   if (insertCohortCreationR && !insertTableSql)
     stop("Need to insert table SQL in order to generate R code")
@@ -284,10 +306,11 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 }
 
 
-#' Get a cohort definition's name from WebAPI
+#' (Deprecated) Get a cohort definition's name from WebAPI
 #'
 #' @details
-#' Obtains the name of a cohort.
+#' (Deprecated) Obtains the name of a cohort. 
+#' This function has been deprecated. As an alternative please use getCohortDefinition
 #'
 #' @param baseUrl        The base URL for the WebApi instance, for example:
 #'                       "http://server.org:80/WebAPI".
@@ -304,6 +327,10 @@ getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
               package="ROhdsiWebApi", 
               msg = "This function has been deprecated. As an alternative please use getCohortDefinition",
               old = as.character(sys.call(sys.parent()))[1L])
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertLogical(formatName)
+  checkmate::assertInt(definitionId)
+  checkmate::reportAssertions(errorMessage)
 
   json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
 
@@ -337,6 +364,10 @@ getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
 #' @export
 getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertLogical(generateStats)
+  checkmate::assertInt(definitionId)
+  checkmate::reportAssertions(errorMessage)
 
   url <- sprintf("%1s/cohortdefinition/sql", baseUrl)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
@@ -357,68 +388,6 @@ getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) 
   (httr::content(req))$templateSql
 }
 
-
-
-#' Get a list of concept sets and included/mapped concepts from a cohort definition
-#'
-#' @details
-#' For a given cohort definition id, get all concept sets and resolve all concepts into an included
-#' concepts data frame and mapped concepts data frame from each
-#'
-#' @param baseUrl          The base URL for the WebApi instance, for example:
-#'                         "http://server.org:80/WebAPI".
-#' @param definitionId     The cohort id to fetch concept sets and concepts from
-#' @param vocabSourceKey   The vocabulary key to use.
-#'
-#' @return
-#' A list of concept sets, set names, and concept data frames
-#'
-#' @examples
-#' \dontrun{
-#' # This will obtain a list of concept sets and concepts from a cohort id:
-#'
-#' getConceptsFromCohortId(baseUrl = "http://server.org:80/WebAPI", definitionId = 123)
-#' }
-#'
-#' @export
-getConceptSetsAndConceptsFromCohort <- function(baseUrl, definitionId, vocabSourceKey = NULL) {
-
-  .checkBaseUrl(baseUrl)
-
-  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
-    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
-  }
-
-  json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
-
-  webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
-
-  if (compareVersion(a = "2.7.2", webApiVersion) == 0) {
-    json <- json$expression
-  } else {
-    json <- RJSONIO::fromJSON(json$expression)
-  }
-
-  lapply(json$ConceptSets, function(j) {
-
-    includedConcepts <- getSetExpressionConceptIds(baseUrl = baseUrl,
-                                                   expression = RJSONIO::toJSON(j$expression),
-                                                   vocabSourceKey = vocabSourceKey)
-    list(id = j$id,
-         name = j$name,
-         includedConcepts = .getIncludedConceptsDf(baseUrl = baseUrl,
-                                                   vocabSourceKey = vocabSourceKey,
-                                                   includedConcepts = includedConcepts),
-         mappedConcepts = .getMappedConceptsDf(baseUrl = baseUrl,
-                                               vocabSourceKey = vocabSourceKey,
-                                               includedConcepts = includedConcepts),
-         setExpression = .setExpressionToDf(j$expression),
-         jsonExpression = j$expression)
-  })
-}
-
-
-
 #' Get Cohort Generation Statuses
 #'
 #' @details
@@ -438,6 +407,9 @@ getConceptSetsAndConceptsFromCohort <- function(baseUrl, definitionId, vocabSour
 #' @export
 getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NULL) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInteger(definitionIds)
+  checkmate::reportAssertions(errorMessage)
 
   checkSourceKeys <- function(baseUrl, sourceKeys) {
     sourceIds <- lapply(X = sourceKeys, .getSourceIdFromKey, baseUrl = baseUrl)
@@ -538,6 +510,10 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NUL
 #' @export
 invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInteger(definitionIds)
+  checkmate::assertInteger(sourceKeys)
+  checkmate::reportAssertions(errorMessage)
 
   checkSourceKeys <- function(baseUrl, sourceKeys) {
     sourceIds <- lapply(X = sourceKeys, .getSourceIdFromKey, baseUrl = baseUrl)
@@ -579,6 +555,13 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
 #'
 #' @export
 getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId)
+  checkmate::assertScalar(sourceKey)
+  checkmate::assertCharacter(sourceKey)
+  checkmate::reportAssertions(errorMessage)
+  
   url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0", baseUrl, cohortId, sourceKey)
   json <- httr::GET(url)
   json <- httr::content(json)
@@ -619,6 +602,13 @@ getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
 #' @export
 deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnError = FALSE) {
   .checkBaseUrl(baseUrl)
+  
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId)
+  checkmate::assertScalar(sourceKey)
+  checkmate::assertCharacter(sourceKey)
+  checkmate::assertLogical(silent)
+  checkmate::reportAssertions(errorMessage)
   
   cohortDefinition <- tryCatch(ROhdsiWebApi::getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl),
                                error=function(e) e, 

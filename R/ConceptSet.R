@@ -34,6 +34,9 @@
 #' @export
 getConceptSet <- function(baseUrl, conceptSetId) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(conceptSetId)
+  checkmate::reportAssertions(errorMessage)
   
   url <- sprintf("%1s/conceptset/%2s", baseUrl, conceptSetId)
   metaData <- httr::GET(url)
@@ -135,6 +138,10 @@ convertConceptSetToTable <- function(conceptSet, snakeCaseToCamelCase = TRUE) {
 #' @export
 getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(setId)
+  checkmate::assertLogical(formatName)
+  checkmate::reportAssertions(errorMessage)
 
   url <- gsub("@baseUrl", baseUrl, gsub("@setId", setId, "@baseUrl/conceptset/@setId"))
   json <- httr::GET(url)
@@ -171,6 +178,10 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
 #' @export
 getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(setId)
+  checkmate::assertLogical(asDataFrame)
+  checkmate::reportAssertions(errorMessage)
 
   url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, setId)
   json <- httr::GET(url)
@@ -305,6 +316,9 @@ getSetExpressionConceptIds <- function(baseUrl, expression, vocabSourceKey = NUL
 #' @export
 getConceptSetConceptIds <- function(baseUrl, setId, vocabSourceKey = NULL) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(setId)
+  checkmate::reportAssertions(errorMessage)
 
   if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
     vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
@@ -340,6 +354,11 @@ createConceptSetWorkbook <- function(conceptSetIds,
                                      included = FALSE,
                                      mapped = FALSE) {
   .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInteger(conceptSetIds)
+  checkmate::assertLogical(included)
+  checkmate::assertLogical(mapped)
+  checkmate::reportAssertions(errorMessage)
 
   if (is.null(workFolder))
     workFolder <- getwd()
