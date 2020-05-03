@@ -106,7 +106,7 @@ getWebApiVersion <- function(baseUrl) {
 #'
 #' @export
 getCdmSources <- function(baseUrl) {
-
+  .checkBaseUrl(baseUrl)
   url <- sprintf("%s/source/sources", baseUrl)
   request <- httr::GET(url)
   httr::stop_for_status(request)
@@ -164,6 +164,7 @@ getCdmSources <- function(baseUrl) {
 #'
 #' @export
 getAtlasDefinitionsDetails <- function(baseUrl) {
+  .checkBaseUrl(baseUrl)
   atlasCategories <- c('conceptset',
                        'cohortdefinition',
                        'ir',
@@ -172,10 +173,8 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
   
   listOfAtlasIds <- list()
   for (i in (1:length(atlasCategories))) {
-    #i  = 1
     atlasCategory <- atlasCategories[[i]]
-    url <-
-      paste(baseUrl, atlasCategory, '?size=100000000', sep = "/")
+    url <- paste(baseUrl, atlasCategory, '?size=100000000', sep = "/")
     request <- httr::GET(url)
     httr::stop_for_status(request)
     listOfAtlasIds[[atlasCategory]] <- httr::content(request) %>%
@@ -240,6 +239,7 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
 }
 
 
+
 # recursively flattens tree based structure.
 .flattenTree <- function(node, accumulated) {
   if (is.null(node$children)) {
@@ -252,4 +252,11 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
     }
     return(accumulated)
   }
+}
+
+# converts time in integer/milliseconds to date-time with timezone.
+# assumption is that the system timezone = time zone of the local server running webApi.
+.millisecondsToDate <- function(milliseconds) {
+  sec <- milliseconds/1000
+  as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone())
 }

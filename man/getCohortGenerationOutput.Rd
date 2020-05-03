@@ -2,7 +2,7 @@
 % Please edit documentation in R/CohortDefinition.R
 \name{getCohortGenerationOutput}
 \alias{getCohortGenerationOutput}
-\title{Get cohort generation report}
+\title{Get cohort generation output}
 \usage{
 getCohortGenerationOutput(baseUrl, cohortId, sourceKey, mode = 0)
 }
@@ -20,10 +20,10 @@ or persons (mode = 1). Default value = 0.}
 A list of data frames containing cohort generation report
 }
 \description{
-Get cohort generation report
+Get cohort generation output
 }
 \details{
-Obtains a list with dataframe containing details of report for cohort generation output.
+Obtains a list with dataframe containing details of output for cohort generation
 }
 \examples{
 \dontrun{
