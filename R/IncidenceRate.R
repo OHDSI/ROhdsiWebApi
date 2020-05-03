@@ -28,12 +28,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' getIncidenceRateDefinitions <- function(baseUrl "http://server.org:80/WebAPI",
+#'  getIncidenceRateSpecification <- function(baseUrl "http://server.org:80/WebAPI",
 #'                                          incidenceRateId = 296)
 #'                                          )
 #' }
 #' @export
-getIncidenceRateDefinitions <- function(baseUrl,
+ getIncidenceRateSpecification <- function(baseUrl,
                                         incidenceRateId) {
   .checkBaseUrl(baseUrl)
   #ir specifications
@@ -58,7 +58,8 @@ getIncidenceRateDefinitions <- function(baseUrl,
 #' @param baseUrl         The base URL for the WebApi instance, for example:
 #'                        "http://server.org:80/WebAPI".
 #' @param incidenceRateId The Atlas ID for incidence rate analysis.
-#' @return                An R-object
+#' @return                A tibble data-frame R-object with incidence rate
+#'                        generation information.
 #'
 #' @examples
 #' \dontrun{
@@ -92,11 +93,11 @@ getIncidenceRateGenerationInformation <- function(baseUrl,
 }
 
 
-#' Get results from incidence rate analysis.
+#' Get output from incidence rate analysis.
 #'
 #' @details
 #' Given a sourceKey, targetCohortId, outcomeCohortId combinations, this function will return the 
-#' results of incidence rate analysis.
+#' output of incidence rate analysis.
 #'
 #' @param baseUrl            The base URL for the WebApi instance, for example:
 #'                           "http://server.org:80/WebAPI".
@@ -108,7 +109,7 @@ getIncidenceRateGenerationInformation <- function(baseUrl,
 #'
 #' @examples
 #' \dontrun{
-#' getIncidenceRateResults <- function(baseUrl "http://server.org:80/WebAPI",
+#' getIncidenceRateOutput <- function(baseUrl "http://server.org:80/WebAPI",
 #'                                     incidenceRateId = 296,
 #'                                     targetCohortId = 432423, 
 #'                                     outcomeCohortId = 324,
@@ -116,11 +117,11 @@ getIncidenceRateGenerationInformation <- function(baseUrl,
 #'                                    )
 #' }
 #' @export
-getIncidenceRateResults <- function(baseUrl,
-                                    incidenceRateId,
-                                    sourceKey,
-                                    targetCohortId,
-                                    outcomeCohortId) {
+getIncidenceRateOutput <- function(baseUrl,
+                                   incidenceRateId,
+                                   sourceKey,
+                                   targetCohortId,
+                                   outcomeCohortId) {
   .checkBaseUrl(baseUrl)
   
   url <- sprintf("%1s/ir/%2s/report/%3s?targetId=%4s&outcomeId=%5s", 
@@ -129,7 +130,7 @@ getIncidenceRateResults <- function(baseUrl,
                  sourceKey, 
                  targetCohortId, 
                  outcomeCohortId
-                 )
+  )
   url <- httr::GET(url)
   json <- httr::content(url, as = "text", type = "application/json", encoding = 'UTF-8')
   if (json == '[]') {
@@ -142,13 +143,13 @@ getIncidenceRateResults <- function(baseUrl,
   data$summary$rateP1K <- (data$summary$cases/data$summary$timeAtRisk)*1000
   data$summary$sourceKey <- sourceKey
   data$summary$incidenceRateId <- incidenceRateId
-          
+  
   data$stratifyStats <- dplyr::bind_rows(data$stratifyStats)
   if (nrow(data$stratifyStats) > 0) {
-  data$stratifyStats$proportionP1K = (data$stratifyStats$cases/data$stratifyStats$totalPersons)*1000
-  data$stratifyStats$rateP1K = (data$stratifyStats$cases/data$stratifyStats$timeAtRisk)*1000
-  data$stratifyStats$sourceKey <- sourceKey
-  data$stratifyStats$incidenceRateId <- incidenceRateId
+    data$stratifyStats$proportionP1K = (data$stratifyStats$cases/data$stratifyStats$totalPersons)*1000
+    data$stratifyStats$rateP1K = (data$stratifyStats$cases/data$stratifyStats$timeAtRisk)*1000
+    data$stratifyStats$sourceKey <- sourceKey
+    data$stratifyStats$incidenceRateId <- incidenceRateId
   } else {
     data$stratifyStats$proportionP1K = 0.0
     data$stratifyStats$rateP1K = 0.0
@@ -163,10 +164,10 @@ getIncidenceRateResults <- function(baseUrl,
   treeMapResult <- .flattenTree(jsonTreeMapData,treeMapResult) 
   treeMapResultDf <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
   treeMapResultDf <- treeMapResultDf %>% dplyr::mutate(
-            'SatisfiedNumber' = stringr::str_count(string = treeMapResultDf$bits, pattern = '1'),
-            'SatisfiedRules' = stringr::str_locate_all(string = treeMapResultDf$bits, pattern = '1') %>% paste()
-          )
-
+    'SatisfiedNumber' = stringr::str_count(string = treeMapResultDf$bits, pattern = '1'),
+    'SatisfiedRules' = stringr::str_locate_all(string = treeMapResultDf$bits, pattern = '1') %>% paste()
+  )
+  
   data$treemapData <- treeMapResultDf
   data$treemapData$sourceKey <- sourceKey
   data$treemapData$targetId <- targetCohortId

@@ -13,7 +13,8 @@ getIncidenceRateGenerationInformation(baseUrl, incidenceRateId)
 \item{incidenceRateId}{The Atlas ID for incidence rate analysis.}
 }
 \value{
-An R-object
+A tibble data-frame R-object with incidence rate
+                       generation information.
 }
 \description{
 Get incident rate generation information.
