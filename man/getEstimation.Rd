@@ -2,29 +2,28 @@
 % Please edit documentation in R/Estimation.R
 \name{getEstimation}
 \alias{getEstimation}
-\title{Get an estimation definition}
+\title{Get the estimation specification}
 \usage{
-getEstimation(estimationId, baseUrl)
+getEstimation(baseUrl, estimationId)
 }
 \arguments{
-\item{estimationId}{The number indicating which estimation specification to fetch.}
-
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
+
+\item{estimationId}{The Atlas id for the estimation specification}
 }
 \value{
-An Robject representing the estimation defintion
+A list of R-objects with specifications for estimation
 }
 \description{
-Get an estimation definition
+Get the estimation specification
 }
 \details{
-Obtain the estimation study specification from WebAPI for a given estimation id
+Get an R list object with expression from WebAPI for a given estimation specification
 }
 \examples{
 \dontrun{
-estimation = getEstimation(estimationId = 124, 
-                           baseUrl = "http://server.org:80/WebAPI")
+getEstimation(baseUrl = "http://server.org:80/WebAPI", estimationId = 3434)
 }
 
 }

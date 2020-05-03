@@ -125,17 +125,16 @@ insertCohortDefinitionInPackage <- function(definitionId,
   checkmate::assertLogical(generateStats, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  # Fetch JSON object
-  json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
-  object <- jsonlite::fromJSON(json$expression)
+  object <- getCohortDefinition(cohortId = definitionId, 
+                                baseUrl = baseUrl)
   if (is.null(name)) {
-    name <- json$name
+    name <- object$name
   }
   if (!file.exists(jsonFolder)) {
     dir.create(jsonFolder, recursive = TRUE)
   }
   jsonFileName <- file.path(jsonFolder, paste(name, "json", sep = "."))
-  jsonlite::write_json(object, jsonFileName, pretty = TRUE)
+  jsonlite::write_json(object$expression, jsonFileName, pretty = TRUE)
   writeLines(paste("- Created JSON file:", jsonFileName))
 
   # Fetch SQL
@@ -370,70 +369,6 @@ getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) 
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
   (httr::content(req))$templateSql
 }
-
-
-
-#' Get a list of concept sets and included/mapped concepts from a cohort definition
-#'
-#' @details
-#' For a given cohort definition id, get all concept sets and resolve all concepts into an included
-#' concepts data frame and mapped concepts data frame from each
-#'
-#' @param baseUrl          The base URL for the WebApi instance, for example:
-#'                         "http://server.org:80/WebAPI".
-#' @param definitionId     The cohort id to fetch concept sets and concepts from
-#' @param vocabSourceKey   The vocabulary key to use.
-#'
-#' @return
-#' A list of concept sets, set names, and concept data frames
-#'
-#' @examples
-#' \dontrun{
-#' # This will obtain a list of concept sets and concepts from a cohort id:
-#'
-#' getConceptsFromCohortId(baseUrl = "http://server.org:80/WebAPI", definitionId = 123)
-#' }
-#'
-#' @export
-getConceptSetsAndConceptsFromCohort <- function(baseUrl, definitionId, vocabSourceKey = NULL) {
-
-  .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(definitionId, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-
-  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
-    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
-  }
-
-  json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
-
-  webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
-
-  if (compareVersion(a = "2.7.2", webApiVersion) == 0) {
-    json <- json$expression
-  } else {
-    json <- RJSONIO::fromJSON(json$expression)
-  }
-
-  lapply(json$ConceptSets, function(j) {
-
-    includedConcepts <- getSetExpressionConceptIds(baseUrl = baseUrl,
-                                                   expression = RJSONIO::toJSON(j$expression),
-                                                   vocabSourceKey = vocabSourceKey)
-    list(id = j$id,
-         name = j$name,
-         includedConcepts = .getIncludedConceptsDf(baseUrl = baseUrl,
-                                                   vocabSourceKey = vocabSourceKey,
-                                                   includedConcepts = includedConcepts),
-         mappedConcepts = .getMappedConceptsDf(baseUrl = baseUrl,
-                                               vocabSourceKey = vocabSourceKey,
-                                               includedConcepts = includedConcepts),
-         setExpression = .setExpressionToDf(j$expression),
-         jsonExpression = j$expression)
-  })
-}
-
 
 
 #' Get Cohort Generation Statuses

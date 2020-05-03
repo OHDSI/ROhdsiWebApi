@@ -16,39 +16,58 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get an estimation definition
+#' Get the estimation specification
 #'
 #' @details
-#' Obtain the estimation study specification from WebAPI for a given estimation id
+#' Get an R list object with expression from WebAPI for a given estimation specification
 #'
-#' @template BaseUrl
-#'
-#' @param estimationId   The number indicating which estimation specification to fetch.
-#' 
-#' @return
-#' An Robject representing the estimation defintion
+#' @param baseUrl        The base URL for the WebApi instance, for example:
+#'                       "http://server.org:80/WebAPI".
+#' @param estimationId   The Atlas id for the estimation specification
+#' @return               A list of R-objects with specifications for estimation
 #'
 #' @examples
 #' \dontrun{
-#' estimation = getEstimation(estimationId = 124, 
-#'                            baseUrl = "http://server.org:80/WebAPI")
+#' getEstimation(baseUrl = "http://server.org:80/WebAPI", estimationId = 3434)
 #' }
 #'
 #' @export
-getEstimation <- function(estimationId, baseUrl) {
+getEstimation <- function(baseUrl, estimationId){
   .checkBaseUrl(baseUrl)
+
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(estimationId)
+  checkmate::reportAssertions(errorMessage)
   
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(estimationId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  url <- paste(baseUrl, "estimation", estimationId, sep = "/")
+  url <- sprintf("%s/estimation/%d/", baseUrl, estimationId)
+
   json <- httr::GET(url)
   data <- httr::content(json)
-  if (!is.null(data$payload$message)) {
-    stop(data$payload$message)
-  }
-  # Data at root level appears completely redundant with data in specification, so dropping root level:
-  data <- RJSONIO::fromJSON(data$specification)
+  data$expression <- data$specification #this expression cannot be imported back - why?
+  
+  data$createdDate <- .millisecondsToDate(data$createdDate)
+  data$modifiedDate <- .millisecondsToDate(data$modifiedDate)
+  data$specification <- jsonlite::fromJSON(txt = data$specification)
+  
+  data$specification$cohortDefinitions <- dplyr::as_tibble(data$specification$cohortDefinitions)
+  data$specification$conceptSets <- dplyr::as_tibble(data$specification$conceptSets)
+  data$specification$conceptSetCrossReference <- dplyr::as_tibble(data$specification$conceptSetCrossReference)
+  data$specification$negativeControls <- dplyr::as_tibble(data$specification$negativeControls)
+  
+  targetComparatorOutcomeIdDf <- list()
+  temp <- data$specification$estimationAnalysisSettings$analysisSpecification$targetComparatorOutcomes
+  
+  targetComparatorOutcomeIdDf <- data.frame(expand.grid(targetId = temp$targetId %>% unlist() %>% unique(),
+                                                        comparatorId = temp$comparatorId %>% unlist() %>% unique(),
+                                                        outcomeId = temp$outcomeIds %>% purrr::reduce(c) %>% unique())
+  )
+  data$specification$estimationAnalysisSettings$analysisSpecification$targetComparatorOutcomes <-
+    targetComparatorOutcomeIdDf
+  
   return(data)
 }
+

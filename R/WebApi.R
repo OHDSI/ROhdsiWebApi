@@ -237,3 +237,10 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
     dplyr::mutate(atlasCategory = SqlRender::camelCaseToTitleCase(atlasCategory))
   return(listOfAtlasIds)
 }
+
+# converts time in integer/milliseconds to date-time with timezone.
+# assumption is that the system timezone = time zone of the local server running webApi.
+.millisecondsToDate <- function(milliseconds) {
+  sec <- milliseconds/1000
+  as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone())
+}
