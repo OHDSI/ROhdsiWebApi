@@ -651,9 +651,12 @@ deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnErro
 #' @param mode        Mode is used to differentiate between inclusion rules and count by events (mode = 0, default) 
 #'                    or persons (mode = 1). Default value = 0. 
 #' @return            A list of data frames containing cohort generation report
-#'
+#' @examples
+#' \dontrun{
+#' getCohortGenerationOutput(cohortId = 282, baseUrl = "http://server.org:80/WebAPI", sourceKey = "HCUP", mode = 1)
+#' }
 #' @export
-getCohortGenerationReport <- function(baseUrl, cohortId, sourceKey, mode = 0) {
+getCohortGenerationOutput <- function(baseUrl, cohortId, sourceKey, mode = 0) {
   
   .checkBaseUrl(baseUrl)
   
