@@ -555,6 +555,11 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
 #'
 #' @export
 getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
+  .Deprecated(new = "getCohortGenerationReport", 
+              package="ROhdsiWebApi", 
+              msg = "This function has been deprecated. As an alternative please use getCohortGenerationReport.",
+              old = as.character(sys.call(sys.parent()))[1L])
+  
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId)
@@ -635,3 +640,57 @@ deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnErro
   return(NA)
 }
 
+
+#' Get cohort generation output
+#'
+#' @details
+#' Obtains a list with dataframe containing details of output for cohort generation
+#' 
+#' @param baseUrl     The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
+#' @param cohortId    The Atlas cohort definition id for the cohort
+#' @param sourceKey   The source key for a CDM instance in WebAPI, as defined in the Configuration page
+#' @param mode        Mode is used to differentiate between inclusion rules and count by events (mode = 0, default) 
+#'                    or persons (mode = 1). Default value = 0. 
+#' @return            A list of data frames containing cohort generation report
+#' @examples
+#' \dontrun{
+#' getCohortGenerationOutput(cohortId = 282, baseUrl = "http://server.org:80/WebAPI", sourceKey = "HCUP", mode = 1)
+#' }
+#' @export
+getCohortGenerationOutput <- function(baseUrl, cohortId, sourceKey, mode = 0) {
+  
+  .checkBaseUrl(baseUrl)
+  
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId)
+  checkmate::assertScalar(sourceKey)
+  checkmate::assertCharacter(sourceKey)
+  checkmate::assertInt(mode, lower = 0, upper = 1)
+  checkmate::reportAssertions(errorMessage)
+  
+  url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=", baseUrl, cohortId, sourceKey, mode)
+  json <- httr::GET(url)
+  json <- httr::content(json)
+  
+  results <- list()
+  results$summary <- json$summary %>% tidyr::as_tibble()
+  if (length(json$inclusionRuleStats) == 0) {
+    results$inclusionRuleStats <- NULL
+  } else {
+    results$inclusionRuleStas <- json$inclusionRuleStats %>% 
+      jsonlite::toJSON() %>% 
+      jsonlite::fromJSON(simplifyVector = T, simplifyDataFrame = T, flatten = T)
+  }
+  if (length(json$treemapData) == 0) {
+    results$treemapData <- NULL
+  } else {
+    treeMapResult <- list(name = c(), size = c())
+    treeMapResult <- .flattenTree(json$treemapData, treeMapResult)
+    json$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
+    json$treemapData$size <- as.integer(json$treemapData$size)
+    json$treemapData$SatisfiedNumber = stringr::str_count(string = json$treemapData$bits, pattern = '1')
+    json$treemapData$SatisfiedRules = stringr::str_locate_all(string = json$treemapData$bits, pattern = '1') %>% 
+      paste()
+  }
+  return(results)
+}

@@ -26,6 +26,7 @@ Imports:
     readr,
     magrittr,
     purrr,
+    tidyr,
     checkmate,
     lubridate,
     tidyr

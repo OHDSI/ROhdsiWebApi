@@ -237,6 +237,22 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
   return(listOfAtlasIds)
 }
 
+
+
+# recursively flattens tree based structure.
+.flattenTree <- function(node, accumulated) {
+  if (is.null(node$children)) {
+    accumulated$name <- c(accumulated$name, node$name);
+    accumulated$size <- c(accumulated$size, node$size);
+    return(accumulated)
+  } else {
+    for (child in node$children) {
+      accumulated <- .flattenTree(child, accumulated)
+    }
+    return(accumulated)
+  }
+}
+
 # converts time in integer/milliseconds to date-time with timezone.
 # assumption is that the system timezone = time zone of the local server running webApi.
 .millisecondsToDate <- function(milliseconds) {
