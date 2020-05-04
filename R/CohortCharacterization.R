@@ -125,6 +125,8 @@ getCohortCharacterizationResults <- function(baseUrl,
        prevalence = prevResultsDf)
 }
 
+
+
 .getLatestGenerationId <- function(baseUrl, characterizationId, sourceKey) {
   url <- sprintf("%s/cohort-characterization/%d/generation", baseUrl, characterizationId)
   json <- httr::GET(url)
@@ -142,6 +144,7 @@ getCohortCharacterizationResults <- function(baseUrl,
     stop("Cohort characterization results not found. Please generate the cohort characterization.")
   }
 }
+
 
 
 #' Get a characterization definition expression
@@ -188,6 +191,7 @@ getCharacterizationDefinition <- function(baseUrl, characterizationId, generatio
   }
   return(data)
 }
+
 
 
 #' Delete a cohort characterization definition and results

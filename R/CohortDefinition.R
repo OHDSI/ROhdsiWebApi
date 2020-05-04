@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+
 #' Get a cohort definition
 #'
 #' @details
@@ -49,6 +51,8 @@ getCohortDefinition <- function(cohortId, baseUrl) {
   data$expression <- RJSONIO::fromJSON(data$expression)
   return(data)
 }
+
+
 
 #' Get a cohort definition expression
 #'
@@ -92,6 +96,8 @@ getCohortDefinitionExpression <- function(definitionId, baseUrl) {
   json <- httr::GET(url)
   httr::content(json)
 }
+
+
 
 #' Load a cohort definition and insert it into this package
 #'
@@ -161,6 +167,8 @@ insertCohortDefinitionInPackage <- function(definitionId,
   SqlRender::writeSql(sql = sql, targetFile = sqlFileName)
   writeLines(paste("- Created SQL file:", sqlFileName))
 }
+
+
 
 #' Insert a set of cohort definitions into package
 #'
@@ -389,6 +397,7 @@ getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) 
 }
 
 
+
 #' Get Cohort Generation Statuses
 #'
 #' @details
@@ -451,11 +460,9 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NUL
   df
 }
 
+
+
 .getCohortGenerationStatus <- function(baseUrl, definitionId, sourceKey) {
-  millisecondsToDate <- function(milliseconds) {
-    sec <- milliseconds/1000
-    as.character(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
-  }
 
   .checkBaseUrl(baseUrl)
 
@@ -476,12 +483,14 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NUL
   }
 
   return(list(status = json[[1]]$status,
-              startTime = millisecondsToDate(milliseconds = json[[1]]$startTime),
+              startTime = .millisecondsToDate(milliseconds = json[[1]]$startTime),
               executionDuration = ifelse(is.null(json[[1]]$executionDuration),
                                          "NA",
                                          json[[1]]$executionDuration),
               personCount = ifelse(is.null(json[[1]]$personCount), "NA", json[[1]]$personCount)))
 }
+
+
 
 .invokeCohortGeneration <- function(baseUrl, sourceKey, definitionId) {
   result <- .getCohortGenerationStatus(baseUrl = baseUrl,
@@ -496,6 +505,8 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NUL
     json$status
   }
 }
+
+
 
 #' Invoke the generation of a set of cohort definitions
 #'
@@ -544,6 +555,8 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
   rownames(df) <- c()
   df
 }
+
+
 
 #' Get cohort inclusion rules and person counts
 #'
@@ -640,6 +653,7 @@ deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnErro
   }
   return(NA)
 }
+
 
 
 #' Get cohort generation output
