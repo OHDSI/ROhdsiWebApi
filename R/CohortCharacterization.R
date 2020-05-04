@@ -45,19 +45,19 @@ getCohortCharacterizationResults <- function(baseUrl,
                                              analysisNames = c()) {
   
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(characterizationId)
+  checkmate::assertInt(characterizationId, add = errorMessage)
   if (!is.null(generationId)) {
-    checkmate::assertInt(generationId)
+    checkmate::assertInt(generationId, add = errorMessage)
   }
-  checkmate::assertScalar(sourceKey)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
   if (!length(cohortIds) == 0) {
-    checkmate::assertInteger(cohortIds)
+    checkmate::assertInteger(cohortIds, add = errorMessage)
   }
   if (!length(domains) == 0) {
-    checkmate::assertCharacter(domains)
+    checkmate::assertCharacter(domains, add = errorMessage)
   }
   if (!length(analysisNames) == 0) {
-    checkmate::assertCharacter(analysisNames)
+    checkmate::assertCharacter(analysisNames, add = errorMessage)
   }
   checkmate::reportAssertions(errorMessage)
   
@@ -169,9 +169,9 @@ getCharacterizationDefinition <- function(baseUrl, characterizationId, generatio
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(characterizationId)
+  checkmate::assertInt(characterizationId, add = errorMessage)
   if (!is.null(generationId)) {
-    checkmate::assertInt(generationId)
+    checkmate::assertInt(generationId, add = errorMessage)
   }
   checkmate::reportAssertions(errorMessage)
   
@@ -214,9 +214,9 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl, silent
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(characterizationId)
-  checkmate::assertLogical(silent)
-  checkmate::assertLogical(stopOnError)
+  checkmate::assertInt(characterizationId, add = errorMessage)
+  checkmate::assertLogical(silent, add = errorMessage)
+  checkmate::assertLogical(stopOnError, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   characterizationDefinition <- tryCatch(ROhdsiWebApi::getCharacterizationDefinition(characterizationId = characterizationId, 

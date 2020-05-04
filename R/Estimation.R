@@ -40,7 +40,7 @@ getEstimation <- function(baseUrl, estimationId){
   checkmate::reportAssertions(errorMessage)
   
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(estimationId)
+  checkmate::assertInt(estimationId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   url <- sprintf("%s/estimation/%d/", baseUrl, estimationId)
