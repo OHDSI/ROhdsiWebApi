@@ -145,7 +145,6 @@ getCdmSources <- function(baseUrl) {
 
 
 
-
 #' Retrieve the details of all Atlas definitions, by atlas functional category.
 #'
 #' @details
@@ -243,4 +242,18 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
 .millisecondsToDate <- function(milliseconds) {
   sec <- milliseconds/1000
   as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone())
+}
+
+# recursively flattens tree based structure.
+.flattenTree <- function(node, accumulated) {
+  if (is.null(node$children)) {
+    accumulated$name <- c(accumulated$name, node$name);
+    accumulated$size <- c(accumulated$size, node$size);
+    return(accumulated)
+  } else {
+    for (child in node$children) {
+      accumulated <- .flattenTree(child, accumulated)
+    }
+    return(accumulated)
+  }
 }
