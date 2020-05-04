@@ -145,67 +145,67 @@ getCdmSources <- function(baseUrl) {
 
 
 
-#' Retrieve the details of all Atlas definitions, by atlas functional category.
+#' Retrieve the details of all WebApi definitions, by functional category.
 #'
 #' @details
-#' Obtains the details of Atlas study definitions such as id, name, created/modified details, hash object, etc.
-#' The following atlas function categories are supported. Concept-set, Cohort-definition,
-#' Cohort-characterization, Pathway-analysis, Incidence rate (ir), estimation and prediction.
-#' This function is useful to retrieve the current definitions in one atlas instance and comparing it
-#' to another atlas instance, or for version control.
-#'
+#' Obtains the meta data details of WebApi specifications such as id, name, created/modified 
+#' details, hash object, etc. The following function categories are supported. 
+#' Concept-set, Cohort-definition, Cohort-characterization, Pathway-analysis, Incidence rate (ir), 
+#' estimation and prediction. This function is useful to retrieve the current specifications.
 #'
 #' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
 #'
-#' @return
-#' A data frame of atlas study definitions with details. Note: modifiedDate and createdDate are
-#' returned as text/character (to be worked on in future version).
-#'
+#' @return          A tibble of specification metadata. Note: modifiedDate and createdDate are
+#'                  returned as text/character (to be worked on in future version).
+#' @examples
+#' \dontrun{
+#' getMetadataForAllSpecifications(baseUrl = "http://server.org:80/WebAPI")
+#' }
 #' @export
-getAtlasDefinitionsDetails <- function(baseUrl) {
+getMetadataForAllSpecifications <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  atlasCategories <- c('conceptset',
-                       'cohortdefinition',
-                       'ir',
-                       'estimation',
-                       'prediction')
+  categories <- c('conceptset',
+                  'cohortdefinition',
+                  'ir',
+                  'estimation',
+                  'prediction')
   
-  listOfAtlasIds <- list()
-  for (i in (1:length(atlasCategories))) {
-    atlasCategory <- atlasCategories[[i]]
-    url <- paste(baseUrl, atlasCategory, '?size=100000000', sep = "/")
+  listOfIds <- list()
+  for (i in (1:length(categories))) {
+    category <- categories[[i]]
+    url <- paste(baseUrl, category, '?size=100000000', sep = "/")
     request <- httr::GET(url)
     httr::stop_for_status(request)
-    listOfAtlasIds[[atlasCategory]] <- httr::content(request) %>%
+    listOfIds[[category]] <- httr::content(request) %>%
       purrr::map(function(x)
         purrr::map(x, function(y)
           ifelse(is.null(y), NA, y))) %>% # convert NULL to NA in list
       dplyr::bind_rows() %>%
-      dplyr::mutate(atlasCategory = atlasCategory) %>%
+      dplyr::mutate(category = category) %>%
       dplyr::mutate(createdDate = as.character(createdDate),
                     modifiedDate = as.character(modifiedDate))
   }
   
   # there is difference in how webApi returns for 'cohort-characterization' and 'pathway-analysis'
   # the return are nested within 'content'
-  atlasCategories <- c('cohort-characterization',
-                       'pathway-analysis')
-  for (i in (1:length(atlasCategories))) {
-    atlasCategory <- atlasCategories[[i]]
+  categories <- c('cohort-characterization',
+                  'pathway-analysis')
+  for (i in (1:length(categories))) {
+    category <- categories[[i]]
     url <-
-      paste(baseUrl, atlasCategory, '?size=100000000', sep = "/")
+      paste(baseUrl, category, '?size=100000000', sep = "/")
     request <- httr::GET(url)
     httr::stop_for_status(request)
-    listOfAtlasIds[[atlasCategory]] <-
+    listOfIds[[category]] <-
       httr::content(request)$content %>%
       purrr::map(function(x)
         purrr::map(x, function(y)
           ifelse(is.null(y), NA, y))) %>%  # convert NULL to NA in list
       dplyr::bind_rows()
     
-    if (atlasCategory == 'cohort-characterization') {
-      listOfAtlasIds[[atlasCategory]] <-
-        listOfAtlasIds[[atlasCategory]] %>%
+    if (category == 'cohort-characterization') {
+      listOfIds[[category]] <-
+        listOfIds[[category]] %>%
         dplyr::rename(
           createdDate = createdAt,
           modifiedDate = updatedAt,
@@ -213,28 +213,28 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
         )
     }
     
-    listOfAtlasIds[[atlasCategory]] <-
-      listOfAtlasIds[[atlasCategory]] %>%
-      dplyr::mutate(atlasCategory = atlasCategory) %>%
+    listOfIds[[category]] <-
+      listOfIds[[category]] %>%
+      dplyr::mutate(category = category) %>%
       dplyr::mutate(createdDate = as.character(createdDate),
                     modifiedDate = as.character(modifiedDate))
   }
   # to do: createdDate and modifiedDate are in character format. Need to make them date/time.
   # but this does not appear to be consistent.
-  listOfAtlasIds <- dplyr::bind_rows(listOfAtlasIds) %>%
+  listOfIds <- dplyr::bind_rows(listOfIds) %>%
     dplyr::mutate(
-      atlasCategory = dplyr::case_when(
-        atlasCategory == 'conceptset' ~ 'conceptSets',
-        atlasCategory == 'cohortdefinition' ~ 'cohortDefinitions',
-        atlasCategory == 'ir' ~ 'incidenceRates',
-        atlasCategory == 'estimation' ~ 'estimation',
-        atlasCategory == 'prediction' ~ 'prediction',
-        atlasCategory == 'cohort-characterization' ~ 'characterizations',
-        atlasCategory == 'pathway-analysis' ~ 'cohortPathways'
+      category = dplyr::case_when(
+        category == 'conceptset' ~ 'conceptSets',
+        category == 'cohortdefinition' ~ 'cohortDefinitions',
+        category == 'ir' ~ 'incidenceRates',
+        category == 'estimation' ~ 'estimation',
+        category == 'prediction' ~ 'prediction',
+        category == 'cohort-characterization' ~ 'characterizations',
+        category == 'pathway-analysis' ~ 'cohortPathways'
       )
     ) %>%
-    dplyr::mutate(atlasCategory = SqlRender::camelCaseToTitleCase(atlasCategory))
-  return(listOfAtlasIds)
+    dplyr::mutate(category = SqlRender::camelCaseToTitleCase(category))
+  return(listOfIds)
 }
 
 
