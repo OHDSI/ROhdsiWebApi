@@ -17,10 +17,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ajit Londhe \email{alondhe@amgen.com}
+\strong{Maintainer}: Gowtham Rao \email{gowthamrao@gmail.com}
 
 Authors:
 \itemize{
+  \item Ajit Londhe \email{alondhe@amgen.com}
   \item Martijn Schuemie
   \item Frank DeFalco
 }
