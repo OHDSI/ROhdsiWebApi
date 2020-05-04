@@ -35,7 +35,7 @@
 getConceptSet <- function(baseUrl, conceptSetId) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(conceptSetId)
+  checkmate::assertInt(conceptSetId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   url <- sprintf("%1s/conceptset/%2s", baseUrl, conceptSetId)
@@ -139,8 +139,8 @@ convertConceptSetToTable <- function(conceptSet, snakeCaseToCamelCase = TRUE) {
 getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(setId)
-  checkmate::assertLogical(formatName)
+  checkmate::assertInt(setId, add = errorMessage)
+  checkmate::assertLogical(formatName, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   url <- gsub("@baseUrl", baseUrl, gsub("@setId", setId, "@baseUrl/conceptset/@setId"))
@@ -179,8 +179,8 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
 getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(setId)
-  checkmate::assertLogical(asDataFrame)
+  checkmate::assertInt(setId, add = errorMessage)
+  checkmate::assertLogical(asDataFrame, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, setId)
@@ -317,7 +317,7 @@ getSetExpressionConceptIds <- function(baseUrl, expression, vocabSourceKey = NUL
 getConceptSetConceptIds <- function(baseUrl, setId, vocabSourceKey = NULL) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(setId)
+  checkmate::assertInt(setId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
@@ -355,9 +355,9 @@ createConceptSetWorkbook <- function(conceptSetIds,
                                      mapped = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(conceptSetIds)
-  checkmate::assertLogical(included)
-  checkmate::assertLogical(mapped)
+  checkmate::assertInteger(conceptSetIds, add = errorMessage)
+  checkmate::assertLogical(included, add = errorMessage)
+  checkmate::assertLogical(mapped, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (is.null(workFolder))

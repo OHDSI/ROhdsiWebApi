@@ -36,9 +36,5 @@ Post a specification expression into WebAPI
 }
 \examples{
 \dontrun{
-validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)$expression
-postAtlasDefinition(name = 'new name for expression in target', 
-                     baseUrl = "http://server.org:80/WebAPI", 
-                     jsonExpression = validJsonExpression)
 }
 }
