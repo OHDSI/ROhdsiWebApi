@@ -2,7 +2,7 @@
 % Please edit documentation in R/CohortDefinition.R
 \name{getCohortDefinitionName}
 \alias{getCohortDefinitionName}
-\title{Get a cohort definition's name from WebAPI}
+\title{(Deprecated) Get a cohort definition's name from WebAPI}
 \usage{
 getCohortDefinitionName(baseUrl, definitionId, formatName = FALSE)
 }
@@ -18,8 +18,9 @@ getCohortDefinitionName(baseUrl, definitionId, formatName = FALSE)
 The name of the cohort.
 }
 \description{
-Get a cohort definition's name from WebAPI
+(Deprecated) Get a cohort definition's name from WebAPI
 }
 \details{
-Obtains the name of a cohort.
+(Deprecated) Obtains the name of a cohort. 
+This function has been deprecated. As an alternative please use getCohortDefinition
 }
