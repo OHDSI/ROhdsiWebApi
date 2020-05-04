@@ -60,6 +60,11 @@ getCohortDefinition <- function(cohortId, baseUrl) {
 #'                       "http://server.org:80/WebAPI".
 #' @return
 #' A JSON list object representing the cohort definition
+#' This function has been deprecated. As an alternative please use the following
+#' steps as in the example below:
+#'   1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
+#'   2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
+#'   3) save validJsonExpression object as .txt"
 #'
 #' @examples
 #' \dontrun{
@@ -71,6 +76,14 @@ getCohortDefinition <- function(cohortId, baseUrl) {
 #' @export
 getCohortDefinitionExpression <- function(definitionId, baseUrl) {
   .checkBaseUrl(baseUrl)
+  .Deprecated(new = "getCohortDefinition", 
+              package="ROhdsiWebApi", 
+              msg = "This function has been deprecated. As an alternative please use the following
+              steps as in the example below:
+              1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
+              2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
+              3) save validJsonExpression object as .txt",
+              old = as.character(sys.call(sys.parent()))[1L])
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(definitionId)
   checkmate::reportAssertions(errorMessage)
@@ -293,10 +306,11 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 }
 
 
-#' Get a cohort definition's name from WebAPI
+#' (Deprecated) Get a cohort definition's name from WebAPI
 #'
 #' @details
-#' Obtains the name of a cohort.
+#' (Deprecated) Obtains the name of a cohort. 
+#' This function has been deprecated. As an alternative please use getCohortDefinition
 #'
 #' @param baseUrl        The base URL for the WebApi instance, for example:
 #'                       "http://server.org:80/WebAPI".
@@ -309,6 +323,10 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 #' @export
 getCohortDefinitionName <- function(baseUrl, definitionId, formatName = FALSE) {
   .checkBaseUrl(baseUrl)
+  .Deprecated(new = "getCohortDefinition", 
+              package="ROhdsiWebApi", 
+              msg = "This function has been deprecated. As an alternative please use getCohortDefinition",
+              old = as.character(sys.call(sys.parent()))[1L])
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertLogical(formatName)
   checkmate::assertInt(definitionId)
