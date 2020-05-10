@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+
 #' Get definitions for incident rate analysis
 #'
 #' @details
@@ -50,6 +52,7 @@
 }
 
 
+ 
 #' Get incident rate generation information.
 #'
 #' @details
@@ -86,11 +89,12 @@ getIncidenceRateGenerationInformation <- function(baseUrl,
   
   data <- data %>%
     dplyr::mutate(
-      startTime = millisecondsToDate(startTime)
+      startTime = .millisecondsToDate(startTime)
     ) %>%
     dplyr::as_tibble()
   return(data)
 }
+
 
 
 #' Get output from incidence rate analysis.

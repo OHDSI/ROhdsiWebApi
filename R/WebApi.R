@@ -32,6 +32,8 @@
   return(success)
 }
 
+
+
 .convertNulltoNA <- function(thisList) {
   for (n in names(thisList)) {
     if (is.null(thisList[n][[1]])) {
@@ -40,6 +42,8 @@
   }
   thisList
 }
+
+
 
 #' Get Priority Vocab Source Key
 #'
@@ -60,6 +64,8 @@ getPriorityVocabKey <- function(baseUrl) {
   json$sourceKey
 }
 
+
+
 #' Get the version of the WebAPI
 #'
 #' @details
@@ -77,6 +83,8 @@ getWebApiVersion <- function(baseUrl) {
   (httr::content(json))$version
 }
 
+
+
 .getSourceIdFromKey <- function(baseUrl, sourceKey) {
   .checkBaseUrl(baseUrl)
 
@@ -89,9 +97,12 @@ getWebApiVersion <- function(baseUrl) {
   json$sourceId
 }
 
+
+
 .formatName <- function(name) {
   gsub("_", " ", gsub("\\[(.*?)\\]_", "", gsub(" ", "_", name)))
 }
+
 
 
 #' Get the data sources in the WebAPI instance
@@ -253,12 +264,16 @@ getAtlasDefinitionsDetails <- function(baseUrl) {
   }
 }
 
+
+
 # converts time in integer/milliseconds to date-time with timezone.
 # assumption is that the system timezone = time zone of the local server running webApi.
 .millisecondsToDate <- function(milliseconds) {
   sec <- milliseconds/1000
-  as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone())
+  return(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
 }
+
+
 
 # recursively flattens tree based structure.
 .flattenTree <- function(node, accumulated) {

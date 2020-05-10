@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+
 #' Get concepts
 #' 
 #' @template VocabSourceKey
@@ -67,6 +69,7 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
   }
   return(result)
 }
+
 
 
 #' Get source concepts that map to standard concepts
