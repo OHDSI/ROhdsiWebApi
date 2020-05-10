@@ -372,17 +372,15 @@ getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) 
   url <- sprintf("%1s/cohortdefinition/sql", baseUrl)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
 
-  cohortDefinitionExpression <- ROhdsiWebApi::getCohortDefinition(baseUrl = Sys.getenv("baseUrl"), 
-                                                                  cohortId = definitionId)
-  validJsonExpression <- RJSONIO::toJSON(cohortDefinitionExpression$expression)
+  json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
 
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   if (compareVersion(a = "2.7.2", b = webApiVersion) == 0) {
-    body <- RJSONIO::toJSON(list(expression = validJsonExpression,
+    body <- RJSONIO::toJSON(list(expression = json$expression,
                                  options = list(generateStats = generateStats)), digits = 23)
 
   } else {
-    body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression),
+    body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(json$expression),
                                  options = list(generateStats = generateStats)), digits = 23)
   }
 
