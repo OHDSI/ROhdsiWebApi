@@ -51,7 +51,7 @@ getCohortCharacterizationResults <- function(baseUrl,
   }
   checkmate::assertScalar(sourceKey, add = errorMessage)
   if (!length(cohortIds) == 0) {
-    checkmate::assertInteger(cohortIds, add = errorMessage)
+    checkmate::assertIntegerish(cohortIds, add = errorMessage)
   }
   if (!length(domains) == 0) {
     checkmate::assertCharacter(domains, add = errorMessage)

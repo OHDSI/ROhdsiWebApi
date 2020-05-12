@@ -41,7 +41,7 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
   
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(conceptIds, add = errorMessage)
+  checkmate::assertIntegerish(conceptIds, add = errorMessage)
   checkmate::assertLogical(snakeCaseToCamelCase, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
@@ -94,7 +94,7 @@ getSourceConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeC
   
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(conceptIds, add = errorMessage)
+  checkmate::assertIntegerish(conceptIds, add = errorMessage)
   checkmate::assertLogical(snakeCaseToCamelCase, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   

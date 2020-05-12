@@ -415,7 +415,7 @@ getCohortDefinitionSql <- function(baseUrl, cohortId, generateStats = TRUE) {
 getCohortGenerationStatuses <- function(baseUrl, cohortIds, sourceKeys = NULL) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(cohortIds, add = errorMessage)
+  checkmate::assertIntegerish(cohortIds, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   checkSourceKeys <- function(baseUrl, sourceKeys) {
@@ -442,9 +442,9 @@ getCohortGenerationStatuses <- function(baseUrl, cohortIds, sourceKeys = NULL) {
                                          sourceKey = row["sourceKey"])
 
     list(sourceKey = row["sourceKey"],
-         cohortId = row["cohortId"],
+         cohortId = as.integer(row["cohortId"]),
          definitionName = getCohortDefinitionName(baseUrl = baseUrl,
-                                                  cohortId = row["cohortId"],
+                                                  cohortId = as.integer(row["cohortId"]),
                                                   formatName = FALSE),
          status = result$status,
          startTime = result$startTime,
@@ -519,7 +519,7 @@ getCohortGenerationStatuses <- function(baseUrl, cohortIds, sourceKeys = NULL) {
 invokeCohortSetGeneration <- function(baseUrl, sourceKeys, cohortIds) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(cohortIds, add = errorMessage)
+  checkmate::assertIntegerish(cohortIds, add = errorMessage)
   checkmate::assertInteger(sourceKeys, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 

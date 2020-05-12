@@ -365,7 +365,7 @@ createConceptSetWorkbook <- function(conceptSetIds,
                                      mapped = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(conceptSetIds, add = errorMessage)
+  checkmate::assertIntegerish(conceptSetIds, add = errorMessage)
   checkmate::assertLogical(included, add = errorMessage)
   checkmate::assertLogical(mapped, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
