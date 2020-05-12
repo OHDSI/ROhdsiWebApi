@@ -539,9 +539,8 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, cohortIds) {
   statuses <- apply(X = df, MARGIN = 1, function(row) {
     list(sourceKey = row["sourceKey"],
          cohortId = as.integer(row["cohortId"]),
-         definitionName = getCohortDefinitionName(baseUrl = baseUrl,
-                                                  cohortId = row["cohortId"],
-                                                  formatName = FALSE),
+         definitionName = getCohortDefinition(baseUrl = baseUrl,
+                                              cohortId = as.integer(row["cohortId"])$name),
          result = .invokeCohortGeneration(baseUrl = baseUrl,
                                           sourceKey = row["sourceKey"],
                                           cohortId = as.integer(row["cohortId"])))
