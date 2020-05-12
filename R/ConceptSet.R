@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+
 #' Get a concept set 
 #'
 #' @details
@@ -52,6 +54,8 @@ getConceptSet <- function(baseUrl, conceptSetId) {
   metaData$expression <- data
   return(metaData)
 }
+
+
 
 #' Resolve a concept set to the included standard concept IDs
 #' 
@@ -92,6 +96,7 @@ resolveConceptSet <- function(conceptSet, baseUrl, vocabSourceKey = NULL) {
 }
 
 
+
 #' Convert a concept set to a table
 #' 
 #' @template ConceptSet
@@ -121,6 +126,8 @@ convertConceptSetToTable <- function(conceptSet, snakeCaseToCamelCase = TRUE) {
   }
   return(result)
 }
+
+
 
 #' Get a concept set's name from WebAPI
 #'
@@ -153,6 +160,8 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
     json$name
   }
 }
+
+
 
 
 #' Get a concept set expression
@@ -194,6 +203,8 @@ getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
   }
 }
 
+
+
 .setExpressionToDf <- function(json) {
 
   lists <- lapply(json$items, function(j) {
@@ -202,6 +213,8 @@ getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
 
   do.call("rbind", lists)
 }
+
+
 
 .getIncludedConceptsDf <- function(baseUrl, vocabSourceKey, includedConcepts) {
   url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabSourceKey)
@@ -218,6 +231,7 @@ getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
 }
 
 
+
 .getMappedConceptsDf <- function(baseUrl, vocabSourceKey, includedConcepts) {
   url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabSourceKey)
   body <- RJSONIO::toJSON(includedConcepts, digits = 23)
@@ -232,6 +246,7 @@ getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
 
   do.call("rbind", lists)
 }
+
 
 
 #' Insert a set of concept sets' concept ids into package
@@ -262,6 +277,7 @@ insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
     write.csv(x = df, file = fileConn, row.names = FALSE, quote = FALSE)
   }
 }
+
 
 
 #' Get Concepts from a Concept Set Expression
@@ -299,6 +315,7 @@ getSetExpressionConceptIds <- function(baseUrl, expression, vocabSourceKey = NUL
 }
 
 
+
 #' Get Concept Set Concept Ids
 #'
 #' @details
@@ -330,6 +347,7 @@ getConceptSetConceptIds <- function(baseUrl, setId, vocabSourceKey = NULL) {
                              expression = expression,
                              vocabSourceKey = vocabSourceKey)
 }
+
 
 
 #' Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook

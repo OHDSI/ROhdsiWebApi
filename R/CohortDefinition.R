@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+
 #' Get a cohort definition
 #'
 #' @details
@@ -50,6 +52,8 @@ getCohortDefinition <- function(cohortId, baseUrl) {
   return(data)
 }
 
+
+
 #' Get a cohort definition expression
 #'
 #' @details
@@ -62,7 +66,7 @@ getCohortDefinition <- function(cohortId, baseUrl) {
 #' A JSON list object representing the cohort definition
 #' This function has been deprecated. As an alternative please use the following
 #' steps as in the example below:
-#'   1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
+#'   1) cohortDefinition <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
 #'   2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
 #'   3) save validJsonExpression object as .txt"
 #'
@@ -92,6 +96,8 @@ getCohortDefinitionExpression <- function(definitionId, baseUrl) {
   json <- httr::GET(url)
   httr::content(json)
 }
+
+
 
 #' Load a cohort definition and insert it into this package
 #'
@@ -161,6 +167,8 @@ insertCohortDefinitionInPackage <- function(definitionId,
   SqlRender::writeSql(sql = sql, targetFile = sqlFileName)
   writeLines(paste("- Created SQL file:", sqlFileName))
 }
+
+
 
 #' Insert a set of cohort definitions into package
 #'
@@ -372,21 +380,25 @@ getCohortDefinitionSql <- function(baseUrl, definitionId, generateStats = TRUE) 
   url <- sprintf("%1s/cohortdefinition/sql", baseUrl)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
 
-  json <- getCohortDefinitionExpression(definitionId = definitionId, baseUrl = baseUrl)
+  cohortDefinitionExpression <- ROhdsiWebApi::getCohortDefinition(baseUrl = baseUrl, 
+                                                                  cohortId = definitionId)
+  validJsonExpression <- RJSONIO::toJSON(cohortDefinitionExpression$expression)
 
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   if (compareVersion(a = "2.7.2", b = webApiVersion) == 0) {
-    body <- RJSONIO::toJSON(list(expression = json$expression,
+    body <- RJSONIO::toJSON(list(expression = validJsonExpression,
                                  options = list(generateStats = generateStats)), digits = 23)
 
   } else {
-    body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(json$expression),
+    body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression),
                                  options = list(generateStats = generateStats)), digits = 23)
   }
 
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
-  (httr::content(req))$templateSql
+  sql <- (httr::content(req))$templateSql
+  return(sql)
 }
+
 
 
 #' Get Cohort Generation Statuses
@@ -451,11 +463,9 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NUL
   df
 }
 
+
+
 .getCohortGenerationStatus <- function(baseUrl, definitionId, sourceKey) {
-  millisecondsToDate <- function(milliseconds) {
-    sec <- milliseconds/1000
-    as.character(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
-  }
 
   .checkBaseUrl(baseUrl)
 
@@ -476,12 +486,14 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NUL
   }
 
   return(list(status = json[[1]]$status,
-              startTime = millisecondsToDate(milliseconds = json[[1]]$startTime),
+              startTime = .millisecondsToDate(milliseconds = json[[1]]$startTime),
               executionDuration = ifelse(is.null(json[[1]]$executionDuration),
                                          "NA",
                                          json[[1]]$executionDuration),
               personCount = ifelse(is.null(json[[1]]$personCount), "NA", json[[1]]$personCount)))
 }
+
+
 
 .invokeCohortGeneration <- function(baseUrl, sourceKey, definitionId) {
   result <- .getCohortGenerationStatus(baseUrl = baseUrl,
@@ -496,6 +508,8 @@ getCohortGenerationStatuses <- function(baseUrl, definitionIds, sourceKeys = NUL
     json$status
   }
 }
+
+
 
 #' Invoke the generation of a set of cohort definitions
 #'
@@ -544,6 +558,8 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, definitionIds) {
   rownames(df) <- c()
   df
 }
+
+
 
 #' Get cohort inclusion rules and person counts
 #'
@@ -640,6 +656,7 @@ deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnErro
   }
   return(NA)
 }
+
 
 
 #' Get cohort generation output

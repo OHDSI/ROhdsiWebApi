@@ -2,14 +2,15 @@ Package: ROhdsiWebApi
 Type: Package
 Title: R package to allow interactivity with a WebApi instance
 Version: 0.0.3
-Date: 2020-01-13
+Date: 2020-05-04
 Authors@R: c(
-    person("Ajit", "Londhe", email = "alondhe@amgen.com", role = c("aut", "cre")),
+    person("Ajit", "Londhe", email = "alondhe@amgen.com", role = c("aut")),
     person("Martijn", "Schuemie", role = c("aut")),
     person("Frank", "DeFalco", role = c("aut")),
+    person("Gowtham", "Rao", email = "gowthamrao@gmail.com", role = c("aut", "cre")),
     person("Observational Health Data Science and Informatics", role = c("cph"))
   )
-Maintainer: Ajit Londhe <alondhe@amgen.com>
+Maintainer: Gowtham Rao <gowthamrao@gmail.com>
 Description: Includes R wrappers for calling WebAPI web services.
 License: Apache License 2.0
 Depends:
