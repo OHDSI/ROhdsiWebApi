@@ -21,8 +21,7 @@
 #' @details
 #' Get an R list object with expression from WebAPI for a given estimation specification
 #'
-#' @param baseUrl        The base URL for the WebApi instance, for example:
-#'                       "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #' @param estimationId   The WebApi id for the estimation specification
 #' @return               A list of R-objects with specifications for estimation
 #'

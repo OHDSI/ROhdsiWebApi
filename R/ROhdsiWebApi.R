@@ -20,8 +20,6 @@
 "_PACKAGE"
 
 #'
-#' @docType package
-#' @name ROhdsiWebApi
 #' @importFrom utils compareVersion read.csv write.csv
 #' @importFrom magrittr "%>%"
 NULL

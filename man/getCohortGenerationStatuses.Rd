@@ -4,13 +4,14 @@
 \alias{getCohortGenerationStatuses}
 \title{Get Cohort Generation Statuses}
 \usage{
-getCohortGenerationStatuses(baseUrl, definitionIds, sourceKeys = NULL)
+getCohortGenerationStatuses(baseUrl, cohortIds, sourceKeys = NULL)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
-\item{definitionIds}{A list of cohort definition Ids}
+\item{cohortIds}{A list of cohortIds}
 
 \item{sourceKeys}{(OPTIONAL) A list of CDM source keys. These can be found in Atlas ->
 Configure. Otherwise, all CDM source keys will be used.}

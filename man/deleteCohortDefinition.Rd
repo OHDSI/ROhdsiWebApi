@@ -7,10 +7,12 @@
 deleteCohortDefinition(cohortId, baseUrl, silent = FALSE, stopOnError = FALSE)
 }
 \arguments{
-\item{cohortId}{The number indicating which cohort definition to fetch.}
+\item{cohortId}{An integer id representing the id that uniquely identifies a cohort definition
+in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
 \item{silent}{[OPTIONAL, Default = FALSE] If TRUE, function will work silently without showing any warning or error message.}
 

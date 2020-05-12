@@ -4,13 +4,15 @@
 \alias{getCohortDefinitionExpression}
 \title{Get a cohort definition expression}
 \usage{
-getCohortDefinitionExpression(definitionId, baseUrl)
+getCohortDefinitionExpression(cohortId, baseUrl)
 }
 \arguments{
-\item{definitionId}{The number indicating which cohort definition to fetch.}
+\item{cohortId}{An integer id representing the id that uniquely identifies a cohort definition
+in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 }
 \value{
 A JSON list object representing the cohort definition
@@ -30,7 +32,7 @@ Obtain the JSON expression from WebAPI for a given cohort id
 \dontrun{
 # This will obtain a cohort definition's JSON expression:
 
-getCohortDefinitionExpression(definitionId = 282, baseUrl = "http://server.org:80/WebAPI")
+getCohortDefinitionExpression(cohortId = 282, baseUrl = "http://server.org:80/WebAPI")
 }
 
 }

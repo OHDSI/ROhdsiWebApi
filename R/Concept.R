@@ -21,9 +21,7 @@
 #' @template VocabSourceKey
 #' 
 #' @template BaseUrl
-#' 
 #' @template SnakeCaseToCamelCase
-#'
 #' @param conceptIds            A vector of concept IDs.
 #' 
 #' @return
@@ -75,11 +73,8 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
 #' Get source concepts that map to standard concepts
 #' 
 #' @template VocabSourceKey
-#' 
 #' @template BaseUrl
-#' 
 #' @template SnakeCaseToCamelCase
-#'
 #' @param conceptIds       A list of concept IDs referring to standard concepts.
 #' 
 #' @return

@@ -4,13 +4,15 @@
 \alias{getCohortDefinitionName}
 \title{(Deprecated) Get a cohort definition's name from WebAPI}
 \usage{
-getCohortDefinitionName(baseUrl, definitionId, formatName = FALSE)
+getCohortDefinitionName(baseUrl, cohortId, formatName = FALSE)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
-\item{definitionId}{The cohort definition id in Atlas.}
+\item{cohortId}{An integer id representing the id that uniquely identifies a cohort definition
+in a WebApi instance.}
 
 \item{formatName}{Should the name be formatted to remove prefixes and underscores?}
 }

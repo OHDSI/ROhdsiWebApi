@@ -4,15 +4,16 @@
 \alias{invokeCohortSetGeneration}
 \title{Invoke the generation of a set of cohort definitions}
 \usage{
-invokeCohortSetGeneration(baseUrl, sourceKeys, definitionIds)
+invokeCohortSetGeneration(baseUrl, sourceKeys, cohortIds)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
-\item{sourceKeys}{A list of CDM source keys. These can be found in Atlas -> Configure.}
+\item{sourceKeys}{A list of sourceKeys}
 
-\item{definitionIds}{A list of cohort definition Ids}
+\item{cohortIds}{A list of cohortIds}
 }
 \description{
 Invoke the generation of a set of cohort definitions

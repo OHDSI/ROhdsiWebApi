@@ -4,13 +4,15 @@
 \alias{getConceptSetExpression}
 \title{Get a concept set expression}
 \usage{
-getConceptSetExpression(baseUrl, setId, asDataFrame = FALSE)
+getConceptSetExpression(baseUrl, conceptSetId, asDataFrame = FALSE)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
-\item{setId}{The concept set id in WebApi}
+\item{conceptSetId}{An integer id representing the id that uniquely identifies a 
+concept set definition in a WebApi instance.}
 
 \item{asDataFrame}{(OPTIONAL) Get expression as data frame}
 }
@@ -27,7 +29,7 @@ Obtain the JSON expression from WebAPI for a given concept set
 \dontrun{
 # This will obtain a concept set's JSON expression:
 
-getConceptSetExpression(setId = 282, baseUrl = "http://server.org:80/WebAPI")
+getConceptSetExpression(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
 }
 
 }

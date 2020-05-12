@@ -10,7 +10,8 @@ resolveConceptSet(conceptSet, baseUrl, vocabSourceKey = NULL)
 \item{conceptSet}{A concept set as obtained through the \code{\link{getConceptSet}} function.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
 \item{vocabSourceKey}{The source key of the Vocabulary. By default, the priority Vocabulary is
 used.}

@@ -8,9 +8,11 @@ getConceptSet(baseUrl, conceptSetId)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
-\item{conceptSetId}{The concept set ID in WebApi.}
+\item{conceptSetId}{An integer id representing the id that uniquely identifies a 
+concept set definition in a WebApi instance.}
 }
 \value{
 An R object representing the concept set
