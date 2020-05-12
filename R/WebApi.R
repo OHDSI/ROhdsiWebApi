@@ -249,7 +249,6 @@ getMetadataForAllSpecifications <- function(baseUrl) {
 }
 
 
-
 # recursively flattens tree based structure.
 .flattenTree <- function(node, accumulated) {
   if (is.null(node$children)) {
@@ -273,18 +272,73 @@ getMetadataForAllSpecifications <- function(baseUrl) {
   return(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
 }
 
-
-
-# recursively flattens tree based structure.
-.flattenTree <- function(node, accumulated) {
-  if (is.null(node$children)) {
-    accumulated$name <- c(accumulated$name, node$name);
-    accumulated$size <- c(accumulated$size, node$size);
-    return(accumulated)
-  } else {
-    for (child in node$children) {
-      accumulated <- .flattenTree(child, accumulated)
+#' Post a specification expression into WebApi
+#'
+#' @details
+#' Post a specification expression into WebAPI
+#'
+#' @template BaseUrl 
+#' @param name        A valid name for the expression. WebApi will use this name (if valid) as
+#'                    the name of the specification. WebApi checks for validity,
+#'                    such as uniqueness, unaccepted character etc. An error might be thrown.
+#' @param type        The type of expression in WebApi. Currently only 'cohort' is supported 
+#'                    to refer cohort definition specification expression.
+#' @param object      An R list object containing the expression for the specification. 
+#'                    This will be converted to JSON by function and posted into the WebApi.
+#'                    Note: only limited checks are performed in R to check the validity of this
+#'                    expression.               
+#' @return            This function will return a dataframe object with one row
+#'                    describing the posted atlas study definitions and its details.
+#'                    If unsuccessful a STOP message will be shown.
+#'                    See \code{\link{getAtlasDefinitionsDetails}}. 
+#'                         
+#' @examples
+#' \dontrun{
+# validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)$expression
+# postSpecification(name = 'new name for expression in target',
+#                   baseUrl = "http://server.org:80/WebAPI",
+#                   jsonExpression = validJsonExpression)
+#' }
+#' @export
+postSpecification <- function(baseUrl, 
+                              name,
+                              type = 'cohort',
+                              object) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertCharacter(name, add = errorMessage)
+  checkmate::assertCharacter(type, add = errorMessage)
+  checkmate::assertList(x = object, 
+                        types = c('character', 'list'), 
+                        any.missing = FALSE,
+                        null.ok = FALSE, 
+                        add = errorMessage
+                        )
+  checkmate::reportAssertions(errorMessage)
+  
+  jsonExpression <- RJSONIO::toJSON(object)
+  
+  if (type == 'cohort') {
+    json_body <- paste0("{\"name\":\"",
+                        as.character(name),
+                        "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
+                        jsonExpression,
+                        "}")
+    # POST the JSON
+    response <- httr::POST(url = paste0(baseUrl, "/cohortdefinition/"),
+                           body = json_body,
+                           config = httr::add_headers(.headers =c('Content-Type' = 'application/json')))
+    # Expect a "200" response that it worked
+    if (response$status_code != 200) {
+      stop(paste0("Post attempt failed for cohort : ", name))
+    } else {
+      atlasDefinitionDetails <- getAtlasDefinitionsDetails(baseUrl = baseUrl) %>% 
+        dplyr::filter(atlasCategory == 'Cohort Definitions',
+                      name == !!name
+        )
+      return(atlasDefinitionDetails)
     }
-    return(accumulated)
+  } else {
+    stop(paste0('type = ', type, " is not supported in this version. Post attempt failed."))
   }
 }
