@@ -7,11 +7,15 @@
 getCohortGenerationOutput(baseUrl, cohortId, sourceKey, mode = 0)
 }
 \arguments{
-\item{baseUrl}{The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".}
+\item{baseUrl}{The base URL for the WebApi instance, for example:
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
-\item{cohortId}{The Atlas cohort definition id for the cohort}
+\item{cohortId}{An integer id representing the id that uniquely identifies a cohort definition
+in a WebApi instance.}
 
-\item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the Configuration page}
+\item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
+Configuration page}
 
 \item{mode}{Mode is used to differentiate between inclusion rules and count by events (mode = 0, default) 
 or persons (mode = 1). Default value = 0.}

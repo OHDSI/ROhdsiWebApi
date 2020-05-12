@@ -21,9 +21,7 @@
 #' @template VocabSourceKey
 #' 
 #' @template BaseUrl
-#' 
 #' @template SnakeCaseToCamelCase
-#'
 #' @param conceptIds            A vector of concept IDs.
 #' 
 #' @return
@@ -43,7 +41,7 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
   
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(conceptIds, add = errorMessage)
+  checkmate::assertIntegerish(conceptIds, add = errorMessage)
   checkmate::assertLogical(snakeCaseToCamelCase, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
@@ -75,11 +73,8 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
 #' Get source concepts that map to standard concepts
 #' 
 #' @template VocabSourceKey
-#' 
 #' @template BaseUrl
-#' 
 #' @template SnakeCaseToCamelCase
-#'
 #' @param conceptIds       A list of concept IDs referring to standard concepts.
 #' 
 #' @return
@@ -99,7 +94,7 @@ getSourceConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeC
   
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(conceptIds, add = errorMessage)
+  checkmate::assertIntegerish(conceptIds, add = errorMessage)
   checkmate::assertLogical(snakeCaseToCamelCase, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   

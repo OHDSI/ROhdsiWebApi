@@ -50,7 +50,7 @@
 #' @details
 #' Obtains the source key of the default OMOP Vocab in WebApi
 #'
-#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #'
 #' @return
 #' A string with the source key of the default OMOP Vocab in WebApi.
@@ -71,7 +71,7 @@ getPriorityVocabKey <- function(baseUrl) {
 #' @details
 #' Obtains the WebAPI version number
 #'
-#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #'
 #' @return
 #' The WebAPI version
@@ -110,7 +110,7 @@ getWebApiVersion <- function(baseUrl) {
 #' @details
 #' Obtains the data sources configured in the WebAPI instance
 #'
-#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #'
 #' @return
 #' A data frame of data source information
@@ -164,7 +164,7 @@ getCdmSources <- function(baseUrl) {
 #' Concept-set, Cohort-definition, Cohort-characterization, Pathway-analysis, Incidence rate (ir), 
 #' estimation and prediction. This function is useful to retrieve the current specifications.
 #'
-#' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #'
 #' @return          A tibble of specification metadata. Note: modifiedDate and createdDate are
 #'                  returned as text/character (to be worked on in future version).
@@ -175,16 +175,35 @@ getCdmSources <- function(baseUrl) {
 #' @export
 getMetadataForAllSpecifications <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  categories <- c('conceptset',
-                  'cohortdefinition',
-                  'ir',
+  
+  categories <- c('conceptSet',
+                  'cohort',
+                  'incidenceRate',
                   'estimation',
                   'prediction')
-  
   listOfIds <- list()
   for (i in (1:length(categories))) {
+    #categoryUrl crosswalks standard category names to 
+    #names of the category used in WebApi end point.
     category <- categories[[i]]
-    url <- paste(baseUrl, category, '?size=100000000', sep = "/")
+    if (category == 'conceptSet') 
+    {
+      categoryUrl = 'conceptset'
+    } else if (category == 'cohort') 
+    {
+      categoryUrl = 'cohortdefinition'
+    } else if (category == 'incidenceRate') 
+    {
+      categoryUrl = 'ir'
+    } else if (category == 'estimation') 
+    {
+      categoryUrl = 'estimation'
+    } else if (category == 'prediction') 
+    {
+      categoryUrl = 'prediction'
+    }
+        
+    url <- paste(baseUrl, categoryUrl, '?size=100000000', sep = "/")
     request <- httr::GET(url)
     httr::stop_for_status(request)
     listOfIds[[category]] <- httr::content(request) %>%
@@ -197,14 +216,22 @@ getMetadataForAllSpecifications <- function(baseUrl) {
                     modifiedDate = as.character(modifiedDate))
   }
   
+  
   # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis'
   # the return are nested within 'content'
-  categories <- c('cohort-characterization',
-                  'pathway-analysis')
+  categories <- c('characterization',
+                  'pathway')
   for (i in (1:length(categories))) {
     category <- categories[[i]]
+    if (category == 'characterization') 
+    {
+      categoryUrl = 'cohort-characterization'
+    } else if (category == 'pathway') 
+    {
+      categoryUrl = 'pathway-analysis'
+    }
     url <-
-      paste(baseUrl, category, '?size=100000000', sep = "/")
+      paste(baseUrl, categoryUrl, '?size=100000000', sep = "/")
     request <- httr::GET(url)
     httr::stop_for_status(request)
     listOfIds[[category]] <-
@@ -214,7 +241,7 @@ getMetadataForAllSpecifications <- function(baseUrl) {
           ifelse(is.null(y), NA, y))) %>%  # convert NULL to NA in list
       dplyr::bind_rows()
     
-    if (category == 'cohort-characterization') {
+    if (category == 'characterization') {
       listOfIds[[category]] <-
         listOfIds[[category]] %>%
         dplyr::rename(
@@ -233,17 +260,6 @@ getMetadataForAllSpecifications <- function(baseUrl) {
   # to do: createdDate and modifiedDate are in character format. Need to make them date/time.
   # but this does not appear to be consistent.
   listOfIds <- dplyr::bind_rows(listOfIds) %>%
-    dplyr::mutate(
-      category = dplyr::case_when(
-        category == 'conceptset' ~ 'conceptSets',
-        category == 'cohortdefinition' ~ 'cohortDefinitions',
-        category == 'ir' ~ 'incidenceRates',
-        category == 'estimation' ~ 'estimation',
-        category == 'prediction' ~ 'prediction',
-        category == 'cohort-characterization' ~ 'characterizations',
-        category == 'pathway-analysis' ~ 'cohortPathways'
-      )
-    ) %>%
     dplyr::mutate(category = SqlRender::camelCaseToTitleCase(category))
   return(listOfIds)
 }
@@ -271,6 +287,8 @@ getMetadataForAllSpecifications <- function(baseUrl) {
   sec <- milliseconds/1000
   return(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
 }
+
+
 
 #' Post a specification expression into WebApi
 #'
@@ -333,7 +351,7 @@ postSpecification <- function(baseUrl,
       stop(paste0("Post attempt failed for cohort : ", name))
     } else {
       metadataForAllSpecifications <- getMetadataForAllSpecifications(baseUrl = baseUrl) %>% 
-        dplyr::filter(category == 'cohortDefinitions',
+        dplyr::filter(category == 'cohortdefinition',
                       name == !!name
         )
       return(metadataForAllSpecifications)

@@ -8,7 +8,8 @@ postSpecification(baseUrl, name, type = "cohort", object)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
 \item{name}{A valid name for the expression. WebApi will use this name (if valid) as
 the name of the specification. WebApi checks for validity,

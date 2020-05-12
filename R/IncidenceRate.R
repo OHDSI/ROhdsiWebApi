@@ -23,8 +23,7 @@
 #' @details
 #' Returns an R-objects with definitions for incident rate analysis
 #'
-#' @param baseUrl            The base URL for the WebApi instance, for example:
-#'                           "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #' @param incidenceRateId    The WebApi ID for incidence rate analysis.
 #' @return                   Get definitions for incident rate analysis
 #'
@@ -58,8 +57,7 @@
 #' @details
 #' Get incident rate generation information.
 #'
-#' @param baseUrl         The base URL for the WebApi instance, for example:
-#'                        "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #' @param incidenceRateId The WebApi ID for incidence rate analysis.
 #' @return                A tibble data-frame R-object with incidence rate
 #'                        generation information.
@@ -103,8 +101,7 @@ getIncidenceRateGenerationInformation <- function(baseUrl,
 #' Given a sourceKey, targetCohortId, outcomeCohortId combinations, this function will return the 
 #' output of incidence rate analysis.
 #'
-#' @param baseUrl            The base URL for the WebApi instance, for example:
-#'                           "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #' @param incidenceRateId    The WebApi ID for incidence rate analysis.
 #' @param sourceKey          The sourceKey for the incident rate analysis.
 #' @param targetCohortId     The cohort id of the target cohort in the incident rate analysis.

@@ -22,8 +22,7 @@
 #' Obtain a concept set from WebAPI
 #' 
 #' @template BaseUrl
-#'
-#' @param conceptSetId  The concept set ID in WebApi.
+#' @template ConceptSetId
 #'
 #' @return
 #' An R object representing the concept set
@@ -62,7 +61,6 @@ getConceptSet <- function(baseUrl, conceptSetId) {
 #' @template VocabSourceKey
 #' 
 #' @template BaseUrl
-#'
 #' @param conceptSet       A concept set as obtained through the \code{\link{getConceptSet}} function.
 #' @return
 #' A list of standard concept ids
@@ -100,7 +98,6 @@ resolveConceptSet <- function(conceptSet, baseUrl, vocabSourceKey = NULL) {
 #' Convert a concept set to a table
 #' 
 #' @template ConceptSet
-#' 
 #' @template SnakeCaseToCamelCase
 #' 
 #' @return
@@ -134,23 +131,22 @@ convertConceptSetToTable <- function(conceptSet, snakeCaseToCamelCase = TRUE) {
 #' @details
 #' Obtains the name of a concept set.
 #'
-#' @param baseUrl      The base URL for the WebApi instance, for example:
-#'                     "http://server.org:80/WebAPI".
-#' @param setId        The concept set id in WebApi.
+#' @template BaseUrl
+#' @template ConceptSetId
 #' @param formatName   Should the name be formatted to remove prefixes and underscores?
 #'
 #' @return
 #' The name of the concept set.
 #'
 #' @export
-getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
+getConceptSetName <- function(baseUrl, conceptSetId, formatName = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(setId, add = errorMessage)
+  checkmate::assertInt(conceptSetId, add = errorMessage)
   checkmate::assertLogical(formatName, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  url <- gsub("@baseUrl", baseUrl, gsub("@setId", setId, "@baseUrl/conceptset/@setId"))
+  url <- gsub("@baseUrl", baseUrl, gsub("@conceptSetId", conceptSetId, "@baseUrl/conceptset/@conceptSetId"))
   json <- httr::GET(url)
   json <- httr::content(json)
 
@@ -169,9 +165,8 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
 #' @details
 #' Obtain the JSON expression from WebAPI for a given concept set
 #'
-#' @param setId         The concept set id in WebApi
-#' @param baseUrl       The base URL for the WebApi instance, for example:
-#'                      "http://server.org:80/WebAPI".
+#' @template ConceptSetId
+#' @template BaseUrl
 #' @param asDataFrame   (OPTIONAL) Get expression as data frame
 #'
 #' @return
@@ -181,18 +176,18 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
 #' \dontrun{
 #' # This will obtain a concept set's JSON expression:
 #'
-#' getConceptSetExpression(setId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' getConceptSetExpression(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #'
 #' @export
-getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
+getConceptSetExpression <- function(baseUrl, conceptSetId, asDataFrame = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(setId, add = errorMessage)
+  checkmate::assertInt(conceptSetId, add = errorMessage)
   checkmate::assertLogical(asDataFrame, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, setId)
+  url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, conceptSetId)
   json <- httr::GET(url)
   json <- httr::content(json)
 
@@ -253,7 +248,7 @@ getConceptSetExpression <- function(baseUrl, setId, asDataFrame = FALSE) {
 #'
 #' @param fileName   Name of a CSV file in the inst/settings folder of the package specifying the
 #'                   concept sets to insert. See details for the expected file format.
-#' @param baseUrl    The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #'
 #' @details
 #' The CSV file should have: \describe{ \item{atlasId}{The concept set Id in ATLAS.} }
@@ -270,7 +265,7 @@ insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
   for (i in 1:nrow(conceptSetsToCreate)) {
     writeLines(paste("Inserting concept set:", conceptSetsToCreate$atlasId[i]))
     df <- as.data.frame(getConceptSetConceptIds(baseUrl = baseUrl,
-                                                setId = conceptSetsToCreate$atlasId[i]))
+                                                conceptSetId = conceptSetsToCreate$atlasId[i]))
     names(df) <- c("CONCEPT_ID")
     fileConn <- file(file.path("inst/conceptsets",
                                paste(conceptSetsToCreate$atlasId[i], "csv", sep = ".")))
@@ -282,8 +277,7 @@ insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
 
 #' Get Concepts from a Concept Set Expression
 #'
-#' @param baseUrl          The base URL for the WebApi instance, for example:
-#'                         "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #' @param expression       A JSON string that represents the concept set expression
 #' @param vocabSourceKey   The source key of the Vocabulary. By default, the priority Vocabulary is
 #'                         used.
@@ -321,9 +315,8 @@ getSetExpressionConceptIds <- function(baseUrl, expression, vocabSourceKey = NUL
 #' @details
 #' Obtains the full list of concept Ids in a concept set.
 #'
-#' @param baseUrl          The base URL for the WebApi instance, for example:
-#'                         "http://server.org:80/WebAPI".
-#' @param setId            The concept set id in Atlas.
+#' @template BaseUrl
+#' @template ConceptSetId
 #' @param vocabSourceKey   The source key of the Vocabulary. By default, the priority Vocabulary is
 #'                         used.
 #'
@@ -331,17 +324,17 @@ getSetExpressionConceptIds <- function(baseUrl, expression, vocabSourceKey = NUL
 #' A list of concept Ids.
 #'
 #' @export
-getConceptSetConceptIds <- function(baseUrl, setId, vocabSourceKey = NULL) {
+getConceptSetConceptIds <- function(baseUrl, conceptSetId, vocabSourceKey = NULL) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(setId, add = errorMessage)
+  checkmate::assertInt(conceptSetId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
     vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
   }
 
-  expression <- RJSONIO::toJSON(getConceptSetExpression(baseUrl = baseUrl, setId = setId),
+  expression <- RJSONIO::toJSON(getConceptSetExpression(baseUrl = baseUrl, conceptSetId = conceptSetId),
                                 digits = 23)
   getSetExpressionConceptIds(baseUrl = baseUrl,
                              expression = expression,
@@ -355,8 +348,7 @@ getConceptSetConceptIds <- function(baseUrl, setId, vocabSourceKey = NULL) {
 #' @param conceptSetIds   A vector of concept set IDs.
 #' @param workFolder      Directory location where the workbook will be saved, defaults to working
 #'                        directory.
-#' @param baseUrl         The base URL for the WebApi instance, for example:
-#'                        "http://server.org:80/WebAPI".
+#' @template BaseUrl
 #' @param included        Should included concepts be included in the workbook?
 #' @param mapped          Should mapped concepts be included in the workbook?
 #'
@@ -373,7 +365,7 @@ createConceptSetWorkbook <- function(conceptSetIds,
                                      mapped = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInteger(conceptSetIds, add = errorMessage)
+  checkmate::assertIntegerish(conceptSetIds, add = errorMessage)
   checkmate::assertLogical(included, add = errorMessage)
   checkmate::assertLogical(mapped, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
@@ -387,7 +379,7 @@ createConceptSetWorkbook <- function(conceptSetIds,
   conceptSetNames <- NULL
   for (i in conceptSetIds) {
     conceptSetNames <- c(conceptSetNames,
-                         getConceptSetName(baseUrl = baseUrl, setId = i, formatName = FALSE))
+                         getConceptSetName(baseUrl = baseUrl, conceptSetId = i, formatName = FALSE))
   }
   conceptSets <- data.frame(conceptSetId = conceptSetIds, conceptSetName = conceptSetNames)
 

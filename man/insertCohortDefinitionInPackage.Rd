@@ -5,7 +5,7 @@
 \title{Load a cohort definition and insert it into this package}
 \usage{
 insertCohortDefinitionInPackage(
-  definitionId,
+  cohortId,
   name = NULL,
   jsonFolder = "inst/cohorts",
   sqlFolder = "inst/sql/sql_server",
@@ -14,7 +14,8 @@ insertCohortDefinitionInPackage(
 )
 }
 \arguments{
-\item{definitionId}{The number indicating which cohort definition to fetch.}
+\item{cohortId}{An integer id representing the id that uniquely identifies a cohort definition
+in a WebApi instance.}
 
 \item{name}{The name that will be used for the json and SQL files. If not provided, the
 name in cohort will be used, but this may not lead to valid file names.}
@@ -24,7 +25,8 @@ name in cohort will be used, but this may not lead to valid file names.}
 \item{sqlFolder}{Path to the folder where the SQL representation will be saved.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
 \item{generateStats}{Should the SQL include the code for generating inclusion rule statistics?
 Note that if TRUE, several additional tables are expected to exists as
@@ -47,7 +49,7 @@ executing the cohort definition SQL.
 \dontrun{
 # This will create 'inst/cohorts/Angioedema.json' and 'inst/sql/sql_server/Angioedema.sql':
 
-insertCohortDefinitionInPackage(definitionId = 282,
+insertCohortDefinitionInPackage(cohortId = 282,
                                 name = "Angioedema",
                                 baseUrl = "http://server.org:80/WebAPI")
 }

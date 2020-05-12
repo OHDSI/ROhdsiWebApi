@@ -4,13 +4,15 @@
 \alias{getConceptSetConceptIds}
 \title{Get Concept Set Concept Ids}
 \usage{
-getConceptSetConceptIds(baseUrl, setId, vocabSourceKey = NULL)
+getConceptSetConceptIds(baseUrl, conceptSetId, vocabSourceKey = NULL)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
-\item{setId}{The concept set id in Atlas.}
+\item{conceptSetId}{An integer id representing the id that uniquely identifies a 
+concept set definition in a WebApi instance.}
 
 \item{vocabSourceKey}{The source key of the Vocabulary. By default, the priority Vocabulary is
 used.}

@@ -24,10 +24,8 @@
 #' Get a R object with person profile data. This function may be used for 
 #' visualizing a patients profile in tables or visualization.
 #'
-#' @param baseUrl        The base URL for the WebApi instance, for example:
-#'                       "http://server.org:80/WebAPI".
-#' @param sourceKey      The source key for a CDM instance in WebAPI, as defined in the
-#'                       Configuration page
+#' @template BaseUrl
+#' @template sourceKey
 #' @param personId       The personId of the person whoose profile is being reviewed
 #' @param indexCohortId  <OPTIONAL> Do you want to use a particular cohortId as the index cohort?
 #'                       If left NULL, the WebApi will identify the earliest cohort for the person by 
