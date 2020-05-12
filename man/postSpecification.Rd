@@ -24,9 +24,9 @@ expression.}
 }
 \value{
 This function will return a dataframe object with one row
-                   describing the posted atlas study definitions and its details.
+                   describing the posted WebApi expression and its details.
                    If unsuccessful a STOP message will be shown.
-                   See \code{\link{getAtlasDefinitionsDetails}}.
+                   See \code{\link{getMetadataForAllSpecifications}}.
 }
 \description{
 Post a specification expression into WebApi

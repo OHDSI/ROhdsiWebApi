@@ -10,7 +10,7 @@ getEstimation(baseUrl, estimationId)
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
 
-\item{estimationId}{The Atlas id for the estimation specification}
+\item{estimationId}{The WebApi id for the estimation specification}
 }
 \value{
 A list of R-objects with specifications for estimation

@@ -16,7 +16,7 @@ getIncidenceRateOutput(
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
 
-\item{incidenceRateId}{The Atlas ID for incidence rate analysis.}
+\item{incidenceRateId}{The WebApi ID for incidence rate analysis.}
 
 \item{sourceKey}{The sourceKey for the incident rate analysis.}
 

@@ -23,7 +23,7 @@
 #' 
 #' @template BaseUrl
 #'
-#' @param conceptSetId  The concept set ID in Atlas.
+#' @param conceptSetId  The concept set ID in WebApi.
 #'
 #' @return
 #' An R object representing the concept set
@@ -136,7 +136,7 @@ convertConceptSetToTable <- function(conceptSet, snakeCaseToCamelCase = TRUE) {
 #'
 #' @param baseUrl      The base URL for the WebApi instance, for example:
 #'                     "http://server.org:80/WebAPI".
-#' @param setId        The concept set id in Atlas.
+#' @param setId        The concept set id in WebApi.
 #' @param formatName   Should the name be formatted to remove prefixes and underscores?
 #'
 #' @return
@@ -169,7 +169,7 @@ getConceptSetName <- function(baseUrl, setId, formatName = FALSE) {
 #' @details
 #' Obtain the JSON expression from WebAPI for a given concept set
 #'
-#' @param setId         The concept set id in Atlas.
+#' @param setId         The concept set id in WebApi
 #' @param baseUrl       The base URL for the WebApi instance, for example:
 #'                      "http://server.org:80/WebAPI".
 #' @param asDataFrame   (OPTIONAL) Get expression as data frame
