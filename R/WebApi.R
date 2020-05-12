@@ -219,11 +219,11 @@ getMetadataForAllSpecifications <- function(baseUrl) {
   
   # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis'
   # the return are nested within 'content'
-  categories <- c('cohort',
+  categories <- c('characterization',
                   'pathway')
   for (i in (1:length(categories))) {
     category <- categories[[i]]
-    if (category == 'cohort') 
+    if (category == 'characterization') 
     {
       categoryUrl = 'cohort-characterization'
     } else if (category == 'pathway') 
@@ -231,7 +231,7 @@ getMetadataForAllSpecifications <- function(baseUrl) {
       categoryUrl = 'pathway-analysis'
     }
     url <-
-      paste(baseUrl, category, '?size=100000000', sep = "/")
+      paste(baseUrl, categoryUrl, '?size=100000000', sep = "/")
     request <- httr::GET(url)
     httr::stop_for_status(request)
     listOfIds[[category]] <-
@@ -241,7 +241,7 @@ getMetadataForAllSpecifications <- function(baseUrl) {
           ifelse(is.null(y), NA, y))) %>%  # convert NULL to NA in list
       dplyr::bind_rows()
     
-    if (category == 'cohort') {
+    if (category == 'characterization') {
       listOfIds[[category]] <-
         listOfIds[[category]] %>%
         dplyr::rename(
