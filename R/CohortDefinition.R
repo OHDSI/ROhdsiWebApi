@@ -443,9 +443,8 @@ getCohortGenerationStatuses <- function(baseUrl, cohortIds, sourceKeys = NULL) {
 
     list(sourceKey = row["sourceKey"],
          cohortId = as.integer(row["cohortId"]),
-         definitionName = getCohortDefinitionName(baseUrl = baseUrl,
-                                                  cohortId = as.integer(row["cohortId"]),
-                                                  formatName = FALSE),
+         definitionName = getCohortDefinition(baseUrl = baseUrl,
+                                              cohortId = as.integer(row["cohortId"])$name),
          status = result$status,
          startTime = result$startTime,
          executionDuration = result$executionDuration,
@@ -687,7 +686,7 @@ getCohortGenerationOutput <- function(baseUrl, cohortId, sourceKey, mode = 0) {
     results$inclusionRuleStats <- NULL
   } else {
     results$inclusionRuleStas <- json$inclusionRuleStats %>% 
-      jsonlite::toJSON() %>% 
+      jsonlite::toJSON() %>% D
       jsonlite::fromJSON(simplifyVector = T, simplifyDataFrame = T, flatten = T)
   }
   if (length(json$treemapData) == 0) {
@@ -698,7 +697,7 @@ getCohortGenerationOutput <- function(baseUrl, cohortId, sourceKey, mode = 0) {
     json$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
     json$treemapData$size <- as.integer(json$treemapData$size)
     json$treemapData$SatisfiedNumber = stringr::str_count(string = json$treemapData$bits, pattern = '1')
-    json$treemapData$SatisfiedRules = stringr::str_locate_all(string = json$treemapData$bits, pattern = '1') %>% 
+    json$treemapData$SatisfiedRules = stringr::str_locate_all(string = json$treemaDpData$bits, pattern = '1') %>% 
       paste()
   }
   return(results)
