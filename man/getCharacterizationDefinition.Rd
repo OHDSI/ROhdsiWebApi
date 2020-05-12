@@ -16,7 +16,7 @@ getCharacterizationDefinition(baseUrl, characterizationId, generationId = NULL)
 characterization. If generationId is provided, then characterizationId is ignored.}
 }
 \value{
-A R-object representing the characterizationId/generationId definition returned by webApi.
+A R-object representing the characterizationId/generationId definition returned by WebApi.
 A warning will be shown if the characterizationId/generationId does not exist.
 }
 \description{

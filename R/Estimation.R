@@ -23,7 +23,7 @@
 #'
 #' @param baseUrl        The base URL for the WebApi instance, for example:
 #'                       "http://server.org:80/WebAPI".
-#' @param estimationId   The Atlas id for the estimation specification
+#' @param estimationId   The WebApi id for the estimation specification
 #' @return               A list of R-objects with specifications for estimation
 #'
 #' @examples

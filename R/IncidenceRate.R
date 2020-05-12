@@ -25,7 +25,7 @@
 #'
 #' @param baseUrl            The base URL for the WebApi instance, for example:
 #'                           "http://server.org:80/WebAPI".
-#' @param incidenceRateId    The Atlas ID for incidence rate analysis.
+#' @param incidenceRateId    The WebApi ID for incidence rate analysis.
 #' @return                   Get definitions for incident rate analysis
 #'
 #' @examples
@@ -60,7 +60,7 @@
 #'
 #' @param baseUrl         The base URL for the WebApi instance, for example:
 #'                        "http://server.org:80/WebAPI".
-#' @param incidenceRateId The Atlas ID for incidence rate analysis.
+#' @param incidenceRateId The WebApi ID for incidence rate analysis.
 #' @return                A tibble data-frame R-object with incidence rate
 #'                        generation information.
 #'
@@ -105,7 +105,7 @@ getIncidenceRateGenerationInformation <- function(baseUrl,
 #'
 #' @param baseUrl            The base URL for the WebApi instance, for example:
 #'                           "http://server.org:80/WebAPI".
-#' @param incidenceRateId    The Atlas ID for incidence rate analysis.
+#' @param incidenceRateId    The WebApi ID for incidence rate analysis.
 #' @param sourceKey          The sourceKey for the incident rate analysis.
 #' @param targetCohortId     The cohort id of the target cohort in the incident rate analysis.
 #' @param outcomeCohortId    The cohort id of the outcome cohort in the incidence rate analysis.

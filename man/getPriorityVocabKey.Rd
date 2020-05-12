@@ -10,11 +10,11 @@ getPriorityVocabKey(baseUrl)
 \item{baseUrl}{The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".}
 }
 \value{
-A string with the source key of the default OMOP Vocab in Atlas.
+A string with the source key of the default OMOP Vocab in WebApi.
 }
 \description{
 Get Priority Vocab Source Key
 }
 \details{
-Obtains the source key of the default OMOP Vocab in Atlas.
+Obtains the source key of the default OMOP Vocab in WebApi
 }

@@ -10,7 +10,7 @@ getConceptSet(baseUrl, conceptSetId)
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
 
-\item{conceptSetId}{The concept set ID in Atlas.}
+\item{conceptSetId}{The concept set ID in WebApi.}
 }
 \value{
 An R object representing the concept set

@@ -10,7 +10,7 @@ getConceptSetExpression(baseUrl, setId, asDataFrame = FALSE)
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
 
-\item{setId}{The concept set id in Atlas.}
+\item{setId}{The concept set id in WebApi}
 
 \item{asDataFrame}{(OPTIONAL) Get expression as data frame}
 }

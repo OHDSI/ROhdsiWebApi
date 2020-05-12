@@ -10,7 +10,7 @@ getIncidenceRateGenerationInformation(baseUrl, incidenceRateId)
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
 
-\item{incidenceRateId}{The Atlas ID for incidence rate analysis.}
+\item{incidenceRateId}{The WebApi ID for incidence rate analysis.}
 }
 \value{
 A tibble data-frame R-object with incidence rate

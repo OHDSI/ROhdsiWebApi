@@ -48,12 +48,12 @@
 #' Get Priority Vocab Source Key
 #'
 #' @details
-#' Obtains the source key of the default OMOP Vocab in Atlas.
+#' Obtains the source key of the default OMOP Vocab in WebApi
 #'
 #' @param baseUrl   The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".
 #'
 #' @return
-#' A string with the source key of the default OMOP Vocab in Atlas.
+#' A string with the source key of the default OMOP Vocab in WebApi.
 #'
 #' @export
 getPriorityVocabKey <- function(baseUrl) {
@@ -197,7 +197,7 @@ getMetadataForAllSpecifications <- function(baseUrl) {
                     modifiedDate = as.character(modifiedDate))
   }
   
-  # there is difference in how webApi returns for 'cohort-characterization' and 'pathway-analysis'
+  # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis'
   # the return are nested within 'content'
   categories <- c('cohort-characterization',
                   'pathway-analysis')
@@ -266,7 +266,7 @@ getMetadataForAllSpecifications <- function(baseUrl) {
 
 
 # converts time in integer/milliseconds to date-time with timezone.
-# assumption is that the system timezone = time zone of the local server running webApi.
+# assumption is that the system timezone = time zone of the local server running WebApi.
 .millisecondsToDate <- function(milliseconds) {
   sec <- milliseconds/1000
   return(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
@@ -288,9 +288,9 @@ getMetadataForAllSpecifications <- function(baseUrl) {
 #'                    Note: only limited checks are performed in R to check the validity of this
 #'                    expression.               
 #' @return            This function will return a dataframe object with one row
-#'                    describing the posted atlas study definitions and its details.
+#'                    describing the posted WebApi expression and its details.
 #'                    If unsuccessful a STOP message will be shown.
-#'                    See \code{\link{getAtlasDefinitionsDetails}}. 
+#'                    See \code{\link{getMetadataForAllSpecifications}}. 
 #'                         
 #' @examples
 #' \dontrun{
@@ -332,11 +332,11 @@ postSpecification <- function(baseUrl,
     if (response$status_code != 200) {
       stop(paste0("Post attempt failed for cohort : ", name))
     } else {
-      atlasDefinitionDetails <- getAtlasDefinitionsDetails(baseUrl = baseUrl) %>% 
-        dplyr::filter(atlasCategory == 'Cohort Definitions',
+      metadataForAllSpecifications <- getMetadataForAllSpecifications(baseUrl = baseUrl) %>% 
+        dplyr::filter(category == 'cohortDefinitions',
                       name == !!name
         )
-      return(atlasDefinitionDetails)
+      return(metadataForAllSpecifications)
     }
   } else {
     stop(paste0('type = ', type, " is not supported in this version. Post attempt failed."))

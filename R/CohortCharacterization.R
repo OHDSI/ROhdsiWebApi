@@ -23,7 +23,7 @@
 #'
 #' @param baseUrl              The base URL for the WebApi instance, for example:
 #'                             "http://server.org:80/WebAPI".
-#' @param characterizationId   The id of the cohort characterization in Atlas
+#' @param characterizationId   The id of the cohort characterization in WebApi
 #' @param generationId         Used to specify the id of a particular generation of a cohort
 #'                             characterization. By default, the latest execution is retrieved
 #' @param sourceKey            The source key for a CDM instance in WebAPI, as defined in the
@@ -159,7 +159,7 @@ getCohortCharacterizationResults <- function(baseUrl,
 #'                             characterization. If generationId is provided, then characterizationId is ignored.
 #' 
 #' @return
-#' A R-object representing the characterizationId/generationId definition returned by webApi.
+#' A R-object representing the characterizationId/generationId definition returned by WebApi.
 #' A warning will be shown if the characterizationId/generationId does not exist.
 #'
 #' @examples
