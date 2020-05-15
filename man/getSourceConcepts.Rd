@@ -7,7 +7,7 @@
 getSourceConcepts(
   conceptIds,
   baseUrl,
-  vocabSourceKey = NULL,
+  vocabularySourceKey = NULL,
   snakeCaseToCamelCase = TRUE
 )
 }
@@ -18,7 +18,7 @@ getSourceConcepts(
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
 
-\item{vocabSourceKey}{The source key of the Vocabulary. By default, the priority Vocabulary is
+\item{vocabularySourceKey}{The source key of the Vocabulary. By default, the priority Vocabulary is
 used.}
 
 \item{snakeCaseToCamelCase}{Should the column names of the result be converted to camelCase?}
@@ -31,7 +31,7 @@ Get source concepts that map to standard concepts
 }
 \examples{
 \dontrun{
-conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+conceptSet <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
 conceptIds <- resolveConceptSet(conceptSet = conceptSet,
                                 baseUrl = "http://server.org:80/WebAPI")
 sourceConcepts <- getSourceConcepts(conceptIds = conceptIds, 

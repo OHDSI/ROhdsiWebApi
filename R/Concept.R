@@ -14,11 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
 #' Get concepts
 #' 
-#' @template VocabSourceKey
+#' @template vocabularySourceKey
 #' 
 #' @template BaseUrl
 #' @template SnakeCaseToCamelCase
@@ -37,7 +35,7 @@
 #' }
 #'
 #' @export
-getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToCamelCase = TRUE) {
+getConcepts <- function(conceptIds, baseUrl, vocabularySourceKey = NULL, snakeCaseToCamelCase = TRUE) {
   
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
@@ -45,11 +43,11 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
   checkmate::assertLogical(snakeCaseToCamelCase, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
-    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
+  if (missing(vocabularySourceKey) || is.null(vocabularySourceKey)) {
+    vocabularySourceKey <- getPriorityVocabularyKey(baseUrl = baseUrl)
   }
   
-  url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabSourceKey)
+  url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabularySourceKey)
   body <- RJSONIO::toJSON(conceptIds, digits = 23)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
@@ -72,7 +70,7 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
 
 #' Get source concepts that map to standard concepts
 #' 
-#' @template VocabSourceKey
+#' @template vocabularySourceKey
 #' @template BaseUrl
 #' @template SnakeCaseToCamelCase
 #' @param conceptIds       A list of concept IDs referring to standard concepts.
@@ -82,7 +80,7 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
 #'
 #' @examples
 #' \dontrun{
-#' conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' conceptSet <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
 #' conceptIds <- resolveConceptSet(conceptSet = conceptSet,
 #'                                 baseUrl = "http://server.org:80/WebAPI")
 #' sourceConcepts <- getSourceConcepts(conceptIds = conceptIds, 
@@ -90,7 +88,7 @@ getConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToC
 #' }
 #'
 #' @export
-getSourceConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeCaseToCamelCase = TRUE) {
+getSourceConcepts <- function(conceptIds, baseUrl, vocabularySourceKey = NULL, snakeCaseToCamelCase = TRUE) {
   
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
@@ -98,11 +96,11 @@ getSourceConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeC
   checkmate::assertLogical(snakeCaseToCamelCase, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
-    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
+  if (missing(vocabularySourceKey) || is.null(vocabularySourceKey)) {
+    vocabularySourceKey <- getPriorityVocabularyKey(baseUrl = baseUrl)
   }
   
-  url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabSourceKey)
+  url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabularySourceKey)
   body <- RJSONIO::toJSON(conceptIds, digits = 23)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
@@ -112,7 +110,7 @@ getSourceConcepts <- function(conceptIds, baseUrl, vocabSourceKey = NULL, snakeC
     idx <- sapply(x, is.null)
     idx <- names(idx)[idx]
     x[idx] <- NA
-    tibble::as.tibble(x)
+    tibble::as_tibble(x)
   })
   
   result <- dplyr::bind_rows(lists)

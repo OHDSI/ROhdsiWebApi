@@ -7,7 +7,7 @@
 getConcepts(
   conceptIds,
   baseUrl,
-  vocabSourceKey = NULL,
+  vocabularySourceKey = NULL,
   snakeCaseToCamelCase = TRUE
 )
 }
@@ -18,7 +18,7 @@ getConcepts(
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
 
-\item{vocabSourceKey}{The source key of the Vocabulary. By default, the priority Vocabulary is
+\item{vocabularySourceKey}{The source key of the Vocabulary. By default, the priority Vocabulary is
 used.}
 
 \item{snakeCaseToCamelCase}{Should the column names of the result be converted to camelCase?}

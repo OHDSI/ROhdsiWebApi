@@ -16,24 +16,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get the estimation specification
+#' Get the estimation definition
 #'
 #' @details
-#' Get an R list object with expression from WebAPI for a given estimation specification
+#' Get an R object representing the estimation definition.
 #'
 #' @template BaseUrl
 #' @param estimationId   The WebApi id for the estimation specification
-#' @return               A list of R-objects with specifications for estimation
+#' @return               An R object.
 #'
 #' @examples
 #' \dontrun{
-#' getEstimation(baseUrl = "http://server.org:80/WebAPI", estimationId = 3434)
+#' getEstimationDefinition(baseUrl = "http://server.org:80/WebAPI", estimationId = 3434)
 #' }
 #'
 #' @export
-getEstimation <- function(baseUrl, estimationId){
+getEstimationDefinition <- function(baseUrl, estimationId){
   .checkBaseUrl(baseUrl)
-
+  
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(estimationId)
   checkmate::reportAssertions(errorMessage)
@@ -43,30 +43,34 @@ getEstimation <- function(baseUrl, estimationId){
   checkmate::reportAssertions(errorMessage)
   
   url <- sprintf("%s/estimation/%d/", baseUrl, estimationId)
-
+  
   json <- httr::GET(url)
   data <- httr::content(json)
-  data$expression <- data$specification #this expression cannot be imported back - why?
   
+  if (!is.null(data$payload$message)) {
+    stop(data$payload$message)
+  }
+  
+  data$specification <- RJSONIO::fromJSON(data$specification)
   data$createdDate <- .millisecondsToDate(data$createdDate)
   data$modifiedDate <- .millisecondsToDate(data$modifiedDate)
-  data$specification <- jsonlite::fromJSON(txt = data$specification)
   
-  data$specification$cohortDefinitions <- dplyr::as_tibble(data$specification$cohortDefinitions)
-  data$specification$conceptSets <- dplyr::as_tibble(data$specification$conceptSets)
-  data$specification$conceptSetCrossReference <- dplyr::as_tibble(data$specification$conceptSetCrossReference)
-  data$specification$negativeControls <- dplyr::as_tibble(data$specification$negativeControls)
-  
-  targetComparatorOutcomeIdDf <- list()
-  temp <- data$specification$estimationAnalysisSettings$analysisSpecification$targetComparatorOutcomes
-  
-  targetComparatorOutcomeIdDf <- data.frame(expand.grid(targetId = temp$targetId %>% unlist() %>% unique(),
-                                                        comparatorId = temp$comparatorId %>% unlist() %>% unique(),
-                                                        outcomeId = temp$outcomeIds %>% purrr::reduce(c) %>% unique())
-  )
-  data$specification$estimationAnalysisSettings$analysisSpecification$targetComparatorOutcomes <-
-    targetComparatorOutcomeIdDf
-  
+  # If we don't change the R object, we can always convert it back to JSON
+  # data$expression <- data$specification #this expression cannot be imported back - why?
+  # data$specification <- jsonlite::fromJSON(txt = data$specification)
+  # data$specification$cohortDefinitions <- dplyr::as_tibble(data$specification$cohortDefinitions)
+  # data$specification$conceptSets <- dplyr::as_tibble(data$specification$conceptSets)
+  # data$specification$conceptSetCrossReference <- dplyr::as_tibble(data$specification$conceptSetCrossReference)
+  # data$specification$negativeControls <- dplyr::as_tibble(data$specification$negativeControls)
+  # targetComparatorOutcomeIdDf <- list()
+  # temp <- data$specification$estimationAnalysisSettings$analysisSpecification$targetComparatorOutcomes
+  # 
+  # targetComparatorOutcomeIdDf <- data.frame(expand.grid(targetId = temp$targetId %>% unlist() %>% unique(),
+  #                                                       comparatorId = temp$comparatorId %>% unlist() %>% unique(),
+  #                                                       outcomeId = temp$outcomeIds %>% purrr::reduce(c) %>% unique())
+  # )
+  # data$specification$estimationAnalysisSettings$analysisSpecification$targetComparatorOutcomes <-
+  #   targetComparatorOutcomeIdDf
+  # 
   return(data)
 }
-

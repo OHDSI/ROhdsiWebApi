@@ -1,23 +1,41 @@
 library(ROhdsiWebApi)
 baseUrl <- Sys.getenv("baseUrl")
 
-estimation <- getEstimation(estimationId = 124, baseUrl = baseUrl)
+estimation <- getEstimationDefinition(estimationId = 124, baseUrl = baseUrl)
 
-cohortId <- estimation$cohortDefinitions[[1]]$id
+cohortId <- estimation$specification$cohortDefinitions[[1]]$id
 
 cohortDefinition <- getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl)
 
-conceptSet <- cohortDefinition$expression$ConceptSets[[1]]
+conceptSetDefinition <- cohortDefinition$expression$ConceptSets[[1]]
 
-conceptSet <- getConceptSet(conceptSetId = estimation$conceptSets[[1]]$id, baseUrl = baseUrl)
+conceptSetDefinition <- getConceptSetDefinition(conceptSetId = estimation$specification$conceptSets[[1]]$id, baseUrl = baseUrl)
 
-conceptSet <- getConceptSet(conceptSetId = 10677, baseUrl = baseUrl)
+conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 10677, baseUrl = baseUrl)
 
-convertConceptSetToTable(conceptSet)
+convertConceptSetDefinitionToTable(conceptSetDefinition)
 
 
-conceptIds <- resolveConceptSet(conceptSet = conceptSet, baseUrl = baseUrl)
+conceptIds <- resolveConceptSet(conceptSetDefinition = conceptSetDefinition, baseUrl = baseUrl)
 
-concepts <- getConcepts(conceptIds = conceptIds, baseUrl = baseUrl)
+getConcepts(conceptIds = conceptIds, baseUrl = baseUrl)
 
-sourceConcepts <- getSourceConcepts(conceptIds = conceptIds, baseUrl = baseUrl)
+getSourceConcepts(conceptIds = conceptIds, baseUrl = baseUrl)
+
+
+
+
+
+createConceptSetWorkbook(conceptSetIds = c(124, 125),
+                         fileName = "c:/temp/workbook.xlsx",
+                         baseUrl = baseUrl,
+                         included = TRUE,
+                         mapped = TRUE)
+
+getCohortGenerationInformation(5665, baseUrl)
+
+getCdmSources(baseUrl)
+
+cohortResults <- getCohortResults(cohortId = 5665, baseUrl = baseUrl, sourceKey = "CDM_JMDC_V1106")
+cohortResults$inclusionRuleStats
+cohortResults$summary

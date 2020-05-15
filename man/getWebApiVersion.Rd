@@ -2,7 +2,7 @@
 % Please edit documentation in R/WebApi.R
 \name{getWebApiVersion}
 \alias{getWebApiVersion}
-\title{Get the version of the WebAPI}
+\title{Get the WebAPI version number}
 \usage{
 getWebApiVersion(baseUrl)
 }
@@ -12,11 +12,11 @@ getWebApiVersion(baseUrl)
 If trailing '/' is used, you may receive an error.}
 }
 \value{
-The WebAPI version
+A string.
 }
 \description{
-Get the version of the WebAPI
+Get the WebAPI version number
 }
 \details{
-Obtains the WebAPI version number
+Obtains the WebAPI version number.
 }

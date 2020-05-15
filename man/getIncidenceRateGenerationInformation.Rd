@@ -2,31 +2,30 @@
 % Please edit documentation in R/IncidenceRate.R
 \name{getIncidenceRateGenerationInformation}
 \alias{getIncidenceRateGenerationInformation}
-\title{Get incident rate generation information.}
+\title{Get incident rate generation information}
 \usage{
-getIncidenceRateGenerationInformation(baseUrl, incidenceRateId)
+getIncidenceRateGenerationInformation(incidenceRateId, baseUrl)
 }
 \arguments{
+\item{incidenceRateId}{The WebApi ID for incidence rate analysis.}
+
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
-
-\item{incidenceRateId}{The WebApi ID for incidence rate analysis.}
 }
 \value{
 A tibble data-frame R-object with incidence rate
                        generation information.
 }
 \description{
-Get incident rate generation information.
+Get incident rate generation information
 }
 \details{
-Get incident rate generation information.
+Get incident rate generation information
 }
 \examples{
 \dontrun{
-getIncidenceRateGenerationInformation <- function(baseUrl "http://server.org:80/WebAPI",
-                                         incidenceRateId = 296)
+getIncidenceRateGenerationInformation(incidenceRateId = 296, baseUrl = baseUrl)
                                          )
 }
 }

@@ -4,28 +4,29 @@
 \alias{resolveConceptSet}
 \title{Resolve a concept set to the included standard concept IDs}
 \usage{
-resolveConceptSet(conceptSet, baseUrl, vocabSourceKey = NULL)
+resolveConceptSet(conceptSetDefinition, baseUrl, vocabularySourceKey = NULL)
 }
 \arguments{
-\item{conceptSet}{A concept set as obtained through the \code{\link{getConceptSet}} function.}
+\item{conceptSetDefinition}{A concept set definition, for example as obtained through the \code{\link{getConceptSetDefinition}} function, 
+or taken from a cohort definition.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
 
-\item{vocabSourceKey}{The source key of the Vocabulary. By default, the priority Vocabulary is
+\item{vocabularySourceKey}{The source key of the Vocabulary. By default, the priority Vocabulary is
 used.}
 }
 \value{
-A list of standard concept ids
+A vector of standard concept ids.
 }
 \description{
 Resolve a concept set to the included standard concept IDs
 }
 \examples{
 \dontrun{
-conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
-conceptIds <- resolveConceptSet(conceptSet = conceptSet,
+conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+conceptIds <- resolveConceptSet(conceptSetDefinition = conceptSetDefinition,
                                 baseUrl = "http://server.org:80/WebAPI")
 }
 
