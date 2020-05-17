@@ -134,11 +134,10 @@ getCdmSources <- function(baseUrl) {
                    sourceDialect = s$sourceDialect,
                    cdmDatabaseSchema = cdmDatabaseSchema,
                    vocabDatabaseSchema = vocabDatabaseSchema,
-                   resultsDatabaseSchema = resultsDatabaseSchema,
-                   stringsAsFactors = FALSE)
+                   resultsDatabaseSchema = resultsDatabaseSchema)
   })
   
-  do.call(rbind, sourceDetails)
+  return(dplyr::bind_rows(sourceDetails))
 }
 
 #' Retrieve the meta data of all WebApi definitions

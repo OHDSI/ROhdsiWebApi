@@ -509,7 +509,7 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, cohortIds) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(cohortIds, add = errorMessage)
-  checkmate::assertInteger(sourceKeys, add = errorMessage)
+  checkmate::assertCharacter(sourceKeys, min.len = 1, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   checkSourceKeys <- function(baseUrl, sourceKeys) {
