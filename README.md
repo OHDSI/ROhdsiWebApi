@@ -35,6 +35,10 @@ Installation
 
 User Documentation
 ==================
+Documentation can be found on the [package website](https://ohdsi.github.io/ROhdsiWebApi).
+
+PDF versions of the documentation are also available:
+* Vignette: [Using Andromeda](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/WorkingWithCohorts.pdf)
 * Package manual: [ROhdsiWebApi.pdf](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/extras/ROhdsiWebApi.pdf)
 
 Support
@@ -42,6 +46,9 @@ Support
 * Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a>
 * We use the <a href="https://github.com/OHDSI/ROhdsiWebApi/issues">GitHub issue tracker</a> for all bugs/issues/enhancements 
  
+Contributing
+============
+Read [here](https://ohdsi.github.io/Hades/contribute.html) how you can contribute to this package.
  
 License
 =======

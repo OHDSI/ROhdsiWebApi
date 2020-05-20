@@ -1,6 +1,12 @@
 ---
 title: "Working With Cohorts"
-output: rmarkdown::html_vignette
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
 vignette: >
   %\VignetteIndexEntry{WorkingWithCohorts}
   %\VignetteEngine{knitr::rmarkdown}

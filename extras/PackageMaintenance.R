@@ -1,5 +1,3 @@
-# @file PackageMaintenance
-#
 # Copyright 2020 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
@@ -20,9 +18,18 @@
 OhdsiRTools::formatRFolder("R")
 OhdsiRTools::checkUsagePackage("ROhdsiWebApi")
 OhdsiRTools::updateCopyrightYearFolder()
+devtools::spell_check()
 
 # Create manual and vignette
-unlink("extras/OhdsiRTools.pdf")
-shell("R CMD Rd2pdf ./ --output=extras/OhdsiRTools.pdf")
+unlink("extras/ROhdsiWebApi.pdf")
+shell("R CMD Rd2pdf ./ --output=extras/ROhdsiWebApi.pdf")
+
+dir.create("inst/doc", recursive = TRUE)
+rmarkdown::render("vignettes/WorkingWithCohorts.Rmd",
+                  output_file = "../inst/doc/WorkingWithCohorts.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+unlink("inst/doc/WorkingWithCohorts.tex")
 
 pkgdown::build_site()
