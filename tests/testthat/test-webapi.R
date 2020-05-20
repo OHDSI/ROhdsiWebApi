@@ -15,9 +15,9 @@ test_that("Test getWebApiVersion", {
   expect_equal(length(strsplit(version, "\\.")[[1]]), 3)
 })
 
-test_that("Test getPriorityVocabKey", {
+test_that("Test getPriorityVocabularyKey", {
   skip_if(baseUrl == "")
-  key <- getPriorityVocabKey(baseUrl = baseUrl)
+  key <- getPriorityVocabularyKey(baseUrl = baseUrl)
   expect_type(key, "character")
   expect_gt(nchar(key), 0)
 })

@@ -16,8 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
 #' Get a cohort definition
 #'
 #' @details
@@ -50,8 +48,6 @@ getCohortDefinition <- function(cohortId, baseUrl) {
   data$expression <- RJSONIO::fromJSON(data$expression)
   return(data)
 }
-
-
 
 #' Get a cohort definition expression
 #'
@@ -95,8 +91,6 @@ getCohortDefinitionExpression <- function(cohortId, baseUrl) {
   json <- httr::GET(url)
   httr::content(json)
 }
-
-
 
 #' Load a cohort definition and insert it into this package
 #'
@@ -165,8 +159,6 @@ insertCohortDefinitionInPackage <- function(cohortId,
   SqlRender::writeSql(sql = sql, targetFile = sqlFileName)
   writeLines(paste("- Created SQL file:", sqlFileName))
 }
-
-
 
 #' Insert a set of cohort definitions into package
 #'
@@ -310,7 +302,6 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   invisible(sql)
 }
 
-
 #' (Deprecated) Get a cohort definition's name from WebAPI
 #'
 #' @details
@@ -344,7 +335,6 @@ getCohortDefinitionName <- function(baseUrl, cohortId, formatName = FALSE) {
     json$name
   }
 }
-
 
 #' Get a cohort definition's SQL from WebAPI
 #'
@@ -394,9 +384,7 @@ getCohortDefinitionSql <- function(baseUrl, cohortId, generateStats = TRUE) {
   return(sql)
 }
 
-
-
-#' Get Cohort Generation Statuses
+#' Get cohort generation information
 #'
 #' @details
 #' Obtains cohort generation statuses for a collection of cohort definition Ids and CDM sources.
@@ -412,7 +400,7 @@ getCohortDefinitionSql <- function(baseUrl, cohortId, generateStats = TRUE) {
 #' and source key.
 #'
 #' @export
-getCohortGenerationStatuses <- function(baseUrl, cohortIds, sourceKeys = NULL) {
+getCohortGenerationInformation <- function(cohortIds, baseUrl, sourceKeys = NULL) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(cohortIds, add = errorMessage)
@@ -431,32 +419,36 @@ getCohortGenerationStatuses <- function(baseUrl, cohortIds, sourceKeys = NULL) {
     stop("One or more source keys is invalid, please check Atlas -> Configure page.")
   }
 
+  cohortIds <- as.integer(cohortIds)
   tuples <- list(cohortIds, sourceKeys)
   df <- expand.grid(tuples, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   colnames(df) <- c("cohortId", "sourceKey")
-
-  statuses <- apply(X = df, MARGIN = 1, function(row) {
-    cohortId <- as.integer(row["cohortId"])
+  
+  getCohortName <- function(cohortId) {
+    return(tibble::tibble(cohortId = cohortId,
+                          name = getCohortDefinition(cohortId = cohortId, 
+                                                     baseUrl = baseUrl)$name))
+  }
+  cohortNames <- do.call("rbind", (lapply(cohortIds, getCohortName)))
+  df <- merge(df, cohortNames)
+  
+  getGenerationInformation <- function(row) {
     result <- .getCohortGenerationStatus(baseUrl = baseUrl,
-                                         cohortId = cohortId,
-                                         sourceKey = row["sourceKey"])
+                                         cohortId = row$cohortId,
+                                         sourceKey = row$sourceKey)
 
-    list(sourceKey = row["sourceKey"],
-         cohortId = as.integer(row["cohortId"]),
-         definitionName = getCohortDefinition(baseUrl = baseUrl,
-                                              cohortId = as.integer(row["cohortId"])$name),
-         status = result$status,
-         startTime = result$startTime,
-         executionDuration = result$executionDuration,
-               personCount = result$personCount)
-  })
-
-  df <- do.call(rbind, lapply(statuses, data.frame, stringsAsFactors = FALSE))
-  rownames(df) <- c()
-  df
+    return(tibble::tibble(sourceKey = row$sourceKey,
+                          cohortId = row$cohortId,
+                          definitionName = row$name,
+                          status = result$status,
+                          startTime = result$startTime,
+                          executionDuration = result$executionDuration,
+                          personCount = result$personCount))
+  }
+  results <- lapply(split(df, 1:nrow(df)), getGenerationInformation)
+  results <- do.call("rbind", results)
+  return(results)
 }
-
-
 
 .getCohortGenerationStatus <- function(baseUrl, cohortId, sourceKey) {
 
@@ -502,8 +494,6 @@ getCohortGenerationStatuses <- function(baseUrl, cohortIds, sourceKeys = NULL) {
   }
 }
 
-
-
 #' Invoke the generation of a set of cohort definitions
 #'
 #' @details
@@ -519,7 +509,7 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, cohortIds) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(cohortIds, add = errorMessage)
-  checkmate::assertInteger(sourceKeys, add = errorMessage)
+  checkmate::assertCharacter(sourceKeys, min.len = 1, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   checkSourceKeys <- function(baseUrl, sourceKeys) {
@@ -550,8 +540,6 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, cohortIds) {
   df
 }
 
-
-
 #' Get cohort inclusion rules and person counts
 #'
 #' @details
@@ -565,7 +553,7 @@ invokeCohortSetGeneration <- function(baseUrl, sourceKeys, cohortIds) {
 getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
   .Deprecated(new = "getCohortGenerationReport", 
               package="ROhdsiWebApi", 
-              msg = "This function has been deprecated. As an alternative please use getCohortGenerationReport.",
+              msg = "This function has been deprecated. As an alternative please use getCohortResults",
               old = as.character(sys.call(sys.parent()))[1L])
   
   .checkBaseUrl(baseUrl)
@@ -590,8 +578,6 @@ getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
   })
   do.call(rbind.data.frame, results)
 }
-
-
 
 #' Delete a cohort definition
 #'
@@ -649,10 +635,10 @@ deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnErro
 
 
 
-#' Get cohort generation output
+#' Get cohort generation results
 #'
 #' @details
-#' Obtains a list with dataframe containing details of output for cohort generation
+#' Obtains a list with data frame containing details of output for cohort generation
 #' 
 #' @template BaseUrl
 #' @template CohortId
@@ -662,10 +648,10 @@ deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnErro
 #' @return            A list of data frames containing cohort generation report
 #' @examples
 #' \dontrun{
-#' getCohortGenerationOutput(cohortId = 282, baseUrl = "http://server.org:80/WebAPI", sourceKey = "HCUP", mode = 1)
+#' getCohortGeneratioInformation(cohortId = 282, baseUrl = "http://server.org:80/WebAPI", sourceKey = "HCUP", mode = 1)
 #' }
 #' @export
-getCohortGenerationOutput <- function(baseUrl, cohortId, sourceKey, mode = 0) {
+getCohortResults <- function(cohortId, baseUrl , sourceKey, mode = 0) {
   
   .checkBaseUrl(baseUrl)
   
@@ -685,20 +671,22 @@ getCohortGenerationOutput <- function(baseUrl, cohortId, sourceKey, mode = 0) {
   if (length(json$inclusionRuleStats) == 0) {
     results$inclusionRuleStats <- NULL
   } else {
-    results$inclusionRuleStas <- json$inclusionRuleStats %>% 
-      jsonlite::toJSON() %>% D
-      jsonlite::fromJSON(simplifyVector = T, simplifyDataFrame = T, flatten = T)
+    inclusionRuleStats <- lapply(json$inclusionRuleStats, tibble::as_tibble)
+    results$inclusionRuleStats <- do.call("rbind", inclusionRuleStats)
   }
   if (length(json$treemapData) == 0) {
     results$treemapData <- NULL
   } else {
-    treeMapResult <- list(name = c(), size = c())
-    treeMapResult <- .flattenTree(json$treemapData, treeMapResult)
-    json$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
-    json$treemapData$size <- as.integer(json$treemapData$size)
-    json$treemapData$SatisfiedNumber = stringr::str_count(string = json$treemapData$bits, pattern = '1')
-    json$treemapData$SatisfiedRules = stringr::str_locate_all(string = json$treemaDpData$bits, pattern = '1') %>% 
-      paste()
+    results$treemapData <- jsonlite::fromJSON(json$treemapData, simplifyDataFrame = FALSE)
+    
+    # This code wasn't working:
+    # treeMapResult <- list(name = c(), size = c())
+    # treeMapResult <- .flattenTree(treemapData, treeMapResult)
+    # json$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
+    # json$treemapData$size <- as.integer(json$treemapData$size)
+    # json$treemapData$SatisfiedNumber = stringr::str_count(string = json$treemapData$bits, pattern = '1')
+    # json$treemapData$SatisfiedRules = stringr::str_locate_all(string = json$treemaDpData$bits, pattern = '1') %>% 
+    #   paste()
   }
   return(results)
 }

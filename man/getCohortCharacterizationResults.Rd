@@ -5,8 +5,8 @@
 \title{Get Cohort Characterization Results}
 \usage{
 getCohortCharacterizationResults(
-  baseUrl,
   characterizationId,
+  baseUrl,
   generationId = NULL,
   sourceKey,
   cohortIds = c(),
@@ -15,10 +15,10 @@ getCohortCharacterizationResults(
 )
 }
 \arguments{
+\item{characterizationId}{The id of the cohort characterization in WebApi}
+
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
-
-\item{characterizationId}{The id of the cohort characterization in WebApi}
 
 \item{generationId}{Used to specify the id of a particular generation of a cohort
 characterization. By default, the latest execution is retrieved}

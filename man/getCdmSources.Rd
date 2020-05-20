@@ -12,11 +12,11 @@ getCdmSources(baseUrl)
 If trailing '/' is used, you may receive an error.}
 }
 \value{
-A data frame of data source information
+A data frame.
 }
 \description{
 Get the data sources in the WebAPI instance
 }
 \details{
-Obtains the data sources configured in the WebAPI instance
+Obtains the data sources configured in the WebAPI instance.
 }

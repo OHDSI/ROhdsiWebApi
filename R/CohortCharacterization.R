@@ -16,9 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
-
 #' Get Cohort Characterization Results
 #'
 #' @param baseUrl              The base URL for the WebApi instance, for example:
@@ -36,8 +33,8 @@
 #'                             default, all analyses are retrieved.
 #'
 #' @export
-getCohortCharacterizationResults <- function(baseUrl,
-                                             characterizationId,
+getCohortCharacterizationResults <- function(characterizationId,
+                                             baseUrl,
                                              generationId = NULL,
                                              sourceKey,
                                              cohortIds = c(),
@@ -125,8 +122,6 @@ getCohortCharacterizationResults <- function(baseUrl,
        prevalence = prevResultsDf)
 }
 
-
-
 .getLatestGenerationId <- function(baseUrl, characterizationId, sourceKey) {
   url <- sprintf("%s/cohort-characterization/%d/generation", baseUrl, characterizationId)
   json <- httr::GET(url)
@@ -145,8 +140,6 @@ getCohortCharacterizationResults <- function(baseUrl,
   }
 }
 
-
-
 #' Get a characterization definition expression
 #'
 #' @details
@@ -164,11 +157,11 @@ getCohortCharacterizationResults <- function(baseUrl,
 #'
 #' @examples
 #' \dontrun{
-#' getCharacterizationDefinition(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' getCohortCharacterizationDefinition(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #'
 #' @export
-getCharacterizationDefinition <- function(baseUrl, characterizationId, generationId = NULL) {
+getCohortCharacterizationDefinition <- function(characterizationId, baseUrl,generationId = NULL) {
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
@@ -192,8 +185,6 @@ getCharacterizationDefinition <- function(baseUrl, characterizationId, generatio
   return(data)
 }
 
-
-
 #' Delete a cohort characterization definition and results
 #'
 #' @details
@@ -210,11 +201,11 @@ getCharacterizationDefinition <- function(baseUrl, characterizationId, generatio
 #'
 #' @examples
 #' \dontrun{
-#' deleteCohortDefinition(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' deleteCohortCharacterizationDefinition(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #'
 #' @export
-deleteCharacterizationDefinition <- function(characterizationId, baseUrl, silent = FALSE, stopOnError = FALSE) {
+deleteCohortCharacterizationDefinition <- function(characterizationId, baseUrl, silent = FALSE, stopOnError = FALSE) {
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
@@ -223,7 +214,7 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl, silent
   checkmate::assertLogical(stopOnError, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  characterizationDefinition <- tryCatch(ROhdsiWebApi::getCharacterizationDefinition(characterizationId = characterizationId, 
+  characterizationDefinition <- tryCatch(getCohortCharacterizationDefinition(characterizationId = characterizationId, 
                                                                                                baseUrl = baseUrl),
                                          error=function(e) e, 
                                          warning=function(w) w

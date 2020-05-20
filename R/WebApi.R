@@ -16,7 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 .checkBaseUrl <- function(baseUrl) {
   success <- tryCatch({
     getWebApiVersion(baseUrl = baseUrl)
@@ -24,15 +23,13 @@
   }, error = function(e) {
     FALSE
   })
-
+  
   if (!success) {
     stop("Could not reach WebApi. Possibly the base URL is not valid? (please verify it is like http://server.org:80/WebAPI)")
   }
   
   return(success)
 }
-
-
 
 .convertNulltoNA <- function(thisList) {
   for (n in names(thisList)) {
@@ -43,20 +40,18 @@
   thisList
 }
 
-
-
-#' Get Priority Vocab Source Key
+#' Get Priority Vocabulary Source Key
 #'
 #' @details
-#' Obtains the source key of the default OMOP Vocab in WebApi
+#' Obtains the source key of the default OMOP Vocabulary in WebApi.
 #'
 #' @template BaseUrl
 #'
 #' @return
-#' A string with the source key of the default OMOP Vocab in WebApi.
+#' A string.
 #'
 #' @export
-getPriorityVocabKey <- function(baseUrl) {
+getPriorityVocabularyKey <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
   url <- gsub("@baseUrl", baseUrl, "@baseUrl/source/priorityVocabulary")
   json <- httr::GET(url)
@@ -64,17 +59,15 @@ getPriorityVocabKey <- function(baseUrl) {
   json$sourceKey
 }
 
-
-
-#' Get the version of the WebAPI
+#' Get the WebAPI version number
 #'
 #' @details
-#' Obtains the WebAPI version number
+#' Obtains the WebAPI version number.
 #'
 #' @template BaseUrl
 #'
 #' @return
-#' The WebAPI version
+#' A string.
 #'
 #' @export
 getWebApiVersion <- function(baseUrl) {
@@ -83,13 +76,11 @@ getWebApiVersion <- function(baseUrl) {
   (httr::content(json))$version
 }
 
-
-
 .getSourceIdFromKey <- function(baseUrl, sourceKey) {
   .checkBaseUrl(baseUrl)
-
+  
   url <- sprintf("%1s/source/%2s", baseUrl, sourceKey)
-
+  
   json <- httr::GET(url)
   json <- httr::content(json)
   if (is.null(json$sourceId))
@@ -97,23 +88,19 @@ getWebApiVersion <- function(baseUrl) {
   json$sourceId
 }
 
-
-
 .formatName <- function(name) {
   gsub("_", " ", gsub("\\[(.*?)\\]_", "", gsub(" ", "_", name)))
 }
 
-
-
 #' Get the data sources in the WebAPI instance
 #'
 #' @details
-#' Obtains the data sources configured in the WebAPI instance
+#' Obtains the data sources configured in the WebAPI instance.
 #'
 #' @template BaseUrl
 #'
 #' @return
-#' A data frame of data source information
+#' A data frame.
 #'
 #' @export
 getCdmSources <- function(baseUrl) {
@@ -122,7 +109,7 @@ getCdmSources <- function(baseUrl) {
   request <- httr::GET(url)
   httr::stop_for_status(request)
   sources <- httr::content(request)
-
+  
   sourceDetails <- lapply(sources, function(s) {
     cdmDatabaseSchema <- NA
     vocabDatabaseSchema <- NA
@@ -142,36 +129,36 @@ getCdmSources <- function(baseUrl) {
         }
       }
     }
-    data.frame(sourceName = s$sourceName,
-               sourceKey = s$sourceKey,
-               sourceDialect = s$sourceDialect,
-               cdmDatabaseSchema = cdmDatabaseSchema,
-               vocabDatabaseSchema = vocabDatabaseSchema,
-               resultsDatabaseSchema = resultsDatabaseSchema,
-               stringsAsFactors = FALSE)
+    tibble::tibble(sourceName = s$sourceName,
+                   sourceKey = s$sourceKey,
+                   sourceDialect = s$sourceDialect,
+                   cdmDatabaseSchema = cdmDatabaseSchema,
+                   vocabDatabaseSchema = vocabDatabaseSchema,
+                   resultsDatabaseSchema = resultsDatabaseSchema)
   })
-
-  do.call(rbind, sourceDetails)
+  
+  return(dplyr::bind_rows(sourceDetails))
 }
 
-
-
-#' Retrieve the details of all WebApi definitions, by functional category.
+#' Retrieve the meta data of all WebApi definitions
 #'
 #' @details
-#' Obtains the meta data details of WebApi specifications such as id, name, created/modified 
+#' Obtains the meta data of WebApi specifications such as id, name, created/modified 
 #' details, hash object, etc. The following function categories are supported. 
 #' Concept-set, Cohort-definition, Cohort-characterization, Pathway-analysis, Incidence rate (ir), 
 #' estimation and prediction. This function is useful to retrieve the current specifications.
 #'
 #' @template BaseUrl
 #'
-#' @return          A tibble of specification metadata. Note: modifiedDate and createdDate are
-#'                  returned as text/character (to be worked on in future version).
+#' @return          
+#' A tibble of specification metadata. Note: modifiedDate and createdDate are
+#' returned as text/character.
+#' 
 #' @examples
 #' \dontrun{
 #' getMetadataForAllSpecifications(baseUrl = "http://server.org:80/WebAPI")
 #' }
+#' 
 #' @export
 getMetadataForAllSpecifications <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
@@ -202,7 +189,7 @@ getMetadataForAllSpecifications <- function(baseUrl) {
     {
       categoryUrl = 'prediction'
     }
-        
+    
     url <- paste(baseUrl, categoryUrl, '?size=100000000', sep = "/")
     request <- httr::GET(url)
     httr::stop_for_status(request)
@@ -215,7 +202,6 @@ getMetadataForAllSpecifications <- function(baseUrl) {
       dplyr::mutate(createdDate = as.character(createdDate),
                     modifiedDate = as.character(modifiedDate))
   }
-  
   
   # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis'
   # the return are nested within 'content'
@@ -264,7 +250,6 @@ getMetadataForAllSpecifications <- function(baseUrl) {
   return(listOfIds)
 }
 
-
 # recursively flattens tree based structure.
 .flattenTree <- function(node, accumulated) {
   if (is.null(node$children)) {
@@ -279,8 +264,6 @@ getMetadataForAllSpecifications <- function(baseUrl) {
   }
 }
 
-
-
 # converts time in integer/milliseconds to date-time with timezone.
 # assumption is that the system timezone = time zone of the local server running WebApi.
 .millisecondsToDate <- function(milliseconds) {
@@ -288,16 +271,14 @@ getMetadataForAllSpecifications <- function(baseUrl) {
   return(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
 }
 
-
-
-#' Post a specification expression into WebApi
+#' Post a definition into WebApi
 #'
 #' @details
-#' Post a specification expression into WebAPI
+#' Post a definition into WebAPI
 #'
 #' @template BaseUrl 
-#' @param name        A valid name for the expression. WebApi will use this name (if valid) as
-#'                    the name of the specification. WebApi checks for validity,
+#' @param name        A valid name for the definition. WebApi will use this name (if valid) as
+#'                    the name of the definition. WebApi checks for validity,
 #'                    such as uniqueness, unaccepted character etc. An error might be thrown.
 #' @param type        The type of expression in WebApi. Currently only 'cohort' is supported 
 #'                    to refer cohort definition specification expression.
@@ -318,10 +299,10 @@ getMetadataForAllSpecifications <- function(baseUrl) {
 #                   jsonExpression = validJsonExpression)
 #' }
 #' @export
-postSpecification <- function(baseUrl, 
-                              name,
-                              type = 'cohort',
-                              object) {
+postDefinition <- function(baseUrl, 
+                           name,
+                           type = 'cohort',
+                           object) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(name, add = errorMessage)
@@ -331,7 +312,7 @@ postSpecification <- function(baseUrl,
                         any.missing = FALSE,
                         null.ok = FALSE, 
                         add = errorMessage
-                        )
+  )
   checkmate::reportAssertions(errorMessage)
   
   jsonExpression <- RJSONIO::toJSON(object)
@@ -345,7 +326,7 @@ postSpecification <- function(baseUrl,
     # POST the JSON
     response <- httr::POST(url = paste0(baseUrl, "/cohortdefinition/"),
                            body = json_body,
-                           config = httr::add_headers(.headers =c('Content-Type' = 'application/json')))
+                           config = httr::add_headers(.headers = c('Content-Type' = 'application/json')))
     # Expect a "200" response that it worked
     if (response$status_code != 200) {
       stop(paste0("Post attempt failed for cohort : ", name))

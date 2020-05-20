@@ -1,5 +1,3 @@
-# @file IncidenceRate
-#
 # Copyright 2020 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
@@ -16,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
 #' Get definitions for incident rate analysis
 #'
 #' @details
@@ -29,13 +25,13 @@
 #'
 #' @examples
 #' \dontrun{
-#'  getIncidenceRateSpecification <- function(baseUrl "http://server.org:80/WebAPI",
+#'  getIncidenceRateDefinition <- function(baseUrl "http://server.org:80/WebAPI",
 #'                                          incidenceRateId = 296)
 #'                                          )
 #' }
 #' @export
- getIncidenceRateSpecification <- function(baseUrl,
-                                        incidenceRateId) {
+getIncidenceRateDefinition <- function(baseUrl,
+                                       incidenceRateId) {
   .checkBaseUrl(baseUrl)
   #ir specifications
   url <- sprintf("%1s/ir/%2s", baseUrl, incidenceRateId)
@@ -50,12 +46,10 @@
   return(data)
 }
 
-
- 
-#' Get incident rate generation information.
+#' Get incident rate generation information
 #'
 #' @details
-#' Get incident rate generation information.
+#' Get incident rate generation information
 #'
 #' @template BaseUrl
 #' @param incidenceRateId The WebApi ID for incidence rate analysis.
@@ -64,13 +58,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' getIncidenceRateGenerationInformation <- function(baseUrl "http://server.org:80/WebAPI",
-#'                                          incidenceRateId = 296)
+#' getIncidenceRateGenerationInformation(incidenceRateId = 296, baseUrl = baseUrl)
 #'                                          )
 #' }
 #' @export
-getIncidenceRateGenerationInformation <- function(baseUrl,
-                                                  incidenceRateId) {
+getIncidenceRateGenerationInformation <- function(incidenceRateId, baseUrl) {
   .checkBaseUrl(baseUrl)
   #generation
   url <- sprintf("%1s/ir/%2s/info", baseUrl, incidenceRateId)
@@ -93,13 +85,11 @@ getIncidenceRateGenerationInformation <- function(baseUrl,
   return(data)
 }
 
-
-
-#' Get output from incidence rate analysis.
+#' Get results from incidence rate analysis.
 #'
 #' @details
 #' Given a sourceKey, targetCohortId, outcomeCohortId combinations, this function will return the 
-#' output of incidence rate analysis.
+#' results of incidence rate analysis.
 #'
 #' @template BaseUrl
 #' @param incidenceRateId    The WebApi ID for incidence rate analysis.
@@ -110,19 +100,19 @@ getIncidenceRateGenerationInformation <- function(baseUrl,
 #'
 #' @examples
 #' \dontrun{
-#' getIncidenceRateOutput <- function(baseUrl "http://server.org:80/WebAPI",
-#'                                     incidenceRateId = 296,
+#' getIncidenceRateResults(incidenceRateId = 296,
+#'                         baseUrl ="http://server.org:80/WebAPI",
 #'                                     targetCohortId = 432423, 
 #'                                     outcomeCohortId = 324,
 #'                                     sourceKey = "HCUP"
 #'                                    )
 #' }
 #' @export
-getIncidenceRateOutput <- function(baseUrl,
-                                   incidenceRateId,
-                                   sourceKey,
-                                   targetCohortId,
-                                   outcomeCohortId) {
+getIncidenceRateResults <- function(incidenceRateId,
+                                    baseUrl,
+                                    sourceKey,
+                                    targetCohortId,
+                                    outcomeCohortId) {
   .checkBaseUrl(baseUrl)
   
   url <- sprintf("%1s/ir/%2s/report/%3s?targetId=%4s&outcomeId=%5s", 

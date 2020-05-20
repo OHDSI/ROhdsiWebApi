@@ -2,7 +2,7 @@
 % Please edit documentation in R/WebApi.R
 \name{getMetadataForAllSpecifications}
 \alias{getMetadataForAllSpecifications}
-\title{Retrieve the details of all WebApi definitions, by functional category.}
+\title{Retrieve the meta data of all WebApi definitions}
 \usage{
 getMetadataForAllSpecifications(baseUrl)
 }
@@ -13,13 +13,13 @@ If trailing '/' is used, you may receive an error.}
 }
 \value{
 A tibble of specification metadata. Note: modifiedDate and createdDate are
-                 returned as text/character (to be worked on in future version).
+returned as text/character.
 }
 \description{
-Retrieve the details of all WebApi definitions, by functional category.
+Retrieve the meta data of all WebApi definitions
 }
 \details{
-Obtains the meta data details of WebApi specifications such as id, name, created/modified 
+Obtains the meta data of WebApi specifications such as id, name, created/modified 
 details, hash object, etc. The following function categories are supported. 
 Concept-set, Cohort-definition, Cohort-characterization, Pathway-analysis, Incidence rate (ir), 
 estimation and prediction. This function is useful to retrieve the current specifications.
@@ -28,4 +28,5 @@ estimation and prediction. This function is useful to retrieve the current speci
 \dontrun{
 getMetadataForAllSpecifications(baseUrl = "http://server.org:80/WebAPI")
 }
+
 }

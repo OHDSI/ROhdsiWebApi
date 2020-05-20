@@ -14,26 +14,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
-#' Get a concept set 
+#' Get a concept set definition
 #'
 #' @details
-#' Obtain a concept set from WebAPI
+#' Obtain a concept set from WebAPI.
 #' 
 #' @template BaseUrl
 #' @template ConceptSetId
 #'
 #' @return
-#' An R object representing the concept set
+#' An R object representing the concept set.
 #'
 #' @examples
 #' \dontrun{
-#' conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #'
 #' @export
-getConceptSet <- function(baseUrl, conceptSetId) {
+getConceptSetDefinition <- function(conceptSetId, baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(conceptSetId, add = errorMessage)
@@ -54,36 +52,34 @@ getConceptSet <- function(baseUrl, conceptSetId) {
   return(metaData)
 }
 
-
-
 #' Resolve a concept set to the included standard concept IDs
 #' 
-#' @template VocabSourceKey
+#' @template vocabularySourceKey
 #' 
 #' @template BaseUrl
-#' @param conceptSet       A concept set as obtained through the \code{\link{getConceptSet}} function.
+#' @template ConceptSetDefinition
 #' @return
-#' A list of standard concept ids
+#' A vector of standard concept ids.
 #'
 #' @examples
 #' \dontrun{
-#' conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
-#' conceptIds <- resolveConceptSet(conceptSet = conceptSet,
+#' conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' conceptIds <- resolveConceptSet(conceptSetDefinition = conceptSetDefinition,
 #'                                 baseUrl = "http://server.org:80/WebAPI")
 #' }
 #'
 #' @export
-resolveConceptSet <- function(conceptSet, baseUrl, vocabSourceKey = NULL) {
+resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey = NULL) {
   
   .checkBaseUrl(baseUrl)
   
-  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
-    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
+  if (missing(vocabularySourceKey) || is.null(vocabularySourceKey)) {
+    vocabularySourceKey <- getPriorityVocabularyKey(baseUrl = baseUrl)
   }
   
-  url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabSourceKey)
+  url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabularySourceKey)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  expression <- RJSONIO::toJSON(conceptSet$expression)
+  expression <- RJSONIO::toJSON(conceptSetDefinition$expression)
   data <- httr::POST(url, body = expression, config = httr::add_headers(httpheader))
   data <- httr::content(data)
   if (!is.null(data$payload$message)) {
@@ -93,11 +89,9 @@ resolveConceptSet <- function(conceptSet, baseUrl, vocabSourceKey = NULL) {
   return(data)
 }
 
-
-
-#' Convert a concept set to a table
+#' Convert a concept set definition to a table
 #' 
-#' @template ConceptSet
+#' @template ConceptSetDefinition
 #' @template SnakeCaseToCamelCase
 #' 
 #' @return
@@ -105,14 +99,13 @@ resolveConceptSet <- function(conceptSet, baseUrl, vocabSourceKey = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
-#' conceptIds <- resolveConceptSet(conceptSet = conceptSet,
-#'                                 baseUrl = "http://server.org:80/WebAPI")
+#' conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' convertConceptSetDefinitionToTable(conceptSetDefinition = conceptSetDefinition)
 #' }
 #'
 #' @export
-convertConceptSetToTable <- function(conceptSet, snakeCaseToCamelCase = TRUE) {
-  lists <- lapply(conceptSet$expression$items, function(x) {
+convertConceptSetDefinitionToTable <- function(conceptSetDefinition, snakeCaseToCamelCase = TRUE) {
+  lists <- lapply(conceptSetDefinition$expression$items, function(x) {
     x <- append(x$concept, x)
     x$concept <- NULL
     return(tibble::as_tibble(x))
@@ -124,324 +117,118 @@ convertConceptSetToTable <- function(conceptSet, snakeCaseToCamelCase = TRUE) {
   return(result)
 }
 
-
-
-#' Get a concept set's name from WebAPI
-#'
-#' @details
-#' Obtains the name of a concept set.
-#'
-#' @template BaseUrl
-#' @template ConceptSetId
-#' @param formatName   Should the name be formatted to remove prefixes and underscores?
-#'
-#' @return
-#' The name of the concept set.
-#'
-#' @export
-getConceptSetName <- function(baseUrl, conceptSetId, formatName = FALSE) {
-  .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(conceptSetId, add = errorMessage)
-  checkmate::assertLogical(formatName, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-
-  url <- gsub("@baseUrl", baseUrl, gsub("@conceptSetId", conceptSetId, "@baseUrl/conceptset/@conceptSetId"))
-  json <- httr::GET(url)
-  json <- httr::content(json)
-
-  if (formatName) {
-    .formatName(json$name)
-  } else {
-    json$name
-  }
-}
-
-
-
-
-#' Get a concept set expression
-#'
-#' @details
-#' Obtain the JSON expression from WebAPI for a given concept set
-#'
-#' @template ConceptSetId
-#' @template BaseUrl
-#' @param asDataFrame   (OPTIONAL) Get expression as data frame
-#'
-#' @return
-#' A JSON list object representing the concept set
-#'
-#' @examples
-#' \dontrun{
-#' # This will obtain a concept set's JSON expression:
-#'
-#' getConceptSetExpression(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
-#' }
-#'
-#' @export
-getConceptSetExpression <- function(baseUrl, conceptSetId, asDataFrame = FALSE) {
-  .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(conceptSetId, add = errorMessage)
-  checkmate::assertLogical(asDataFrame, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-
-  url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, conceptSetId)
-  json <- httr::GET(url)
-  json <- httr::content(json)
-
-  if (asDataFrame) {
-    .setExpressionToDf(json = json)
-  } else {
-    json
-  }
-}
-
-
-
 .setExpressionToDf <- function(json) {
-
+  
   lists <- lapply(json$items, function(j) {
     as.data.frame(j)
   })
-
+  
   do.call("rbind", lists)
 }
 
-
-
-.getIncludedConceptsDf <- function(baseUrl, vocabSourceKey, includedConcepts) {
-  url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabSourceKey)
+.getIncludedConceptsDf <- function(baseUrl, vocabularySourceKey, includedConcepts) {
+  url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabularySourceKey)
   body <- RJSONIO::toJSON(includedConcepts, digits = 23)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
   req <- httr::content(req)
-
+  
   lists <- lapply(req, function(r) {
     as.data.frame(r)
   })
-
+  
   do.call("rbind", lists)
 }
 
-
-
-.getMappedConceptsDf <- function(baseUrl, vocabSourceKey, includedConcepts) {
-  url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabSourceKey)
+.getMappedConceptsDf <- function(baseUrl, vocabularySourceKey, includedConcepts) {
+  url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabularySourceKey)
   body <- RJSONIO::toJSON(includedConcepts, digits = 23)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
   req <- httr::content(req)
-
+  
   lists <- lapply(req, function(r) {
     modList <- .convertNulltoNA(r)
     as.data.frame(modList, stringsAsFactors = FALSE)
   })
-
+  
   do.call("rbind", lists)
 }
-
-
-
-#' Insert a set of concept sets' concept ids into package
-#'
-#' @param fileName   Name of a CSV file in the inst/settings folder of the package specifying the
-#'                   concept sets to insert. See details for the expected file format.
-#' @template BaseUrl
-#'
-#' @details
-#' The CSV file should have: \describe{ \item{atlasId}{The concept set Id in ATLAS.} }
-#'
-#' @export
-insertConceptSetConceptIdsInPackage <- function(fileName, baseUrl) {
-  .checkBaseUrl(baseUrl)
-
-  conceptSetsToCreate <- readr::read_csv(file.path("inst/settings", fileName), col_types = readr::cols())
-  if (!file.exists("inst/conceptsets")) {
-    dir.create("inst/conceptsets", recursive = TRUE)
-  }
-
-  for (i in 1:nrow(conceptSetsToCreate)) {
-    writeLines(paste("Inserting concept set:", conceptSetsToCreate$atlasId[i]))
-    df <- as.data.frame(getConceptSetConceptIds(baseUrl = baseUrl,
-                                                conceptSetId = conceptSetsToCreate$atlasId[i]))
-    names(df) <- c("CONCEPT_ID")
-    fileConn <- file(file.path("inst/conceptsets",
-                               paste(conceptSetsToCreate$atlasId[i], "csv", sep = ".")))
-    write.csv(x = df, file = fileConn, row.names = FALSE, quote = FALSE)
-  }
-}
-
-
-
-#' Get Concepts from a Concept Set Expression
-#'
-#' @template BaseUrl
-#' @param expression       A JSON string that represents the concept set expression
-#' @param vocabSourceKey   The source key of the Vocabulary. By default, the priority Vocabulary is
-#'                         used.
-#' @return
-#' A list of concept ids
-#'
-#' @examples
-#' \dontrun{
-#' # This will obtain the concept ids from a concept set expression:
-#'
-#' getSetExpressionConceptIds(baseUrl = "http://server.org:80/WebAPI",
-#'                            expression = someJsonExpression)
-#' }
-#'
-#' @export
-getSetExpressionConceptIds <- function(baseUrl, expression, vocabSourceKey = NULL) {
-
-  .checkBaseUrl(baseUrl)
-
-  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
-    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
-  }
-
-  url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabSourceKey)
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  req <- httr::POST(url, body = expression, config = httr::add_headers(httpheader))
-  req <- httr::content(req)
-  unlist(req)
-}
-
-
-
-#' Get Concept Set Concept Ids
-#'
-#' @details
-#' Obtains the full list of concept Ids in a concept set.
-#'
-#' @template BaseUrl
-#' @template ConceptSetId
-#' @param vocabSourceKey   The source key of the Vocabulary. By default, the priority Vocabulary is
-#'                         used.
-#'
-#' @return
-#' A list of concept Ids.
-#'
-#' @export
-getConceptSetConceptIds <- function(baseUrl, conceptSetId, vocabSourceKey = NULL) {
-  .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(conceptSetId, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-
-  if (missing(vocabSourceKey) || is.null(vocabSourceKey)) {
-    vocabSourceKey <- getPriorityVocabKey(baseUrl = baseUrl)
-  }
-
-  expression <- RJSONIO::toJSON(getConceptSetExpression(baseUrl = baseUrl, conceptSetId = conceptSetId),
-                                digits = 23)
-  getSetExpressionConceptIds(baseUrl = baseUrl,
-                             expression = expression,
-                             vocabSourceKey = vocabSourceKey)
-}
-
-
 
 #' Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook
 #'
 #' @param conceptSetIds   A vector of concept set IDs.
-#' @param workFolder      Directory location where the workbook will be saved, defaults to working
-#'                        directory.
+#' @param fileName        The name of the XLSX workbook file.
 #' @template BaseUrl
 #' @param included        Should included concepts be included in the workbook?
 #' @param mapped          Should mapped concepts be included in the workbook?
 #'
 #' @return
-#' A xlsx workbook (conceptSetExpressions.xlsx) that includes a list of all concept set IDs and names
+#' A xlsx workbook that includes a list of all concept set IDs and names
 #' and a worksheet for the concepts in each set. Options to include an included concepts and mapped
-#' concepts worksheet for each concept set are avaialble.
+#' concepts worksheet for each concept set are available.
 #'
 #' @export
 createConceptSetWorkbook <- function(conceptSetIds,
-                                     workFolder = NULL,
+                                     fileName,
                                      baseUrl,
                                      included = FALSE,
                                      mapped = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(conceptSetIds, add = errorMessage)
+  checkmate::assertPathForOutput(fileName, overwrite = TRUE, add = errorMessage)
   checkmate::assertLogical(included, add = errorMessage)
   checkmate::assertLogical(mapped, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
-
-  if (is.null(workFolder))
-    workFolder <- getwd()
-
+  
   if (!is.vector(conceptSetIds))
     stop("conceptSetIds argument must be a numeric vector")
-
-  conceptSetNames <- NULL
-  for (i in conceptSetIds) {
-    conceptSetNames <- c(conceptSetNames,
-                         getConceptSetName(baseUrl = baseUrl, conceptSetId = i, formatName = FALSE))
-  }
-  conceptSets <- data.frame(conceptSetId = conceptSetIds, conceptSetName = conceptSetNames)
-
+  
+  conceptSetDefinitions <- lapply(conceptSetIds, getConceptSetDefinition, baseUrl = baseUrl) 
+  
+  conceptSets <- data.frame(conceptSetId = sapply(conceptSetDefinitions, function(x) x$id), 
+                            conceptSetName = sapply(conceptSetDefinitions, function(x) x$name))
+  
   wb <- openxlsx::createWorkbook()
-  openxlsx::addWorksheet(wb = wb, sheetName = "conceptSetIds")
+  .createSheet(wb = wb,
+               label = "conceptSetIds",
+               contents = conceptSets)
+  
+  for (conceptSetDefinition in conceptSetDefinitions) {
+    .createSheet(wb = wb,
+                 label = sprintf("expression_%s", conceptSetDefinition$id),
+                 contents = convertConceptSetDefinitionToTable(conceptSetDefinition))
+    
+    if (included || mapped) {
+      standardConceptsIds <- resolveConceptSet(conceptSetDefinition, baseUrl)
+      
+      if (included) {
+        .createSheet(wb = wb,
+                     label = sprintf("included_%s", conceptSetDefinition$id),
+                     contents = getConcepts(standardConceptsIds, baseUrl))
+      }
+      
+      if (mapped) {
+        .createSheet(wb = wb,
+                     label = sprintf("mapped_%s", conceptSetDefinition$id),
+                     contents = getSourceConcepts(standardConceptsIds, baseUrl = baseUrl))
+      }
+    }
+  }
+  openxlsx::saveWorkbook(wb = wb, file = fileName, overwrite = TRUE)
+}
+
+.createSheet <- function(wb, label, contents) {
+  openxlsx::addWorksheet(wb = wb, sheetName = label)
   openxlsx::writeDataTable(wb = wb,
-                           sheet = "conceptSetIds",
-                           x = conceptSets,
+                           sheet = label,
+                           x = contents,
                            colNames = TRUE,
                            rowNames = FALSE,
                            withFilter = FALSE)
   openxlsx::setColWidths(wb = wb,
-                         sheet = "conceptSetIds",
-                         cols = 1:ncol(conceptSets),
+                         sheet = label,
+                         cols = 1:ncol(contents),
                          widths = "auto")
-
-  createSheet <- function(fileNumber, label) {
-    concepts <- read.csv(file = substring(files[fileNumber], first = 3),
-                         header = FALSE,
-                         sep = ",",
-                         strip.white = TRUE,
-                         blank.lines.skip = TRUE,
-                         skipNul = TRUE)
-    names(concepts) <- as.character(apply(concepts[1, ], 1, paste))
-    concepts <- concepts[-1, ]
-    openxlsx::addWorksheet(wb = wb, sheetName = paste(label, i, sep = "_"))
-    openxlsx::writeDataTable(wb = wb,
-                             sheet = paste(label, i, sep = "_"),
-                             x = concepts,
-                             colNames = TRUE,
-                             rowNames = FALSE,
-                             withFilter = FALSE)
-    openxlsx::setColWidths(wb = wb,
-                           sheet = paste(label, i, sep = "_"),
-                           cols = 1:ncol(concepts),
-                           widths = "auto")
-  }
-
-  for (i in conceptSetIds) {
-    url <- paste(baseUrl, "conceptset", i, "export", sep = "/")
-    httr::set_config(httr::config(ssl_verifypeer = 0L))
-    r <- httr::GET(url = url)
-    bin <- httr::content(r, "raw")
-    base::writeBin(object = bin, con = file.path(workFolder, paste0(i, "_conceptSet.zip")))
-    files <- utils::unzip(zipfile = file.path(workFolder, paste0(i, "_conceptSet.zip")),
-                          overwrite = TRUE)
-
-    # concept set
-    createSheet(1, "concepts")
-
-    # included concepts
-    if (included)
-      createSheet(2, "included")
-
-    # mapped concepts
-    if (mapped)
-      createSheet(3, "mapped")
-
-    # remove zip
-    file.remove(file.path(workFolder, paste0(i, "_conceptSet.zip")))
-  }
-  file.remove(files[1], files[2], files[3])
-  openxlsx::saveWorkbook(wb = wb, file = file.path(workFolder,
-                                                   "conceptSetExpressions.xlsx"), overwrite = TRUE)
 }
