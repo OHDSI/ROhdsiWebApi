@@ -677,16 +677,12 @@ getCohortResults <- function(cohortId, baseUrl , sourceKey, mode = 0) {
   if (length(json$treemapData) == 0) {
     results$treemapData <- NULL
   } else {
-    results$treemapData <- jsonlite::fromJSON(json$treemapData, simplifyDataFrame = FALSE)
+    treemapData <- jsonlite::fromJSON(json$treemapData, simplifyDataFrame = FALSE)
     
-    # This code wasn't working:
-    # treeMapResult <- list(name = c(), size = c())
-    # treeMapResult <- .flattenTree(treemapData, treeMapResult)
-    # json$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
-    # json$treemapData$size <- as.integer(json$treemapData$size)
-    # json$treemapData$SatisfiedNumber = stringr::str_count(string = json$treemapData$bits, pattern = '1')
-    # json$treemapData$SatisfiedRules = stringr::str_locate_all(string = json$treemaDpData$bits, pattern = '1') %>% 
-    #   paste()
+    treeMapResult <- list(name = c(), size = c())
+    treeMapResult <- .flattenTree(node = treemapData, accumulated = treeMapResult)
+    results$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
+    results$treemapData$SatisfiedNumber = stringr::str_count(string = results$treemapData$bits, pattern = '1')
   }
   return(results)
 }

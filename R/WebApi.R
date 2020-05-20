@@ -25,7 +25,11 @@
   })
   
   if (!success) {
-    stop("Could not reach WebApi. Possibly the base URL is not valid? (please verify it is like http://server.org:80/WebAPI)")
+    stop("Could not reach WebApi. Possibly the base URL is not valid or is not reachable? 
+         Please verify 
+          - is it in the form http://server.org:80/WebAPI,
+          - are you are connected to the network"
+         )
   }
   
   return(success)
