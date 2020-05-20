@@ -17,7 +17,7 @@ before_script:
 
 notifications:
   recipients:
-    - alondhe2@its.jnj.com
+    - gowthamrao@gmail.com
     - schuemie@ohdsi.org
   email:
     on_success: change
