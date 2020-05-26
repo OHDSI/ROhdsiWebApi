@@ -32,7 +32,8 @@ Obtain the characterization definition expression from WebAPI as R-object for a 
 }
 \examples{
 \dontrun{
-getCohortCharacterizationDefinition(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
+getCohortCharacterizationDefinition(characterizationId = 282, 
+                                    baseUrl = "http://server.org:80/WebAPI")
 }
 
 }

@@ -157,7 +157,8 @@ getCohortCharacterizationResults <- function(characterizationId,
 #'
 #' @examples
 #' \dontrun{
-#' getCohortCharacterizationDefinition(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' getCohortCharacterizationDefinition(characterizationId = 282, 
+#'                                     baseUrl = "http://server.org:80/WebAPI")
 #' }
 #'
 #' @export
@@ -201,7 +202,8 @@ getCohortCharacterizationDefinition <- function(characterizationId, baseUrl,gene
 #'
 #' @examples
 #' \dontrun{
-#' deleteCohortCharacterizationDefinition(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' deleteCohortCharacterizationDefinition(characterizationId = 282, 
+#'                                        baseUrl = "http://server.org:80/WebAPI")
 #' }
 #'
 #' @export

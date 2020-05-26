@@ -27,7 +27,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, 
+#'                                                 baseUrl = "http://server.org:80/WebAPI")
 #' }
 #'
 #' @export
@@ -63,7 +64,8 @@ getConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, 
+#'                                                 baseUrl = "http://server.org:80/WebAPI")
 #' conceptIds <- resolveConceptSet(conceptSetDefinition = conceptSetDefinition,
 #'                                 baseUrl = "http://server.org:80/WebAPI")
 #' }
@@ -99,7 +101,8 @@ resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey
 #'
 #' @examples
 #' \dontrun{
-#' conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+#' conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, 
+#'                                                 baseUrl = "http://server.org:80/WebAPI")
 #' convertConceptSetDefinitionToTable(conceptSetDefinition = conceptSetDefinition)
 #' }
 #'

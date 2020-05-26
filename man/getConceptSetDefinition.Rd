@@ -25,7 +25,8 @@ Obtain a concept set from WebAPI.
 }
 \examples{
 \dontrun{
-conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
+conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, 
+                                                baseUrl = "http://server.org:80/WebAPI")
 }
 
 }

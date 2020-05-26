@@ -296,10 +296,11 @@ getMetadataForAllSpecifications <- function(baseUrl) {
 #'                         
 #' @examples
 #' \dontrun{
-# validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)$expression
-# postSpecification(name = 'new name for expression in target',
-#                   baseUrl = "http://server.org:80/WebAPI",
-#                   jsonExpression = validJsonExpression)
+#' validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, 
+#'                                            cohortId = 15873)$expression
+#' postSpecification(name = 'new name for expression in target',
+#'                   baseUrl = "http://server.org:80/WebAPI",
+#'                   jsonExpression = validJsonExpression)
 #' }
 #' @export
 postDefinition <- function(baseUrl, 

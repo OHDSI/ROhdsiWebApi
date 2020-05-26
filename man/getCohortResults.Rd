@@ -31,6 +31,9 @@ Obtains a list with data frame containing details of output for cohort generatio
 }
 \examples{
 \dontrun{
-getCohortGeneratioInformation(cohortId = 282, baseUrl = "http://server.org:80/WebAPI", sourceKey = "HCUP", mode = 1)
+getCohortGeneratioInformation(cohortId = 282, 
+                              baseUrl = "http://server.org:80/WebAPI", 
+                              sourceKey = "HCUP", 
+                              mode = 1)
 }
 }

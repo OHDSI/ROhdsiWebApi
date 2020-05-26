@@ -33,7 +33,8 @@ Deletes cohort characterization definition and results from WebAPI for a given c
 }
 \examples{
 \dontrun{
-deleteCohortCharacterizationDefinition(characterizationId = 282, baseUrl = "http://server.org:80/WebAPI")
+deleteCohortCharacterizationDefinition(characterizationId = 282, 
+                                       baseUrl = "http://server.org:80/WebAPI")
 }
 
 }

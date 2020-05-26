@@ -533,7 +533,10 @@ deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnErro
 #' @return            A list of data frames containing cohort generation report
 #' @examples
 #' \dontrun{
-#' getCohortGeneratioInformation(cohortId = 282, baseUrl = "http://server.org:80/WebAPI", sourceKey = "HCUP", mode = 1)
+#' getCohortGeneratioInformation(cohortId = 282, 
+#'                               baseUrl = "http://server.org:80/WebAPI", 
+#'                               sourceKey = "HCUP", 
+#'                               mode = 1)
 #' }
 #' @export
 getCohortResults <- function(cohortId, baseUrl , sourceKey, mode = 0) {
