@@ -552,18 +552,19 @@ getCohortResults <- function(cohortId, baseUrl , sourceKey, mode = 0) {
   json <- httr::content(json)
   
   results <- list()
-  results$summary <- json$summary %>% tidyr::as_tibble()
+  if (is.null(json$summary$percentMatched)) {
+    json$summary$percentMatched <- 0
+  }
+  results$summary <- json$summary %>%
+    tidyr::as_tibble()
   if (length(json$inclusionRuleStats) == 0) {
     results$inclusionRuleStats <- NULL
+    results$treemapData <- NULL
   } else {
     inclusionRuleStats <- lapply(json$inclusionRuleStats, tibble::as_tibble)
     results$inclusionRuleStats <- do.call("rbind", inclusionRuleStats)
-  }
-  if (length(json$treemapData) == 0) {
-    results$treemapData <- NULL
-  } else {
-    treemapData <- jsonlite::fromJSON(json$treemapData, simplifyDataFrame = FALSE)
     
+    treemapData <- jsonlite::fromJSON(json$treemapData, simplifyDataFrame = FALSE)
     treeMapResult <- list(name = c(), size = c())
     treeMapResult <- .flattenTree(node = treemapData, accumulated = treeMapResult)
     results$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)

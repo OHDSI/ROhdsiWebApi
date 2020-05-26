@@ -81,6 +81,13 @@ test_that("Test getCohortGenerationInformation", {
   expect_gt(nrow(info), 0)
 })
 
+test_that("Test getCohortResults ", {
+  skip_if(baseUrl == "")
+  results <- getCohortResults(1774139, baseUrl = baseUrl, sourceKey = "SYNPUF5PCT")
+  expect_s3_class(info, "data.frame")
+  expect_gt(nrow(info), 0)
+})
+
 # test_that("Test getCohortResults", {
 #   skip_if(baseUrl == "")
 #   info <- getCohortResults(1774139, baseUrl = baseUrl, sourceKey = "SYNPUF5PCT")
