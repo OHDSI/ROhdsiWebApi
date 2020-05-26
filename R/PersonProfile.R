@@ -24,7 +24,7 @@
 #'
 #' @template BaseUrl
 #' @template sourceKey
-#' @param personId       The personId of the person whoose profile is being reviewed
+#' @param personId       The personId of the person whose profile is being reviewed
 #' @param indexCohortId  <OPTIONAL> Do you want to use a particular cohortId as the index cohort?
 #'                       If left NULL, the WebApi will identify the earliest cohort for the person by 
 #'                       cohort start date and use it as the index cohort. 
