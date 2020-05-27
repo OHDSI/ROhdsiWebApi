@@ -79,18 +79,6 @@ getWebApiVersion <- function(baseUrl) {
   (httr::content(json))$version
 }
 
-.getSourceIdFromKey <- function(baseUrl, sourceKey) {
-  .checkBaseUrl(baseUrl)
-  
-  url <- sprintf("%1s/source/%2s", baseUrl, sourceKey)
-  
-  json <- httr::GET(url)
-  json <- httr::content(json)
-  if (is.null(json$sourceId))
-    json$sourceId <- -1
-  json$sourceId
-}
-
 .formatName <- function(name) {
   gsub("_", " ", gsub("\\[(.*?)\\]_", "", gsub(" ", "_", name)))
 }

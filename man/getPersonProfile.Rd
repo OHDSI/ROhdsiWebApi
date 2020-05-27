@@ -14,7 +14,7 @@ If trailing '/' is used, you may receive an error.}
 \item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
 Configuration page}
 
-\item{personId}{The personId of the person whoose profile is being reviewed}
+\item{personId}{The personId of the person whose profile is being reviewed}
 
 \item{indexCohortId}{<OPTIONAL> Do you want to use a particular cohortId as the index cohort?
 If left NULL, the WebApi will identify the earliest cohort for the person by 
