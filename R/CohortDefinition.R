@@ -311,103 +311,97 @@ getCohortDefinitionSql <- function(baseUrl, cohortId, generateStats = TRUE) {
 #' Get cohort generation information
 #'
 #' @details
-#' Obtains cohort generation statuses for a collection of cohort definition Ids and CDM sources.
-#' Useful if running multiple cohort generation jobs that are long-running.
+#' Get information about cohort generation for a given combination of 
+#' sourceKey and cohortId
 #'
 #' @template BaseUrl
-#' @param cohortIds       A list of cohortIds
-#' @param sourceKeys      (OPTIONAL) A list of CDM source keys. These can be found in Atlas ->
-#'                        Configure. Otherwise, all CDM source keys will be used.
+#' @template CohortId
+#' @template SourceKey
 #'
 #' @return
-#' A data frame of cohort generation statuses, start times, and execution durations per definition id
-#' and source key.
+#' A data frame of cohort generation statuses, start times, and execution durations.
 #'
 #' @export
-getCohortGenerationInformation <- function(cohortIds, baseUrl, sourceKeys = NULL) {
+getCohortGenerationInformation <- function(cohortId, baseUrl, sourceKey) {
   .checkBaseUrl(baseUrl)
+  cdmDataSources <- getCdmSources(baseUrl)
+  
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(cohortIds, add = errorMessage)
+  checkmate::assertIntegerish(cohortId, add = errorMessage)
+  checkmate::assertCharacter(sourceKey, min.len = 1, max.len = 1, add = errorMessage)
+  checkmate::assertNames(sourceKey, 
+                         subset.of = cdmDataSources %>% 
+                           dplyr::select(sourceKey) %>% 
+                           dplyr::distinct() %>% 
+                           dplyr::pull(),
+                         add = errorMessage
+  )
   checkmate::reportAssertions(errorMessage)
-
-  checkSourceKeys <- function(baseUrl, sourceKeys) {
-    sourceIds <- lapply(X = sourceKeys, .getSourceIdFromKey, baseUrl = baseUrl)
-    return(!(-1 %in% sourceIds))
-  }
-
-  if (missing(sourceKeys)) {
-    sourceKeys <- (getCdmSources(baseUrl = baseUrl))$sourceKey
-  }
-
-  if (!checkSourceKeys(baseUrl = baseUrl, sourceKeys = sourceKeys)) {
-    stop("One or more source keys is invalid, please check Atlas -> Configure page.")
-  }
-
-  cohortIds <- as.integer(cohortIds)
-  tuples <- list(cohortIds, sourceKeys)
-  df <- expand.grid(tuples, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-  colnames(df) <- c("cohortId", "sourceKey")
   
-  getCohortName <- function(cohortId) {
-    return(tibble::tibble(cohortId = cohortId,
-                          name = getCohortDefinition(cohortId = cohortId, 
-                                                     baseUrl = baseUrl)$name))
-  }
-  cohortNames <- do.call("rbind", (lapply(cohortIds, getCohortName)))
-  df <- merge(df, cohortNames)
+  sourceId <- cdmDataSources %>% 
+              dplyr::filter(sourceKey == !!sourceKey) %>% 
+              dplyr::select(sourceId) %>% 
+              dplyr::distinct() %>% 
+              dplyr::pull()
   
-  getGenerationInformation <- function(row) {
-    result <- .getCohortGenerationStatus(baseUrl = baseUrl,
-                                         cohortId = row$cohortId,
-                                         sourceKey = row$sourceKey)
-
-    return(tibble::tibble(sourceKey = row$sourceKey,
-                          cohortId = row$cohortId,
-                          definitionName = row$name,
-                          status = result$status,
-                          startTime = result$startTime,
-                          executionDuration = result$executionDuration,
-                          personCount = result$personCount))
-  }
-  results <- lapply(split(df, 1:nrow(df)), getGenerationInformation)
-  results <- do.call("rbind", results)
-  return(results)
-}
-
-.getCohortGenerationStatus <- function(baseUrl, cohortId, sourceKey) {
-
-  .checkBaseUrl(baseUrl)
-
-  sourceId <- .getSourceIdFromKey(baseUrl = baseUrl, sourceKey = sourceKey)
-
+  cohortDefinition <- getCohortDefinition(baseUrl = baseUrl, cohortId = cohortId)
+  cohortName <- cohortDefinition$name
+  
   url <- sprintf("%1s/cohortdefinition/%2s/info", baseUrl, cohortId)
-
   response <- httr::GET(url)
-  response <- httr::content(response)
-
-  if (length(response) == 0) {
-    return(list(status = "NA", startTime = "NA", executionDuration = "NA", personCount = "NA"))
+  
+  if (!response$status_code %in% c(100,200)) {
+        stop('No Cohort generation information found.')
   }
-
-  json <- response[sapply(response, function(j) j$id$sourceId == sourceId)]
-  if (length(json) == 0) {
-    return(list(status = "NA", startTime = "NA", executionDuration = "NA", personCount = "NA"))
-  }
-
-  return(list(status = json[[1]]$status,
-              startTime = .millisecondsToDate(milliseconds = json[[1]]$startTime),
-              executionDuration = ifelse(is.null(json[[1]]$executionDuration),
-                                         "NA",
-                                         json[[1]]$executionDuration),
-              personCount = ifelse(is.null(json[[1]]$personCount), "NA", json[[1]]$personCount)))
+  
+  response <- httr::content(response)[[1]] %>%
+    unlist(recursive = TRUE, use.names = TRUE) %>%
+    as.matrix() %>%
+    t() %>%
+    tidyr::as_tibble() %>%
+    dplyr::mutate_if(integerCharacters, as.integer) %>%
+    dplyr::mutate_if(numericCharacters, as.numeric) %>%
+    dplyr::mutate_if(logicalCharacters, as.logical) %>%
+    dplyr::mutate(cohortId = cohortId,
+                  cohortName = cohortName) %>%
+    dplyr::mutate(startTime = millisecondsToDate(milliseconds = startTime))
+  
+  return(response)
 }
 
 
 
-.invokeCohortGeneration <- function(baseUrl, sourceKey, cohortId) {
-  result <- .getCohortGenerationStatus(baseUrl = baseUrl,
-                                       sourceKey = sourceKey,
-                                       cohortId = cohortId)
+#' Invoke the generation of cohort
+#'
+#' @details
+#' Invokes the generation of a cohort for a given combination of sourceKey and
+#' cohortId. Use \code{getCohortGenerationStatus} to check the progress.
+#'
+#' @template BaseUrl
+#' @template CohortId
+#' @template SourceKey
+#'
+#' @export
+invokeCohortGeneration <- function(baseUrl, sourceKey, cohortId) {
+  .checkBaseUrl(baseUrl)
+  cdmDataSources <- getCdmSources(baseUrl)
+  
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertLogical(generateStats, add = errorMessage)
+  checkmate::assertIntegerish(cohortId, add = errorMessage)
+  checkmate::assertCharacter(sourceKey, min.len = 1, max.len = 1, add = errorMessage)
+  checkmate::assertNames(sourceKey, 
+                         subset.of = cdmDataSources %>% 
+                           dplyr::select(sourceKey) %>% 
+                           dplyr::distinct() %>% 
+                           dplyr::pull(),
+                         add = errorMessage
+  )
+  checkmate::reportAssertions(errorMessage)
+  
+  result <- getCohortGenerationInformation(baseUrl = baseUrl,
+                                           sourceKey = sourceKey,
+                                           cohortId = cohortId)
   if (result$status %in% c("STARTING", "STARTED", "RUNNING")) {
     result$status
   } else {
@@ -418,51 +412,6 @@ getCohortGenerationInformation <- function(cohortIds, baseUrl, sourceKeys = NULL
   }
 }
 
-#' Invoke the generation of a set of cohort definitions
-#'
-#' @details
-#' Invokes the generation of a set of cohort definitions across a set of CDMs set up in WebAPI. Use
-#' \code{getCohortGenerationStatuses} to check the progress of the set.
-#'
-#' @template BaseUrl
-#' @param cohortIds           A list of cohortIds
-#' @param sourceKeys          A list of sourceKeys
-#'
-#' @export
-invokeCohortSetGeneration <- function(baseUrl, sourceKeys, cohortIds) {
-  .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(cohortIds, add = errorMessage)
-  checkmate::assertCharacter(sourceKeys, min.len = 1, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-
-  checkSourceKeys <- function(baseUrl, sourceKeys) {
-    sourceIds <- lapply(X = sourceKeys, .getSourceIdFromKey, baseUrl = baseUrl)
-    return(!(-1 %in% sourceIds))
-  }
-
-  if (!checkSourceKeys(baseUrl = baseUrl, sourceKeys = sourceKeys)) {
-    stop("One or more source keys is invalid, please check Atlas -> Configure page.")
-  }
-
-  tuples <- list(cohortIds, sourceKeys)
-  df <- expand.grid(tuples, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-  colnames(df) <- c("cohortId", "sourceKey")
-
-  statuses <- apply(X = df, MARGIN = 1, function(row) {
-    list(sourceKey = row["sourceKey"],
-         cohortId = as.integer(row["cohortId"]),
-         definitionName = getCohortDefinition(baseUrl = baseUrl,
-                                              cohortId = as.integer(row["cohortId"])$name),
-         result = .invokeCohortGeneration(baseUrl = baseUrl,
-                                          sourceKey = row["sourceKey"],
-                                          cohortId = as.integer(row["cohortId"])))
-  })
-
-  df <- do.call(rbind, lapply(statuses, data.frame, stringsAsFactors = FALSE))
-  rownames(df) <- c()
-  df
-}
 
 #' Delete a cohort definition
 #'
@@ -550,28 +499,43 @@ getCohortResults <- function(cohortId, baseUrl , sourceKey, mode = 0) {
   checkmate::assertInt(mode, lower = 0, upper = 1)
   checkmate::reportAssertions(errorMessage)
   
-  url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=", baseUrl, cohortId, sourceKey, mode)
-  json <- httr::GET(url)
-  json <- httr::content(json)
+  cohortGenerationInformation <-
+    getCohortGenerationInformation(baseUrl = baseUrl,
+                                   sourceKey = sourceKey,
+                                   cohortId = cohortId)
   
-  results <- list()
-  if (is.null(json$summary$percentMatched)) {
-    json$summary$percentMatched <- 0
-  }
-  results$summary <- json$summary %>%
-    tidyr::as_tibble()
-  if (length(json$inclusionRuleStats) == 0) {
-    results$inclusionRuleStats <- NULL
-    results$treemapData <- NULL
-  } else {
-    inclusionRuleStats <- lapply(json$inclusionRuleStats, tibble::as_tibble)
-    results$inclusionRuleStats <- do.call("rbind", inclusionRuleStats)
+  if (cohortGenerationInformation$status == 'COMPLETE') {
+    url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=", baseUrl, cohortId, sourceKey, mode)
+    json <- httr::GET(url)
+    json <- httr::content(json)
     
-    treemapData <- jsonlite::fromJSON(json$treemapData, simplifyDataFrame = FALSE)
-    treeMapResult <- list(name = c(), size = c())
-    treeMapResult <- .flattenTree(node = treemapData, accumulated = treeMapResult)
-    results$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
-    results$treemapData$SatisfiedNumber = stringr::str_count(string = results$treemapData$bits, pattern = '1')
+    results <- list()
+    if (is.null(json$summary$percentMatched)) {
+      json$summary$percentMatched <- 0
+    }
+    results$summary <- json$summary %>%
+      tidyr::as_tibble()
+    if (length(json$inclusionRuleStats) == 0) {
+      results$inclusionRuleStats <- NULL
+      results$treemapData <- NULL
+    } else {
+      inclusionRuleStats <- lapply(json$inclusionRuleStats, tibble::as_tibble)
+      results$inclusionRuleStats <- do.call("rbind", inclusionRuleStats)
+      
+      treemapData <- jsonlite::fromJSON(json$treemapData, simplifyDataFrame = FALSE)
+      treeMapResult <- list(name = c(), size = c())
+      treeMapResult <- .flattenTree(node = treemapData, accumulated = treeMapResult)
+      results$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
+      results$treemapData$SatisfiedNumber = stringr::str_count(string = results$treemapData$bits, pattern = '1')
+    }
+    return(results)
+  } else if (cohortGenerationInformation$status %in% c("STARTING", "STARTED", "RUNNING")) {
+    STOP(paste('Cohort generation not complete. Status is reported to be ', 
+                cohortGenerationInformation$status,
+               'please wait till generation status is COMPLETE.'
+               )
+    )
+  } else {
+    STOP('No results found. Cohort generation may not have been invoked.')
   }
-  return(results)
 }
