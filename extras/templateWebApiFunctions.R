@@ -13,8 +13,9 @@
 #' returned as text/character.
 #' 
 #' @examples 
+#' \dontrun{
 #' %functionNameDefinitionsMetaData%(baseUrl = "http://server.org:80/WebAPI")
-#' 
+#' }
 #' @export
 %functionNameDefinitionsMetaData% <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
@@ -41,8 +42,9 @@
 #' will return a list of ids that are no valid.
 #' 
 #' @examples 
+#' \dontrun{
 #' %functionNameIsValid%(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
-#' 
+#' }
 #' @export
 %functionNameIsValid% <- function(baseUrl, ids, verbose = FALSE) {
   .checkBaseUrl(baseUrl)

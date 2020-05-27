@@ -28,6 +28,7 @@ Checks if a set of id for a Estimation is valid, i.e. checks if all the ids exis
 i.e. valid.
 }
 \examples{
+\dontrun{
 isValidEstimationId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
-
+}
 }

@@ -359,12 +359,12 @@ getCohortGenerationInformation <- function(cohortId, baseUrl, sourceKey) {
     as.matrix() %>%
     t() %>%
     tidyr::as_tibble() %>%
-    dplyr::mutate_if(integerCharacters, as.integer) %>%
-    dplyr::mutate_if(numericCharacters, as.numeric) %>%
-    dplyr::mutate_if(logicalCharacters, as.logical) %>%
+    dplyr::mutate_if(.integerCharacters, as.integer) %>%
+    dplyr::mutate_if(.numericCharacters, as.numeric) %>%
+    dplyr::mutate_if(.logicalCharacters, as.logical) %>%
     dplyr::mutate(cohortId = cohortId,
                   cohortName = cohortName) %>%
-    dplyr::mutate(startTime = millisecondsToDate(milliseconds = startTime))
+    dplyr::mutate(startTime = .millisecondsToDate(milliseconds = startTime))
   
   return(response)
 }

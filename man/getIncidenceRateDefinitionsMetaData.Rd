@@ -24,6 +24,7 @@ object, etc. from WebApi for IncidenceRate. This function is useful to retrieve 
 IncidenceRate specifications.
 }
 \examples{
+\dontrun{
 getIncidenceRateDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-
+}
 }

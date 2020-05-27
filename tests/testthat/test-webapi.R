@@ -84,7 +84,7 @@ test_that("Test getCohortDefinition", {
 
 test_that("Test getCohortGenerationInformation", {
   skip_if(baseUrl == "")
-  info <- getCohortGenerationInformation(1774139, baseUrl = baseUrl)
+  info <- getCohortGenerationInformation(1774139, baseUrl = baseUrl, sourceKey = "SYNPUF5PCT")
   expect_s3_class(info, "data.frame")
   expect_gt(nrow(info), 0)
 })
@@ -101,18 +101,5 @@ test_that("Test getCohortDefinitionSql", {
   sql <- getCohortDefinitionSql(1774139, baseUrl = baseUrl)
   expect_type(sql, "character")
 })
-
-test_that("Test getMetadataForAllSpecifications", {
-  skip_if(baseUrl == "")
-  metaData <- getMetadataForAllSpecifications( baseUrl = baseUrl)
-  expect_s3_class(metaData, "data.frame")
-})
-
-# test_that("Test getCohortResults", {
-#   skip_if(baseUrl == "")
-#   info <- getCohortResults(1774139, baseUrl = baseUrl, sourceKey = "SYNPUF5PCT")
-#   expect_s3_class(info, "data.frame")
-#   expect_gt(nrow(info), 0)
-# })
 
 # TODO: add cohort characterization and incidence rates

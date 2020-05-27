@@ -28,6 +28,7 @@ Checks if a set of id for a Cohort is valid, i.e. checks if all the ids exists i
 valid.
 }
 \examples{
+\dontrun{
 isValidCohortId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
-
+}
 }

@@ -24,6 +24,7 @@ object, etc. from WebApi for ConceptSet. This function is useful to retrieve the
 specifications.
 }
 \examples{
+\dontrun{
 getConceptSetDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-
+}
 }

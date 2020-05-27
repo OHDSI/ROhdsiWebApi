@@ -24,6 +24,7 @@ object, etc. from WebApi for Estimation. This function is useful to retrieve the
 specifications.
 }
 \examples{
+\dontrun{
 getEstimationDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-
+}
 }

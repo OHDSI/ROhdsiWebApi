@@ -24,6 +24,7 @@ object, etc. from WebApi for Characterization. This function is useful to retrie
 Characterization specifications.
 }
 \examples{
+\dontrun{
 getCharacterizationDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-
+}
 }

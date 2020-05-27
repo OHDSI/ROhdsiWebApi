@@ -24,6 +24,7 @@ object, etc. from WebApi for Cohort. This function is useful to retrieve the cur
 specifications.
 }
 \examples{
+\dontrun{
 getCohortDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-
+}
 }

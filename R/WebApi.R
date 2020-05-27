@@ -286,7 +286,6 @@ getWebApiDefinitionsMetadata <- function(baseUrl, categories) {
 #' @return            This function will return a dataframe object with one row
 #'                    describing the posted WebApi expression and its details.
 #'                    If unsuccessful a STOP message will be shown.
-#'                    See \code{\link{getMetadataForAllSpecifications}}. 
 #'                         
 #' @examples
 #' \dontrun{

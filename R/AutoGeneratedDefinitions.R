@@ -33,8 +33,9 @@
 #' as text/character.
 #'
 #' @examples
+#' \dontrun{
 #' getConceptSetDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-#'
+#' }
 #' @export
 getConceptSetDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
@@ -57,8 +58,9 @@ getConceptSetDefinitionsMetaData <- function(baseUrl) {
 #' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
+#' \dontrun{
 #' isValidConceptSetId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
-#'
+#' }
 #' @export
 isValidConceptSetId <- function(baseUrl, ids, verbose = FALSE) {
   .checkBaseUrl(baseUrl)
@@ -96,8 +98,9 @@ isValidConceptSetId <- function(baseUrl, ids, verbose = FALSE) {
 #' text/character.
 #'
 #' @examples
+#' \dontrun{
 #' getCohortDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-#'
+#' }
 #' @export
 getCohortDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
@@ -120,8 +123,9 @@ getCohortDefinitionsMetaData <- function(baseUrl) {
 #' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
+#' \dontrun{
 #' isValidCohortId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
-#'
+#' }
 #' @export
 isValidCohortId <- function(baseUrl, ids, verbose = FALSE) {
   .checkBaseUrl(baseUrl)
@@ -159,8 +163,9 @@ isValidCohortId <- function(baseUrl, ids, verbose = FALSE) {
 #' returned as text/character.
 #'
 #' @examples
+#' \dontrun{
 #' getIncidenceRateDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-#'
+#' }
 #' @export
 getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
@@ -183,8 +188,9 @@ getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
 #' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
+#' \dontrun{
 #' isValidIncidenceRateId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
-#'
+#' }
 #' @export
 isValidIncidenceRateId <- function(baseUrl, ids, verbose = FALSE) {
   .checkBaseUrl(baseUrl)
@@ -222,8 +228,9 @@ isValidIncidenceRateId <- function(baseUrl, ids, verbose = FALSE) {
 #' as text/character.
 #'
 #' @examples
+#' \dontrun{
 #' getEstimationDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-#'
+#' }
 #' @export
 getEstimationDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
@@ -246,8 +253,9 @@ getEstimationDefinitionsMetaData <- function(baseUrl) {
 #' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
+#' \dontrun{
 #' isValidEstimationId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
-#'
+#' }
 #' @export
 isValidEstimationId <- function(baseUrl, ids, verbose = FALSE) {
   .checkBaseUrl(baseUrl)
@@ -285,8 +293,9 @@ isValidEstimationId <- function(baseUrl, ids, verbose = FALSE) {
 #' as text/character.
 #'
 #' @examples
+#' \dontrun{
 #' getPredictionDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-#'
+#' }
 #' @export
 getPredictionDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
@@ -309,8 +318,9 @@ getPredictionDefinitionsMetaData <- function(baseUrl) {
 #' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
+#' \dontrun{
 #' isValidPredictionId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
-#'
+#' }
 #' @export
 isValidPredictionId <- function(baseUrl, ids, verbose = FALSE) {
   .checkBaseUrl(baseUrl)
@@ -348,8 +358,9 @@ isValidPredictionId <- function(baseUrl, ids, verbose = FALSE) {
 #' returned as text/character.
 #'
 #' @examples
+#' \dontrun{
 #' getCharacterizationDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-#'
+#' }
 #' @export
 getCharacterizationDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
@@ -372,8 +383,9 @@ getCharacterizationDefinitionsMetaData <- function(baseUrl) {
 #' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
+#' \dontrun{
 #' isValidCharacterizationId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
-#'
+#' }
 #' @export
 isValidCharacterizationId <- function(baseUrl, ids, verbose = FALSE) {
   .checkBaseUrl(baseUrl)
@@ -411,8 +423,9 @@ isValidCharacterizationId <- function(baseUrl, ids, verbose = FALSE) {
 #' text/character.
 #'
 #' @examples
+#' \dontrun{
 #' getPathwayDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-#'
+#' }
 #' @export
 getPathwayDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
@@ -435,8 +448,9 @@ getPathwayDefinitionsMetaData <- function(baseUrl) {
 #' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
+#' \dontrun{
 #' isValidPathwayId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
-#'
+#' }
 #' @export
 isValidPathwayId <- function(baseUrl, ids, verbose = FALSE) {
   .checkBaseUrl(baseUrl)

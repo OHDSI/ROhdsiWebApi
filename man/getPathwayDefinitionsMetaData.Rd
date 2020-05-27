@@ -24,6 +24,7 @@ object, etc. from WebApi for Pathway. This function is useful to retrieve the cu
 specifications.
 }
 \examples{
+\dontrun{
 getPathwayDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-
+}
 }

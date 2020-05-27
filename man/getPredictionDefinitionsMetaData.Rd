@@ -24,6 +24,7 @@ object, etc. from WebApi for Prediction. This function is useful to retrieve the
 specifications.
 }
 \examples{
+\dontrun{
 getPredictionDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
-
+}
 }
