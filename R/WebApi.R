@@ -132,7 +132,8 @@ getCdmSources <- function(baseUrl) {
         }
       }
     }
-    tibble::tibble(sourceName = s$sourceName,
+    tibble::tibble(sourceId = s$sourceId,
+                   sourceName = s$sourceName,
                    sourceKey = s$sourceKey,
                    sourceDialect = s$sourceDialect,
                    cdmDatabaseSchema = cdmDatabaseSchema,
