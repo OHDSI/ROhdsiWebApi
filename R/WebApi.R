@@ -313,7 +313,7 @@ postDefinition <- function(baseUrl,
   checkmate::assertCharacter(category, add = errorMessage)
   checkmate::assertNames(x = category, subset.of =validCategories )
   checkmate::assertList(x = object, 
-                        types = c('character', 'list'), 
+                        types = c('character', 'list', 'integer', 'numeric'), 
                         any.missing = FALSE,
                         null.ok = FALSE, 
                         add = errorMessage
@@ -322,7 +322,7 @@ postDefinition <- function(baseUrl,
   
   # change category names to comply with difference in webApi
   if (category == 'incidenceRate') {
-    categoryWebApi <- 'iranalysis'
+    categoryWebApi <- 'ir/design'
   } else if (category == 'conceptSet') {
     categoryWebApi <- 'conceptset'
   } else if (category == 'cohort') {
