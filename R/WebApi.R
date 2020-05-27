@@ -143,7 +143,11 @@ getCdmSources <- function(baseUrl) {
   return(dplyr::bind_rows(sourceDetails))
 }
 
+
 #' Retrieve the meta data of all WebApi definitions
+#' 
+#' @param categories        These are the categories in WebApi. The valid options are conceptSet, 
+#'                          cohort, incidenceRate, estimation, prediction, characterization, pathway.
 #'
 #' @details
 #' Obtains the meta data of WebApi specifications such as id, name, created/modified 
@@ -159,92 +163,93 @@ getCdmSources <- function(baseUrl) {
 #' 
 #' @examples
 #' \dontrun{
-#' getMetadataForAllSpecifications(baseUrl = "http://server.org:80/WebAPI")
+#' getWebApiDefinitionsMetadata(baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' 
 #' @export
-getMetadataForAllSpecifications <- function(baseUrl) {
+getWebApiDefinitionsMetadata <- function(baseUrl, categories) {
   .checkBaseUrl(baseUrl)
-  
-  categories <- c('conceptSet',
-                  'cohort',
-                  'incidenceRate',
-                  'estimation',
-                  'prediction')
-  listOfIds <- list()
-  for (i in (1:length(categories))) {
-    #categoryUrl crosswalks standard category names to 
-    #names of the category used in WebApi end point.
-    category <- categories[[i]]
-    if (category == 'conceptSet') 
-    {
-      categoryUrl = 'conceptset'
-    } else if (category == 'cohort') 
-    {
-      categoryUrl = 'cohortdefinition'
-    } else if (category == 'incidenceRate') 
-    {
-      categoryUrl = 'ir'
-    } else if (category == 'estimation') 
-    {
-      categoryUrl = 'estimation'
-    } else if (category == 'prediction') 
-    {
-      categoryUrl = 'prediction'
-    }
-    
-    url <- paste(baseUrl, categoryUrl, '?size=100000000', sep = "/")
-    request <- httr::GET(url)
-    httr::stop_for_status(request)
-    listOfIds[[category]] <- httr::content(request) %>%
-      purrr::map(function(x)
-        purrr::map(x, function(y)
-          ifelse(is.null(y), NA, y))) %>% # convert NULL to NA in list
-      dplyr::bind_rows() %>%
-      dplyr::mutate(category = category) %>%
-      dplyr::mutate(createdDate = as.character(createdDate),
-                    modifiedDate = as.character(modifiedDate))
-  }
   
   # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis'
   # the return are nested within 'content'
-  categories <- c('characterization',
-                  'pathway')
-  for (i in (1:length(categories))) {
+  # group1 and group2 are categories that are different based on how WebApi is implemented.
+  group1 <- c('conceptSet','cohort','incidenceRate','estimation','prediction')
+  group2 <- c('characterization','pathway')
+  
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertCharacter(categories, min.len = 1, add = errorMessage)
+  checkmate::assertNames(x = categories, subset.of = c(group1, group2) )
+  checkmate::reportAssertions(errorMessage)
+  
+  listOfIds <- list()
+  for (i in length(categories)) {
     category <- categories[[i]]
-    if (category == 'characterization') 
-    {
-      categoryUrl = 'cohort-characterization'
-    } else if (category == 'pathway') 
-    {
-      categoryUrl = 'pathway-analysis'
-    }
-    url <-
-      paste(baseUrl, categoryUrl, '?size=100000000', sep = "/")
-    request <- httr::GET(url)
-    httr::stop_for_status(request)
-    listOfIds[[category]] <-
-      httr::content(request)$content %>%
-      purrr::map(function(x)
-        purrr::map(x, function(y)
-          ifelse(is.null(y), NA, y))) %>%  # convert NULL to NA in list
-      dplyr::bind_rows()
-    
-    if (category == 'characterization') {
+    if (category %in% group1) {
+      if (category == 'conceptSet') 
+      {
+        categoryUrl = 'conceptset'
+      } else if (category == 'cohort') 
+      {
+        categoryUrl = 'cohortdefinition'
+      } else if (category == 'incidenceRate') 
+      {
+        categoryUrl = 'ir'
+      } else if (category == 'estimation') 
+      {
+        categoryUrl = 'estimation'
+      } else if (category == 'prediction') 
+      {
+        categoryUrl = 'prediction'
+      }
+      
+      url <- paste(baseUrl, categoryUrl, '?size=100000000', sep = "/")
+      request <- httr::GET(url)
+      httr::stop_for_status(request)
+      listOfIds[[category]] <- httr::content(request) %>%
+        purrr::map(function(x)
+          purrr::map(x, function(y)
+            ifelse(is.null(y), NA, y))) %>% # convert NULL to NA in list
+        dplyr::bind_rows() %>%
+        dplyr::mutate(category = category) %>%
+        dplyr::mutate(createdDate = as.character(createdDate),
+                      modifiedDate = as.character(modifiedDate))
+      
+    } else if (category %in% group2) {
+      if (category == 'characterization') 
+      {
+        categoryUrl = 'cohort-characterization'
+      } else if (category == 'pathway') 
+      {
+        categoryUrl = 'pathway-analysis'
+      }
+      
+      url <- paste(baseUrl, categoryUrl, '?size=100000000', sep = "/")
+      request <- httr::GET(url)
+      httr::stop_for_status(request)
+      listOfIds[[category]] <-
+        httr::content(request)$content %>%
+        purrr::map(function(x)
+          purrr::map(x, function(y)
+            ifelse(is.null(y), NA, y))) %>%  # convert NULL to NA in list
+        dplyr::bind_rows()
+      
+      if (category == 'characterization') {
+        listOfIds[[category]] <-
+          listOfIds[[category]] %>%
+          dplyr::rename(
+            createdDate = createdAt,
+            modifiedDate = updatedAt,
+            modifiedBy = updatedBy
+          )
+      }
+      
       listOfIds[[category]] <-
         listOfIds[[category]] %>%
-        dplyr::rename(
-          createdDate = createdAt,
-          modifiedDate = updatedAt,
-          modifiedBy = updatedBy
-        )
+        dplyr::mutate(category = category) %>%
+        dplyr::mutate(createdDate = as.character(createdDate),
+                      modifiedDate = as.character(modifiedDate))
+      
     }
-    
-    listOfIds[[category]] <-
-      listOfIds[[category]] %>%
-      dplyr::mutate(category = category) %>%
-      dplyr::mutate(createdDate = as.character(createdDate),
-                    modifiedDate = as.character(modifiedDate))
   }
   # to do: createdDate and modifiedDate are in character format. Need to make them date/time.
   # but this does not appear to be consistent.

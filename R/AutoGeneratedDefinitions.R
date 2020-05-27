@@ -38,7 +38,7 @@
 #' @export
 getConceptSetDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiMetadata(baseUrl = baseUrl, categories = c("conceptSet")))
+  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("conceptSet")))
 }
 
 
@@ -68,7 +68,7 @@ isValidConceptSetId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiMetadata(baseUrl = baseUrl, categories = c("conceptSet"))
+  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("conceptSet"))
 
   invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
 
@@ -101,7 +101,7 @@ isValidConceptSetId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getCohortDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiMetadata(baseUrl = baseUrl, categories = c("cohort")))
+  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("cohort")))
 }
 
 
@@ -131,7 +131,7 @@ isValidCohortId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiMetadata(baseUrl = baseUrl, categories = c("cohort"))
+  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("cohort"))
 
   invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
 
@@ -164,7 +164,7 @@ isValidCohortId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiMetadata(baseUrl = baseUrl, categories = c("incidenceRate")))
+  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("incidenceRate")))
 }
 
 
@@ -194,7 +194,7 @@ isValidIncidenceRateId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiMetadata(baseUrl = baseUrl, categories = c("incidenceRate"))
+  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("incidenceRate"))
 
   invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
 
@@ -227,7 +227,7 @@ isValidIncidenceRateId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getEstimationDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiMetadata(baseUrl = baseUrl, categories = c("estimation")))
+  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("estimation")))
 }
 
 
@@ -257,7 +257,7 @@ isValidEstimationId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiMetadata(baseUrl = baseUrl, categories = c("estimation"))
+  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("estimation"))
 
   invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
 
@@ -290,7 +290,7 @@ isValidEstimationId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getPredictionDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiMetadata(baseUrl = baseUrl, categories = c("prediction")))
+  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("prediction")))
 }
 
 
@@ -320,7 +320,7 @@ isValidPredictionId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiMetadata(baseUrl = baseUrl, categories = c("prediction"))
+  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("prediction"))
 
   invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
 
@@ -353,7 +353,7 @@ isValidPredictionId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getCharacterizationDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiMetadata(baseUrl = baseUrl, categories = c("characterization")))
+  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("characterization")))
 }
 
 
@@ -383,7 +383,7 @@ isValidCharacterizationId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiMetadata(baseUrl = baseUrl, categories = c("characterization"))
+  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("characterization"))
 
   invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
 
@@ -416,7 +416,7 @@ isValidCharacterizationId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getPathwayDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiMetadata(baseUrl = baseUrl, categories = c("pathway")))
+  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("pathway")))
 }
 
 
@@ -446,7 +446,7 @@ isValidPathwayId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiMetadata(baseUrl = baseUrl, categories = c("pathway"))
+  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("pathway"))
 
   invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
 

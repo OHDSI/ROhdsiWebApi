@@ -18,7 +18,7 @@
 #' @export
 %functionNameDefinitionsMetaData% <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiMetadata(baseUrl = baseUrl,
+  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl,
                            categories = c("%category%")
                            )
          )
@@ -52,7 +52,7 @@
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  validIds <- getWebApiMetadata(baseUrl = baseUrl,
+  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl,
                                 categories = c("%category%")
   )
   
