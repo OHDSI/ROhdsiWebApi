@@ -173,7 +173,7 @@ getCohortCharacterizationDefinition <- function(characterizationId, baseUrl,gene
   checkmate::reportAssertions(errorMessage)
   
   if (is.null(generationId)) {
-    url <- sprintf("%s/cohort-characterization/%d/design", baseUrl, characterizationId)
+    url <- sprintf("%s/cohort-characterization/%d/export", baseUrl, characterizationId)
   } else {
     url <- sprintf("%s/cohort-characterization/generation/%d/design", baseUrl, generationId)
   }
