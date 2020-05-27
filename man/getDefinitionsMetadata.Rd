@@ -25,7 +25,9 @@ Retrieve the meta data of all WebApi definitions
 Obtains the meta data of WebApi specifications such as id, name, created/modified 
 details, hash object, etc. The following function categories are supported. 
 Concept-set, Cohort-definition, Cohort-characterization, Pathway-analysis, Incidence rate (ir), 
-estimation and prediction. This function is useful to retrieve the current specifications.
+estimation and prediction. They should be referenced using string 
+'conceptSet','cohort', 'characterization', 'pathway', 'incidenceRate', 'estimation','prediction' 
+ only. This function is useful to retrieve the current specifications.
 }
 \examples{
 \dontrun{
