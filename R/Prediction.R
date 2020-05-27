@@ -1,4 +1,4 @@
-# @file CohortCharacterization
+# @file Prediction
 #
 # Copyright 2020 Observational Health Data Sciences and Informatics
 #
