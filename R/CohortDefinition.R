@@ -340,13 +340,12 @@ getCohortGenerationInformation <- function(cohortId, baseUrl, sourceKey) {
   
   sourceId <- cdmDataSources %>% 
               dplyr::filter(sourceKey == !!sourceKey) %>% 
-              dplyr::select(sourceId) %>% 
+              dplyr::select(.data$sourceId) %>% 
               dplyr::distinct() %>% 
               dplyr::pull()
   
   cohortDefinition <- getCohortDefinition(baseUrl = baseUrl, cohortId = cohortId)
-  cohortName <- cohortDefinition$name
-  
+
   url <- sprintf("%1s/cohortdefinition/%2s/info", baseUrl, cohortId)
   response <- httr::GET(url)
   
@@ -362,9 +361,9 @@ getCohortGenerationInformation <- function(cohortId, baseUrl, sourceKey) {
     dplyr::mutate_if(.integerCharacters, as.integer) %>%
     dplyr::mutate_if(.numericCharacters, as.numeric) %>%
     dplyr::mutate_if(.logicalCharacters, as.logical) %>%
-    dplyr::mutate(cohortId = cohortId,
-                  cohortName = cohortName) %>%
-    dplyr::mutate(startTime = .millisecondsToDate(milliseconds = startTime))
+    dplyr::mutate(cohortId = !!cohortId,
+                  cohortName = !!cohortDefinition$name) %>%
+    dplyr::mutate(startTime = .millisecondsToDate(milliseconds = .data$startTime))
   
   return(response)
 }
@@ -387,7 +386,6 @@ invokeCohortGeneration <- function(baseUrl, sourceKey, cohortId) {
   cdmDataSources <- getCdmSources(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertLogical(generateStats, add = errorMessage)
   checkmate::assertIntegerish(cohortId, add = errorMessage)
   checkmate::assertCharacter(sourceKey, min.len = 1, max.len = 1, add = errorMessage)
   checkmate::assertNames(sourceKey, 
@@ -437,15 +435,13 @@ deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnErro
   
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId, add = errorMessage)
-  checkmate::assertScalar(sourceKey, add = errorMessage)
-  checkmate::assertCharacter(sourceKey, add = errorMessage)
   checkmate::assertLogical(silent, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   cohortDefinition <- tryCatch(ROhdsiWebApi::getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl),
-                               error=function(e) e, 
-                               warning=function(w) w
-  )
+                               error = function(e) e, 
+                               warning = function(w) w)
+  
   thereIsAWarning <- stringr::str_detect(string = tolower(paste0("",cohortDefinition$message)), pattern = as.character(cohortId))
   
   if (!silent) {
@@ -530,12 +526,12 @@ getCohortResults <- function(cohortId, baseUrl , sourceKey, mode = 0) {
     }
     return(results)
   } else if (cohortGenerationInformation$status %in% c("STARTING", "STARTED", "RUNNING")) {
-    STOP(paste('Cohort generation not complete. Status is reported to be ', 
+    stop(paste("Cohort generation not complete. Status is reported to be ", 
                 cohortGenerationInformation$status,
-               'please wait till generation status is COMPLETE.'
+               "please wait till generation status is COMPLETE."
                )
     )
   } else {
-    STOP('No results found. Cohort generation may not have been invoked.')
+    stop("No results found. Cohort generation may not have been invoked.")
   }
 }

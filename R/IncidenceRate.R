@@ -78,9 +78,7 @@ getIncidenceRateGenerationInformation <- function(incidenceRateId, baseUrl) {
     stringr::str_replace_all(pattern = 'id.', replacement = '')  
   
   data <- data %>%
-    dplyr::mutate(
-      startTime = .millisecondsToDate(startTime)
-    ) %>%
+    dplyr::mutate(startTime = .millisecondsToDate(.data$startTime)) %>%
     dplyr::as_tibble()
   return(data)
 }

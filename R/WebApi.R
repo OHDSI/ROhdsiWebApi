@@ -152,11 +152,11 @@ getCdmSources <- function(baseUrl) {
 #' 
 #' @examples
 #' \dontrun{
-#' getWebApiDefinitionsMetadata(baseUrl = "http://server.org:80/WebAPI")
+#' getDefinitionsMetadata(baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' 
 #' @export
-getWebApiDefinitionsMetadata <- function(baseUrl, categories) {
+getDefinitionsMetadata <- function(baseUrl, categories) {
   .checkBaseUrl(baseUrl)
   
   # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis'
@@ -199,9 +199,8 @@ getWebApiDefinitionsMetadata <- function(baseUrl, categories) {
           purrr::map(x, function(y)
             ifelse(is.null(y), NA, y))) %>% # convert NULL to NA in list
         dplyr::bind_rows() %>%
-        dplyr::mutate(category = category) %>%
-        dplyr::mutate(createdDate = as.character(createdDate),
-                      modifiedDate = as.character(modifiedDate))
+        dplyr::mutate(createdDate = as.character(.data$createdDate),
+                      modifiedDate = as.character(.data$modifiedDate))
       
     } else if (category %in% group2) {
       if (category == 'characterization') 
@@ -225,18 +224,16 @@ getWebApiDefinitionsMetadata <- function(baseUrl, categories) {
       if (category == 'characterization') {
         listOfIds[[category]] <-
           listOfIds[[category]] %>%
-          dplyr::rename(
-            createdDate = createdAt,
-            modifiedDate = updatedAt,
-            modifiedBy = updatedBy
-          )
+          dplyr::rename(createdDate = .data$createdAt,
+                        modifiedDate = .data$updatedAt,
+                        modifiedBy = .data$updatedBy )
       }
       
       listOfIds[[category]] <-
         listOfIds[[category]] %>%
         dplyr::mutate(category = category) %>%
-        dplyr::mutate(createdDate = as.character(createdDate),
-                      modifiedDate = as.character(modifiedDate))
+        dplyr::mutate(createdDate = as.character(.data$createdDate),
+                      modifiedDate = as.character(.data$modifiedDate))
       
     }
   }
@@ -328,10 +325,8 @@ postDefinition <- function(baseUrl,
     if (response$status_code != 200) {
       stop(paste0("Post attempt failed for cohort : ", name))
     } else {
-      metadataForAllSpecifications <- getMetadataForAllSpecifications(baseUrl = baseUrl) %>% 
-        dplyr::filter(category == 'cohortdefinition',
-                      name == !!name
-        )
+      metadataForAllSpecifications <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "cohortdefinition") %>% 
+        dplyr::filter(.data$name == !!name)
       return(metadataForAllSpecifications)
     }
   } else {

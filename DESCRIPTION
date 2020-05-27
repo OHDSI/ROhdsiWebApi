@@ -28,7 +28,8 @@ Imports:
     SqlRender,
     stringr,
     tibble,
-    tidyr
+    tidyr,
+    rlang
 Suggests:
     testthat,
     knitr,

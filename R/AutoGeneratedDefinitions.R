@@ -19,7 +19,7 @@
 
 
 
-  
+
 #' Retrieve the meta data for ConceptSet definitions.
 #'
 #' @details
@@ -39,7 +39,7 @@
 #' @export
 getConceptSetDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("conceptSet")))
+  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("conceptSet")))
 }
 
 
@@ -55,7 +55,7 @@ getConceptSetDefinitionsMetaData <- function(baseUrl) {
 #'                     integers representing invalid ids. Default = FALSE
 #' @return
 #' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
+#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
 #' \dontrun{
@@ -70,14 +70,13 @@ isValidConceptSetId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("conceptSet"))
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("conceptSet"))
 
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
-
+  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
 
   if (nrow(invalidIds) > 0) {
     if (verbose == TRUE) {
-      return(invalidIds %>% dplyr::select(id) %>% dplyr::distinct() %>% dplyr::pull())
+      return(unique(invalidIds$id))
     } else {
       return(FALSE)
     }
@@ -85,6 +84,8 @@ isValidConceptSetId <- function(baseUrl, ids, verbose = FALSE) {
     return(TRUE)
   }
 }
+
+
 #' Retrieve the meta data for Cohort definitions.
 #'
 #' @details
@@ -104,7 +105,7 @@ isValidConceptSetId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getCohortDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("cohort")))
+  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("cohort")))
 }
 
 
@@ -120,7 +121,7 @@ getCohortDefinitionsMetaData <- function(baseUrl) {
 #'                     integers representing invalid ids. Default = FALSE
 #' @return
 #' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
+#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
 #' \dontrun{
@@ -135,14 +136,13 @@ isValidCohortId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("cohort"))
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("cohort"))
 
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
-
+  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
 
   if (nrow(invalidIds) > 0) {
     if (verbose == TRUE) {
-      return(invalidIds %>% dplyr::select(id) %>% dplyr::distinct() %>% dplyr::pull())
+      return(unique(invalidIds$id))
     } else {
       return(FALSE)
     }
@@ -150,6 +150,8 @@ isValidCohortId <- function(baseUrl, ids, verbose = FALSE) {
     return(TRUE)
   }
 }
+
+
 #' Retrieve the meta data for IncidenceRate definitions.
 #'
 #' @details
@@ -169,7 +171,7 @@ isValidCohortId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("incidenceRate")))
+  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("incidenceRate")))
 }
 
 
@@ -185,7 +187,7 @@ getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
 #'                     integers representing invalid ids. Default = FALSE
 #' @return
 #' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
+#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
 #' \dontrun{
@@ -200,14 +202,13 @@ isValidIncidenceRateId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("incidenceRate"))
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("incidenceRate"))
 
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
-
+  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
 
   if (nrow(invalidIds) > 0) {
     if (verbose == TRUE) {
-      return(invalidIds %>% dplyr::select(id) %>% dplyr::distinct() %>% dplyr::pull())
+      return(unique(invalidIds$id))
     } else {
       return(FALSE)
     }
@@ -215,6 +216,8 @@ isValidIncidenceRateId <- function(baseUrl, ids, verbose = FALSE) {
     return(TRUE)
   }
 }
+
+
 #' Retrieve the meta data for Estimation definitions.
 #'
 #' @details
@@ -234,7 +237,7 @@ isValidIncidenceRateId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getEstimationDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("estimation")))
+  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("estimation")))
 }
 
 
@@ -250,7 +253,7 @@ getEstimationDefinitionsMetaData <- function(baseUrl) {
 #'                     integers representing invalid ids. Default = FALSE
 #' @return
 #' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
+#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
 #' \dontrun{
@@ -265,14 +268,13 @@ isValidEstimationId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("estimation"))
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("estimation"))
 
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
-
+  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
 
   if (nrow(invalidIds) > 0) {
     if (verbose == TRUE) {
-      return(invalidIds %>% dplyr::select(id) %>% dplyr::distinct() %>% dplyr::pull())
+      return(unique(invalidIds$id))
     } else {
       return(FALSE)
     }
@@ -280,6 +282,8 @@ isValidEstimationId <- function(baseUrl, ids, verbose = FALSE) {
     return(TRUE)
   }
 }
+
+
 #' Retrieve the meta data for Prediction definitions.
 #'
 #' @details
@@ -299,7 +303,7 @@ isValidEstimationId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getPredictionDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("prediction")))
+  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("prediction")))
 }
 
 
@@ -315,7 +319,7 @@ getPredictionDefinitionsMetaData <- function(baseUrl) {
 #'                     integers representing invalid ids. Default = FALSE
 #' @return
 #' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
+#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
 #' \dontrun{
@@ -330,14 +334,13 @@ isValidPredictionId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("prediction"))
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("prediction"))
 
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
-
+  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
 
   if (nrow(invalidIds) > 0) {
     if (verbose == TRUE) {
-      return(invalidIds %>% dplyr::select(id) %>% dplyr::distinct() %>% dplyr::pull())
+      return(unique(invalidIds$id))
     } else {
       return(FALSE)
     }
@@ -345,6 +348,8 @@ isValidPredictionId <- function(baseUrl, ids, verbose = FALSE) {
     return(TRUE)
   }
 }
+
+
 #' Retrieve the meta data for Characterization definitions.
 #'
 #' @details
@@ -364,7 +369,7 @@ isValidPredictionId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getCharacterizationDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("characterization")))
+  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("characterization")))
 }
 
 
@@ -380,7 +385,7 @@ getCharacterizationDefinitionsMetaData <- function(baseUrl) {
 #'                     integers representing invalid ids. Default = FALSE
 #' @return
 #' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
+#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
 #' \dontrun{
@@ -395,14 +400,13 @@ isValidCharacterizationId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("characterization"))
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("characterization"))
 
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
-
+  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
 
   if (nrow(invalidIds) > 0) {
     if (verbose == TRUE) {
-      return(invalidIds %>% dplyr::select(id) %>% dplyr::distinct() %>% dplyr::pull())
+      return(unique(invalidIds$id))
     } else {
       return(FALSE)
     }
@@ -410,6 +414,8 @@ isValidCharacterizationId <- function(baseUrl, ids, verbose = FALSE) {
     return(TRUE)
   }
 }
+
+
 #' Retrieve the meta data for Pathway definitions.
 #'
 #' @details
@@ -429,7 +435,7 @@ isValidCharacterizationId <- function(baseUrl, ids, verbose = FALSE) {
 #' @export
 getPathwayDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("pathway")))
+  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("pathway")))
 }
 
 
@@ -445,7 +451,7 @@ getPathwayDefinitionsMetaData <- function(baseUrl) {
 #'                     integers representing invalid ids. Default = FALSE
 #' @return
 #' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
+#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
 #'
 #' @examples
 #' \dontrun{
@@ -460,14 +466,13 @@ isValidPathwayId <- function(baseUrl, ids, verbose = FALSE) {
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl, categories = c("pathway"))
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("pathway"))
 
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(y = validIds, by = c(id = "id"))
-
+  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
 
   if (nrow(invalidIds) > 0) {
     if (verbose == TRUE) {
-      return(invalidIds %>% dplyr::select(id) %>% dplyr::distinct() %>% dplyr::pull())
+      return(unique(invalidIds$id))
     } else {
       return(FALSE)
     }

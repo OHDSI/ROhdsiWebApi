@@ -18,7 +18,7 @@ integers representing invalid ids. Default = FALSE}
 }
 \value{
 Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-not valid. Optionally, specify = TRUE will return a list of ids that are no valid.
+not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
 }
 \description{
 Check if IncidenceRate id is valid.

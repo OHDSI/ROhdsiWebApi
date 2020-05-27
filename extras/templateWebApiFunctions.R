@@ -1,5 +1,5 @@
 
-  
+
 #' Retrieve the meta data for %categoryFirstUpper% definitions.
 #'
 #' @details
@@ -19,10 +19,8 @@
 #' @export
 %functionNameDefinitionsMetaData% <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getWebApiDefinitionsMetadata(baseUrl = baseUrl,
-                           categories = c("%category%")
-                           )
-         )
+  return(getDefinitionsMetadata(baseUrl = baseUrl,
+                                      categories = c("%category%")))
 }
 
 
@@ -38,7 +36,7 @@
 #'                      list of integers representing invalid ids. Default = FALSE
 #' @return
 #' Function will return TRUE if all ids in the set are 
-#' valid. Function will return FALSE if any id is not valid. Optionally, specify = TRUE
+#' valid. Function will return FALSE if any id is not valid. Optionally, verbose = TRUE
 #' will return a list of ids that are no valid.
 #' 
 #' @examples 
@@ -54,23 +52,19 @@
   checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  validIds <- getWebApiDefinitionsMetadata(baseUrl = baseUrl,
-                                categories = c("%category%")
-  )
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl,
+                                           categories = c("%category%"))
   
   invalidIds <- tidyr::tibble(id = ids) %>%
-    dplyr::anti_join(y = validIds,
-                     by = c('id' = 'id')
-    )
+    dplyr::anti_join(validIds, by = "id")
   
-  
-    if (nrow(invalidIds) > 0) {
-      if (verbose == TRUE) {
-        return(invalidIds %>% dplyr::select(id) %>% dplyr::distinct() %>% dplyr::pull())
-      } else {
-        return(FALSE)
-      }
+  if (nrow(invalidIds) > 0) {
+    if (verbose == TRUE) {
+      return(unique(invalidIds$id))
     } else {
-      return(TRUE)
+      return(FALSE)
     }
+  } else {
+    return(TRUE)
+  }
 }
