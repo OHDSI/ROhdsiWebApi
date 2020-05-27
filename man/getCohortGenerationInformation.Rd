@@ -4,26 +4,26 @@
 \alias{getCohortGenerationInformation}
 \title{Get cohort generation information}
 \usage{
-getCohortGenerationInformation(cohortIds, baseUrl, sourceKeys = NULL)
+getCohortGenerationInformation(cohortId, baseUrl, sourceKey)
 }
 \arguments{
-\item{cohortIds}{A list of cohortIds}
+\item{cohortId}{An integer id representing the id that uniquely identifies a cohort definition
+in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
 
-\item{sourceKeys}{(OPTIONAL) A list of CDM source keys. These can be found in Atlas ->
-Configure. Otherwise, all CDM source keys will be used.}
+\item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
+Configuration page}
 }
 \value{
-A data frame of cohort generation statuses, start times, and execution durations per definition id
-and source key.
+A data frame of cohort generation statuses, start times, and execution durations.
 }
 \description{
 Get cohort generation information
 }
 \details{
-Obtains cohort generation statuses for a collection of cohort definition Ids and CDM sources.
-Useful if running multiple cohort generation jobs that are long-running.
+Get information about cohort generation for a given combination of 
+sourceKey and cohortId
 }
