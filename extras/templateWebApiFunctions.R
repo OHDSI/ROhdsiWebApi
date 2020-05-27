@@ -32,39 +32,21 @@
 #'  
 #' @template BaseUrl
 #' @param    ids        A list of integer id(s) of the %categoryFirstUpper% to be tested for validity.
-#' @param    verbose    Do you want to know what ids are invalid? This parameter will return
-#'                      list of integers representing invalid ids. Default = FALSE
 #' @return
-#' Function will return TRUE if all ids in the set are 
-#' valid. Function will return FALSE if any id is not valid. Optionally, verbose = TRUE
-#' will return a list of ids that are no valid.
+#' A logical vector indicating which of the ids are valid.
 #' 
 #' @examples 
 #' \dontrun{
-#' %functionNameIsValid%(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
+#' %functionNameIsValid%(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-%functionNameIsValid% <- function(baseUrl, ids, verbose = FALSE) {
+%functionNameIsValid% <- function(ids, baseUrl) {
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(ids, add = errorMessage)
-  checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  validIds <- getDefinitionsMetadata(baseUrl = baseUrl,
-                                           categories = c("%category%"))
-  
-  invalidIds <- tidyr::tibble(id = ids) %>%
-    dplyr::anti_join(validIds, by = "id")
-  
-  if (nrow(invalidIds) > 0) {
-    if (verbose == TRUE) {
-      return(unique(invalidIds$id))
-    } else {
-      return(FALSE)
-    }
-  } else {
-    return(TRUE)
-  }
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "%category%")
+  return(ids %in% validIds)
 }

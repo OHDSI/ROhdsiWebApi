@@ -37,9 +37,9 @@ pkgdown::build_site()
 
 # Generate functions from template ----------------------
 library(dplyr)
-webApiCategories <- tibble(category =  c('conceptSet','cohort','incidenceRate',
-                                         'estimation','prediction','characterization',
-                                         'pathway')) %>% 
+webApiCategories <- tibble(category =  c("conceptSet","cohort","incidenceRate",
+                                         "estimation","prediction","characterization",
+                                         "pathway")) %>% 
   mutate(categoryFirstUpper = paste0(toupper(substr(category, 1, 1)), substr(category, 2, nchar(category))))
 
 arguments <- tibble(functionNameDefinitionsMetaData = paste0("get", webApiCategories$categoryFirstUpper, "DefinitionsMetaData"),

@@ -102,4 +102,30 @@ test_that("Test getCohortDefinitionSql", {
   expect_type(sql, "character")
 })
 
+test_that("Test getDefinitionsMetadata", {
+  skip_if(baseUrl == "")
+  categories <- c("conceptSet","cohort","incidenceRate",
+                "estimation","prediction","characterization",
+                "pathway")
+  for (category in categories) {
+    writeLines(sprintf("Testing category '%s'", category))
+    metaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = category)
+    expect_s3_class(metaData, "data.frame")
+    expect_gt(nrow(metaData), 0)
+  }
+})
+
+test_that("Test isValid...", {
+  skip_if(baseUrl == "")
+  categories <- c("conceptSet","cohort","incidenceRate",
+                  "estimation","prediction","characterization",
+                  "pathway")
+  for (category in categories) {
+    writeLines(sprintf("Testing category '%s'", category))
+    functionName <- paste0("isValid", toupper(substr(category, 1, 1)), substr(category, 2, nchar(category)), "Id")
+    value <- do.call(functionName, list(ids = -1, baseUrl = baseUrl))
+    expect_false(value)
+  }
+})
+
 # TODO: add cohort characterization and incidence rates

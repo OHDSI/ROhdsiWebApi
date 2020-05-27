@@ -50,39 +50,24 @@ getConceptSetDefinitionsMetaData <- function(baseUrl) {
 #' i.e. valid.
 #'
 #' @template BaseUrl
-#' @param    ids       A list of integer id(s) of the ConceptSet to be tested for validity.
-#' @param    verbose   Do you want to know what ids are invalid? This parameter will return list of
-#'                     integers representing invalid ids. Default = FALSE
+#' @param    ids   A list of integer id(s) of the ConceptSet to be tested for validity.
 #' @return
-#' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
+#' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidConceptSetId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
+#' isValidConceptSetId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidConceptSetId <- function(baseUrl, ids, verbose = FALSE) {
+isValidConceptSetId <- function(ids, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(ids, add = errorMessage)
-  checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("conceptSet"))
-
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
-
-  if (nrow(invalidIds) > 0) {
-    if (verbose == TRUE) {
-      return(unique(invalidIds$id))
-    } else {
-      return(FALSE)
-    }
-  } else {
-    return(TRUE)
-  }
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "conceptSet")
+  return(ids %in% validIds)
 }
 
 
@@ -116,39 +101,24 @@ getCohortDefinitionsMetaData <- function(baseUrl) {
 #' valid.
 #'
 #' @template BaseUrl
-#' @param    ids       A list of integer id(s) of the Cohort to be tested for validity.
-#' @param    verbose   Do you want to know what ids are invalid? This parameter will return list of
-#'                     integers representing invalid ids. Default = FALSE
+#' @param    ids   A list of integer id(s) of the Cohort to be tested for validity.
 #' @return
-#' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
+#' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidCohortId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
+#' isValidCohortId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidCohortId <- function(baseUrl, ids, verbose = FALSE) {
+isValidCohortId <- function(ids, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(ids, add = errorMessage)
-  checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("cohort"))
-
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
-
-  if (nrow(invalidIds) > 0) {
-    if (verbose == TRUE) {
-      return(unique(invalidIds$id))
-    } else {
-      return(FALSE)
-    }
-  } else {
-    return(TRUE)
-  }
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "cohort")
+  return(ids %in% validIds)
 }
 
 
@@ -182,39 +152,24 @@ getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
 #' i.e. valid.
 #'
 #' @template BaseUrl
-#' @param    ids       A list of integer id(s) of the IncidenceRate to be tested for validity.
-#' @param    verbose   Do you want to know what ids are invalid? This parameter will return list of
-#'                     integers representing invalid ids. Default = FALSE
+#' @param    ids   A list of integer id(s) of the IncidenceRate to be tested for validity.
 #' @return
-#' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
+#' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidIncidenceRateId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
+#' isValidIncidenceRateId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidIncidenceRateId <- function(baseUrl, ids, verbose = FALSE) {
+isValidIncidenceRateId <- function(ids, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(ids, add = errorMessage)
-  checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("incidenceRate"))
-
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
-
-  if (nrow(invalidIds) > 0) {
-    if (verbose == TRUE) {
-      return(unique(invalidIds$id))
-    } else {
-      return(FALSE)
-    }
-  } else {
-    return(TRUE)
-  }
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "incidenceRate")
+  return(ids %in% validIds)
 }
 
 
@@ -248,39 +203,24 @@ getEstimationDefinitionsMetaData <- function(baseUrl) {
 #' i.e. valid.
 #'
 #' @template BaseUrl
-#' @param    ids       A list of integer id(s) of the Estimation to be tested for validity.
-#' @param    verbose   Do you want to know what ids are invalid? This parameter will return list of
-#'                     integers representing invalid ids. Default = FALSE
+#' @param    ids   A list of integer id(s) of the Estimation to be tested for validity.
 #' @return
-#' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
+#' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidEstimationId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
+#' isValidEstimationId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidEstimationId <- function(baseUrl, ids, verbose = FALSE) {
+isValidEstimationId <- function(ids, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(ids, add = errorMessage)
-  checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("estimation"))
-
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
-
-  if (nrow(invalidIds) > 0) {
-    if (verbose == TRUE) {
-      return(unique(invalidIds$id))
-    } else {
-      return(FALSE)
-    }
-  } else {
-    return(TRUE)
-  }
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "estimation")
+  return(ids %in% validIds)
 }
 
 
@@ -314,39 +254,24 @@ getPredictionDefinitionsMetaData <- function(baseUrl) {
 #' i.e. valid.
 #'
 #' @template BaseUrl
-#' @param    ids       A list of integer id(s) of the Prediction to be tested for validity.
-#' @param    verbose   Do you want to know what ids are invalid? This parameter will return list of
-#'                     integers representing invalid ids. Default = FALSE
+#' @param    ids   A list of integer id(s) of the Prediction to be tested for validity.
 #' @return
-#' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
+#' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidPredictionId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
+#' isValidPredictionId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidPredictionId <- function(baseUrl, ids, verbose = FALSE) {
+isValidPredictionId <- function(ids, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(ids, add = errorMessage)
-  checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("prediction"))
-
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
-
-  if (nrow(invalidIds) > 0) {
-    if (verbose == TRUE) {
-      return(unique(invalidIds$id))
-    } else {
-      return(FALSE)
-    }
-  } else {
-    return(TRUE)
-  }
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "prediction")
+  return(ids %in% validIds)
 }
 
 
@@ -380,39 +305,24 @@ getCharacterizationDefinitionsMetaData <- function(baseUrl) {
 #' WebApi i.e. valid.
 #'
 #' @template BaseUrl
-#' @param    ids       A list of integer id(s) of the Characterization to be tested for validity.
-#' @param    verbose   Do you want to know what ids are invalid? This parameter will return list of
-#'                     integers representing invalid ids. Default = FALSE
+#' @param    ids   A list of integer id(s) of the Characterization to be tested for validity.
 #' @return
-#' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
+#' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidCharacterizationId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
+#' isValidCharacterizationId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidCharacterizationId <- function(baseUrl, ids, verbose = FALSE) {
+isValidCharacterizationId <- function(ids, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(ids, add = errorMessage)
-  checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("characterization"))
-
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
-
-  if (nrow(invalidIds) > 0) {
-    if (verbose == TRUE) {
-      return(unique(invalidIds$id))
-    } else {
-      return(FALSE)
-    }
-  } else {
-    return(TRUE)
-  }
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "characterization")
+  return(ids %in% validIds)
 }
 
 
@@ -446,37 +356,22 @@ getPathwayDefinitionsMetaData <- function(baseUrl) {
 #' valid.
 #'
 #' @template BaseUrl
-#' @param    ids       A list of integer id(s) of the Pathway to be tested for validity.
-#' @param    verbose   Do you want to know what ids are invalid? This parameter will return list of
-#'                     integers representing invalid ids. Default = FALSE
+#' @param    ids   A list of integer id(s) of the Pathway to be tested for validity.
 #' @return
-#' Function will return TRUE if all ids in the set are valid. Function will return FALSE if any id is
-#' not valid. Optionally, verbose = TRUE will return a list of ids that are no valid.
+#' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidPathwayId(baseUrl = "http://server.org:80/WebAPI", ids = c(13242, 3423, 34))
+#' isValidPathwayId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidPathwayId <- function(baseUrl, ids, verbose = FALSE) {
+isValidPathwayId <- function(ids, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(ids, add = errorMessage)
-  checkmate::assertLogical(verbose, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("pathway"))
-
-  invalidIds <- tidyr::tibble(id = ids) %>% dplyr::anti_join(validIds, by = "id")
-
-  if (nrow(invalidIds) > 0) {
-    if (verbose == TRUE) {
-      return(unique(invalidIds$id))
-    } else {
-      return(FALSE)
-    }
-  } else {
-    return(TRUE)
-  }
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "pathway")
+  return(ids %in% validIds)
 }
