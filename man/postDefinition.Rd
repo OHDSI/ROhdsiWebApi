@@ -4,7 +4,7 @@
 \alias{postDefinition}
 \title{Post a definition into WebApi}
 \usage{
-postDefinition(baseUrl, name, category = "cohort", object)
+postDefinition(baseUrl, name, category, object)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:

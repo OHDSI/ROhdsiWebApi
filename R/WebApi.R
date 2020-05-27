@@ -302,12 +302,16 @@ getDefinitionsMetadata <- function(baseUrl, categories) {
 #' @export
 postDefinition <- function(baseUrl, 
                            name,
-                           category = 'cohort',
+                           category,
                            object) {
   .checkBaseUrl(baseUrl)
+  validCategories <- c('conceptSet','cohort','incidenceRate','estimation',
+                       'prediction','characterization','pathway')
+  
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(name, add = errorMessage)
   checkmate::assertCharacter(category, add = errorMessage)
+  checkmate::assertNames(x = category, subset.of =validCategories )
   checkmate::assertList(x = object, 
                         types = c('character', 'list'), 
                         any.missing = FALSE,
@@ -316,11 +320,30 @@ postDefinition <- function(baseUrl,
   )
   checkmate::reportAssertions(errorMessage)
   
+  # change category names to comply with difference in webApi
+  if (category == 'incidenceRate') {
+    categoryWebApi <- 'iranalysis'
+  } else if (category == 'conceptSet') {
+    categoryWebApi <- 'conceptset'
+  } else if (category == 'cohort') {
+    categoryWebApi <- 'cohortdefinition'
+  } else {categoryWebApi <- category}
+  
+  # convert R-object to JSON expression.
   jsonExpression <- RJSONIO::toJSON(object)
   
-  
-  # Expect a "200" response that it worked
-  .expect200 <- function(response) {
+  .postJson <- function(name, jsonExpression) {
+    # create json body
+    json_body <- paste0("{\"name\":\"",
+                        as.character(name),
+                        "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
+                        jsonExpression,
+                        "}")
+    # POST the JSON
+    response <- httr::POST(url = paste0(baseUrl, "/", categoryWebApi, "/"),
+                           body = json_body,
+                           config = httr::add_headers(.headers = c('Content-Type' = 'application/json')))
+    # Check response
     if (response$status_code != 200) {
       stop(paste0("Post attempt failed for ", category, " : ", name, ". ", httr::http_status(response)$message))
     } else {
@@ -331,53 +354,39 @@ postDefinition <- function(baseUrl,
   }
   
   # Check name
-  .checkNameExists <- function(urlCheckName) {
-    data <- httr::GET(urlCheckName)
-    data <- httr::content(data)
-    if (data == 1) {
-      stop(paste0("Post attempt failed. ", category, ":'", name, "' already exists. Choose another name."))
+  .checkNameExists <- function(name, baseUrl, category) {
+    # urlCheckName <- paste0(baseUrl, "/", categoryWebApi, "/0/exists?name=", URLencode(name, reserved = TRUE) )
+    # data <- httr::GET(urlCheckName)
+    # data <- httr::content(data)
+    # if (data == 1) {
+    #   stop(paste0("Post attempt failed. ", category, ":'", name, "' already exists. Choose another name."))
+    # }
+    
+    definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = category)
+    matched <- definitionsMetaData %>% 
+      dplyr::filter(name == !!name)
+    
+    if (nrow(matched) > 0) {
+       stop(paste0("Post attempt failed. ", category, ":'", name, "' already exists. Choose another name."))
     }
   }
   
   if (category == 'cohort') {
     ############### Cohort #########################
     # check if name exists
-    urlCheckName <- paste0(baseUrl, "/cohortdefinition/0/exists?name=", URLencode(name, reserved = TRUE) )
-    .checkNameExists(urlCheckName)
-    
-    # create json body
-    json_body <- paste0("{\"name\":\"",
-                        as.character(name),
-                        "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
-                        jsonExpression,
-                        "}")
-    
-    # POST the JSON
-    response <- httr::POST(url = paste0(baseUrl, "/cohortdefinition/"),
-                           body = json_body,
-                           config = httr::add_headers(.headers = c('Content-Type' = 'application/json')))
-    .expect200(response)
+    .checkNameExists(name, baseUrl, category)
+    .postJson(name, jsonExpression)
     
   } else if (category == 'conceptSet') {
     ############### ConceptSet #########################
     # check if name exists
-    urlCheckName <- paste0(baseUrl, "/conceptset/0/exists?name=", URLencode(name, reserved = TRUE) )
+    .checkNameExists(name, baseUrl, category)
+    .postJson(name, jsonExpression)
+    
+#  } else if (category == 'incidenceRate') {
+    ############### Incidence Rate #########################
+    # check if name exists
     .checkNameExists(urlCheckName)
-    
-    # create json body
-    json_body <- paste0("{\"name\":\"",
-                        as.character(name),
-                        "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
-                        jsonExpression,
-                        "}")
-    
-    
-    response <- httr::POST(url = paste0(baseUrl, "/conceptset/"),
-                           body = json_body,
-                           config = httr::add_headers(.headers = c('Content-Type' = 'application/json')))
-    
-   .expect200(response)
-    
   } else {
     stop(paste0('category = ', category, " is not supported in this version. Post attempt failed."))
   }
