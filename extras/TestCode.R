@@ -1,11 +1,8 @@
 library(ROhdsiWebApi)
-library(magrittr)
+library(dplyr)
 baseUrl <- Sys.getenv("baseUrl")
 
-#######################################
-# configuration information on WebApi##
-#######################################
-
+# configuration information on WebApi ------------------------------------------
 cdmSources <- getCdmSources(baseUrl = baseUrl)
 View(cdmSources)
 
@@ -18,9 +15,7 @@ priorityVocabulary
 metaDataSpecifications <- getMetadataForAllSpecifications(baseUrl = baseUrl)
 
 
-#############################
-##concepts and concept sets##
-#############################
+# concepts and concept sets --------------------------------------------------------
 conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 10677, baseUrl = baseUrl)
 
 conceptSetDefinitionAsTable <- convertConceptSetDefinitionToTable(conceptSetDefinition)
@@ -37,9 +32,7 @@ createConceptSetWorkbook(
   mapped = TRUE
 )
 
-##########
-##cohort##
-##########
+# cohort -------------------------------------------------
 cohortDefinition <- getCohortDefinition(cohortId = 5665, baseUrl = baseUrl)
 cohortDefinition$name
 cohortDefinition$description
@@ -62,8 +55,15 @@ cohortResults$inclusionRuleStats
 cohortResults$summary
 cohortResults$treemapData # needs to return a data frame.
 
+# Insert cohort definition in package
+insertCohortDefinitionInPackage(cohortId = 15151,
+                                name = "Covid19",
+                                baseUrl = baseUrl)
+unlink("inst/cohorts", recursive = TRUE)
+unlink("inst/sql", recursive = TRUE)
+                                
 
-# cohort characterization
+# cohort characterization -----------------------------------------------
 cohortCharacterizationDefinition <- getCohortCharacterizationDefinition(characterizationId = 486, 
                                                                         baseUrl = baseUrl)
 cohortName <- cohortCharacterizationDefinition$cohorts[[1]]$name
@@ -74,7 +74,7 @@ characterizationResults <- getCohortCharacterizationResults(characterizationId =
                                                             baseUrl = baseUrl, 
                                                             sourceKey = 'IBM_CCAE')
 
-# incidence rate
+# incidence rate -------------------------------------------------------------
 incidenceRateDefinition <- getIncidenceRateDefinition(baseUrl = baseUrl, incidenceRateId = 429)
 cohortDefinition <- incidenceRateDefinition$expression$targetCohorts[[1]]$expression
 conceptSetDefinitionAsTable <- convertConceptSetDefinitionToTable(cohortDefinition$ConceptSets[[1]])
@@ -82,9 +82,9 @@ conceptSetDefinitionAsTable <- convertConceptSetDefinitionToTable(cohortDefiniti
 incidenceRateGenerationInformation <- getIncidenceRateGenerationInformation(baseUrl = baseUrl,
                                                                             incidenceRateId = 429)
 
-# incidenceRateResults
+# incidenceRateResults ----------------------------------------------------
 
-# estimation
+# estimation ------------------------------------------------------------
 estimation <- getEstimationDefinition(estimationId = 124, baseUrl = baseUrl)
 cohortId <- estimation$specification$cohortDefinitions[[1]]$id
 ### where is the cohort expression?

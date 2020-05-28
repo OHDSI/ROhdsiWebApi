@@ -103,7 +103,9 @@ insertCohortDefinitionInPackage <- function(cohortId,
     dir.create(jsonFolder, recursive = TRUE)
   }
   jsonFileName <- file.path(jsonFolder, paste(name, "json", sep = "."))
-  jsonlite::write_json(object$expression, jsonFileName, pretty = TRUE)
+  json <- RJSONIO::toJSON(object$expression, pretty = TRUE)
+  SqlRender::writeSql(sql = json, targetFile = jsonFileName)
+  
   writeLines(paste("- Created JSON file:", jsonFileName))
 
   # Fetch SQL
