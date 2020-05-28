@@ -14,10 +14,10 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' %functionNameDefinitionsMetaData%(baseUrl = "http://server.org:80/WebAPI")
+#' get%categoryFirstUpper%DefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-%functionNameDefinitionsMetaData% <- function(baseUrl) {
+get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
   return(getDefinitionsMetadata(baseUrl = baseUrl,
                                       categories = c("%category%")))
@@ -37,10 +37,10 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' %functionNameIsValid%(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' isValid%categoryFirstUpper%Id(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-%functionNameIsValid% <- function(ids, baseUrl) {
+isValid%categoryFirstUpper%Id <- function(ids, baseUrl) {
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()

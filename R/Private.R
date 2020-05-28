@@ -28,3 +28,18 @@
 .integerCharacters <- function(x) {
   !any(is.na(suppressWarnings(as.integer(x)))) & is.character(x)
 }
+
+.getStandardCategories <- function(){
+  tibble(categoryStandard =  c("conceptSet","cohort","incidenceRate",
+                               "estimation","prediction","characterization",
+                               "pathway")
+  ) %>% 
+    dplyr::mutate(categoryFirstUpper = paste0(toupper(substr(categoryStandard, 1, 1)), substr(categoryStandard, 2, nchar(categoryStandard)))) %>% 
+    dplyr::mutate(categoryAsUsedInWebApi = dplyr::case_when(categoryStandard == 'incidenceRate' ~ 'ir',
+                                                            categoryStandard == 'conceptSet' ~ 'conceptset',
+                                                            categoryStandard == 'cohort' ~'cohortdefinition',
+                                                            TRUE ~ categoryStandard
+    )
+    ) %>% 
+    return()
+}
