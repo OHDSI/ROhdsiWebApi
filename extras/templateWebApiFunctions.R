@@ -17,7 +17,7 @@
 #' get%categoryFirstUpper%DefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl) {
+get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl){
   .checkBaseUrl(baseUrl)
   return(getDefinitionsMetadata(baseUrl = baseUrl,
                                       categories = c("%category%")))
@@ -40,7 +40,7 @@ get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl) {
 #' isValid%categoryFirstUpper%Id(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValid%categoryFirstUpper%Id <- function(ids, baseUrl) {
+isValid%categoryFirstUpper%Id <- function(ids, baseUrl){
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
@@ -49,4 +49,41 @@ isValid%categoryFirstUpper%Id <- function(ids, baseUrl) {
   
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "%category%")
   return(ids %in% validIds)
+}
+
+
+
+
+#' Get %categoryFirstUpper% id definition.
+#'
+#' @details
+#' Obtain the %categoryFirstUpper% definition from WebAPI for a given %categoryFirstUpper% id
+#'  
+#' @template BaseUrl
+#' @template %categoryFirstUpper%Id
+#' @return
+#' An R object representing the %categoryFirstUpper% definition
+#' 
+#' @examples 
+#' \dontrun{
+#' get%categoryFirstUpper%Definition(%categoryFirstUpper%Id = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+get%categoryFirstUpper%Definition <- function(%categoryFirstUpper%Id, baseUrl){
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(%categoryFirstUpper%Id, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+  
+  if (isTRUE(isValid%categoryFirstUpper%Id(ids = %categoryFirstUpper%Id, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %categoryFirstUpper%Id)
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+    return(metaData)
+  } else {
+    stop(paste0(%category%Id, ":", %categoryFirstUpper%Id, " is not present in the WebApi."))
+  }
 }

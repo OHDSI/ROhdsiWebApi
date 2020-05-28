@@ -71,6 +71,43 @@ isValidConceptSetId <- function(ids, baseUrl) {
 }
 
 
+
+
+#' Get ConceptSet id definition.
+#'
+#' @details
+#' Obtain the ConceptSet definition from WebAPI for a given ConceptSet id
+#'
+#' @template BaseUrl
+#' @template ConceptSetId
+#' @return
+#' An R object representing the ConceptSet definition
+#'
+#' @examples
+#' \dontrun{
+#' getConceptSetDefinition(ConceptSetId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getConceptSetDefinition <- function(ConceptSetId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(ConceptSetId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidConceptSetId(ids = ConceptSetId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "conceptset", "/", ConceptSetId)
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+    return(metaData)
+  } else {
+    stop(paste0(conceptSetId, ":", ConceptSetId, " is not present in the WebApi."))
+  }
+}
+
+
 #' Retrieve the meta data for Cohort definitions.
 #'
 #' @details
@@ -119,6 +156,43 @@ isValidCohortId <- function(ids, baseUrl) {
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "cohort")
   return(ids %in% validIds)
+}
+
+
+
+
+#' Get Cohort id definition.
+#'
+#' @details
+#' Obtain the Cohort definition from WebAPI for a given Cohort id
+#'
+#' @template BaseUrl
+#' @template CohortId
+#' @return
+#' An R object representing the Cohort definition
+#'
+#' @examples
+#' \dontrun{
+#' getCohortDefinition(CohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getCohortDefinition <- function(CohortId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(CohortId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidCohortId(ids = CohortId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohortdefinition", "/", CohortId)
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+    return(metaData)
+  } else {
+    stop(paste0(cohortId, ":", CohortId, " is not present in the WebApi."))
+  }
 }
 
 
@@ -173,6 +247,43 @@ isValidIncidenceRateId <- function(ids, baseUrl) {
 }
 
 
+
+
+#' Get IncidenceRate id definition.
+#'
+#' @details
+#' Obtain the IncidenceRate definition from WebAPI for a given IncidenceRate id
+#'
+#' @template BaseUrl
+#' @template IncidenceRateId
+#' @return
+#' An R object representing the IncidenceRate definition
+#'
+#' @examples
+#' \dontrun{
+#' getIncidenceRateDefinition(IncidenceRateId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getIncidenceRateDefinition <- function(IncidenceRateId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(IncidenceRateId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidIncidenceRateId(ids = IncidenceRateId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "ir", "/", IncidenceRateId)
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+    return(metaData)
+  } else {
+    stop(paste0(incidenceRateId, ":", IncidenceRateId, " is not present in the WebApi."))
+  }
+}
+
+
 #' Retrieve the meta data for Estimation definitions.
 #'
 #' @details
@@ -221,6 +332,43 @@ isValidEstimationId <- function(ids, baseUrl) {
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "estimation")
   return(ids %in% validIds)
+}
+
+
+
+
+#' Get Estimation id definition.
+#'
+#' @details
+#' Obtain the Estimation definition from WebAPI for a given Estimation id
+#'
+#' @template BaseUrl
+#' @template EstimationId
+#' @return
+#' An R object representing the Estimation definition
+#'
+#' @examples
+#' \dontrun{
+#' getEstimationDefinition(EstimationId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getEstimationDefinition <- function(EstimationId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(EstimationId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidEstimationId(ids = EstimationId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "estimation", "/", EstimationId)
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+    return(metaData)
+  } else {
+    stop(paste0(estimationId, ":", EstimationId, " is not present in the WebApi."))
+  }
 }
 
 
@@ -275,6 +423,43 @@ isValidPredictionId <- function(ids, baseUrl) {
 }
 
 
+
+
+#' Get Prediction id definition.
+#'
+#' @details
+#' Obtain the Prediction definition from WebAPI for a given Prediction id
+#'
+#' @template BaseUrl
+#' @template PredictionId
+#' @return
+#' An R object representing the Prediction definition
+#'
+#' @examples
+#' \dontrun{
+#' getPredictionDefinition(PredictionId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getPredictionDefinition <- function(PredictionId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(PredictionId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidPredictionId(ids = PredictionId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "prediction", "/", PredictionId)
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+    return(metaData)
+  } else {
+    stop(paste0(predictionId, ":", PredictionId, " is not present in the WebApi."))
+  }
+}
+
+
 #' Retrieve the meta data for Characterization definitions.
 #'
 #' @details
@@ -326,6 +511,44 @@ isValidCharacterizationId <- function(ids, baseUrl) {
 }
 
 
+
+
+#' Get Characterization id definition.
+#'
+#' @details
+#' Obtain the Characterization definition from WebAPI for a given Characterization id
+#'
+#' @template BaseUrl
+#' @template CharacterizationId
+#' @return
+#' An R object representing the Characterization definition
+#'
+#' @examples
+#' \dontrun{
+#' getCharacterizationDefinition(CharacterizationId = 13242,
+#'                               baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getCharacterizationDefinition <- function(CharacterizationId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(CharacterizationId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidCharacterizationId(ids = CharacterizationId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "characterization", "/", CharacterizationId)
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+    return(metaData)
+  } else {
+    stop(paste0(characterizationId, ":", CharacterizationId, " is not present in the WebApi."))
+  }
+}
+
+
 #' Retrieve the meta data for Pathway definitions.
 #'
 #' @details
@@ -374,4 +597,41 @@ isValidPathwayId <- function(ids, baseUrl) {
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "pathway")
   return(ids %in% validIds)
+}
+
+
+
+
+#' Get Pathway id definition.
+#'
+#' @details
+#' Obtain the Pathway definition from WebAPI for a given Pathway id
+#'
+#' @template BaseUrl
+#' @template PathwayId
+#' @return
+#' An R object representing the Pathway definition
+#'
+#' @examples
+#' \dontrun{
+#' getPathwayDefinition(PathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getPathwayDefinition <- function(PathwayId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(PathwayId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidPathwayId(ids = PathwayId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "pathway", "/", PathwayId)
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+    return(metaData)
+  } else {
+    stop(paste0(pathwayId, ":", PathwayId, " is not present in the WebApi."))
+  }
 }
