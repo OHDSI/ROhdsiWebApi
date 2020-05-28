@@ -313,8 +313,8 @@ postDefinition <- function(baseUrl,
   checkmate::assertCharacter(category, add = errorMessage)
   checkmate::assertNames(x = category, subset.of =validCategories )
   checkmate::assertList(x = object, 
-                        types = c('character', 'list', 'integer', 'numeric'), 
-                        any.missing = FALSE,
+                        types = c('character', 'list', 'integer', 'numeric', 'logical'), 
+                        any.missing = TRUE,
                         null.ok = FALSE, 
                         add = errorMessage
   )
@@ -327,6 +327,8 @@ postDefinition <- function(baseUrl,
     categoryWebApi <- 'conceptset'
   } else if (category == 'cohort') {
     categoryWebApi <- 'cohortdefinition'
+  } else if (category == 'estimation') {
+    categoryWebApi <- 'estimation/import'
   } else {categoryWebApi <- category}
   
   # convert R-object to JSON expression.
@@ -386,8 +388,13 @@ postDefinition <- function(baseUrl,
 #  } else if (category == 'incidenceRate') {
     ############### Incidence Rate #########################
     # check if name exists
-    .checkNameExists(urlCheckName)
-  } else {
+  #  .checkNameExists(urlCheckName)
+  # } else if (category == 'estimation') {
+  #   ############### estimation #########################
+  #   # check if name exists
+  #   .checkNameExists(name, baseUrl, category)
+  #   .postJson(name, jsonExpression)
+    } else {
     stop(paste0('category = ', category, " is not supported in this version. Post attempt failed."))
   }
 }

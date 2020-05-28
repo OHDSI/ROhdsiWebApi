@@ -51,7 +51,7 @@ getEstimationDefinition <- function(baseUrl, estimationId){
     stop(data$payload$message)
   }
   
-  data$specification <- RJSONIO::fromJSON(data$specification)
+  data$specification <- RJSONIO::fromJSON(data$specification, nullValue = NA)
   data$createdDate <- .millisecondsToDate(data$createdDate)
   data$modifiedDate <- .millisecondsToDate(data$modifiedDate)
   
