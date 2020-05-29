@@ -124,6 +124,40 @@ getConceptSetDefinition <- function(conceptSetId, baseUrl) {
 }
 
 
+
+
+#' Delete ConceptSet id definition.
+#'
+#' @details
+#' Delete the ConceptSet definition from WebAPI for a given ConceptSet id
+#'
+#' @template BaseUrl
+#' @param ConceptSetId   An integer id representing the id that uniquely identifies a ConceptSet
+#'                       definition in a WebApi instance.
+#' @return
+#' An R object representing the ConceptSet definition
+#'
+#' @examples
+#' \dontrun{
+#' getConceptSetDefinition(ConceptSetId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(conceptSetId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidConceptSetId(ids = conceptSetId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "conceptset", "/", conceptSetId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("ConceptSetId : conceptSetId is not present in the WebApi.")
+  }
+}
+
+
 #' Retrieve the meta data for Cohort definitions.
 #'
 #' @details
@@ -222,6 +256,40 @@ getCohortDefinition <- function(cohortId, baseUrl) {
       }
     }
     return(metaData)
+  } else {
+    stop("CohortId : cohortId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Delete Cohort id definition.
+#'
+#' @details
+#' Delete the Cohort definition from WebAPI for a given Cohort id
+#'
+#' @template BaseUrl
+#' @param CohortId   An integer id representing the id that uniquely identifies a Cohort definition in
+#'                   a WebApi instance.
+#' @return
+#' An R object representing the Cohort definition
+#'
+#' @examples
+#' \dontrun{
+#' getCohortDefinition(CohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deleteCohortDefinition <- function(cohortId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidCohortId(ids = cohortId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohortdefinition", "/", cohortId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
   } else {
     stop("CohortId : cohortId is not present in the WebApi.")
   }
@@ -332,6 +400,40 @@ getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 }
 
 
+
+
+#' Delete IncidenceRate id definition.
+#'
+#' @details
+#' Delete the IncidenceRate definition from WebAPI for a given IncidenceRate id
+#'
+#' @template BaseUrl
+#' @param IncidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
+#'                          definition in a WebApi instance.
+#' @return
+#' An R object representing the IncidenceRate definition
+#'
+#' @examples
+#' \dontrun{
+#' getIncidenceRateDefinition(IncidenceRateId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(incidenceRateId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidIncidenceRateId(ids = incidenceRateId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "ir", "/", incidenceRateId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("IncidenceRateId : incidenceRateId is not present in the WebApi.")
+  }
+}
+
+
 #' Retrieve the meta data for Estimation definitions.
 #'
 #' @details
@@ -436,6 +538,40 @@ getEstimationDefinition <- function(estimationId, baseUrl) {
 }
 
 
+
+
+#' Delete Estimation id definition.
+#'
+#' @details
+#' Delete the Estimation definition from WebAPI for a given Estimation id
+#'
+#' @template BaseUrl
+#' @param EstimationId   An integer id representing the id that uniquely identifies a Estimation
+#'                       definition in a WebApi instance.
+#' @return
+#' An R object representing the Estimation definition
+#'
+#' @examples
+#' \dontrun{
+#' getEstimationDefinition(EstimationId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deleteEstimationDefinition <- function(estimationId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(estimationId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidEstimationId(ids = estimationId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "estimation", "/", estimationId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("EstimationId : estimationId is not present in the WebApi.")
+  }
+}
+
+
 #' Retrieve the meta data for Prediction definitions.
 #'
 #' @details
@@ -534,6 +670,40 @@ getPredictionDefinition <- function(predictionId, baseUrl) {
       }
     }
     return(metaData)
+  } else {
+    stop("PredictionId : predictionId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Delete Prediction id definition.
+#'
+#' @details
+#' Delete the Prediction definition from WebAPI for a given Prediction id
+#'
+#' @template BaseUrl
+#' @param PredictionId   An integer id representing the id that uniquely identifies a Prediction
+#'                       definition in a WebApi instance.
+#' @return
+#' An R object representing the Prediction definition
+#'
+#' @examples
+#' \dontrun{
+#' getPredictionDefinition(PredictionId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deletePredictionDefinition <- function(predictionId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(predictionId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidPredictionId(ids = predictionId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "prediction", "/", predictionId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
   } else {
     stop("PredictionId : predictionId is not present in the WebApi.")
   }
@@ -645,6 +815,41 @@ getCharacterizationDefinition <- function(characterizationId, baseUrl) {
 }
 
 
+
+
+#' Delete Characterization id definition.
+#'
+#' @details
+#' Delete the Characterization definition from WebAPI for a given Characterization id
+#'
+#' @template BaseUrl
+#' @param CharacterizationId   An integer id representing the id that uniquely identifies a
+#'                             Characterization definition in a WebApi instance.
+#' @return
+#' An R object representing the Characterization definition
+#'
+#' @examples
+#' \dontrun{
+#' getCharacterizationDefinition(CharacterizationId = 13242,
+#'                               baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(characterizationId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidCharacterizationId(ids = characterizationId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohort-characterization", "/", characterizationId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("CharacterizationId : characterizationId is not present in the WebApi.")
+  }
+}
+
+
 #' Retrieve the meta data for Pathway definitions.
 #'
 #' @details
@@ -743,6 +948,40 @@ getPathwayDefinition <- function(pathwayId, baseUrl) {
       }
     }
     return(metaData)
+  } else {
+    stop("PathwayId : pathwayId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Delete Pathway id definition.
+#'
+#' @details
+#' Delete the Pathway definition from WebAPI for a given Pathway id
+#'
+#' @template BaseUrl
+#' @param PathwayId   An integer id representing the id that uniquely identifies a Pathway definition
+#'                    in a WebApi instance.
+#' @return
+#' An R object representing the Pathway definition
+#'
+#' @examples
+#' \dontrun{
+#' getPathwayDefinition(PathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deletePathwayDefinition <- function(pathwayId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(pathwayId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidPathwayId(ids = pathwayId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "pathway-analysis", "/", pathwayId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
   } else {
     stop("PathwayId : pathwayId is not present in the WebApi.")
   }

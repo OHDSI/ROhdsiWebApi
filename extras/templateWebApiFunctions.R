@@ -103,3 +103,37 @@ get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
     stop("%categoryFirstUpper%Id : %category%Id is not present in the WebApi.")
   }
 }
+
+
+
+
+#' Delete %categoryFirstUpper% id definition.
+#'
+#' @details
+#' Delete the %categoryFirstUpper% definition from WebAPI for a given %categoryFirstUpper% id
+#'  
+#' @template BaseUrl
+#' @param %categoryFirstUpper%Id   An integer id representing the id that uniquely identifies a 
+#'                                 %categoryFirstUpper% definition in a WebApi instance.
+#' @return
+#' An R object representing the %categoryFirstUpper% definition
+#' 
+#' @examples 
+#' \dontrun{
+#' get%categoryFirstUpper%Definition(%categoryFirstUpper%Id = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(%category%Id, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+  
+  if (isTRUE(isValid%categoryFirstUpper%Id(ids = %category%Id, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("%categoryFirstUpper%Id : %category%Id is not present in the WebApi.")
+  }
+}
