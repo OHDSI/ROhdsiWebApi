@@ -6,6 +6,7 @@
 #' sourceKey and %category%Id.
 #'  
 #' @template BaseUrl
+#' @template SourceKey
 #' @param %category%Id   An integer id representing the id that uniquely identifies a 
 #'                       %categoryFirstUpper% definition in a WebApi instance.
 #' @return
@@ -16,7 +17,7 @@
 #' get%categoryFirstUpper%GenerationInformation(%categoryFirstUpper%Id = 13242, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-get%categoryFirstUpper%GenerationInformation <- function(%category%Id, baseUrl){
+get%categoryFirstUpper%GenerationInformation <- function(%category%Id, sourceKey, baseUrl){
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(%category%Id, add = errorMessage)
@@ -91,7 +92,7 @@ invoke%categoryFirstUpper%Definition <- function(%category%Id, baseUrl, sourceKe
   checkmate::assertInt(%category%Id, add = errorMessage)
   checkmate::assertScalar(sourceKey, add = errorMessage)
   checkmate::assertNames(sourceKey, 
-                         subset.of = cdmDataSources %>% 
+                         subset.of = validSourceKeys %>% 
                            dplyr::select(sourceKey) %>% 
                            dplyr::distinct() %>% 
                            dplyr::pull(),
@@ -99,7 +100,7 @@ invoke%categoryFirstUpper%Definition <- function(%category%Id, baseUrl, sourceKe
   )
   checkmate::reportAssertions(errorMessage)
   
-  if (isTRUE(isValid%categoryFirstUpper%Id(ids = %category%Id, baseUrl = baseUrl))) {
+  if (isTRUE(isValid%categoryFirstUpper%Id(%category%Ids = %category%Id, baseUrl = baseUrl))) {
     url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)

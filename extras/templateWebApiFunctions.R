@@ -98,6 +98,9 @@ get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
         metaData$expression <- data
       }
     }
+    if (is.character(metaData$expression)) {
+      metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+    }
     return(metaData)
   } else {
     stop("%categoryFirstUpper%Id : %category%Id is not present in the WebApi.")
@@ -129,7 +132,7 @@ delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
   checkmate::assertInt(%category%Id, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  if (isTRUE(isValid%categoryFirstUpper%Id(ids = %category%Id, baseUrl = baseUrl))) {
+  if (isTRUE(isValid%categoryFirstUpper%Id(%category%Ids = %category%Id, baseUrl = baseUrl))) {
     url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)

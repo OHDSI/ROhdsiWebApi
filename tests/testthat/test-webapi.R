@@ -120,10 +120,12 @@ test_that("Test isValid...", {
   categories <- c("conceptSet","cohort","incidenceRate",
                   "estimation","prediction","characterization",
                   "pathway")
+  arguments <- list(ids = -1, baseUrl = baseUrl)
   for (category in categories) {
     writeLines(sprintf("Testing category '%s'", category))
     functionName <- paste0("isValid", toupper(substr(category, 1, 1)), substr(category, 2, nchar(category)), "Id")
-    value <- do.call(functionName, list(ids = -1, baseUrl = baseUrl))
+    names(arguments)[1] <- sprintf("%sIds", category)
+    value <- do.call(functionName, arguments)
     expect_false(value)
   }
 })

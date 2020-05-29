@@ -4,11 +4,14 @@
 \alias{getCohortGenerationInformation}
 \title{Get generation information for Cohort id.}
 \usage{
-getCohortGenerationInformation(cohortId, baseUrl)
+getCohortGenerationInformation(cohortId, sourceKey, baseUrl)
 }
 \arguments{
 \item{cohortId}{An integer id representing the id that uniquely identifies a Cohort definition in
 a WebApi instance.}
+
+\item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
+Configuration page}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.

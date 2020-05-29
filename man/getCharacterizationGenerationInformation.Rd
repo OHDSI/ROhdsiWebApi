@@ -4,11 +4,18 @@
 \alias{getCharacterizationGenerationInformation}
 \title{Get generation information for Characterization id.}
 \usage{
-getCharacterizationGenerationInformation(characterizationId, baseUrl)
+getCharacterizationGenerationInformation(
+  characterizationId,
+  sourceKey,
+  baseUrl
+)
 }
 \arguments{
 \item{characterizationId}{An integer id representing the id that uniquely identifies a
 Characterization definition in a WebApi instance.}
+
+\item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
+Configuration page}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.

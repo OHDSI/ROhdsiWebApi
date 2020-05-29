@@ -59,7 +59,7 @@ insertCohortDefinitionInPackage <- function(cohortId,
   checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::assertLogical(generateStats, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
-
+  
   object <- getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl)
   if (is.null(name)) {
     name <- object$name
@@ -70,9 +70,9 @@ insertCohortDefinitionInPackage <- function(cohortId,
   jsonFileName <- file.path(jsonFolder, paste(name, "json", sep = "."))
   json <- RJSONIO::toJSON(object$expression, pretty = TRUE)
   SqlRender::writeSql(sql = json, targetFile = jsonFileName)
-
+  
   writeLines(paste("- Created JSON file:", jsonFileName))
-
+  
   # Fetch SQL
   sql <- getCohortDefinitionSql(baseUrl = baseUrl,
                                 cohortId = cohortId,
@@ -126,7 +126,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   checkmate::assertScalar(packageName, add = errorMessage)
   checkmate::assertCharacter(packageName, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
-
+  
   if (insertCohortCreationR && !insertTableSql)
     stop("Need to insert table SQL in order to generate R code")
   if (insertCohortCreationR && generateStats && jsonFolder != "inst/cohorts")
@@ -135,9 +135,9 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
     stop("When generating R code, the sqlFolder must be 'inst/sql/sql_server'")
   if (insertCohortCreationR && !grepl("inst", fileName))
     stop("When generating R code, the input CSV file must be in the inst folder.")
-
+  
   cohortsToCreate <- readr::read_csv(fileName, col_types = readr::cols())
-
+  
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Inserting cohort:", cohortsToCreate$name[i]))
@@ -148,13 +148,13 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
                                     sqlFolder = sqlFolder,
                                     generateStats = generateStats)
   }
-
+  
   # Insert SQL to create empty cohort table
   if (insertTableSql) {
     writeLines("Creating SQL to create empty cohort table")
     .insertSqlForCohortTableInPackage(statsTables = generateStats, sqlFolder = sqlFolder)
   }
-
+  
   # Store information on inclusion rules
   if (generateStats) {
     writeLines("Storing information on inclusion rules")
@@ -165,7 +165,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
     write.csv(rules, csvFileName, row.names = FALSE)
     writeLines(paste("- Created CSV file:", csvFileName))
   }
-
+  
   # Generate R code to create cohorts
   if (insertCohortCreationR) {
     writeLines("Generating R code to create cohorts")
@@ -245,30 +245,30 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 #' The templated SQL to generate the cohort
 #'
 #' @export
-getCohortDefinitionSql <- function(baseUrl, cohortId, generateStats = TRUE) {
+getCohortDefinitionSql <- function(cohortId, baseUrl, generateStats = TRUE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertLogical(generateStats, add = errorMessage)
   checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
-
+  
   url <- sprintf("%1s/cohortdefinition/sql", baseUrl)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-
-  cohortDefinitionExpression <- ROhdsiWebApi::getCohortDefinition(baseUrl = baseUrl,
-                                                                  cohortId = cohortId)
-  validJsonExpression <- RJSONIO::toJSON(cohortDefinitionExpression$expression)
-
+  
+  cohortDefinition <- ROhdsiWebApi::getCohortDefinition(baseUrl = baseUrl,
+                                                        cohortId = cohortId)
+  validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
+  
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   if (compareVersion(a = "2.7.2", b = webApiVersion) == 0) {
     body <- RJSONIO::toJSON(list(expression = validJsonExpression,
                                  options = list(generateStats = generateStats)), digits = 23)
-
+    
   } else {
     body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression),
                                  options = list(generateStats = generateStats)), digits = 23)
   }
-
+  
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
   sql <- (httr::content(req))$templateSql
   return(sql)
@@ -298,25 +298,25 @@ getCohortDefinitionSql <- function(baseUrl, cohortId, generateStats = TRUE) {
 #' }
 #' @export
 getCohortResults <- function(cohortId, baseUrl, sourceKey, mode = 0) {
-
+  
   .checkBaseUrl(baseUrl)
-
+  
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId)
   checkmate::assertScalar(sourceKey)
   checkmate::assertCharacter(sourceKey)
   checkmate::assertInt(mode, lower = 0, upper = 1)
   checkmate::reportAssertions(errorMessage)
-
+  
   cohortGenerationInformation <- getCohortGenerationInformation(baseUrl = baseUrl,
                                                                 sourceKey = sourceKey,
                                                                 cohortId = cohortId)
-
+  
   if (cohortGenerationInformation$status == "COMPLETE") {
     url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=", baseUrl, cohortId, sourceKey, mode)
     json <- httr::GET(url)
     json <- httr::content(json)
-
+    
     results <- list()
     if (is.null(json$summary$percentMatched)) {
       json$summary$percentMatched <- 0
@@ -328,7 +328,7 @@ getCohortResults <- function(cohortId, baseUrl, sourceKey, mode = 0) {
     } else {
       inclusionRuleStats <- lapply(json$inclusionRuleStats, tibble::as_tibble)
       results$inclusionRuleStats <- do.call("rbind", inclusionRuleStats)
-
+      
       treemapData <- jsonlite::fromJSON(json$treemapData, simplifyDataFrame = FALSE)
       treeMapResult <- list(name = c(), size = c())
       treeMapResult <- .flattenTree(node = treemapData, accumulated = treeMapResult)
