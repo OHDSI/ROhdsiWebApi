@@ -31,10 +31,10 @@ Get source concepts that map to standard concepts
 }
 \examples{
 \dontrun{
-conceptSet <- getConceptSetDefinition(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
-conceptIds <- resolveConceptSet(conceptSet = conceptSet,
-                                baseUrl = "http://server.org:80/WebAPI")
-sourceConcepts <- getSourceConcepts(conceptIds = conceptIds, 
+conceptSet <- getConceptSetDefinition(conceptSetId = 282,
+                                      baseUrl = "http://server.org:80/WebAPI")
+conceptIds <- resolveConceptSet(conceptSet = conceptSet, baseUrl = "http://server.org:80/WebAPI")
+sourceConcepts <- getSourceConcepts(conceptIds = conceptIds,
                                     baseUrl = "http://server.org:80/WebAPI")
 }
 

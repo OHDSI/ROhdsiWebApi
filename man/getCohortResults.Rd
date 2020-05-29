@@ -17,8 +17,8 @@ If trailing '/' is used, you may receive an error.}
 \item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
 Configuration page}
 
-\item{mode}{Mode is used to differentiate between inclusion rules and count by events (mode = 0, default) 
-or persons (mode = 1). Default value = 0.}
+\item{mode}{Mode is used to differentiate between inclusion rules and count by events (mode = 0,
+default) or persons (mode = 1). Default value = 0.}
 }
 \value{
 A list of data frames containing cohort generation report
@@ -31,9 +31,9 @@ Obtains a list with data frame containing details of output for cohort generatio
 }
 \examples{
 \dontrun{
-getCohortGeneratioInformation(cohortId = 282, 
-                              baseUrl = "http://server.org:80/WebAPI", 
-                              sourceKey = "HCUP", 
-                              mode = 1)
+getCohortResults(cohortId = 282,
+                 baseUrl = "http://server.org:80/WebAPI",
+                 sourceKey = "HCUP",
+                 mode = 1)
 }
 }

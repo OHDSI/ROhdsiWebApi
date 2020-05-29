@@ -4,10 +4,10 @@
 \alias{isValidConceptSetId}
 \title{Check if ConceptSet id is valid.}
 \usage{
-isValidConceptSetId(ids, baseUrl)
+isValidConceptSetId(conceptSetIds, baseUrl)
 }
 \arguments{
-\item{ids}{A list of integer id(s) of the ConceptSet to be tested for validity.}
+\item{conceptSetIds}{A list of integer id(s) of the ConceptSet to be tested for validity.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -25,6 +25,6 @@ i.e. valid.
 }
 \examples{
 \dontrun{
-isValidConceptSetId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+isValidConceptSetId(conceptSetIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 }
 }

@@ -4,10 +4,10 @@
 \alias{isValidPathwayId}
 \title{Check if Pathway id is valid.}
 \usage{
-isValidPathwayId(ids, baseUrl)
+isValidPathwayId(pathwayIds, baseUrl)
 }
 \arguments{
-\item{ids}{A list of integer id(s) of the Pathway to be tested for validity.}
+\item{pathwayIds}{A list of integer id(s) of the Pathway to be tested for validity.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -25,6 +25,6 @@ valid.
 }
 \examples{
 \dontrun{
-isValidPathwayId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+isValidPathwayId(pathwayIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 }
 }

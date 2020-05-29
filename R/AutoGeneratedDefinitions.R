@@ -50,24 +50,111 @@ getConceptSetDefinitionsMetaData <- function(baseUrl) {
 #' i.e. valid.
 #'
 #' @template BaseUrl
-#' @param    ids   A list of integer id(s) of the ConceptSet to be tested for validity.
+#' @param conceptSetIds   A list of integer id(s) of the ConceptSet to be tested for validity.
 #' @return
 #' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidConceptSetId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' isValidConceptSetId(conceptSetIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidConceptSetId <- function(ids, baseUrl) {
+isValidConceptSetId <- function(conceptSetIds, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(ids, add = errorMessage)
+  checkmate::assertIntegerish(conceptSetIds, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "conceptSet")
-  return(ids %in% validIds)
+  return(conceptSetIds %in% validIds$id)
+}
+
+
+
+
+#' Get ConceptSet id definition.
+#'
+#' @details
+#' Obtain the ConceptSet definition from WebAPI for a given ConceptSet id
+#'
+#' @template BaseUrl
+#' @param conceptSetId   An integer id representing the id that uniquely identifies a ConceptSet
+#'                       definition in a WebApi instance.
+#' @return
+#' An R object representing the ConceptSet definition
+#'
+#' @examples
+#' \dontrun{
+#' getConceptSetDefinition(conceptSetId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getConceptSetDefinition <- function(conceptSetId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(conceptSetId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidConceptSetId(conceptSetIds = conceptSetId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "conceptset", "/", conceptSetId)
+    if ("characterization" == "conceptSet") {
+      url <- paste0(url, "/export")
+    }
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
+    return(metaData)
+  } else {
+    stop("ConceptSetId : conceptSetId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Delete ConceptSet id definition.
+#'
+#' @details
+#' Delete the ConceptSet definition from WebAPI for a given ConceptSet id
+#'
+#' @template BaseUrl
+#' @param conceptSetId   An integer id representing the id that uniquely identifies a ConceptSet
+#'                       definition in a WebApi instance.
+#' @return
+#' An R object representing the ConceptSet definition
+#'
+#' @examples
+#' \dontrun{
+#' deleteConceptSetDefinition(conceptSetId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(conceptSetId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidConceptSetId(ids = conceptSetId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "conceptset", "/", conceptSetId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("ConceptSetId : conceptSetId is not present in the WebApi.")
+  }
 }
 
 
@@ -101,24 +188,216 @@ getCohortDefinitionsMetaData <- function(baseUrl) {
 #' valid.
 #'
 #' @template BaseUrl
-#' @param    ids   A list of integer id(s) of the Cohort to be tested for validity.
+#' @param cohortIds   A list of integer id(s) of the Cohort to be tested for validity.
 #' @return
 #' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidCohortId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' isValidCohortId(cohortIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidCohortId <- function(ids, baseUrl) {
+isValidCohortId <- function(cohortIds, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(ids, add = errorMessage)
+  checkmate::assertIntegerish(cohortIds, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "cohort")
-  return(ids %in% validIds)
+  return(cohortIds %in% validIds$id)
+}
+
+
+
+
+#' Get Cohort id definition.
+#'
+#' @details
+#' Obtain the Cohort definition from WebAPI for a given Cohort id
+#'
+#' @template BaseUrl
+#' @param cohortId   An integer id representing the id that uniquely identifies a Cohort definition in
+#'                   a WebApi instance.
+#' @return
+#' An R object representing the Cohort definition
+#'
+#' @examples
+#' \dontrun{
+#' getCohortDefinition(cohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getCohortDefinition <- function(cohortId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidCohortId(cohortIds = cohortId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohortdefinition", "/", cohortId)
+    if ("characterization" == "cohort") {
+      url <- paste0(url, "/export")
+    }
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
+    return(metaData)
+  } else {
+    stop("CohortId : cohortId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Delete Cohort id definition.
+#'
+#' @details
+#' Delete the Cohort definition from WebAPI for a given Cohort id
+#'
+#' @template BaseUrl
+#' @param cohortId   An integer id representing the id that uniquely identifies a Cohort definition in
+#'                   a WebApi instance.
+#' @return
+#' An R object representing the Cohort definition
+#'
+#' @examples
+#' \dontrun{
+#' deleteCohortDefinition(cohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deleteCohortDefinition <- function(cohortId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidCohortId(ids = cohortId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohortdefinition", "/", cohortId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("CohortId : cohortId is not present in the WebApi.")
+  }
+}
+
+#' Get generation information for Cohort id.
+#'
+#' @details
+#' Get generation (execution) information about Cohort for a given combination of sourceKey and
+#' cohortId.
+#'
+#' @template BaseUrl
+#' @param cohortId   An integer id representing the id that uniquely identifies a Cohort definition in
+#'                   a WebApi instance.
+#' @return
+#' An R object representing the Cohort definition
+#'
+#' @examples
+#' \dontrun{
+#' getCohortGenerationInformation(CohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getCohortGenerationInformation <- function(cohortId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId, add = errorMessage)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  url <- paste0(baseUrl, "/", "cohortdefinition", "/", cohortId, "/", "info")
+  response <- httr::GET(url)
+  if (!response$status_code %in% c(100, 200)) {
+    stop("No Cohort generation information found.")
+  }
+  response <- httr::content(response)
+
+  responseAll <- list()
+  for (i in (1:length(response))) {
+    responseAll[[i]] <- response[[i]] %>% unlist(recursive = TRUE,
+                                                 use.names = TRUE) %>% as.matrix() %>%
+      t() %>% tidyr::as_tibble() %>% dplyr::mutate_if(.integerCharacters,
+                                                      as.integer) %>% dplyr::mutate_if(.numericCharacters,
+                                                                                       as.numeric) %>% dplyr::mutate_if(.logicalCharacters, as.logical) %>% dplyr::mutate(cohortId = !!cohortId) %>%
+      dplyr::mutate(listId = !!i)
+  }
+  response <- dplyr::bind_rows(responseAll)
+
+  cdmDataSources <- getCdmSources(baseUrl) %>% dplyr::select(.data$sourceId, .data$sourceKey)
+
+  if ("executionInfo.id.sourceId" %in% colnames(response)) {
+    names(response) <- stringr::str_replace(string = names(response),
+                                            pattern = "executionInfo.",
+                                            replacement = "")
+  }
+  if ("id.sourceId" %in% colnames(response)) {
+    names(response) <- stringr::str_replace(string = names(response),
+                                            pattern = "id.",
+                                            replacement = "")
+  }
+  if ("sourceId" %in% colnames(response)) {
+    response <- response %>% dplyr::left_join(y = cdmDataSources, by = "sourceId")
+  }
+  return(response)
+}
+
+
+
+
+
+#' Invoke generation of Cohort id.
+#'
+#' @details
+#' Invoke the generation of Cohort id in the WebApi.
+#'
+#' @template BaseUrl
+#' @param cohortId   An integer id representing the id that uniquely identifies a Cohort definition in
+#'                   a WebApi instance.
+#' @template SourceKey
+#' @return
+#' An R object representing the Cohort definition
+#'
+#' @examples
+#' \dontrun{
+#' invokeCohortDefinition(CohortId = 13242,
+#'                        baseUrl = "http://server.org:80/WebAPI",
+#'                        sourceKey = "HCUP")
+#' }
+#' @export
+invokeCohortDefinition <- function(cohortId, baseUrl, sourceKey) {
+  .checkBaseUrl(baseUrl)
+  # get valid source keys from webapi
+  validSourceKeys <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
+    dplyr::pull()
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(cohortId, add = errorMessage)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
+  checkmate::assertNames(sourceKey,
+                         subset.of = cdmDataSources %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
+    dplyr::pull(), add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidCohortId(ids = cohortId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohortdefinition", "/", cohortId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("CohortId : cohortId is not present in the WebApi.")
+  }
 }
 
 
@@ -152,24 +431,218 @@ getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
 #' i.e. valid.
 #'
 #' @template BaseUrl
-#' @param    ids   A list of integer id(s) of the IncidenceRate to be tested for validity.
+#' @param incidenceRateIds   A list of integer id(s) of the IncidenceRate to be tested for validity.
 #' @return
 #' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidIncidenceRateId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' isValidIncidenceRateId(incidenceRateIds = c(13242, 3423, 34),
+#'                        baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidIncidenceRateId <- function(ids, baseUrl) {
+isValidIncidenceRateId <- function(incidenceRateIds, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(ids, add = errorMessage)
+  checkmate::assertIntegerish(incidenceRateIds, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "incidenceRate")
-  return(ids %in% validIds)
+  return(incidenceRateIds %in% validIds$id)
+}
+
+
+
+
+#' Get IncidenceRate id definition.
+#'
+#' @details
+#' Obtain the IncidenceRate definition from WebAPI for a given IncidenceRate id
+#'
+#' @template BaseUrl
+#' @param incidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
+#'                          definition in a WebApi instance.
+#' @return
+#' An R object representing the IncidenceRate definition
+#'
+#' @examples
+#' \dontrun{
+#' getIncidenceRateDefinition(incidenceRateId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(incidenceRateId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidIncidenceRateId(incidenceRateIds = incidenceRateId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "ir", "/", incidenceRateId)
+    if ("characterization" == "incidenceRate") {
+      url <- paste0(url, "/export")
+    }
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
+    return(metaData)
+  } else {
+    stop("IncidenceRateId : incidenceRateId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Delete IncidenceRate id definition.
+#'
+#' @details
+#' Delete the IncidenceRate definition from WebAPI for a given IncidenceRate id
+#'
+#' @template BaseUrl
+#' @param incidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
+#'                          definition in a WebApi instance.
+#' @return
+#' An R object representing the IncidenceRate definition
+#'
+#' @examples
+#' \dontrun{
+#' deleteIncidenceRateDefinition(incidenceRateId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(incidenceRateId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidIncidenceRateId(ids = incidenceRateId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "ir", "/", incidenceRateId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("IncidenceRateId : incidenceRateId is not present in the WebApi.")
+  }
+}
+
+#' Get generation information for IncidenceRate id.
+#'
+#' @details
+#' Get generation (execution) information about IncidenceRate for a given combination of sourceKey and
+#' incidenceRateId.
+#'
+#' @template BaseUrl
+#' @param incidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
+#'                          definition in a WebApi instance.
+#' @return
+#' An R object representing the IncidenceRate definition
+#'
+#' @examples
+#' \dontrun{
+#' getIncidenceRateGenerationInformation(IncidenceRateId = 13242,
+#'                                       baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getIncidenceRateGenerationInformation <- function(incidenceRateId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(incidenceRateId, add = errorMessage)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  url <- paste0(baseUrl, "/", "ir", "/", incidenceRateId, "/", "info")
+  response <- httr::GET(url)
+  if (!response$status_code %in% c(100, 200)) {
+    stop("No IncidenceRate generation information found.")
+  }
+  response <- httr::content(response)
+
+  responseAll <- list()
+  for (i in (1:length(response))) {
+    responseAll[[i]] <- response[[i]] %>% unlist(recursive = TRUE,
+                                                 use.names = TRUE) %>% as.matrix() %>%
+      t() %>% tidyr::as_tibble() %>% dplyr::mutate_if(.integerCharacters,
+                                                      as.integer) %>% dplyr::mutate_if(.numericCharacters,
+                                                                                       as.numeric) %>% dplyr::mutate_if(.logicalCharacters, as.logical) %>% dplyr::mutate(incidenceRateId = !!incidenceRateId) %>%
+      dplyr::mutate(listId = !!i)
+  }
+  response <- dplyr::bind_rows(responseAll)
+
+  cdmDataSources <- getCdmSources(baseUrl) %>% dplyr::select(.data$sourceId, .data$sourceKey)
+
+  if ("executionInfo.id.sourceId" %in% colnames(response)) {
+    names(response) <- stringr::str_replace(string = names(response),
+                                            pattern = "executionInfo.",
+                                            replacement = "")
+  }
+  if ("id.sourceId" %in% colnames(response)) {
+    names(response) <- stringr::str_replace(string = names(response),
+                                            pattern = "id.",
+                                            replacement = "")
+  }
+  if ("sourceId" %in% colnames(response)) {
+    response <- response %>% dplyr::left_join(y = cdmDataSources, by = "sourceId")
+  }
+  return(response)
+}
+
+
+
+
+
+#' Invoke generation of IncidenceRate id.
+#'
+#' @details
+#' Invoke the generation of IncidenceRate id in the WebApi.
+#'
+#' @template BaseUrl
+#' @param incidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
+#'                          definition in a WebApi instance.
+#' @template SourceKey
+#' @return
+#' An R object representing the IncidenceRate definition
+#'
+#' @examples
+#' \dontrun{
+#' invokeIncidenceRateDefinition(IncidenceRateId = 13242,
+#'                               baseUrl = "http://server.org:80/WebAPI",
+#'                               sourceKey = "HCUP")
+#' }
+#' @export
+invokeIncidenceRateDefinition <- function(incidenceRateId, baseUrl, sourceKey) {
+  .checkBaseUrl(baseUrl)
+  # get valid source keys from webapi
+  validSourceKeys <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
+    dplyr::pull()
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(incidenceRateId, add = errorMessage)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
+  checkmate::assertNames(sourceKey,
+                         subset.of = cdmDataSources %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
+    dplyr::pull(), add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidIncidenceRateId(ids = incidenceRateId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "ir", "/", incidenceRateId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("IncidenceRateId : incidenceRateId is not present in the WebApi.")
+  }
 }
 
 
@@ -203,24 +676,111 @@ getEstimationDefinitionsMetaData <- function(baseUrl) {
 #' i.e. valid.
 #'
 #' @template BaseUrl
-#' @param    ids   A list of integer id(s) of the Estimation to be tested for validity.
+#' @param estimationIds   A list of integer id(s) of the Estimation to be tested for validity.
 #' @return
 #' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidEstimationId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' isValidEstimationId(estimationIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidEstimationId <- function(ids, baseUrl) {
+isValidEstimationId <- function(estimationIds, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(ids, add = errorMessage)
+  checkmate::assertIntegerish(estimationIds, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "estimation")
-  return(ids %in% validIds)
+  return(estimationIds %in% validIds$id)
+}
+
+
+
+
+#' Get Estimation id definition.
+#'
+#' @details
+#' Obtain the Estimation definition from WebAPI for a given Estimation id
+#'
+#' @template BaseUrl
+#' @param estimationId   An integer id representing the id that uniquely identifies a Estimation
+#'                       definition in a WebApi instance.
+#' @return
+#' An R object representing the Estimation definition
+#'
+#' @examples
+#' \dontrun{
+#' getEstimationDefinition(estimationId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getEstimationDefinition <- function(estimationId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(estimationId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidEstimationId(estimationIds = estimationId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "estimation", "/", estimationId)
+    if ("characterization" == "estimation") {
+      url <- paste0(url, "/export")
+    }
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
+    return(metaData)
+  } else {
+    stop("EstimationId : estimationId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Delete Estimation id definition.
+#'
+#' @details
+#' Delete the Estimation definition from WebAPI for a given Estimation id
+#'
+#' @template BaseUrl
+#' @param estimationId   An integer id representing the id that uniquely identifies a Estimation
+#'                       definition in a WebApi instance.
+#' @return
+#' An R object representing the Estimation definition
+#'
+#' @examples
+#' \dontrun{
+#' deleteEstimationDefinition(estimationId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deleteEstimationDefinition <- function(estimationId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(estimationId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidEstimationId(ids = estimationId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "estimation", "/", estimationId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("EstimationId : estimationId is not present in the WebApi.")
+  }
 }
 
 
@@ -254,24 +814,111 @@ getPredictionDefinitionsMetaData <- function(baseUrl) {
 #' i.e. valid.
 #'
 #' @template BaseUrl
-#' @param    ids   A list of integer id(s) of the Prediction to be tested for validity.
+#' @param predictionIds   A list of integer id(s) of the Prediction to be tested for validity.
 #' @return
 #' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidPredictionId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' isValidPredictionId(predictionIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidPredictionId <- function(ids, baseUrl) {
+isValidPredictionId <- function(predictionIds, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(ids, add = errorMessage)
+  checkmate::assertIntegerish(predictionIds, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "prediction")
-  return(ids %in% validIds)
+  return(predictionIds %in% validIds$id)
+}
+
+
+
+
+#' Get Prediction id definition.
+#'
+#' @details
+#' Obtain the Prediction definition from WebAPI for a given Prediction id
+#'
+#' @template BaseUrl
+#' @param predictionId   An integer id representing the id that uniquely identifies a Prediction
+#'                       definition in a WebApi instance.
+#' @return
+#' An R object representing the Prediction definition
+#'
+#' @examples
+#' \dontrun{
+#' getPredictionDefinition(predictionId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getPredictionDefinition <- function(predictionId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(predictionId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidPredictionId(predictionIds = predictionId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "prediction", "/", predictionId)
+    if ("characterization" == "prediction") {
+      url <- paste0(url, "/export")
+    }
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
+    return(metaData)
+  } else {
+    stop("PredictionId : predictionId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Delete Prediction id definition.
+#'
+#' @details
+#' Delete the Prediction definition from WebAPI for a given Prediction id
+#'
+#' @template BaseUrl
+#' @param predictionId   An integer id representing the id that uniquely identifies a Prediction
+#'                       definition in a WebApi instance.
+#' @return
+#' An R object representing the Prediction definition
+#'
+#' @examples
+#' \dontrun{
+#' deletePredictionDefinition(predictionId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deletePredictionDefinition <- function(predictionId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(predictionId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidPredictionId(ids = predictionId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "prediction", "/", predictionId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("PredictionId : predictionId is not present in the WebApi.")
+  }
 }
 
 
@@ -305,24 +952,222 @@ getCharacterizationDefinitionsMetaData <- function(baseUrl) {
 #' WebApi i.e. valid.
 #'
 #' @template BaseUrl
-#' @param    ids   A list of integer id(s) of the Characterization to be tested for validity.
+#' @param characterizationIds   A list of integer id(s) of the Characterization to be tested for
+#'                              validity.
 #' @return
 #' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidCharacterizationId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' isValidCharacterizationId(characterizationIds = c(13242, 3423, 34),
+#'                           baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidCharacterizationId <- function(ids, baseUrl) {
+isValidCharacterizationId <- function(characterizationIds, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(ids, add = errorMessage)
+  checkmate::assertIntegerish(characterizationIds, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "characterization")
-  return(ids %in% validIds)
+  return(characterizationIds %in% validIds$id)
+}
+
+
+
+
+#' Get Characterization id definition.
+#'
+#' @details
+#' Obtain the Characterization definition from WebAPI for a given Characterization id
+#'
+#' @template BaseUrl
+#' @param characterizationId   An integer id representing the id that uniquely identifies a
+#'                             Characterization definition in a WebApi instance.
+#' @return
+#' An R object representing the Characterization definition
+#'
+#' @examples
+#' \dontrun{
+#' getCharacterizationDefinition(characterizationId = 13242,
+#'                               baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getCharacterizationDefinition <- function(characterizationId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(characterizationId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidCharacterizationId(characterizationIds = characterizationId,
+                                       baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohort-characterization", "/", characterizationId)
+    if ("characterization" == "characterization") {
+      url <- paste0(url, "/export")
+    }
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
+    return(metaData)
+  } else {
+    stop("CharacterizationId : characterizationId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Delete Characterization id definition.
+#'
+#' @details
+#' Delete the Characterization definition from WebAPI for a given Characterization id
+#'
+#' @template BaseUrl
+#' @param characterizationId   An integer id representing the id that uniquely identifies a
+#'                             Characterization definition in a WebApi instance.
+#' @return
+#' An R object representing the Characterization definition
+#'
+#' @examples
+#' \dontrun{
+#' deleteCharacterizationDefinition(characterizationId = 13242,
+#'                                  baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(characterizationId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidCharacterizationId(ids = characterizationId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohort-characterization", "/", characterizationId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("CharacterizationId : characterizationId is not present in the WebApi.")
+  }
+}
+
+#' Get generation information for Characterization id.
+#'
+#' @details
+#' Get generation (execution) information about Characterization for a given combination of sourceKey
+#' and characterizationId.
+#'
+#' @template BaseUrl
+#' @param characterizationId   An integer id representing the id that uniquely identifies a
+#'                             Characterization definition in a WebApi instance.
+#' @return
+#' An R object representing the Characterization definition
+#'
+#' @examples
+#' \dontrun{
+#' getCharacterizationGenerationInformation(CharacterizationId = 13242,
+#'                                          baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getCharacterizationGenerationInformation <- function(characterizationId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(characterizationId, add = errorMessage)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  url <- paste0(baseUrl, "/", "cohort-characterization", "/", characterizationId, "/", "generation")
+  response <- httr::GET(url)
+  if (!response$status_code %in% c(100, 200)) {
+    stop("No Characterization generation information found.")
+  }
+  response <- httr::content(response)
+
+  responseAll <- list()
+  for (i in (1:length(response))) {
+    responseAll[[i]] <- response[[i]] %>% unlist(recursive = TRUE,
+                                                 use.names = TRUE) %>% as.matrix() %>%
+      t() %>% tidyr::as_tibble() %>% dplyr::mutate_if(.integerCharacters,
+                                                      as.integer) %>% dplyr::mutate_if(.numericCharacters,
+                                                                                       as.numeric) %>% dplyr::mutate_if(.logicalCharacters, as.logical) %>% dplyr::mutate(characterizationId = !!characterizationId) %>%
+      dplyr::mutate(listId = !!i)
+  }
+  response <- dplyr::bind_rows(responseAll)
+
+  cdmDataSources <- getCdmSources(baseUrl) %>% dplyr::select(.data$sourceId, .data$sourceKey)
+
+  if ("executionInfo.id.sourceId" %in% colnames(response)) {
+    names(response) <- stringr::str_replace(string = names(response),
+                                            pattern = "executionInfo.",
+                                            replacement = "")
+  }
+  if ("id.sourceId" %in% colnames(response)) {
+    names(response) <- stringr::str_replace(string = names(response),
+                                            pattern = "id.",
+                                            replacement = "")
+  }
+  if ("sourceId" %in% colnames(response)) {
+    response <- response %>% dplyr::left_join(y = cdmDataSources, by = "sourceId")
+  }
+  return(response)
+}
+
+
+
+
+
+#' Invoke generation of Characterization id.
+#'
+#' @details
+#' Invoke the generation of Characterization id in the WebApi.
+#'
+#' @template BaseUrl
+#' @param characterizationId   An integer id representing the id that uniquely identifies a
+#'                             Characterization definition in a WebApi instance.
+#' @template SourceKey
+#' @return
+#' An R object representing the Characterization definition
+#'
+#' @examples
+#' \dontrun{
+#' invokeCharacterizationDefinition(CharacterizationId = 13242,
+#'                                  baseUrl = "http://server.org:80/WebAPI",
+#'                                  sourceKey = "HCUP")
+#' }
+#' @export
+invokeCharacterizationDefinition <- function(characterizationId, baseUrl, sourceKey) {
+  .checkBaseUrl(baseUrl)
+  # get valid source keys from webapi
+  validSourceKeys <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
+    dplyr::pull()
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(characterizationId, add = errorMessage)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
+  checkmate::assertNames(sourceKey,
+                         subset.of = cdmDataSources %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
+    dplyr::pull(), add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidCharacterizationId(ids = characterizationId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohort-characterization", "/", characterizationId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("CharacterizationId : characterizationId is not present in the WebApi.")
+  }
 }
 
 
@@ -356,22 +1201,214 @@ getPathwayDefinitionsMetaData <- function(baseUrl) {
 #' valid.
 #'
 #' @template BaseUrl
-#' @param    ids   A list of integer id(s) of the Pathway to be tested for validity.
+#' @param pathwayIds   A list of integer id(s) of the Pathway to be tested for validity.
 #' @return
 #' A logical vector indicating which of the ids are valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidPathwayId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' isValidPathwayId(pathwayIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValidPathwayId <- function(ids, baseUrl) {
+isValidPathwayId <- function(pathwayIds, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(ids, add = errorMessage)
+  checkmate::assertIntegerish(pathwayIds, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "pathway")
-  return(ids %in% validIds)
+  return(pathwayIds %in% validIds$id)
+}
+
+
+
+
+#' Get Pathway id definition.
+#'
+#' @details
+#' Obtain the Pathway definition from WebAPI for a given Pathway id
+#'
+#' @template BaseUrl
+#' @param pathwayId   An integer id representing the id that uniquely identifies a Pathway definition
+#'                    in a WebApi instance.
+#' @return
+#' An R object representing the Pathway definition
+#'
+#' @examples
+#' \dontrun{
+#' getPathwayDefinition(pathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getPathwayDefinition <- function(pathwayId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(pathwayId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidPathwayId(pathwayIds = pathwayId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "pathway-analysis", "/", pathwayId)
+    if ("characterization" == "pathway") {
+      url <- paste0(url, "/export")
+    }
+    metaData <- httr::GET(url)
+    metaData <- httr::content(metaData)
+    if (!is.null(metaData$payload$message)) {
+      stop(metaData$payload$message)
+    }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
+    return(metaData)
+  } else {
+    stop("PathwayId : pathwayId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Delete Pathway id definition.
+#'
+#' @details
+#' Delete the Pathway definition from WebAPI for a given Pathway id
+#'
+#' @template BaseUrl
+#' @param pathwayId   An integer id representing the id that uniquely identifies a Pathway definition
+#'                    in a WebApi instance.
+#' @return
+#' An R object representing the Pathway definition
+#'
+#' @examples
+#' \dontrun{
+#' deletePathwayDefinition(pathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+deletePathwayDefinition <- function(pathwayId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(pathwayId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidPathwayId(ids = pathwayId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "pathway-analysis", "/", pathwayId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("PathwayId : pathwayId is not present in the WebApi.")
+  }
+}
+
+#' Get generation information for Pathway id.
+#'
+#' @details
+#' Get generation (execution) information about Pathway for a given combination of sourceKey and
+#' pathwayId.
+#'
+#' @template BaseUrl
+#' @param pathwayId   An integer id representing the id that uniquely identifies a Pathway definition
+#'                    in a WebApi instance.
+#' @return
+#' An R object representing the Pathway definition
+#'
+#' @examples
+#' \dontrun{
+#' getPathwayGenerationInformation(PathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getPathwayGenerationInformation <- function(pathwayId, baseUrl) {
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(pathwayId, add = errorMessage)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  url <- paste0(baseUrl, "/", "pathway-analysis", "/", pathwayId, "/", "generation")
+  response <- httr::GET(url)
+  if (!response$status_code %in% c(100, 200)) {
+    stop("No Pathway generation information found.")
+  }
+  response <- httr::content(response)
+
+  responseAll <- list()
+  for (i in (1:length(response))) {
+    responseAll[[i]] <- response[[i]] %>% unlist(recursive = TRUE,
+                                                 use.names = TRUE) %>% as.matrix() %>%
+      t() %>% tidyr::as_tibble() %>% dplyr::mutate_if(.integerCharacters,
+                                                      as.integer) %>% dplyr::mutate_if(.numericCharacters,
+                                                                                       as.numeric) %>% dplyr::mutate_if(.logicalCharacters, as.logical) %>% dplyr::mutate(pathwayId = !!pathwayId) %>%
+      dplyr::mutate(listId = !!i)
+  }
+  response <- dplyr::bind_rows(responseAll)
+
+  cdmDataSources <- getCdmSources(baseUrl) %>% dplyr::select(.data$sourceId, .data$sourceKey)
+
+  if ("executionInfo.id.sourceId" %in% colnames(response)) {
+    names(response) <- stringr::str_replace(string = names(response),
+                                            pattern = "executionInfo.",
+                                            replacement = "")
+  }
+  if ("id.sourceId" %in% colnames(response)) {
+    names(response) <- stringr::str_replace(string = names(response),
+                                            pattern = "id.",
+                                            replacement = "")
+  }
+  if ("sourceId" %in% colnames(response)) {
+    response <- response %>% dplyr::left_join(y = cdmDataSources, by = "sourceId")
+  }
+  return(response)
+}
+
+
+
+
+
+#' Invoke generation of Pathway id.
+#'
+#' @details
+#' Invoke the generation of Pathway id in the WebApi.
+#'
+#' @template BaseUrl
+#' @param pathwayId   An integer id representing the id that uniquely identifies a Pathway definition
+#'                    in a WebApi instance.
+#' @template SourceKey
+#' @return
+#' An R object representing the Pathway definition
+#'
+#' @examples
+#' \dontrun{
+#' invokePathwayDefinition(PathwayId = 13242,
+#'                         baseUrl = "http://server.org:80/WebAPI",
+#'                         sourceKey = "HCUP")
+#' }
+#' @export
+invokePathwayDefinition <- function(pathwayId, baseUrl, sourceKey) {
+  .checkBaseUrl(baseUrl)
+  # get valid source keys from webapi
+  validSourceKeys <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
+    dplyr::pull()
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(pathwayId, add = errorMessage)
+  checkmate::assertScalar(sourceKey, add = errorMessage)
+  checkmate::assertNames(sourceKey,
+                         subset.of = cdmDataSources %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
+    dplyr::pull(), add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  if (isTRUE(isValidPathwayId(ids = pathwayId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "pathway-analysis", "/", pathwayId)
+    response <- httr::DELETE(url)
+    response <- httr::http_status(response)
+  } else {
+    stop("PathwayId : pathwayId is not present in the WebApi.")
+  }
 }

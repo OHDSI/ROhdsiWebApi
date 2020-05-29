@@ -16,39 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get a cohort definition
-#'
-#' @details
-#' Obtain the cohort definition from WebAPI for a given cohort id
-#'
-#' @template BaseUrl
-#' @template CohortId
-#' 
-#' @return
-#' An R object representing the cohort definition
-#'
-#' @examples
-#' \dontrun{
-#' getCohortDefinition(cohortId = 282, baseUrl = "http://server.org:80/WebAPI")
-#' }
-#'
-#' @export
-getCohortDefinition <- function(cohortId, baseUrl) {
-  .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(cohortId, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-  
-  url <- paste(baseUrl, "cohortdefinition", cohortId, sep = "/")
-  json <- httr::GET(url)
-  data <- httr::content(json)
-  if (!is.null(data$payload$message)) {
-    stop(data$payload$message)
-  }
-  data$expression <- RJSONIO::fromJSON(data$expression)
-  return(data)
-}
-
 
 #' Load a cohort definition and insert it into this package
 #'
@@ -56,11 +23,10 @@ getCohortDefinition <- function(cohortId, baseUrl) {
 #' Load a cohort definition from a WebApi instance and insert it into this package. This will fetch
 #' the json object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the
 #' template SQL and store it in another folder (defaults to the 'inst/sql/sql_server' folder). Both
-#' folders will be created if they don't exist.
-#' When using generateStats = TRUE, the following tables are required to exist when executing the SQL:
-#' cohort_inclusion, cohort_inclusion_result, cohort_inclusion_stats, and cohort_summary_stats. Also
-#' note that the cohort_inclusion table should be populated with the names of the rules prior to
-#' executing the cohort definition SQL.
+#' folders will be created if they don't exist. When using generateStats = TRUE, the following tables
+#' are required to exist when executing the SQL: cohort_inclusion, cohort_inclusion_result,
+#' cohort_inclusion_stats, and cohort_summary_stats. Also note that the cohort_inclusion table should
+#' be populated with the names of the rules prior to executing the cohort definition SQL.
 #'
 #' @template BaseUrl
 #' @template CohortId
@@ -94,8 +60,7 @@ insertCohortDefinitionInPackage <- function(cohortId,
   checkmate::assertLogical(generateStats, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  object <- getCohortDefinition(cohortId = cohortId, 
-                                baseUrl = baseUrl)
+  object <- getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl)
   if (is.null(name)) {
     name <- object$name
   }
@@ -105,7 +70,7 @@ insertCohortDefinitionInPackage <- function(cohortId,
   jsonFileName <- file.path(jsonFolder, paste(name, "json", sep = "."))
   json <- RJSONIO::toJSON(object$expression, pretty = TRUE)
   SqlRender::writeSql(sql = json, targetFile = jsonFileName)
-  
+
   writeLines(paste("- Created JSON file:", jsonFileName))
 
   # Fetch SQL
@@ -265,11 +230,10 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 #' Get a cohort definition's SQL from WebAPI
 #'
 #' @details
-#' Obtains the template SQL of a cohort.
-#' When using generateStats = TRUE, the following tables are required to exist when executing the SQL:
-#' cohort_inclusion, cohort_inclusion_result, cohort_inclusion_stats, and cohort_summary_stats. Also
-#' note that the cohort_inclusion table should be populated with the names of the rules prior to
-#' executing the cohort definition SQL.
+#' Obtains the template SQL of a cohort. When using generateStats = TRUE, the following tables are
+#' required to exist when executing the SQL: cohort_inclusion, cohort_inclusion_result,
+#' cohort_inclusion_stats, and cohort_summary_stats. Also note that the cohort_inclusion table should
+#' be populated with the names of the rules prior to executing the cohort definition SQL.
 #'
 #' @template BaseUrl
 #' @template CohortId
@@ -291,7 +255,7 @@ getCohortDefinitionSql <- function(baseUrl, cohortId, generateStats = TRUE) {
   url <- sprintf("%1s/cohortdefinition/sql", baseUrl)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
 
-  cohortDefinitionExpression <- ROhdsiWebApi::getCohortDefinition(baseUrl = baseUrl, 
+  cohortDefinitionExpression <- ROhdsiWebApi::getCohortDefinition(baseUrl = baseUrl,
                                                                   cohortId = cohortId)
   validJsonExpression <- RJSONIO::toJSON(cohortDefinitionExpression$expression)
 
@@ -310,160 +274,6 @@ getCohortDefinitionSql <- function(baseUrl, cohortId, generateStats = TRUE) {
   return(sql)
 }
 
-#' Get cohort generation information
-#'
-#' @details
-#' Get information about cohort generation for a given combination of 
-#' sourceKey and cohortId
-#'
-#' @template BaseUrl
-#' @template CohortId
-#' @template SourceKey
-#'
-#' @return
-#' A data frame of cohort generation statuses, start times, and execution durations.
-#'
-#' @export
-getCohortGenerationInformation <- function(cohortId, baseUrl, sourceKey) {
-  .checkBaseUrl(baseUrl)
-  cdmDataSources <- getCdmSources(baseUrl)
-  
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(cohortId, add = errorMessage)
-  checkmate::assertCharacter(sourceKey, min.len = 1, max.len = 1, add = errorMessage)
-  checkmate::assertNames(sourceKey, 
-                         subset.of = cdmDataSources %>% 
-                           dplyr::select(sourceKey) %>% 
-                           dplyr::distinct() %>% 
-                           dplyr::pull(),
-                         add = errorMessage
-  )
-  checkmate::reportAssertions(errorMessage)
-  
-  sourceId <- cdmDataSources %>% 
-              dplyr::filter(sourceKey == !!sourceKey) %>% 
-              dplyr::select(.data$sourceId) %>% 
-              dplyr::distinct() %>% 
-              dplyr::pull()
-  
-  cohortDefinition <- getCohortDefinition(baseUrl = baseUrl, cohortId = cohortId)
-
-  url <- sprintf("%1s/cohortdefinition/%2s/info", baseUrl, cohortId)
-  response <- httr::GET(url)
-  
-  if (!response$status_code %in% c(100,200)) {
-        stop('No Cohort generation information found.')
-  }
-  
-  response <- httr::content(response)[[1]] %>%
-    unlist(recursive = TRUE, use.names = TRUE) %>%
-    as.matrix() %>%
-    t() %>%
-    tidyr::as_tibble() %>%
-    dplyr::mutate_if(.integerCharacters, as.integer) %>%
-    dplyr::mutate_if(.numericCharacters, as.numeric) %>%
-    dplyr::mutate_if(.logicalCharacters, as.logical) %>%
-    dplyr::mutate(cohortId = !!cohortId,
-                  cohortName = !!cohortDefinition$name) %>%
-    dplyr::mutate(startTime = .millisecondsToDate(milliseconds = .data$startTime))
-  
-  return(response)
-}
-
-
-
-#' Invoke the generation of cohort
-#'
-#' @details
-#' Invokes the generation of a cohort for a given combination of sourceKey and
-#' cohortId. Use \code{getCohortGenerationStatus} to check the progress.
-#'
-#' @template BaseUrl
-#' @template CohortId
-#' @template SourceKey
-#'
-#' @export
-invokeCohortGeneration <- function(baseUrl, sourceKey, cohortId) {
-  .checkBaseUrl(baseUrl)
-  cdmDataSources <- getCdmSources(baseUrl)
-  
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(cohortId, add = errorMessage)
-  checkmate::assertCharacter(sourceKey, min.len = 1, max.len = 1, add = errorMessage)
-  checkmate::assertNames(sourceKey, 
-                         subset.of = cdmDataSources %>% 
-                           dplyr::select(sourceKey) %>% 
-                           dplyr::distinct() %>% 
-                           dplyr::pull(),
-                         add = errorMessage
-  )
-  checkmate::reportAssertions(errorMessage)
-  
-  result <- getCohortGenerationInformation(baseUrl = baseUrl,
-                                           sourceKey = sourceKey,
-                                           cohortId = cohortId)
-  if (result$status %in% c("STARTING", "STARTED", "RUNNING")) {
-    result$status
-  } else {
-    url <- sprintf("%1s/cohortdefinition/%2s/generate/%3s", baseUrl, cohortId, sourceKey)
-    json <- httr::GET(url)
-    json <- httr::content(json)
-    json$status
-  }
-}
-
-
-#' Delete a cohort definition
-#'
-#' @details
-#' Deletes cohort definition from WebAPI for a given cohort id
-#'
-#' @template BaseUrl
-#' @template CohortId
-#' @param silent      [OPTIONAL, Default = FALSE] If TRUE, function will work silently without showing any warning or error message.
-#' @param stopOnError [OPTIONAL, Default = FALSE] If silent silent = TRUE, then this will be ignored.
-#' 
-#' @return
-#' NA. A status message will be shown.
-#'
-#' @examples
-#' \dontrun{
-#' deleteCohortDefinition(cohortId = 282, baseUrl = "http://server.org:80/WebAPI")
-#' }
-#'
-#' @export
-deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnError = FALSE) {
-  .checkBaseUrl(baseUrl)
-  
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(cohortId, add = errorMessage)
-  checkmate::assertLogical(silent, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-  
-  cohortDefinition <- tryCatch(ROhdsiWebApi::getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl),
-                               error = function(e) e, 
-                               warning = function(w) w)
-  
-  thereIsAWarning <- stringr::str_detect(string = tolower(paste0("",cohortDefinition$message)), pattern = as.character(cohortId))
-  
-  if (!silent) {
-    if (thereIsAWarning) {
-      warning(paste0("", cohortDefinition$message))
-    } else {
-      url <- paste(baseUrl, "cohortdefinition", cohortId, sep = "/")
-      response <- httr::DELETE(url)
-      response <- httr::http_status(response)
-      if (!stringr::str_detect(string = tolower(response$category), pattern = 'success')) {
-        if (stopOnError) {
-          stop("Deleting cohort definition id:", cohortId, " failed.")
-        } else {
-          warning("Deleting cohort definition id:", cohortId, " failed.")
-        }
-      }
-    }
-  }
-  return(NA)
-}
 
 
 
@@ -471,68 +281,66 @@ deleteCohortDefinition <- function(cohortId, baseUrl, silent = FALSE, stopOnErro
 #'
 #' @details
 #' Obtains a list with data frame containing details of output for cohort generation
-#' 
+#'
 #' @template BaseUrl
 #' @template CohortId
 #' @template SourceKey
-#' @param mode        Mode is used to differentiate between inclusion rules and count by events (mode = 0, default) 
-#'                    or persons (mode = 1). Default value = 0. 
-#' @return            A list of data frames containing cohort generation report
+#' @param mode   Mode is used to differentiate between inclusion rules and count by events (mode = 0,
+#'               default) or persons (mode = 1). Default value = 0.
+#' @return
+#' A list of data frames containing cohort generation report
 #' @examples
 #' \dontrun{
-#' getCohortGeneratioInformation(cohortId = 282, 
-#'                               baseUrl = "http://server.org:80/WebAPI", 
-#'                               sourceKey = "HCUP", 
-#'                               mode = 1)
+#' getCohortResults(cohortId = 282,
+#'                  baseUrl = "http://server.org:80/WebAPI",
+#'                  sourceKey = "HCUP",
+#'                  mode = 1)
 #' }
 #' @export
-getCohortResults <- function(cohortId, baseUrl , sourceKey, mode = 0) {
-  
+getCohortResults <- function(cohortId, baseUrl, sourceKey, mode = 0) {
+
   .checkBaseUrl(baseUrl)
-  
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId)
   checkmate::assertScalar(sourceKey)
   checkmate::assertCharacter(sourceKey)
   checkmate::assertInt(mode, lower = 0, upper = 1)
   checkmate::reportAssertions(errorMessage)
-  
-  cohortGenerationInformation <-
-    getCohortGenerationInformation(baseUrl = baseUrl,
-                                   sourceKey = sourceKey,
-                                   cohortId = cohortId)
-  
-  if (cohortGenerationInformation$status == 'COMPLETE') {
+
+  cohortGenerationInformation <- getCohortGenerationInformation(baseUrl = baseUrl,
+                                                                sourceKey = sourceKey,
+                                                                cohortId = cohortId)
+
+  if (cohortGenerationInformation$status == "COMPLETE") {
     url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=", baseUrl, cohortId, sourceKey, mode)
     json <- httr::GET(url)
     json <- httr::content(json)
-    
+
     results <- list()
     if (is.null(json$summary$percentMatched)) {
       json$summary$percentMatched <- 0
     }
-    results$summary <- json$summary %>%
-      tidyr::as_tibble()
+    results$summary <- json$summary %>% tidyr::as_tibble()
     if (length(json$inclusionRuleStats) == 0) {
       results$inclusionRuleStats <- NULL
       results$treemapData <- NULL
     } else {
       inclusionRuleStats <- lapply(json$inclusionRuleStats, tibble::as_tibble)
       results$inclusionRuleStats <- do.call("rbind", inclusionRuleStats)
-      
+
       treemapData <- jsonlite::fromJSON(json$treemapData, simplifyDataFrame = FALSE)
       treeMapResult <- list(name = c(), size = c())
       treeMapResult <- .flattenTree(node = treemapData, accumulated = treeMapResult)
       results$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
-      results$treemapData$SatisfiedNumber = stringr::str_count(string = results$treemapData$bits, pattern = '1')
+      results$treemapData$SatisfiedNumber <- stringr::str_count(string = results$treemapData$bits,
+                                                                pattern = "1")
     }
     return(results)
   } else if (cohortGenerationInformation$status %in% c("STARTING", "STARTED", "RUNNING")) {
-    stop(paste("Cohort generation not complete. Status is reported to be ", 
-                cohortGenerationInformation$status,
-               "please wait till generation status is COMPLETE."
-               )
-    )
+    stop(paste("Cohort generation not complete. Status is reported to be ",
+               cohortGenerationInformation$status,
+               "please wait till generation status is COMPLETE."))
   } else {
     stop("No results found. Cohort generation may not have been invoked.")
   }

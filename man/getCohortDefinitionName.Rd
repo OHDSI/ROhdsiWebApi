@@ -23,6 +23,6 @@ The name of the cohort.
 (Deprecated) Get a cohort definition's name from WebAPI
 }
 \details{
-(Deprecated) Obtains the name of a cohort. 
-This function has been deprecated. As an alternative please use getCohortDefinition
+(Deprecated) Obtains the name of a cohort. This function has been deprecated. As an alternative
+please use getCohortDefinition
 }

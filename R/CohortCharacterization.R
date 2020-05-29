@@ -40,7 +40,7 @@ getCohortCharacterizationResults <- function(characterizationId,
                                              cohortIds = c(),
                                              domains = c(),
                                              analysisNames = c()) {
-  
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(characterizationId, add = errorMessage)
   if (!is.null(generationId)) {
@@ -57,7 +57,7 @@ getCohortCharacterizationResults <- function(characterizationId,
     checkmate::assertCharacter(analysisNames, add = errorMessage)
   }
   checkmate::reportAssertions(errorMessage)
-  
+
   if (is.null(generationId)) {
     generationId <- .getLatestGenerationId(baseUrl = baseUrl,
                                            characterizationId = characterizationId,
@@ -138,106 +138,4 @@ getCohortCharacterizationResults <- function(characterizationId,
   } else {
     stop("Cohort characterization results not found. Please generate the cohort characterization.")
   }
-}
-
-#' Get a characterization definition expression
-#'
-#' @details
-#' Obtain the characterization definition expression from WebAPI as R-object for a given characterization id/generation id
-#'
-#' @template BaseUrl
-#' 
-#' @param characterizationId   The number indicating which characterization definition to fetch.
-#' @param generationId        (OPTIONAL) Used to specify the id of a particular generation of a cohort
-#'                             characterization. If generationId is provided, then characterizationId is ignored.
-#' 
-#' @return
-#' A R-object representing the characterizationId/generationId definition returned by WebApi.
-#' A warning will be shown if the characterizationId/generationId does not exist.
-#'
-#' @examples
-#' \dontrun{
-#' getCohortCharacterizationDefinition(characterizationId = 282, 
-#'                                     baseUrl = "http://server.org:80/WebAPI")
-#' }
-#'
-#' @export
-getCohortCharacterizationDefinition <- function(characterizationId, baseUrl,generationId = NULL) {
-  .checkBaseUrl(baseUrl)
-  
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(characterizationId, add = errorMessage)
-  if (!is.null(generationId)) {
-    checkmate::assertInt(generationId, add = errorMessage)
-  }
-  checkmate::reportAssertions(errorMessage)
-  
-  if (is.null(generationId)) {
-    url <- sprintf("%s/cohort-characterization/%d/export", baseUrl, characterizationId)
-  } else {
-    url <- sprintf("%s/cohort-characterization/generation/%d/design", baseUrl, generationId)
-  }
-  json <- httr::GET(url)
-  data <- httr::content(json, as = 'text', encoding = 'UTF-8')
-  data <- RJSONIO::fromJSON(data)
-  if (!is.null(data$payload$message)) {
-    stop(data$payload$message)
-  }
-  return(data)
-}
-
-#' Delete a cohort characterization definition and results
-#'
-#' @details
-#' Deletes cohort characterization definition and results from WebAPI for a given characterization id
-#'
-#' @template BaseUrl
-#' 
-#' @param characterizationId   The number indicating which characterization definition to fetch.
-#' @param silent      [OPTIONAL, Default = FALSE] If TRUE, function will work silently without showing any warning or error message.
-#' @param stopOnError [OPTIONAL, Default = FALSE] If silent silent = TRUE, then this will be ignored.
-#' 
-#' @return
-#' NA. A status message will be shown.
-#'
-#' @examples
-#' \dontrun{
-#' deleteCohortCharacterizationDefinition(characterizationId = 282, 
-#'                                        baseUrl = "http://server.org:80/WebAPI")
-#' }
-#'
-#' @export
-deleteCohortCharacterizationDefinition <- function(characterizationId, baseUrl, silent = FALSE, stopOnError = FALSE) {
-  .checkBaseUrl(baseUrl)
-  
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(characterizationId, add = errorMessage)
-  checkmate::assertLogical(silent, add = errorMessage)
-  checkmate::assertLogical(stopOnError, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-  
-  characterizationDefinition <- tryCatch(getCohortCharacterizationDefinition(characterizationId = characterizationId, 
-                                                                                               baseUrl = baseUrl),
-                                         error=function(e) e, 
-                                         warning=function(w) w
-  )
-  thereIsAWarning <- stringr::str_detect(string = tolower(paste0("",characterizationDefinition$message)), pattern = as.character(characterizationId))
-  
-  if (!silent) {
-    if (thereIsAWarning) {
-      warning(paste0("", characterizationDefinition$message))
-    } else {
-      url <- sprintf("%s/cohort-characterization/%d", baseUrl, characterizationId)
-      response <- httr::DELETE(url)
-      response <- httr::http_status(response)
-      if (!stringr::str_detect(string = tolower(response$category), pattern = 'success')) {
-        if (stopOnError) {
-          stop("Deleting characterization definition id:", characterizationId, " failed.")
-        } else {
-          warning("Deleting characterization definition id:", characterizationId, " failed.")
-        }
-      }
-    }
-  }
-  return(NA)
 }

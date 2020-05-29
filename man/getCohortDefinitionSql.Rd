@@ -25,9 +25,8 @@ The templated SQL to generate the cohort
 Get a cohort definition's SQL from WebAPI
 }
 \details{
-Obtains the template SQL of a cohort.
-When using generateStats = TRUE, the following tables are required to exist when executing the SQL:
-cohort_inclusion, cohort_inclusion_result, cohort_inclusion_stats, and cohort_summary_stats. Also
-note that the cohort_inclusion table should be populated with the names of the rules prior to
-executing the cohort definition SQL.
+Obtains the template SQL of a cohort. When using generateStats = TRUE, the following tables are
+required to exist when executing the SQL: cohort_inclusion, cohort_inclusion_result,
+cohort_inclusion_stats, and cohort_summary_stats. Also note that the cohort_inclusion table should
+be populated with the names of the rules prior to executing the cohort definition SQL.
 }

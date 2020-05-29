@@ -4,10 +4,10 @@
 \alias{isValidEstimationId}
 \title{Check if Estimation id is valid.}
 \usage{
-isValidEstimationId(ids, baseUrl)
+isValidEstimationId(estimationIds, baseUrl)
 }
 \arguments{
-\item{ids}{A list of integer id(s) of the Estimation to be tested for validity.}
+\item{estimationIds}{A list of integer id(s) of the Estimation to be tested for validity.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -25,6 +25,6 @@ i.e. valid.
 }
 \examples{
 \dontrun{
-isValidEstimationId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+isValidEstimationId(estimationIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 }
 }

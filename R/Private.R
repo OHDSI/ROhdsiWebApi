@@ -28,3 +28,51 @@
 .integerCharacters <- function(x) {
   !any(is.na(suppressWarnings(as.integer(x)))) & is.character(x)
 }
+
+.getStandardCategories <- function(){
+  dplyr::tibble(categoryStandard =  c("conceptSet","cohort","incidenceRate",
+                               "estimation","prediction","characterization",
+                               "pathway")
+  ) %>% 
+    dplyr::mutate(categoryFirstUpper = paste0(toupper(substr(.data$categoryStandard, 1, 1)), substr(.data$categoryStandard, 2, nchar(.data$categoryStandard)))) %>% 
+    dplyr::mutate(categoryAsUsedInWebApi = dplyr::case_when(categoryStandard == 'incidenceRate' ~ 'ir',
+                                                            categoryStandard == 'conceptSet' ~ 'conceptset',
+                                                            categoryStandard == 'cohort' ~'cohortdefinition',
+                                                            categoryStandard == 'characterization' ~ 'cohort-characterization',
+                                                            categoryStandard == 'pathway' ~'pathway-analysis',
+                                                            TRUE ~ categoryStandard
+    )
+    # ) %>% 
+    # dplyr::mutate(categoryUrlExtension = dplyr::case_when(categoryStandard == 'characterization' ~ '',
+    #                                                       TRUE ~ categoryStandard
+    # )
+    ) %>%  
+    dplyr::mutate(categoryUrlGeneration = dplyr::case_when(categoryStandard == 'cohort' ~ 'info',
+                                                           categoryStandard == 'characterization' ~ 'generation',
+                                                           categoryStandard == 'pathway' ~ 'generation',
+                                                           categoryStandard == 'incidenceRate' ~ 'info',
+                                                           TRUE ~ '')) %>% 
+    return()
+}
+
+
+# recursively flattens tree based structure.
+.flattenTree <- function(node, accumulated) {
+  if (is.null(node$children)) {
+    accumulated$name <- c(accumulated$name, node$name);
+    accumulated$size <- c(accumulated$size, node$size);
+    return(accumulated)
+  } else {
+    for (child in node$children) {
+      accumulated <- .flattenTree(child, accumulated)
+    }
+    return(accumulated)
+  }
+}
+
+# converts time in integer/milliseconds to date-time with timezone.
+# assumption is that the system timezone = time zone of the local server running WebApi.
+.millisecondsToDate <- function(milliseconds) {
+  sec <- milliseconds/1000
+  return(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
+}

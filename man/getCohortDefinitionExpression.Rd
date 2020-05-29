@@ -15,12 +15,10 @@ in a WebApi instance.}
 If trailing '/' is used, you may receive an error.}
 }
 \value{
-A JSON list object representing the cohort definition
-This function has been deprecated. As an alternative please use the following
-steps as in the example below:
-  1) cohortDefinition <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
-  2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
-  3) save validJsonExpression object as .txt"
+A JSON list object representing the cohort definition This function has been deprecated. As an
+alternative please use the following steps as in the example below: 1) cohortDefinition <-
+getCohortDefinition(baseUrl = baseUrl, cohortId = 15873) 2) validJsonExpression <-
+RJSONIO::toJSON(cohortDefinition$expression) 3) save validJsonExpression object as .txt"
 }
 \description{
 (Deprecated) Get a cohort definition expression

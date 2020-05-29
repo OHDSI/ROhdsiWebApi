@@ -4,10 +4,11 @@
 \alias{isValidCharacterizationId}
 \title{Check if Characterization id is valid.}
 \usage{
-isValidCharacterizationId(ids, baseUrl)
+isValidCharacterizationId(characterizationIds, baseUrl)
 }
 \arguments{
-\item{ids}{A list of integer id(s) of the Characterization to be tested for validity.}
+\item{characterizationIds}{A list of integer id(s) of the Characterization to be tested for
+validity.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -25,6 +26,7 @@ WebApi i.e. valid.
 }
 \examples{
 \dontrun{
-isValidCharacterizationId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+isValidCharacterizationId(characterizationIds = c(13242, 3423, 34),
+                          baseUrl = "http://server.org:80/WebAPI")
 }
 }
