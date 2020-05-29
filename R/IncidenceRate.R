@@ -14,38 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get definitions for incident rate analysis
-#'
-#' @details
-#' Returns an R-objects with definitions for incident rate analysis
-#'
-#' @template BaseUrl
-#' @param incidenceRateId    The WebApi ID for incidence rate analysis.
-#' @return                   Get definitions for incident rate analysis
-#'
-#' @examples
-#' \dontrun{
-#'  getIncidenceRateDefinition <- function(baseUrl "http://server.org:80/WebAPI",
-#'                                          incidenceRateId = 296)
-#'                                          )
-#' }
-#' @export
-getIncidenceRateDefinition <- function(baseUrl,
-                                       incidenceRateId) {
-  .checkBaseUrl(baseUrl)
-  #ir specifications
-  url <- sprintf("%1s/ir/%2s", baseUrl, incidenceRateId)
-  json <- httr::GET(url)
-  data <- httr::content(json)
-  if (!is.null(data$payload$message)) {
-    stop(data$payload$message)
-  }
-  data$expression <- RJSONIO::fromJSON(data$expression)
-  data$createdDate <- .millisecondsToDate(data$createdDate)
-  data$modifiedDate <- .millisecondsToDate(data$modifiedDate)
-  return(data)
-}
-
 #' Get incident rate generation information
 #'
 #' @details
