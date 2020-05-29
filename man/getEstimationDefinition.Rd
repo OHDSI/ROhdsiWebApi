@@ -7,12 +7,12 @@
 getEstimationDefinition(estimationId, baseUrl)
 }
 \arguments{
+\item{estimationId}{An integer id representing the id that uniquely identifies a Estimation
+definition in a WebApi instance.}
+
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
-
-\item{EstimationId}{An integer id representing the id that uniquely identifies a Estimation
-definition in a WebApi instance.}
 }
 \value{
 An R object representing the Estimation definition
@@ -25,6 +25,6 @@ Obtain the Estimation definition from WebAPI for a given Estimation id
 }
 \examples{
 \dontrun{
-getEstimationDefinition(EstimationId = 13242, baseUrl = "http://server.org:80/WebAPI")
+getEstimationDefinition(estimationId = 13242, baseUrl = "http://server.org:80/WebAPI")
 }
 }

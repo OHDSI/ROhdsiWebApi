@@ -7,12 +7,12 @@
 deleteCohortDefinition(cohortId, baseUrl)
 }
 \arguments{
+\item{cohortId}{An integer id representing the id that uniquely identifies a Cohort definition in
+a WebApi instance.}
+
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
-
-\item{CohortId}{An integer id representing the id that uniquely identifies a Cohort definition in
-a WebApi instance.}
 }
 \value{
 An R object representing the Cohort definition
@@ -25,6 +25,6 @@ Delete the Cohort definition from WebAPI for a given Cohort id
 }
 \examples{
 \dontrun{
-getCohortDefinition(CohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+deleteCohortDefinition(cohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
 }
 }

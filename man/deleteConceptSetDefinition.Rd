@@ -7,12 +7,12 @@
 deleteConceptSetDefinition(conceptSetId, baseUrl)
 }
 \arguments{
+\item{conceptSetId}{An integer id representing the id that uniquely identifies a ConceptSet
+definition in a WebApi instance.}
+
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
-
-\item{ConceptSetId}{An integer id representing the id that uniquely identifies a ConceptSet
-definition in a WebApi instance.}
 }
 \value{
 An R object representing the ConceptSet definition
@@ -25,6 +25,6 @@ Delete the ConceptSet definition from WebAPI for a given ConceptSet id
 }
 \examples{
 \dontrun{
-getConceptSetDefinition(ConceptSetId = 13242, baseUrl = "http://server.org:80/WebAPI")
+deleteConceptSetDefinition(conceptSetId = 13242, baseUrl = "http://server.org:80/WebAPI")
 }
 }

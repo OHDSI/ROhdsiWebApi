@@ -4,10 +4,10 @@
 \alias{isValidIncidenceRateId}
 \title{Check if IncidenceRate id is valid.}
 \usage{
-isValidIncidenceRateId(ids, baseUrl)
+isValidIncidenceRateId(incidenceRateIds, baseUrl)
 }
 \arguments{
-\item{ids}{A list of integer id(s) of the IncidenceRate to be tested for validity.}
+\item{incidenceRateIds}{A list of integer id(s) of the IncidenceRate to be tested for validity.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -25,6 +25,7 @@ i.e. valid.
 }
 \examples{
 \dontrun{
-isValidIncidenceRateId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+isValidIncidenceRateId(incidenceRateIds = c(13242, 3423, 34),
+                       baseUrl = "http://server.org:80/WebAPI")
 }
 }

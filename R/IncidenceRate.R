@@ -14,42 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get incident rate generation information
-#'
-#' @details
-#' Get incident rate generation information
-#'
-#' @template BaseUrl
-#' @param incidenceRateId The WebApi ID for incidence rate analysis.
-#' @return                A tibble data-frame R-object with incidence rate
-#'                        generation information.
-#'
-#' @examples
-#' \dontrun{
-#' getIncidenceRateGenerationInformation(incidenceRateId = 296, baseUrl = baseUrl)
-#'                                          )
-#' }
-#' @export
-getIncidenceRateGenerationInformation <- function(incidenceRateId, baseUrl) {
-  .checkBaseUrl(baseUrl)
-  #generation
-  url <- sprintf("%1s/ir/%2s/info", baseUrl, incidenceRateId)
-  url <- httr::GET(url)
-  json <- httr::content(url, as = "text", type = "application/json", encoding = 'UTF-8')
-  if (json == '[]') {
-    stop(paste0("Please check if incident rate id:", incidenceRateId, "exists."))
-  }
-  data <- jsonlite::fromJSON(txt = json, simplifyVector = TRUE, simplifyDataFrame = TRUE, flatten = TRUE)
-  data$summaryList <- NULL
-  names(data) <- names(data) %>%
-    stringr::str_replace_all(pattern = 'executionInfo.', replacement = '') %>%
-    stringr::str_replace_all(pattern = 'id.', replacement = '')  
-  
-  data <- data %>%
-    dplyr::mutate(startTime = .millisecondsToDate(.data$startTime)) %>%
-    dplyr::as_tibble()
-  return(data)
-}
 
 #' Get results from incidence rate analysis.
 #'

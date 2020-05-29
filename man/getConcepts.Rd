@@ -32,10 +32,8 @@ Get concepts
 \examples{
 \dontrun{
 conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
-conceptIds <- resolveConceptSet(conceptSet = conceptSet,
-                                baseUrl = "http://server.org:80/WebAPI")
-concepts <- getConcepts(conceptIds = conceptIds, 
-                        baseUrl = "http://server.org:80/WebAPI")
+conceptIds <- resolveConceptSet(conceptSet = conceptSet, baseUrl = "http://server.org:80/WebAPI")
+concepts <- getConcepts(conceptIds = conceptIds, baseUrl = "http://server.org:80/WebAPI")
 }
 
 }

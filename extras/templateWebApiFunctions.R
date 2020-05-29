@@ -31,24 +31,24 @@ get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl){
 #' exists in the WebApi i.e. valid. 
 #'  
 #' @template BaseUrl
-#' @param    ids        A list of integer id(s) of the %categoryFirstUpper% to be tested for validity.
+#' @param %category%Ids        A list of integer id(s) of the %categoryFirstUpper% to be tested for validity.
 #' @return
 #' A logical vector indicating which of the ids are valid.
 #' 
 #' @examples 
 #' \dontrun{
-#' isValid%categoryFirstUpper%Id(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' isValid%categoryFirstUpper%Id(%category%Ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValid%categoryFirstUpper%Id <- function(ids, baseUrl){
+isValid%categoryFirstUpper%Id <- function(%category%Ids, baseUrl){
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(ids, add = errorMessage)
+  checkmate::assertIntegerish(%category%Ids, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "%category%")
-  return(ids %in% validIds$id)
+  return(%category%Ids %in% validIds$id)
 }
 
 
@@ -60,14 +60,14 @@ isValid%categoryFirstUpper%Id <- function(ids, baseUrl){
 #' Obtain the %categoryFirstUpper% definition from WebAPI for a given %categoryFirstUpper% id
 #'  
 #' @template BaseUrl
-#' @param %categoryFirstUpper%Id   An integer id representing the id that uniquely identifies a 
-#'                                 %categoryFirstUpper% definition in a WebApi instance.
+#' @param %category%Id   An integer id representing the id that uniquely identifies a 
+#'                       %categoryFirstUpper% definition in a WebApi instance.
 #' @return
 #' An R object representing the %categoryFirstUpper% definition
 #' 
 #' @examples 
 #' \dontrun{
-#' get%categoryFirstUpper%Definition(%categoryFirstUpper%Id = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' get%categoryFirstUpper%Definition(%category%Id = 13242, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
 get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
@@ -76,7 +76,7 @@ get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
   checkmate::assertInt(%category%Id, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  if (isTRUE(isValid%categoryFirstUpper%Id(ids = %category%Id, baseUrl = baseUrl))) {
+  if (isTRUE(isValid%categoryFirstUpper%Id(%category%Ids = %category%Id, baseUrl = baseUrl))) {
     url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
     if ('characterization' == "%category%") {
       url <- paste0(url, "/export")
@@ -113,14 +113,14 @@ get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 #' Delete the %categoryFirstUpper% definition from WebAPI for a given %categoryFirstUpper% id
 #'  
 #' @template BaseUrl
-#' @param %categoryFirstUpper%Id   An integer id representing the id that uniquely identifies a 
-#'                                 %categoryFirstUpper% definition in a WebApi instance.
+#' @param %category%Id   An integer id representing the id that uniquely identifies a 
+#'                       %categoryFirstUpper% definition in a WebApi instance.
 #' @return
 #' An R object representing the %categoryFirstUpper% definition
 #' 
 #' @examples 
 #' \dontrun{
-#' get%categoryFirstUpper%Definition(%categoryFirstUpper%Id = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' delete%categoryFirstUpper%Definition(%category%Id = 13242, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
 delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){

@@ -4,10 +4,10 @@
 \alias{isValidCohortId}
 \title{Check if Cohort id is valid.}
 \usage{
-isValidCohortId(ids, baseUrl)
+isValidCohortId(cohortIds, baseUrl)
 }
 \arguments{
-\item{ids}{A list of integer id(s) of the Cohort to be tested for validity.}
+\item{cohortIds}{A list of integer id(s) of the Cohort to be tested for validity.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -25,6 +25,6 @@ valid.
 }
 \examples{
 \dontrun{
-isValidCohortId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+isValidCohortId(cohortIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 }
 }

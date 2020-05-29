@@ -7,12 +7,12 @@
 getPredictionDefinition(predictionId, baseUrl)
 }
 \arguments{
+\item{predictionId}{An integer id representing the id that uniquely identifies a Prediction
+definition in a WebApi instance.}
+
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
-
-\item{PredictionId}{An integer id representing the id that uniquely identifies a Prediction
-definition in a WebApi instance.}
 }
 \value{
 An R object representing the Prediction definition
@@ -25,6 +25,6 @@ Obtain the Prediction definition from WebAPI for a given Prediction id
 }
 \examples{
 \dontrun{
-getPredictionDefinition(PredictionId = 13242, baseUrl = "http://server.org:80/WebAPI")
+getPredictionDefinition(predictionId = 13242, baseUrl = "http://server.org:80/WebAPI")
 }
 }

@@ -7,12 +7,12 @@
 deletePathwayDefinition(pathwayId, baseUrl)
 }
 \arguments{
+\item{pathwayId}{An integer id representing the id that uniquely identifies a Pathway definition
+in a WebApi instance.}
+
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
-
-\item{PathwayId}{An integer id representing the id that uniquely identifies a Pathway definition
-in a WebApi instance.}
 }
 \value{
 An R object representing the Pathway definition
@@ -25,6 +25,6 @@ Delete the Pathway definition from WebAPI for a given Pathway id
 }
 \examples{
 \dontrun{
-getPathwayDefinition(PathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+deletePathwayDefinition(pathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
 }
 }

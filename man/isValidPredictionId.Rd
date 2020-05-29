@@ -4,10 +4,10 @@
 \alias{isValidPredictionId}
 \title{Check if Prediction id is valid.}
 \usage{
-isValidPredictionId(ids, baseUrl)
+isValidPredictionId(predictionIds, baseUrl)
 }
 \arguments{
-\item{ids}{A list of integer id(s) of the Prediction to be tested for validity.}
+\item{predictionIds}{A list of integer id(s) of the Prediction to be tested for validity.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -25,6 +25,6 @@ i.e. valid.
 }
 \examples{
 \dontrun{
-isValidPredictionId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+isValidPredictionId(predictionIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 }
 }

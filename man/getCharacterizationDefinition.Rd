@@ -7,12 +7,12 @@
 getCharacterizationDefinition(characterizationId, baseUrl)
 }
 \arguments{
+\item{characterizationId}{An integer id representing the id that uniquely identifies a
+Characterization definition in a WebApi instance.}
+
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
-
-\item{CharacterizationId}{An integer id representing the id that uniquely identifies a
-Characterization definition in a WebApi instance.}
 }
 \value{
 An R object representing the Characterization definition
@@ -25,7 +25,7 @@ Obtain the Characterization definition from WebAPI for a given Characterization 
 }
 \examples{
 \dontrun{
-getCharacterizationDefinition(CharacterizationId = 13242,
+getCharacterizationDefinition(characterizationId = 13242,
                               baseUrl = "http://server.org:80/WebAPI")
 }
 }

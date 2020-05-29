@@ -24,14 +24,12 @@
 #'
 #' @template BaseUrl
 #' @template CohortId
-#' 
+#'
 #' @return
-#' A JSON list object representing the cohort definition
-#' This function has been deprecated. As an alternative please use the following
-#' steps as in the example below:
-#'   1) cohortDefinition <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
-#'   2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
-#'   3) save validJsonExpression object as .txt"
+#' A JSON list object representing the cohort definition This function has been deprecated. As an
+#' alternative please use the following steps as in the example below: 1) cohortDefinition <-
+#' getCohortDefinition(baseUrl = baseUrl, cohortId = 15873) 2) validJsonExpression <-
+#' RJSONIO::toJSON(cohortDefinition$expression) 3) save validJsonExpression object as .txt"
 #'
 #' @examples
 #' \dontrun{
@@ -43,18 +41,17 @@
 #' @export
 getCohortDefinitionExpression <- function(cohortId, baseUrl) {
   .checkBaseUrl(baseUrl)
-  .Deprecated(new = "getCohortDefinition", 
-              package="ROhdsiWebApi", 
+  .Deprecated(new = "getCohortDefinition",
+              package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use the following
-              steps as in the example below:
-              1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
-              2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
-              3) save validJsonExpression object as .txt",
-              old = as.character(sys.call(sys.parent()))[1L])
+    steps as in the example below:
+    1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
+    2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
+    3) save validJsonExpression object as .txt", old = as.character(sys.call(sys.parent()))[1L])
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
-  
+
   url <- paste(baseUrl, "cohortdefinition", cohortId, sep = "/")
   json <- httr::GET(url)
   httr::content(json)
@@ -65,12 +62,12 @@ getCohortDefinitionExpression <- function(cohortId, baseUrl) {
 #' (Deprecated) Get a cohort definition's name from WebAPI
 #'
 #' @details
-#' (Deprecated) Obtains the name of a cohort. 
-#' This function has been deprecated. As an alternative please use getCohortDefinition
+#' (Deprecated) Obtains the name of a cohort. This function has been deprecated. As an alternative
+#' please use getCohortDefinition
 #'
 #' @template BaseUrl
 #' @template CohortId
-#' @param formatName     Should the name be formatted to remove prefixes and underscores?
+#' @param formatName   Should the name be formatted to remove prefixes and underscores?
 #'
 #' @return
 #' The name of the cohort.
@@ -78,17 +75,17 @@ getCohortDefinitionExpression <- function(cohortId, baseUrl) {
 #' @export
 getCohortDefinitionName <- function(baseUrl, cohortId, formatName = FALSE) {
   .checkBaseUrl(baseUrl)
-  .Deprecated(new = "getCohortDefinition", 
-              package="ROhdsiWebApi", 
+  .Deprecated(new = "getCohortDefinition",
+              package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use getCohortDefinition",
               old = as.character(sys.call(sys.parent()))[1L])
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertLogical(formatName, add = errorMessage)
   checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
-  
+
   json <- getCohortDefinitionExpression(cohortId = cohortId, baseUrl = baseUrl)
-  
+
   if (formatName) {
     .formatName(json$name)
   } else {
@@ -107,22 +104,22 @@ getCohortDefinitionName <- function(baseUrl, cohortId, formatName = FALSE) {
 #'
 #' @export
 getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
-  .Deprecated(new = "getCohortGenerationReport", 
-              package="ROhdsiWebApi", 
+  .Deprecated(new = "getCohortGenerationReport",
+              package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use getCohortResults",
               old = as.character(sys.call(sys.parent()))[1L])
-  
+
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::assertScalar(sourceKey, add = errorMessage)
   checkmate::assertCharacter(sourceKey, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
-  
+
   url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=0", baseUrl, cohortId, sourceKey)
   json <- httr::GET(url)
   json <- httr::content(json)
-  
+
   results <- lapply(json$inclusionRuleStats, function(j) {
     list(ruleId = j$id,
          description = j$name,

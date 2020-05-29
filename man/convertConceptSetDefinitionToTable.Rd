@@ -23,7 +23,7 @@ Convert a concept set definition to a table
 }
 \examples{
 \dontrun{
-conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, 
+conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282,
                                                 baseUrl = "http://server.org:80/WebAPI")
 convertConceptSetDefinitionToTable(conceptSetDefinition = conceptSetDefinition)
 }
