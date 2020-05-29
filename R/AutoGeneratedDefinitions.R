@@ -67,7 +67,7 @@ isValidConceptSetId <- function(ids, baseUrl) {
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "conceptSet")
-  return(ids %in% validIds)
+  return(ids %in% validIds$id)
 }
 
 
@@ -79,7 +79,8 @@ isValidConceptSetId <- function(ids, baseUrl) {
 #' Obtain the ConceptSet definition from WebAPI for a given ConceptSet id
 #'
 #' @template BaseUrl
-#' @template ConceptSetId
+#' @param ConceptSetId   An integer id representing the id that uniquely identifies a ConceptSet
+#'                       definition in a WebApi instance.
 #' @return
 #' An R object representing the ConceptSet definition
 #'
@@ -88,22 +89,37 @@ isValidConceptSetId <- function(ids, baseUrl) {
 #' getConceptSetDefinition(ConceptSetId = 13242, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-getConceptSetDefinition <- function(ConceptSetId, baseUrl) {
+getConceptSetDefinition <- function(conceptSetId, baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(ConceptSetId, add = errorMessage)
+  checkmate::assertInt(conceptSetId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidConceptSetId(ids = ConceptSetId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "conceptset", "/", ConceptSetId)
+  if (isTRUE(isValidConceptSetId(ids = conceptSetId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "conceptset", "/", conceptSetId)
+    if ("characterization" == "conceptSet") {
+      url <- paste0(url, "/export")
+    }
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
     return(metaData)
   } else {
-    stop(paste0(conceptSetId, ":", ConceptSetId, " is not present in the WebApi."))
+    stop("ConceptSetId : conceptSetId is not present in the WebApi.")
   }
 }
 
@@ -155,7 +171,7 @@ isValidCohortId <- function(ids, baseUrl) {
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "cohort")
-  return(ids %in% validIds)
+  return(ids %in% validIds$id)
 }
 
 
@@ -167,7 +183,8 @@ isValidCohortId <- function(ids, baseUrl) {
 #' Obtain the Cohort definition from WebAPI for a given Cohort id
 #'
 #' @template BaseUrl
-#' @template CohortId
+#' @param CohortId   An integer id representing the id that uniquely identifies a Cohort definition in
+#'                   a WebApi instance.
 #' @return
 #' An R object representing the Cohort definition
 #'
@@ -176,22 +193,37 @@ isValidCohortId <- function(ids, baseUrl) {
 #' getCohortDefinition(CohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-getCohortDefinition <- function(CohortId, baseUrl) {
+getCohortDefinition <- function(cohortId, baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(CohortId, add = errorMessage)
+  checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidCohortId(ids = CohortId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "cohortdefinition", "/", CohortId)
+  if (isTRUE(isValidCohortId(ids = cohortId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohortdefinition", "/", cohortId)
+    if ("characterization" == "cohort") {
+      url <- paste0(url, "/export")
+    }
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
     return(metaData)
   } else {
-    stop(paste0(cohortId, ":", CohortId, " is not present in the WebApi."))
+    stop("CohortId : cohortId is not present in the WebApi.")
   }
 }
 
@@ -243,7 +275,7 @@ isValidIncidenceRateId <- function(ids, baseUrl) {
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "incidenceRate")
-  return(ids %in% validIds)
+  return(ids %in% validIds$id)
 }
 
 
@@ -255,7 +287,8 @@ isValidIncidenceRateId <- function(ids, baseUrl) {
 #' Obtain the IncidenceRate definition from WebAPI for a given IncidenceRate id
 #'
 #' @template BaseUrl
-#' @template IncidenceRateId
+#' @param IncidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
+#'                          definition in a WebApi instance.
 #' @return
 #' An R object representing the IncidenceRate definition
 #'
@@ -264,22 +297,37 @@ isValidIncidenceRateId <- function(ids, baseUrl) {
 #' getIncidenceRateDefinition(IncidenceRateId = 13242, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-getIncidenceRateDefinition <- function(IncidenceRateId, baseUrl) {
+getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(IncidenceRateId, add = errorMessage)
+  checkmate::assertInt(incidenceRateId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidIncidenceRateId(ids = IncidenceRateId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "ir", "/", IncidenceRateId)
+  if (isTRUE(isValidIncidenceRateId(ids = incidenceRateId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "ir", "/", incidenceRateId)
+    if ("characterization" == "incidenceRate") {
+      url <- paste0(url, "/export")
+    }
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
     return(metaData)
   } else {
-    stop(paste0(incidenceRateId, ":", IncidenceRateId, " is not present in the WebApi."))
+    stop("IncidenceRateId : incidenceRateId is not present in the WebApi.")
   }
 }
 
@@ -331,7 +379,7 @@ isValidEstimationId <- function(ids, baseUrl) {
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "estimation")
-  return(ids %in% validIds)
+  return(ids %in% validIds$id)
 }
 
 
@@ -343,7 +391,8 @@ isValidEstimationId <- function(ids, baseUrl) {
 #' Obtain the Estimation definition from WebAPI for a given Estimation id
 #'
 #' @template BaseUrl
-#' @template EstimationId
+#' @param EstimationId   An integer id representing the id that uniquely identifies a Estimation
+#'                       definition in a WebApi instance.
 #' @return
 #' An R object representing the Estimation definition
 #'
@@ -352,22 +401,37 @@ isValidEstimationId <- function(ids, baseUrl) {
 #' getEstimationDefinition(EstimationId = 13242, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-getEstimationDefinition <- function(EstimationId, baseUrl) {
+getEstimationDefinition <- function(estimationId, baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(EstimationId, add = errorMessage)
+  checkmate::assertInt(estimationId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidEstimationId(ids = EstimationId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "estimation", "/", EstimationId)
+  if (isTRUE(isValidEstimationId(ids = estimationId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "estimation", "/", estimationId)
+    if ("characterization" == "estimation") {
+      url <- paste0(url, "/export")
+    }
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
     return(metaData)
   } else {
-    stop(paste0(estimationId, ":", EstimationId, " is not present in the WebApi."))
+    stop("EstimationId : estimationId is not present in the WebApi.")
   }
 }
 
@@ -419,7 +483,7 @@ isValidPredictionId <- function(ids, baseUrl) {
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "prediction")
-  return(ids %in% validIds)
+  return(ids %in% validIds$id)
 }
 
 
@@ -431,7 +495,8 @@ isValidPredictionId <- function(ids, baseUrl) {
 #' Obtain the Prediction definition from WebAPI for a given Prediction id
 #'
 #' @template BaseUrl
-#' @template PredictionId
+#' @param PredictionId   An integer id representing the id that uniquely identifies a Prediction
+#'                       definition in a WebApi instance.
 #' @return
 #' An R object representing the Prediction definition
 #'
@@ -440,22 +505,37 @@ isValidPredictionId <- function(ids, baseUrl) {
 #' getPredictionDefinition(PredictionId = 13242, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-getPredictionDefinition <- function(PredictionId, baseUrl) {
+getPredictionDefinition <- function(predictionId, baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(PredictionId, add = errorMessage)
+  checkmate::assertInt(predictionId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidPredictionId(ids = PredictionId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "prediction", "/", PredictionId)
+  if (isTRUE(isValidPredictionId(ids = predictionId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "prediction", "/", predictionId)
+    if ("characterization" == "prediction") {
+      url <- paste0(url, "/export")
+    }
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
     return(metaData)
   } else {
-    stop(paste0(predictionId, ":", PredictionId, " is not present in the WebApi."))
+    stop("PredictionId : predictionId is not present in the WebApi.")
   }
 }
 
@@ -507,7 +587,7 @@ isValidCharacterizationId <- function(ids, baseUrl) {
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "characterization")
-  return(ids %in% validIds)
+  return(ids %in% validIds$id)
 }
 
 
@@ -519,7 +599,8 @@ isValidCharacterizationId <- function(ids, baseUrl) {
 #' Obtain the Characterization definition from WebAPI for a given Characterization id
 #'
 #' @template BaseUrl
-#' @template CharacterizationId
+#' @param CharacterizationId   An integer id representing the id that uniquely identifies a
+#'                             Characterization definition in a WebApi instance.
 #' @return
 #' An R object representing the Characterization definition
 #'
@@ -529,22 +610,37 @@ isValidCharacterizationId <- function(ids, baseUrl) {
 #'                               baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-getCharacterizationDefinition <- function(CharacterizationId, baseUrl) {
+getCharacterizationDefinition <- function(characterizationId, baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(CharacterizationId, add = errorMessage)
+  checkmate::assertInt(characterizationId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidCharacterizationId(ids = CharacterizationId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "characterization", "/", CharacterizationId)
+  if (isTRUE(isValidCharacterizationId(ids = characterizationId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "cohort-characterization", "/", characterizationId)
+    if ("characterization" == "characterization") {
+      url <- paste0(url, "/export")
+    }
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
     return(metaData)
   } else {
-    stop(paste0(characterizationId, ":", CharacterizationId, " is not present in the WebApi."))
+    stop("CharacterizationId : characterizationId is not present in the WebApi.")
   }
 }
 
@@ -596,7 +692,7 @@ isValidPathwayId <- function(ids, baseUrl) {
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "pathway")
-  return(ids %in% validIds)
+  return(ids %in% validIds$id)
 }
 
 
@@ -608,7 +704,8 @@ isValidPathwayId <- function(ids, baseUrl) {
 #' Obtain the Pathway definition from WebAPI for a given Pathway id
 #'
 #' @template BaseUrl
-#' @template PathwayId
+#' @param PathwayId   An integer id representing the id that uniquely identifies a Pathway definition
+#'                    in a WebApi instance.
 #' @return
 #' An R object representing the Pathway definition
 #'
@@ -617,21 +714,36 @@ isValidPathwayId <- function(ids, baseUrl) {
 #' getPathwayDefinition(PathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-getPathwayDefinition <- function(PathwayId, baseUrl) {
+getPathwayDefinition <- function(pathwayId, baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(PathwayId, add = errorMessage)
+  checkmate::assertInt(pathwayId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidPathwayId(ids = PathwayId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "pathway", "/", PathwayId)
+  if (isTRUE(isValidPathwayId(ids = pathwayId, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "pathway-analysis", "/", pathwayId)
+    if ("characterization" == "pathway") {
+      url <- paste0(url, "/export")
+    }
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
+
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
     return(metaData)
   } else {
-    stop(paste0(pathwayId, ":", PathwayId, " is not present in the WebApi."))
+    stop("PathwayId : pathwayId is not present in the WebApi.")
   }
 }

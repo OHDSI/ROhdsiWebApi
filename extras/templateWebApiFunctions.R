@@ -48,7 +48,7 @@ isValid%categoryFirstUpper%Id <- function(ids, baseUrl){
   checkmate::reportAssertions(errorMessage)
   
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "%category%")
-  return(ids %in% validIds)
+  return(ids %in% validIds$id)
 }
 
 
@@ -60,7 +60,8 @@ isValid%categoryFirstUpper%Id <- function(ids, baseUrl){
 #' Obtain the %categoryFirstUpper% definition from WebAPI for a given %categoryFirstUpper% id
 #'  
 #' @template BaseUrl
-#' @template %categoryFirstUpper%Id
+#' @param %categoryFirstUpper%Id   An integer id representing the id that uniquely identifies a 
+#'                                 %categoryFirstUpper% definition in a WebApi instance.
 #' @return
 #' An R object representing the %categoryFirstUpper% definition
 #' 
@@ -69,21 +70,36 @@ isValid%categoryFirstUpper%Id <- function(ids, baseUrl){
 #' get%categoryFirstUpper%Definition(%categoryFirstUpper%Id = 13242, baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-get%categoryFirstUpper%Definition <- function(%categoryFirstUpper%Id, baseUrl){
+get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(%categoryFirstUpper%Id, add = errorMessage)
+  checkmate::assertInt(%category%Id, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  if (isTRUE(isValid%categoryFirstUpper%Id(ids = %categoryFirstUpper%Id, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %categoryFirstUpper%Id)
+  if (isTRUE(isValid%categoryFirstUpper%Id(ids = %category%Id, baseUrl = baseUrl))) {
+    url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
+    if ('characterization' == "%category%") {
+      url <- paste0(url, "/export")
+    }
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
+    
+    if (is.null(metaData$expression)) {
+      if (!is.null(metaData$specification)) {
+        metaData$expression <- metaData$specification
+        metaData$specification <- NULL
+      } else {
+        url <- paste0(url, "/expression")
+        data <- httr::GET(url)
+        data <- httr::content(data)
+        metaData$expression <- data
+      }
+    }
     return(metaData)
   } else {
-    stop(paste0(%category%Id, ":", %categoryFirstUpper%Id, " is not present in the WebApi."))
+    stop("%categoryFirstUpper%Id : %category%Id is not present in the WebApi.")
   }
 }

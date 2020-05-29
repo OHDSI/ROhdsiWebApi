@@ -140,51 +140,6 @@ getCohortCharacterizationResults <- function(characterizationId,
   }
 }
 
-#' Get a characterization definition expression
-#'
-#' @details
-#' Obtain the characterization definition expression from WebAPI as R-object for a given characterization id/generation id
-#'
-#' @template BaseUrl
-#' 
-#' @param characterizationId   The number indicating which characterization definition to fetch.
-#' @param generationId        (OPTIONAL) Used to specify the id of a particular generation of a cohort
-#'                             characterization. If generationId is provided, then characterizationId is ignored.
-#' 
-#' @return
-#' A R-object representing the characterizationId/generationId definition returned by WebApi.
-#' A warning will be shown if the characterizationId/generationId does not exist.
-#'
-#' @examples
-#' \dontrun{
-#' getCohortCharacterizationDefinition(characterizationId = 282, 
-#'                                     baseUrl = "http://server.org:80/WebAPI")
-#' }
-#'
-#' @export
-getCohortCharacterizationDefinition <- function(characterizationId, baseUrl,generationId = NULL) {
-  .checkBaseUrl(baseUrl)
-  
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(characterizationId, add = errorMessage)
-  if (!is.null(generationId)) {
-    checkmate::assertInt(generationId, add = errorMessage)
-  }
-  checkmate::reportAssertions(errorMessage)
-  
-  if (is.null(generationId)) {
-    url <- sprintf("%s/cohort-characterization/%d/export", baseUrl, characterizationId)
-  } else {
-    url <- sprintf("%s/cohort-characterization/generation/%d/design", baseUrl, generationId)
-  }
-  json <- httr::GET(url)
-  data <- httr::content(json, as = 'text', encoding = 'UTF-8')
-  data <- RJSONIO::fromJSON(data)
-  if (!is.null(data$payload$message)) {
-    stop(data$payload$message)
-  }
-  return(data)
-}
 
 #' Delete a cohort characterization definition and results
 #'

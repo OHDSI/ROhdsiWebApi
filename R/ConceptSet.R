@@ -14,44 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get a concept set definition
-#'
-#' @details
-#' Obtain a concept set from WebAPI.
-#' 
-#' @template BaseUrl
-#' @template ConceptSetId
-#'
-#' @return
-#' An R object representing the concept set.
-#'
-#' @examples
-#' \dontrun{
-#' conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 282, 
-#'                                                 baseUrl = "http://server.org:80/WebAPI")
-#' }
-#'
-#' @export
-getConceptSetDefinition <- function(conceptSetId, baseUrl) {
-  .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(conceptSetId, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-  
-  url <- sprintf("%1s/conceptset/%2s", baseUrl, conceptSetId)
-  metaData <- httr::GET(url)
-  metaData <- httr::content(metaData)
-  if (!is.null(metaData$payload$message)) {
-    stop(metaData$payload$message)
-  }
-  
-  url <- sprintf("%1s/conceptset/%2s/expression", baseUrl, conceptSetId)
-  data <- httr::GET(url)
-  data <- httr::content(data)
-  
-  metaData$expression <- data
-  return(metaData)
-}
 
 #' Resolve a concept set to the included standard concept IDs
 #' 

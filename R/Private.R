@@ -38,8 +38,14 @@
     dplyr::mutate(categoryAsUsedInWebApi = dplyr::case_when(categoryStandard == 'incidenceRate' ~ 'ir',
                                                             categoryStandard == 'conceptSet' ~ 'conceptset',
                                                             categoryStandard == 'cohort' ~'cohortdefinition',
+                                                            categoryStandard == 'characterization' ~ 'cohort-characterization',
+                                                            categoryStandard == 'pathway' ~'pathway-analysis',
                                                             TRUE ~ categoryStandard
     )
     ) %>% 
+    dplyr::mutate(categoryUrlExtension = dplyr::case_when(categoryStandard == 'characterization' ~ '',
+                                                          TRUE ~ categoryStandard
+    )
+    ) %>%  
     return()
 }
