@@ -1,6 +1,6 @@
 library(ROhdsiWebApi)
 library(dplyr)
-baseUrl <- Sys.getenv("baseUrl")
+# baseUrl <- Sys.getenv("baseUrl")
 
 # configuration information on WebApi ------------------------------------------
 cdmSources <- getCdmSources(baseUrl = baseUrl)
@@ -12,7 +12,7 @@ webApiVersion
 priorityVocabulary <- getPriorityVocabularyKey(baseUrl = baseUrl)
 priorityVocabulary
 
-metaDataSpecifications <- getMetadataForAllSpecifications(baseUrl = baseUrl)
+definitionsMetadata <- getDefinitionsMetadata(baseUrl = baseUrl)
 
 
 # concepts and concept sets --------------------------------------------------------
@@ -94,4 +94,4 @@ conceptSetDefinition <-
 conceptSetDefinitionAsTable <- convertConceptSetDefinitionToTable(conceptSetDefinition = conceptSetDefinition)
 
 
-
+sql <- getCohortSqlForDefinition(cohortDefinitionExpression = cohortDefinition$expression, baseUrl = baseUrl)
