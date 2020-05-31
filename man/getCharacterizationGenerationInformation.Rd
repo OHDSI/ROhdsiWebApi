@@ -33,7 +33,8 @@ and characterizationId.
 }
 \examples{
 \dontrun{
-getCharacterizationGenerationInformation(CharacterizationId = 13242,
-                                         baseUrl = "http://server.org:80/WebAPI")
+getCharacterizationGenerationInformation(characterizationId = 13242,
+                                         baseUrl = "http://server.org:80/WebAPI",
+                                         sourceKey = "HCUP")
 }
 }
