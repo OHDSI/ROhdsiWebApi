@@ -7,7 +7,7 @@
 checkIfEstimationNameExists(estimationName, baseUrl)
 }
 \arguments{
-\item{estimationName}{A string name for the $categoryFirstUpper% to be checked.}
+\item{estimationName}{A string name for the Estimation to be checked.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.

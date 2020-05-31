@@ -7,7 +7,7 @@
 checkIfCharacterizationNameExists(characterizationName, baseUrl)
 }
 \arguments{
-\item{characterizationName}{A string name for the $categoryFirstUpper% to be checked.}
+\item{characterizationName}{A string name for the Characterization to be checked.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.

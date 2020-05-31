@@ -34,15 +34,6 @@
   return(success)
 }
 
-.convertNulltoNA <- function(thisList) {
-  for (n in names(thisList)) {
-    if (is.null(thisList[n][[1]])) {
-      thisList[n] <- NA
-    }
-  }
-  thisList
-}
-
 #' Get Priority Vocabulary Source Key
 #'
 #' @details
@@ -246,6 +237,8 @@ getDefinitionsMetadata <- function(baseUrl, categories) {
 
 
 
+
+
 #' Post a definition into WebApi
 #'
 #' @details
@@ -254,11 +247,15 @@ getDefinitionsMetadata <- function(baseUrl, categories) {
 #' @template BaseUrl 
 #' @param name        A valid name for the definition. WebApi will use this name (if valid) as
 #'                    the name of the definition. WebApi checks for validity,
-#'                    such as uniqueness, unaccepted character etc. An error might be thrown.
-#' @param type        The type of expression in WebApi. Currently only 'cohort' is supported 
-#'                    to refer cohort definition specification expression.
-#' @param object      An R list object containing the expression for the specification. 
-#'                    This will be converted to JSON by function and posted into the WebApi.
+#'                    such as uniqueness, absence of unacceptable character etc. An error might be thrown.
+#' @param category    The category of expression in WebApi. Currently only 'cohort' is supported,but
+#'                    we will support posting the definitions of Concept-set, Cohort-definition, 
+#'                    Cohort-characterization, Pathway-analysis, Incidence rate (ir), 
+#'                    estimation and prediction. They should be referenced using string 
+#'                    'conceptSet','cohort', 'characterization', 'pathway', 'incidenceRate', 
+#'                    'estimation','prediction' only. 
+#' @param expression  An R list object containing the expression for the specification. 
+#'                    This will be converted to JSON expression by function and posted into the WebApi.
 #'                    Note: only limited checks are performed in R to check the validity of this
 #'                    expression.               
 #' @return            This function will return a dataframe object with one row
@@ -267,50 +264,70 @@ getDefinitionsMetadata <- function(baseUrl, categories) {
 #'                         
 #' @examples
 #' \dontrun{
-#' validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, 
+#' validRExpression <- getCohortDefinition(baseUrl = baseUrl, 
 #'                                            cohortId = 15873)$expression
-#' postSpecification(name = 'new name for expression in target',
-#'                   baseUrl = "http://server.org:80/WebAPI",
-#'                   jsonExpression = validJsonExpression)
+#' postDefinition(name = 'new name for expression in sdaddaddd',
+#'                baseUrl = "http://server.org:80/WebAPI",
+#'                expression = validRExpression,
+#'                category = 'cohort')
 #' }
 #' @export
 postDefinition <- function(baseUrl, 
                            name,
-                           type = 'cohort',
-                           object) {
+                           category,
+                           expression) {
   .checkBaseUrl(baseUrl)
+  arguments <- ROhdsiWebApi:::.getStandardCategories()
+  
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(name, add = errorMessage)
-  checkmate::assertCharacter(type, add = errorMessage)
-  checkmate::assertList(x = object, 
-                        types = c('character', 'list'), 
-                        any.missing = FALSE,
+  checkmate::assertCharacter(category, add = errorMessage)
+  checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
+  checkmate::assertList(x = expression, 
+                        types = c('character', 'list', 'integer', 'numeric', 'logical'), 
+                        any.missing = TRUE,
                         null.ok = FALSE, 
                         add = errorMessage
   )
   checkmate::reportAssertions(errorMessage)
   
-  jsonExpression <- RJSONIO::toJSON(object)
+  argument <- arguments %>% 
+              dplyr::filter(.data$categoryStandard == !!category)
   
-  if (type == 'cohort') {
+  # convert R-object to JSON expression.
+  jsonExpression <- RJSONIO::toJSON(expression)
+  
+  if (category %in% c('cohort')) { #conceptSet and Characterization is posting empty definitions
+    # create json body
     json_body <- paste0("{\"name\":\"",
                         as.character(name),
                         "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
                         jsonExpression,
                         "}")
     # POST the JSON
-    response <- httr::POST(url = paste0(baseUrl, "/cohortdefinition/"),
+    response <- httr::POST(url = paste0(baseUrl, "/", argument$categoryAsUsedInWebApi, "/"),
                            body = json_body,
                            config = httr::add_headers(.headers = c('Content-Type' = 'application/json')))
-    # Expect a "200" response that it worked
+    # Check response
     if (response$status_code != 200) {
-      stop(paste0("Post attempt failed for cohort : ", name))
+      errorMessage <- paste0("Post attempt failed for ", 
+                             category, " : ", 
+                             name, 
+                             ". Name already exists. ", 
+                             httr::http_status(response)$message)
+      definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = category) %>% 
+        dplyr::filter(name == !!name)
+      if (nrow(definitionsMetaData)) {
+        stop(paste0(errorMessage, " Name already exists in WebApi." ))
+      } else {
+      stop(errorMessage)
+      }
     } else {
-      metadataForAllSpecifications <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "cohortdefinition") %>% 
+      metaDataSpecifications <- getDefinitionsMetadata(baseUrl = baseUrl, categories = category) %>% 
         dplyr::filter(.data$name == !!name)
-      return(metadataForAllSpecifications)
+      return(metaDataSpecifications)
     }
   } else {
-    stop(paste0('type = ', type, " is not supported in this version. Post attempt failed."))
+    stop(paste0('category = ', category, " is not supported in this version. Post not attempted."))
   }
 }

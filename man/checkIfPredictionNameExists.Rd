@@ -7,7 +7,7 @@
 checkIfPredictionNameExists(predictionName, baseUrl)
 }
 \arguments{
-\item{predictionName}{A string name for the $categoryFirstUpper% to be checked.}
+\item{predictionName}{A string name for the Prediction to be checked.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.

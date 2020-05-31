@@ -7,7 +7,7 @@
 checkIfCohortNameExists(cohortName, baseUrl)
 }
 \arguments{
-\item{cohortName}{A string name for the $categoryFirstUpper% to be checked.}
+\item{cohortName}{A string name for the Cohort to be checked.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.

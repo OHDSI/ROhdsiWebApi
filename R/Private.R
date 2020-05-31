@@ -76,3 +76,14 @@
   sec <- milliseconds/1000
   return(as.POSIXct(sec, origin = "1970-01-01", tz = Sys.timezone()))
 }
+
+
+
+.convertNulltoNA <- function(thisList) {
+  for (n in names(thisList)) {
+    if (is.null(thisList[n][[1]])) {
+      thisList[n] <- NA
+    }
+  }
+  thisList
+}

@@ -106,19 +106,21 @@ getConceptSetDefinition <- function(conceptSetId, baseUrl) {
       stop(metaData$payload$message)
     }
 
+    metaData <- .convertNulltoNA(metaData)
+
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else {
-        url <- paste0(url, "/expression")
-        data <- httr::GET(url)
-        data <- httr::content(data)
-        metaData$expression <- data
+      } else if (is.null(metaData$specification)) {
+        metaData$expression <- metaData
+        metaData$expression$name <- NULL
       }
     }
     if (is.character(metaData$expression)) {
-      metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      if (jsonlite::validate(metaData$expression)) {
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      }
     }
     return(metaData)
   } else {
@@ -169,7 +171,7 @@ deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a ConceptSet definition name.
 #'
 #' @template BaseUrl
-#' @param conceptSetName   A string name for the $categoryFirstUpper% to be checked.
+#' @param conceptSetName   A string name for the ConceptSet to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -279,19 +281,21 @@ getCohortDefinition <- function(cohortId, baseUrl) {
       stop(metaData$payload$message)
     }
 
+    metaData <- .convertNulltoNA(metaData)
+
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else {
-        url <- paste0(url, "/expression")
-        data <- httr::GET(url)
-        data <- httr::content(data)
-        metaData$expression <- data
+      } else if (is.null(metaData$specification)) {
+        metaData$expression <- metaData
+        metaData$expression$name <- NULL
       }
     }
     if (is.character(metaData$expression)) {
-      metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      if (jsonlite::validate(metaData$expression)) {
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      }
     }
     return(metaData)
   } else {
@@ -342,7 +346,7 @@ deleteCohortDefinition <- function(cohortId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a Cohort definition name.
 #'
 #' @template BaseUrl
-#' @param cohortName   A string name for the $categoryFirstUpper% to be checked.
+#' @param cohortName   A string name for the Cohort to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -597,19 +601,21 @@ getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
       stop(metaData$payload$message)
     }
 
+    metaData <- .convertNulltoNA(metaData)
+
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else {
-        url <- paste0(url, "/expression")
-        data <- httr::GET(url)
-        data <- httr::content(data)
-        metaData$expression <- data
+      } else if (is.null(metaData$specification)) {
+        metaData$expression <- metaData
+        metaData$expression$name <- NULL
       }
     }
     if (is.character(metaData$expression)) {
-      metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      if (jsonlite::validate(metaData$expression)) {
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      }
     }
     return(metaData)
   } else {
@@ -660,7 +666,7 @@ deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a IncidenceRate definition name.
 #'
 #' @template BaseUrl
-#' @param incidenceRateName   A string name for the $categoryFirstUpper% to be checked.
+#' @param incidenceRateName   A string name for the IncidenceRate to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -878,19 +884,21 @@ getEstimationDefinition <- function(estimationId, baseUrl) {
       stop(metaData$payload$message)
     }
 
+    metaData <- .convertNulltoNA(metaData)
+
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else {
-        url <- paste0(url, "/expression")
-        data <- httr::GET(url)
-        data <- httr::content(data)
-        metaData$expression <- data
+      } else if (is.null(metaData$specification)) {
+        metaData$expression <- metaData
+        metaData$expression$name <- NULL
       }
     }
     if (is.character(metaData$expression)) {
-      metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      if (jsonlite::validate(metaData$expression)) {
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      }
     }
     return(metaData)
   } else {
@@ -941,7 +949,7 @@ deleteEstimationDefinition <- function(estimationId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a Estimation definition name.
 #'
 #' @template BaseUrl
-#' @param estimationName   A string name for the $categoryFirstUpper% to be checked.
+#' @param estimationName   A string name for the Estimation to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -1051,19 +1059,21 @@ getPredictionDefinition <- function(predictionId, baseUrl) {
       stop(metaData$payload$message)
     }
 
+    metaData <- .convertNulltoNA(metaData)
+
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else {
-        url <- paste0(url, "/expression")
-        data <- httr::GET(url)
-        data <- httr::content(data)
-        metaData$expression <- data
+      } else if (is.null(metaData$specification)) {
+        metaData$expression <- metaData
+        metaData$expression$name <- NULL
       }
     }
     if (is.character(metaData$expression)) {
-      metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      if (jsonlite::validate(metaData$expression)) {
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      }
     }
     return(metaData)
   } else {
@@ -1114,7 +1124,7 @@ deletePredictionDefinition <- function(predictionId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a Prediction definition name.
 #'
 #' @template BaseUrl
-#' @param predictionName   A string name for the $categoryFirstUpper% to be checked.
+#' @param predictionName   A string name for the Prediction to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -1228,19 +1238,21 @@ getCharacterizationDefinition <- function(characterizationId, baseUrl) {
       stop(metaData$payload$message)
     }
 
+    metaData <- .convertNulltoNA(metaData)
+
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else {
-        url <- paste0(url, "/expression")
-        data <- httr::GET(url)
-        data <- httr::content(data)
-        metaData$expression <- data
+      } else if (is.null(metaData$specification)) {
+        metaData$expression <- metaData
+        metaData$expression$name <- NULL
       }
     }
     if (is.character(metaData$expression)) {
-      metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      if (jsonlite::validate(metaData$expression)) {
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      }
     }
     return(metaData)
   } else {
@@ -1293,7 +1305,7 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a Characterization definition name.
 #'
 #' @template BaseUrl
-#' @param characterizationName   A string name for the $categoryFirstUpper% to be checked.
+#' @param characterizationName   A string name for the Characterization to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -1512,19 +1524,21 @@ getPathwayDefinition <- function(pathwayId, baseUrl) {
       stop(metaData$payload$message)
     }
 
+    metaData <- .convertNulltoNA(metaData)
+
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else {
-        url <- paste0(url, "/expression")
-        data <- httr::GET(url)
-        data <- httr::content(data)
-        metaData$expression <- data
+      } else if (is.null(metaData$specification)) {
+        metaData$expression <- metaData
+        metaData$expression$name <- NULL
       }
     }
     if (is.character(metaData$expression)) {
-      metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      if (jsonlite::validate(metaData$expression)) {
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      }
     }
     return(metaData)
   } else {
@@ -1575,7 +1589,7 @@ deletePathwayDefinition <- function(pathwayId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a Pathway definition name.
 #'
 #' @template BaseUrl
-#' @param pathwayName   A string name for the $categoryFirstUpper% to be checked.
+#' @param pathwayName   A string name for the Pathway to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.

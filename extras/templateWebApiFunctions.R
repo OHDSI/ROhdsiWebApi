@@ -19,8 +19,7 @@
 #' @export
 get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl){
   .checkBaseUrl(baseUrl)
-  return(getDefinitionsMetadata(baseUrl = baseUrl,
-                                      categories = c("%category%")))
+  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("%category%")))
 }
 
 
@@ -87,19 +86,21 @@ get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
       stop(metaData$payload$message)
     }
     
+    metaData <- .convertNulltoNA(metaData)
+    
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else {
-        url <- paste0(url, "/expression")
-        data <- httr::GET(url)
-        data <- httr::content(data)
-        metaData$expression <- data
+      } else if (is.null(metaData$specification)) {
+        metaData$expression <- metaData
+        metaData$expression$name <- NULL
       }
     }
     if (is.character(metaData$expression)) {
-      metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      if (jsonlite::validate(metaData$expression)) {
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+      }
     }
     return(metaData)
   } else {
@@ -150,7 +151,7 @@ delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 #' Check if a string name already exists in the WebApi as a %categoryFirstUpper% definition name.
 #'  
 #' @template BaseUrl
-#' @param %category%Name    A string name for the $categoryFirstUpper% to be checked.
+#' @param %category%Name    A string name for the %categoryFirstUpper% to be checked.
 #' @return                  If found, the function will return a tibble with details of the specification.
 #'                          If not found, FALSE will be returned.
 #' 

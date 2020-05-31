@@ -7,7 +7,7 @@
 checkIfConceptSetNameExists(conceptSetName, baseUrl)
 }
 \arguments{
-\item{conceptSetName}{A string name for the $categoryFirstUpper% to be checked.}
+\item{conceptSetName}{A string name for the ConceptSet to be checked.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.

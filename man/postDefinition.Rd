@@ -4,7 +4,7 @@
 \alias{postDefinition}
 \title{Post a definition into WebApi}
 \usage{
-postDefinition(baseUrl, name, type = "cohort", object)
+postDefinition(baseUrl, name, category, expression)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
@@ -13,13 +13,17 @@ If trailing '/' is used, you may receive an error.}
 
 \item{name}{A valid name for the definition. WebApi will use this name (if valid) as
 the name of the definition. WebApi checks for validity,
-such as uniqueness, unaccepted character etc. An error might be thrown.}
+such as uniqueness, absence of unacceptable character etc. An error might be thrown.}
 
-\item{type}{The type of expression in WebApi. Currently only 'cohort' is supported 
-to refer cohort definition specification expression.}
+\item{category}{The category of expression in WebApi. Currently only 'cohort' is supported,but
+we will support posting the definitions of Concept-set, Cohort-definition, 
+Cohort-characterization, Pathway-analysis, Incidence rate (ir), 
+estimation and prediction. They should be referenced using string 
+'conceptSet','cohort', 'characterization', 'pathway', 'incidenceRate', 
+'estimation','prediction' only.}
 
-\item{object}{An R list object containing the expression for the specification. 
-This will be converted to JSON by function and posted into the WebApi.
+\item{expression}{An R list object containing the expression for the specification. 
+This will be converted to JSON expression by function and posted into the WebApi.
 Note: only limited checks are performed in R to check the validity of this
 expression.}
 }
@@ -36,10 +40,11 @@ Post a definition into WebAPI
 }
 \examples{
 \dontrun{
-validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, 
+validRExpression <- getCohortDefinition(baseUrl = baseUrl, 
                                            cohortId = 15873)$expression
-postSpecification(name = 'new name for expression in target',
-                  baseUrl = "http://server.org:80/WebAPI",
-                  jsonExpression = validJsonExpression)
+postDefinition(name = 'new name for expression in sdaddaddd',
+               baseUrl = "http://server.org:80/WebAPI",
+               expression = validRExpression,
+               category = 'cohort')
 }
 }
