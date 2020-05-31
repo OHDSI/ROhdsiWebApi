@@ -39,7 +39,9 @@
 #' @export
 getConceptSetDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("conceptSet")))
+  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("conceptSet"))
+  metaData <- .convertNulltoNA(metaData)
+  return(metaData)
 }
 
 
@@ -91,35 +93,51 @@ isValidConceptSetId <- function(conceptSetIds, baseUrl) {
 #' @export
 getConceptSetDefinition <- function(conceptSetId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "conceptSet")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(conceptSetId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidConceptSetId(conceptSetIds = conceptSetId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "conceptset", "/", conceptSetId)
-    if ("characterization" == "conceptSet") {
-      url <- paste0(url, "/export")
-    }
+  isValid <- isValidConceptSetId(conceptSetIds = conceptSetId, baseUrl = baseUrl)
+
+  if (isTRUE(isValid)) {
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", conceptSetId)
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
 
-    metaData <- .convertNulltoNA(metaData)
-
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else if (is.null(metaData$specification)) {
-        metaData$expression <- metaData
-        metaData$expression$name <- NULL
+      } else if (!is.null(metaData$design)) {
+        metaData$expression <- metaData$design
+        metaData$design <- NULL
+      } else {
+        if (argument$categoryUrlGetExpression != "") {
+          urlExpression <- paste0(baseUrl,
+                                  "/",
+                                  argument$categoryUrl,
+                                  "/",
+                                  conceptSetId,
+                                  "/",
+                                  argument$categoryUrlGetExpression)
+          expression <- httr::GET(urlExpression)
+          expression <- httr::content(expression)
+          metaData$expression <- expression
+        } else {
+          metaData$expression <- metaData
+          metaData$expression$name <- NULL
+        }
       }
     }
     if (is.character(metaData$expression)) {
       if (jsonlite::validate(metaData$expression)) {
-        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression, nullValue = NA)
       }
     }
     return(metaData)
@@ -149,12 +167,15 @@ getConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #' @export
 deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "conceptSet")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(conceptSetId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (isTRUE(isValidConceptSetId(conceptSetIds = conceptSetId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "conceptset", "/", conceptSetId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", conceptSetId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {
@@ -214,7 +235,9 @@ checkIfConceptSetNameExists <- function(conceptSetName, baseUrl) {
 #' @export
 getCohortDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("cohort")))
+  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("cohort"))
+  metaData <- .convertNulltoNA(metaData)
+  return(metaData)
 }
 
 
@@ -266,35 +289,51 @@ isValidCohortId <- function(cohortIds, baseUrl) {
 #' @export
 getCohortDefinition <- function(cohortId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "cohort")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidCohortId(cohortIds = cohortId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "cohortdefinition", "/", cohortId)
-    if ("characterization" == "cohort") {
-      url <- paste0(url, "/export")
-    }
+  isValid <- isValidCohortId(cohortIds = cohortId, baseUrl = baseUrl)
+
+  if (isTRUE(isValid)) {
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", cohortId)
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
 
-    metaData <- .convertNulltoNA(metaData)
-
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else if (is.null(metaData$specification)) {
-        metaData$expression <- metaData
-        metaData$expression$name <- NULL
+      } else if (!is.null(metaData$design)) {
+        metaData$expression <- metaData$design
+        metaData$design <- NULL
+      } else {
+        if (argument$categoryUrlGetExpression != "") {
+          urlExpression <- paste0(baseUrl,
+                                  "/",
+                                  argument$categoryUrl,
+                                  "/",
+                                  cohortId,
+                                  "/",
+                                  argument$categoryUrlGetExpression)
+          expression <- httr::GET(urlExpression)
+          expression <- httr::content(expression)
+          metaData$expression <- expression
+        } else {
+          metaData$expression <- metaData
+          metaData$expression$name <- NULL
+        }
       }
     }
     if (is.character(metaData$expression)) {
       if (jsonlite::validate(metaData$expression)) {
-        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression, nullValue = NA)
       }
     }
     return(metaData)
@@ -324,12 +363,15 @@ getCohortDefinition <- function(cohortId, baseUrl) {
 #' @export
 deleteCohortDefinition <- function(cohortId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "cohort")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (isTRUE(isValidCohortId(cohortIds = cohortId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "cohortdefinition", "/", cohortId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", cohortId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {
@@ -391,12 +433,21 @@ checkIfCohortNameExists <- function(cohortName, baseUrl) {
 #' @export
 getCohortGenerationInformation <- function(cohortId, sourceKey, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "cohort")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::assertScalar(sourceKey, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  url <- paste0(baseUrl, "/", "cohortdefinition", "/", cohortId, "/", "info")
+  url <- paste0(baseUrl,
+                "/",
+                argument$categoryUrl,
+                "/",
+                cohortId,
+                "/",
+                argument$categoryUrlGenerationInformation)
   response <- httr::GET(url)
   if (!response$status_code %in% c(100, 200)) {
     stop("No Cohort generation information found.")
@@ -457,6 +508,9 @@ getCohortGenerationInformation <- function(cohortId, sourceKey, baseUrl) {
 #' @export
 invokeCohortDefinition <- function(cohortId, baseUrl, sourceKey) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "cohort")
+
   # get valid source keys from webapi
   validSourceKeys <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
     dplyr::pull()
@@ -469,7 +523,7 @@ invokeCohortDefinition <- function(cohortId, baseUrl, sourceKey) {
   checkmate::reportAssertions(errorMessage)
 
   if (isTRUE(isValidCohortId(cohortIds = cohortId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "cohortdefinition", "/", cohortId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", cohortId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {
@@ -500,11 +554,13 @@ invokeCohortDefinition <- function(cohortId, baseUrl, sourceKey) {
 getCohortDefinitionSqlFromExpression <- function(cohortDefinitionExpression, baseUrl) {
   .checkBaseUrl(baseUrl)
 
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "cohort")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertList(x = cohortDefinitionExpression, min.len = 1, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  url <- paste0(baseUrl, "/", "cohortdefinition", "/sql/")
+  url <- paste0(baseUrl, "/", argument$categoryUrl, "/sql/")
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   validJsonExpression <- RJSONIO::toJSON(cohortDefinitionExpression)
   body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression)), digits = 23)
@@ -533,7 +589,9 @@ getCohortDefinitionSqlFromExpression <- function(cohortDefinitionExpression, bas
 #' @export
 getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("incidenceRate")))
+  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("incidenceRate"))
+  metaData <- .convertNulltoNA(metaData)
+  return(metaData)
 }
 
 
@@ -586,35 +644,51 @@ isValidIncidenceRateId <- function(incidenceRateIds, baseUrl) {
 #' @export
 getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "incidenceRate")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(incidenceRateId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidIncidenceRateId(incidenceRateIds = incidenceRateId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "ir", "/", incidenceRateId)
-    if ("characterization" == "incidenceRate") {
-      url <- paste0(url, "/export")
-    }
+  isValid <- isValidIncidenceRateId(incidenceRateIds = incidenceRateId, baseUrl = baseUrl)
+
+  if (isTRUE(isValid)) {
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", incidenceRateId)
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
 
-    metaData <- .convertNulltoNA(metaData)
-
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else if (is.null(metaData$specification)) {
-        metaData$expression <- metaData
-        metaData$expression$name <- NULL
+      } else if (!is.null(metaData$design)) {
+        metaData$expression <- metaData$design
+        metaData$design <- NULL
+      } else {
+        if (argument$categoryUrlGetExpression != "") {
+          urlExpression <- paste0(baseUrl,
+                                  "/",
+                                  argument$categoryUrl,
+                                  "/",
+                                  incidenceRateId,
+                                  "/",
+                                  argument$categoryUrlGetExpression)
+          expression <- httr::GET(urlExpression)
+          expression <- httr::content(expression)
+          metaData$expression <- expression
+        } else {
+          metaData$expression <- metaData
+          metaData$expression$name <- NULL
+        }
       }
     }
     if (is.character(metaData$expression)) {
       if (jsonlite::validate(metaData$expression)) {
-        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression, nullValue = NA)
       }
     }
     return(metaData)
@@ -644,12 +718,15 @@ getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 #' @export
 deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "incidenceRate")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(incidenceRateId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (isTRUE(isValidIncidenceRateId(incidenceRateIds = incidenceRateId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "ir", "/", incidenceRateId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", incidenceRateId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {
@@ -711,12 +788,21 @@ checkIfIncidenceRateNameExists <- function(incidenceRateName, baseUrl) {
 #' @export
 getIncidenceRateGenerationInformation <- function(incidenceRateId, sourceKey, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "incidenceRate")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(incidenceRateId, add = errorMessage)
   checkmate::assertScalar(sourceKey, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  url <- paste0(baseUrl, "/", "ir", "/", incidenceRateId, "/", "info")
+  url <- paste0(baseUrl,
+                "/",
+                argument$categoryUrl,
+                "/",
+                incidenceRateId,
+                "/",
+                argument$categoryUrlGenerationInformation)
   response <- httr::GET(url)
   if (!response$status_code %in% c(100, 200)) {
     stop("No IncidenceRate generation information found.")
@@ -777,6 +863,9 @@ getIncidenceRateGenerationInformation <- function(incidenceRateId, sourceKey, ba
 #' @export
 invokeIncidenceRateDefinition <- function(incidenceRateId, baseUrl, sourceKey) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "incidenceRate")
+
   # get valid source keys from webapi
   validSourceKeys <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
     dplyr::pull()
@@ -789,7 +878,7 @@ invokeIncidenceRateDefinition <- function(incidenceRateId, baseUrl, sourceKey) {
   checkmate::reportAssertions(errorMessage)
 
   if (isTRUE(isValidIncidenceRateId(incidenceRateIds = incidenceRateId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "ir", "/", incidenceRateId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", incidenceRateId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {
@@ -817,7 +906,9 @@ invokeIncidenceRateDefinition <- function(incidenceRateId, baseUrl, sourceKey) {
 #' @export
 getEstimationDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("estimation")))
+  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("estimation"))
+  metaData <- .convertNulltoNA(metaData)
+  return(metaData)
 }
 
 
@@ -869,35 +960,51 @@ isValidEstimationId <- function(estimationIds, baseUrl) {
 #' @export
 getEstimationDefinition <- function(estimationId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "estimation")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(estimationId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidEstimationId(estimationIds = estimationId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "estimation", "/", estimationId)
-    if ("characterization" == "estimation") {
-      url <- paste0(url, "/export")
-    }
+  isValid <- isValidEstimationId(estimationIds = estimationId, baseUrl = baseUrl)
+
+  if (isTRUE(isValid)) {
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", estimationId)
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
 
-    metaData <- .convertNulltoNA(metaData)
-
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else if (is.null(metaData$specification)) {
-        metaData$expression <- metaData
-        metaData$expression$name <- NULL
+      } else if (!is.null(metaData$design)) {
+        metaData$expression <- metaData$design
+        metaData$design <- NULL
+      } else {
+        if (argument$categoryUrlGetExpression != "") {
+          urlExpression <- paste0(baseUrl,
+                                  "/",
+                                  argument$categoryUrl,
+                                  "/",
+                                  estimationId,
+                                  "/",
+                                  argument$categoryUrlGetExpression)
+          expression <- httr::GET(urlExpression)
+          expression <- httr::content(expression)
+          metaData$expression <- expression
+        } else {
+          metaData$expression <- metaData
+          metaData$expression$name <- NULL
+        }
       }
     }
     if (is.character(metaData$expression)) {
       if (jsonlite::validate(metaData$expression)) {
-        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression, nullValue = NA)
       }
     }
     return(metaData)
@@ -927,12 +1034,15 @@ getEstimationDefinition <- function(estimationId, baseUrl) {
 #' @export
 deleteEstimationDefinition <- function(estimationId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "estimation")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(estimationId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (isTRUE(isValidEstimationId(estimationIds = estimationId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "estimation", "/", estimationId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", estimationId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {
@@ -992,7 +1102,9 @@ checkIfEstimationNameExists <- function(estimationName, baseUrl) {
 #' @export
 getPredictionDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("prediction")))
+  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("prediction"))
+  metaData <- .convertNulltoNA(metaData)
+  return(metaData)
 }
 
 
@@ -1044,35 +1156,51 @@ isValidPredictionId <- function(predictionIds, baseUrl) {
 #' @export
 getPredictionDefinition <- function(predictionId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "prediction")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(predictionId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidPredictionId(predictionIds = predictionId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "prediction", "/", predictionId)
-    if ("characterization" == "prediction") {
-      url <- paste0(url, "/export")
-    }
+  isValid <- isValidPredictionId(predictionIds = predictionId, baseUrl = baseUrl)
+
+  if (isTRUE(isValid)) {
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", predictionId)
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
 
-    metaData <- .convertNulltoNA(metaData)
-
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else if (is.null(metaData$specification)) {
-        metaData$expression <- metaData
-        metaData$expression$name <- NULL
+      } else if (!is.null(metaData$design)) {
+        metaData$expression <- metaData$design
+        metaData$design <- NULL
+      } else {
+        if (argument$categoryUrlGetExpression != "") {
+          urlExpression <- paste0(baseUrl,
+                                  "/",
+                                  argument$categoryUrl,
+                                  "/",
+                                  predictionId,
+                                  "/",
+                                  argument$categoryUrlGetExpression)
+          expression <- httr::GET(urlExpression)
+          expression <- httr::content(expression)
+          metaData$expression <- expression
+        } else {
+          metaData$expression <- metaData
+          metaData$expression$name <- NULL
+        }
       }
     }
     if (is.character(metaData$expression)) {
       if (jsonlite::validate(metaData$expression)) {
-        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression, nullValue = NA)
       }
     }
     return(metaData)
@@ -1102,12 +1230,15 @@ getPredictionDefinition <- function(predictionId, baseUrl) {
 #' @export
 deletePredictionDefinition <- function(predictionId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "prediction")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(predictionId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (isTRUE(isValidPredictionId(predictionIds = predictionId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "prediction", "/", predictionId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", predictionId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {
@@ -1167,7 +1298,9 @@ checkIfPredictionNameExists <- function(predictionName, baseUrl) {
 #' @export
 getCharacterizationDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("characterization")))
+  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("characterization"))
+  metaData <- .convertNulltoNA(metaData)
+  return(metaData)
 }
 
 
@@ -1222,36 +1355,51 @@ isValidCharacterizationId <- function(characterizationIds, baseUrl) {
 #' @export
 getCharacterizationDefinition <- function(characterizationId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "characterization")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(characterizationId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidCharacterizationId(characterizationIds = characterizationId,
-                                       baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "cohort-characterization", "/", characterizationId)
-    if ("characterization" == "characterization") {
-      url <- paste0(url, "/export")
-    }
+  isValid <- isValidCharacterizationId(characterizationIds = characterizationId, baseUrl = baseUrl)
+
+  if (isTRUE(isValid)) {
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", characterizationId)
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
 
-    metaData <- .convertNulltoNA(metaData)
-
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else if (is.null(metaData$specification)) {
-        metaData$expression <- metaData
-        metaData$expression$name <- NULL
+      } else if (!is.null(metaData$design)) {
+        metaData$expression <- metaData$design
+        metaData$design <- NULL
+      } else {
+        if (argument$categoryUrlGetExpression != "") {
+          urlExpression <- paste0(baseUrl,
+                                  "/",
+                                  argument$categoryUrl,
+                                  "/",
+                                  characterizationId,
+                                  "/",
+                                  argument$categoryUrlGetExpression)
+          expression <- httr::GET(urlExpression)
+          expression <- httr::content(expression)
+          metaData$expression <- expression
+        } else {
+          metaData$expression <- metaData
+          metaData$expression$name <- NULL
+        }
       }
     }
     if (is.character(metaData$expression)) {
       if (jsonlite::validate(metaData$expression)) {
-        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression, nullValue = NA)
       }
     }
     return(metaData)
@@ -1282,13 +1430,16 @@ getCharacterizationDefinition <- function(characterizationId, baseUrl) {
 #' @export
 deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "characterization")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(characterizationId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (isTRUE(isValidCharacterizationId(characterizationIds = characterizationId,
                                        baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "cohort-characterization", "/", characterizationId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", characterizationId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {
@@ -1350,12 +1501,21 @@ checkIfCharacterizationNameExists <- function(characterizationName, baseUrl) {
 #' @export
 getCharacterizationGenerationInformation <- function(characterizationId, sourceKey, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "characterization")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(characterizationId, add = errorMessage)
   checkmate::assertScalar(sourceKey, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  url <- paste0(baseUrl, "/", "cohort-characterization", "/", characterizationId, "/", "generation")
+  url <- paste0(baseUrl,
+                "/",
+                argument$categoryUrl,
+                "/",
+                characterizationId,
+                "/",
+                argument$categoryUrlGenerationInformation)
   response <- httr::GET(url)
   if (!response$status_code %in% c(100, 200)) {
     stop("No Characterization generation information found.")
@@ -1416,6 +1576,9 @@ getCharacterizationGenerationInformation <- function(characterizationId, sourceK
 #' @export
 invokeCharacterizationDefinition <- function(characterizationId, baseUrl, sourceKey) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "characterization")
+
   # get valid source keys from webapi
   validSourceKeys <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
     dplyr::pull()
@@ -1429,7 +1592,7 @@ invokeCharacterizationDefinition <- function(characterizationId, baseUrl, source
 
   if (isTRUE(isValidCharacterizationId(characterizationIds = characterizationId,
                                        baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "cohort-characterization", "/", characterizationId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", characterizationId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {
@@ -1457,7 +1620,9 @@ invokeCharacterizationDefinition <- function(characterizationId, baseUrl, source
 #' @export
 getPathwayDefinitionsMetaData <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("pathway")))
+  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("pathway"))
+  metaData <- .convertNulltoNA(metaData)
+  return(metaData)
 }
 
 
@@ -1509,35 +1674,51 @@ isValidPathwayId <- function(pathwayIds, baseUrl) {
 #' @export
 getPathwayDefinition <- function(pathwayId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "pathway")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(pathwayId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  if (isTRUE(isValidPathwayId(pathwayIds = pathwayId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "pathway-analysis", "/", pathwayId)
-    if ("characterization" == "pathway") {
-      url <- paste0(url, "/export")
-    }
+  isValid <- isValidPathwayId(pathwayIds = pathwayId, baseUrl = baseUrl)
+
+  if (isTRUE(isValid)) {
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", pathwayId)
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
 
-    metaData <- .convertNulltoNA(metaData)
-
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else if (is.null(metaData$specification)) {
-        metaData$expression <- metaData
-        metaData$expression$name <- NULL
+      } else if (!is.null(metaData$design)) {
+        metaData$expression <- metaData$design
+        metaData$design <- NULL
+      } else {
+        if (argument$categoryUrlGetExpression != "") {
+          urlExpression <- paste0(baseUrl,
+                                  "/",
+                                  argument$categoryUrl,
+                                  "/",
+                                  pathwayId,
+                                  "/",
+                                  argument$categoryUrlGetExpression)
+          expression <- httr::GET(urlExpression)
+          expression <- httr::content(expression)
+          metaData$expression <- expression
+        } else {
+          metaData$expression <- metaData
+          metaData$expression$name <- NULL
+        }
       }
     }
     if (is.character(metaData$expression)) {
       if (jsonlite::validate(metaData$expression)) {
-        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression, nullValue = NA)
       }
     }
     return(metaData)
@@ -1567,12 +1748,15 @@ getPathwayDefinition <- function(pathwayId, baseUrl) {
 #' @export
 deletePathwayDefinition <- function(pathwayId, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "pathway")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(pathwayId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (isTRUE(isValidPathwayId(pathwayIds = pathwayId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "pathway-analysis", "/", pathwayId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", pathwayId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {
@@ -1634,12 +1818,21 @@ checkIfPathwayNameExists <- function(pathwayName, baseUrl) {
 #' @export
 getPathwayGenerationInformation <- function(pathwayId, sourceKey, baseUrl) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "pathway")
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(pathwayId, add = errorMessage)
   checkmate::assertScalar(sourceKey, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  url <- paste0(baseUrl, "/", "pathway-analysis", "/", pathwayId, "/", "generation")
+  url <- paste0(baseUrl,
+                "/",
+                argument$categoryUrl,
+                "/",
+                pathwayId,
+                "/",
+                argument$categoryUrlGenerationInformation)
   response <- httr::GET(url)
   if (!response$status_code %in% c(100, 200)) {
     stop("No Pathway generation information found.")
@@ -1700,6 +1893,9 @@ getPathwayGenerationInformation <- function(pathwayId, sourceKey, baseUrl) {
 #' @export
 invokePathwayDefinition <- function(pathwayId, baseUrl, sourceKey) {
   .checkBaseUrl(baseUrl)
+
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::filter(categoryStandard == "pathway")
+
   # get valid source keys from webapi
   validSourceKeys <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>%
     dplyr::pull()
@@ -1712,7 +1908,7 @@ invokePathwayDefinition <- function(pathwayId, baseUrl, sourceKey) {
   checkmate::reportAssertions(errorMessage)
 
   if (isTRUE(isValidPathwayId(pathwayIds = pathwayId, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "pathway-analysis", "/", pathwayId)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", pathwayId)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {

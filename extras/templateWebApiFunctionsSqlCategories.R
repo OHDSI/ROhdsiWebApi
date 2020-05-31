@@ -23,11 +23,14 @@
 get%categoryFirstUpper%DefinitionSqlFromExpression <- function(%category%DefinitionExpression, baseUrl){
   .checkBaseUrl(baseUrl)
   
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% 
+    dplyr::filter(categoryStandard == '%category%')
+  
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertList(x = %category%DefinitionExpression, min.len = 1, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  url <- paste0(baseUrl, "/", "%categoryWebApi%", "/sql/")
+  url <- paste0(baseUrl, "/", argument$categoryUrl, "/sql/")
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   validJsonExpression <- RJSONIO::toJSON(%category%DefinitionExpression)
   body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression)), digits = 23)

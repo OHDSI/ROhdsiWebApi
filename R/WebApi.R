@@ -277,57 +277,79 @@ postDefinition <- function(baseUrl,
                            category,
                            expression) {
   .checkBaseUrl(baseUrl)
-  arguments <- ROhdsiWebApi:::.getStandardCategories()
+  arguments <- ROhdsiWebApi:::.getStandardCategories() %>% 
+                dplyr::filter(.data$categoryStandard == category)
   
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(name, add = errorMessage)
   checkmate::assertCharacter(category, add = errorMessage)
   checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
-  checkmate::assertList(x = expression, 
-                        types = c('character', 'list', 'integer', 'numeric', 'logical'), 
-                        any.missing = TRUE,
-                        null.ok = FALSE, 
-                        add = errorMessage
-  )
   checkmate::reportAssertions(errorMessage)
   
-  argument <- arguments %>% 
-              dplyr::filter(.data$categoryStandard == !!category)
+  if (!category %in% c('cohort', 'conceptSet')) {
+    stop(paste0('Posting definitions of ', category, ' is not supported.'))
+  }
+  
+  # check if the name exists in WebApi.
+  definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = category) %>% 
+    dplyr::filter(name == !!name)      
+  if (nrow(definitionsMetaData)) {
+    stop(paste0(category, ": '", name,  "'. This name already exists in WebApi." ))
+  }
   
   # convert R-object to JSON expression.
   jsonExpression <- RJSONIO::toJSON(expression)
   
-  if (category %in% c('cohort')) { #conceptSet and Characterization is posting empty definitions
-    # create json body
-    json_body <- paste0("{\"name\":\"",
-                        as.character(name),
-                        "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
-                        jsonExpression,
-                        "}")
-    # POST the JSON
-    response <- httr::POST(url = paste0(baseUrl, "/", argument$categoryAsUsedInWebApi, "/"),
-                           body = json_body,
-                           config = httr::add_headers(.headers = c('Content-Type' = 'application/json')))
-    # Check response
-    if (response$status_code != 200) {
-      errorMessage <- paste0("Post attempt failed for ", 
-                             category, " : ", 
-                             name, 
-                             ". Name already exists. ", 
-                             httr::http_status(response)$message)
-      definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = category) %>% 
-        dplyr::filter(name == !!name)
-      if (nrow(definitionsMetaData)) {
-        stop(paste0(errorMessage, " Name already exists in WebApi." ))
-      } else {
-      stop(errorMessage)
-      }
-    } else {
-      metaDataSpecifications <- getDefinitionsMetadata(baseUrl = baseUrl, categories = category) %>% 
-        dplyr::filter(.data$name == !!name)
-      return(metaDataSpecifications)
-    }
-  } else {
-    stop(paste0('category = ', category, " is not supported in this version. Post not attempted."))
+  argument <- arguments %>% 
+    dplyr::filter(.data$categoryStandard == !!category)
+  
+  # create json body
+  json <- paste0("{\"name\":\"",
+                 as.character(name),
+                 "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
+                 jsonExpression,
+                 "}")
+  #POST Json
+  url = paste0(baseUrl, "/", argument$categoryUrl, "/")
+  if (category == 'characterization') {
+    url <- paste0(url, argument$categoryUrlPostExpression, "/")
   }
+  response <- ROhdsiWebApi:::.postJson(baseUrl = baseUrl, 
+                                       url = url, 
+                                       json = json)
+  error <- ROhdsiWebApi:::.checkResponse(response)
+  if (!is.null(error)) {stop(error)}
+  
+  metaDataSpecifications <- getDefinitionsMetadata(baseUrl = baseUrl, 
+                                                   categories = category) %>% 
+    dplyr::filter(name == !!name)
+  
+  # create expression in the structure required to POST or PUT
+  if (category %in% c('conceptSet')) {
+    lists <- lapply(expression$items, function(x) {
+      x <- append(x$concept, x)
+      x$concept <- NULL
+      return(tibble::as_tibble(x))
+    })
+    items <- dplyr::bind_rows(lists) %>% 
+      dplyr::mutate(id = dplyr::row_number(),
+                    conceptId = .data$CONCEPT_ID,
+                    conceptSetId = metaDataSpecifications$id,
+                    isExcluded = as.integer(.data$isExcluded),
+                    includeMapped = as.integer(.data$includeMapped),
+                    includeDescendants = as.integer(.data$includeDescendants)
+      ) %>% 
+      dplyr::select(.data$id, .data$conceptId, .data$conceptSetId, 
+                    .data$isExcluded, .data$includeMapped, .data$includeDescendants)
+    expression <- jsonlite::toJSON(x = items)
+  
+    response <- ROhdsiWebApi:::.putJson(baseUrl = baseUrl,
+                                        url = paste0(baseUrl,"/", argument$categoryUrl, "/", 
+                                                     metaDataSpecifications$id,"/", argument$categoryUrlPut),
+                                        json = expression)
+    error <- ROhdsiWebApi:::.checkResponse(response)
+    if (!is.null(error)) {stop(error)}
+  } 
+
+  return(metaDataSpecifications)
 }

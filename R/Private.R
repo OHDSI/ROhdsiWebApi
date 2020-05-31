@@ -33,25 +33,37 @@
   dplyr::tibble(categoryStandard =  c("conceptSet","cohort","incidenceRate",
                                "estimation","prediction","characterization",
                                "pathway")
-  ) %>% 
+    ) %>% 
     dplyr::mutate(categoryFirstUpper = paste0(toupper(substr(.data$categoryStandard, 1, 1)), substr(.data$categoryStandard, 2, nchar(.data$categoryStandard)))) %>% 
-    dplyr::mutate(categoryAsUsedInWebApi = dplyr::case_when(categoryStandard == 'incidenceRate' ~ 'ir',
-                                                            categoryStandard == 'conceptSet' ~ 'conceptset',
-                                                            categoryStandard == 'cohort' ~'cohortdefinition',
-                                                            categoryStandard == 'characterization' ~ 'cohort-characterization',
-                                                            categoryStandard == 'pathway' ~'pathway-analysis',
-                                                            TRUE ~ categoryStandard
-    )
-    # ) %>% 
-    # dplyr::mutate(categoryUrlExtension = dplyr::case_when(categoryStandard == 'characterization' ~ '',
-    #                                                       TRUE ~ categoryStandard
-    # )
+    dplyr::mutate(categoryUrl = dplyr::case_when(categoryStandard == 'conceptSet' ~ 'conceptset',
+                                                 categoryStandard == 'cohort' ~'cohortdefinition',
+                                                 categoryStandard == 'characterization' ~ 'cohort-characterization',
+                                                 categoryStandard == 'pathway' ~'pathway-analysis',
+                                                 categoryStandard == 'incidenceRate' ~ 'ir',
+                                                 categoryStandard == 'estimation' ~ 'estimation',
+                                                 categoryStandard == 'prediction' ~ 'prediction',
+                                                 TRUE ~ '')
+    ) %>%
+    dplyr::mutate(categoryUrlGetExpression = dplyr::case_when(categoryStandard == 'conceptSet' ~ 'expression',
+                                                              categoryStandard == 'characterization' ~ 'design',
+                                                              TRUE ~ '')
     ) %>%  
-    dplyr::mutate(categoryUrlGeneration = dplyr::case_when(categoryStandard == 'cohort' ~ 'info',
-                                                           categoryStandard == 'characterization' ~ 'generation',
-                                                           categoryStandard == 'pathway' ~ 'generation',
-                                                           categoryStandard == 'incidenceRate' ~ 'info',
-                                                           TRUE ~ '')) %>% 
+    dplyr::mutate(categoryUrlGenerationInformation = dplyr::case_when(categoryStandard == 'cohort' ~ 'info',
+                                                                      categoryStandard == 'characterization' ~ 'generation',
+                                                                      categoryStandard == 'pathway' ~ 'generation',
+                                                                      categoryStandard == 'incidenceRate' ~ 'info',
+                                                                      TRUE ~ '')
+    ) %>% 
+    dplyr::mutate(categoryUrlPut = dplyr::case_when(categoryStandard == 'conceptSet' ~ 'items',
+                                                    TRUE ~ '')
+    ) %>% 
+    dplyr::mutate(categoryUrlPostExpression = dplyr::case_when(categoryStandard == 'conceptSet' ~ 'items',
+                                                               categoryStandard == 'cohort' ~ '',
+                                                               categoryStandard == 'characterization' ~ 'import',
+                                                               categoryStandard == 'pathway' ~ '',
+                                                               categoryStandard == 'incidenceRate' ~ '',
+                                                     TRUE ~ '')
+    ) %>% 
     return()
 }
 
@@ -86,4 +98,30 @@
     }
   }
   thisList
+}
+
+
+.postJson <- function(baseUrl, url, json) {
+  # POST the JSON
+  httr::POST(url = url,
+             body = json,
+             encode = 'json',
+             config = httr::add_headers(.headers = c('Content-Type' = 'application/json')))
+}
+.putJson <- function(baseUrl, url, json) {
+  # PUT the JSON
+  httr::PUT(url = url,
+            body = json,
+            encode = 'json',
+            config = httr::add_headers(.headers = c('Content-Type' = 'application/json')))
+}
+.checkResponse <- function(response) {
+  # Check response
+  if (response$status_code != 200) {
+    errorMessage <- paste0("Post attempt failed for ", 
+                           category, " : ", 
+                           name, 
+                           httr::http_status(response)$message)
+    return(errorMessage)
+  }
 }

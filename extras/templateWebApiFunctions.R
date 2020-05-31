@@ -19,7 +19,9 @@
 #' @export
 get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl){
   .checkBaseUrl(baseUrl)
-  return(getDefinitionsMetadata(baseUrl = baseUrl, categories = c("%category%")))
+  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = c("%category%"))
+  metaData <- .convertNulltoNA(metaData)
+  return(metaData)
 }
 
 
@@ -71,35 +73,46 @@ isValid%categoryFirstUpper%Id <- function(%category%Ids, baseUrl){
 #' @export
 get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
   .checkBaseUrl(baseUrl)
+  
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% 
+              dplyr::filter(categoryStandard == '%category%')
+  
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(%category%Id, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  if (isTRUE(isValid%categoryFirstUpper%Id(%category%Ids = %category%Id, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
-    if ('characterization' == "%category%") {
-      url <- paste0(url, "/export")
-    }
+  isValid <- isValid%categoryFirstUpper%Id(%category%Ids = %category%Id, baseUrl = baseUrl)
+  
+  if (isTRUE(isValid)) {
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", %category%Id)
     metaData <- httr::GET(url)
     metaData <- httr::content(metaData)
     if (!is.null(metaData$payload$message)) {
       stop(metaData$payload$message)
     }
     
-    metaData <- .convertNulltoNA(metaData)
-    
     if (is.null(metaData$expression)) {
       if (!is.null(metaData$specification)) {
         metaData$expression <- metaData$specification
         metaData$specification <- NULL
-      } else if (is.null(metaData$specification)) {
-        metaData$expression <- metaData
-        metaData$expression$name <- NULL
+      } else if (!is.null(metaData$design)) {
+        metaData$expression <- metaData$design
+        metaData$design <- NULL
+      } else {
+        if (argument$categoryUrlGetExpression != '') {
+          urlExpression <- paste0(baseUrl, "/", argument$categoryUrl, "/", %category%Id, "/", argument$categoryUrlGetExpression)
+          expression <- httr::GET(urlExpression)
+          expression <- httr::content(expression)
+          metaData$expression <- expression
+        } else {
+          metaData$expression <- metaData
+          metaData$expression$name <- NULL
+        }
       }
     }
     if (is.character(metaData$expression)) {
       if (jsonlite::validate(metaData$expression)) {
-        metaData$expression <- RJSONIO::fromJSON(metaData$expression)
+        metaData$expression <- RJSONIO::fromJSON(metaData$expression, nullValue = NA)
       }
     }
     return(metaData)
@@ -129,12 +142,16 @@ get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 #' @export
 delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
   .checkBaseUrl(baseUrl)
+  
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% 
+    dplyr::filter(categoryStandard == '%category%')
+  
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(%category%Id, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   if (isTRUE(isValid%categoryFirstUpper%Id(%category%Ids = %category%Id, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", %category%Id)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {

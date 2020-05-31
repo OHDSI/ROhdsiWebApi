@@ -21,12 +21,16 @@
 #' @export
 get%categoryFirstUpper%GenerationInformation <- function(%category%Id, sourceKey, baseUrl){
   .checkBaseUrl(baseUrl)
+  
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% 
+    dplyr::filter(categoryStandard == '%category%')
+  
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(%category%Id, add = errorMessage)
   checkmate::assertScalar(sourceKey, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
-  url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id, "/", "%categoryUrlGeneration%")
+  url <- paste0(baseUrl, "/", argument$categoryUrl, "/", %category%Id, "/", argument$categoryUrlGenerationInformation)
   response <- httr::GET(url)
   if (!response$status_code %in% c(100,200)) {
     stop('No %categoryFirstUpper% generation information found.')
@@ -88,6 +92,10 @@ get%categoryFirstUpper%GenerationInformation <- function(%category%Id, sourceKey
 #' @export
 invoke%categoryFirstUpper%Definition <- function(%category%Id, baseUrl, sourceKey){
   .checkBaseUrl(baseUrl)
+  
+  argument <- ROhdsiWebApi:::.getStandardCategories() %>% 
+    dplyr::filter(categoryStandard == '%category%')
+  
   #get valid source keys from webapi
   validSourceKeys <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>% dplyr::pull()
   errorMessage <- checkmate::makeAssertCollection()
@@ -103,7 +111,7 @@ invoke%categoryFirstUpper%Definition <- function(%category%Id, baseUrl, sourceKe
   checkmate::reportAssertions(errorMessage)
   
   if (isTRUE(isValid%categoryFirstUpper%Id(%category%Ids = %category%Id, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
+    url <- paste0(baseUrl, "/", argument$categoryUrl, "/", %category%Id)
     response <- httr::DELETE(url)
     response <- httr::http_status(response)
   } else {

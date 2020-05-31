@@ -12,9 +12,6 @@ webApiVersion
 priorityVocabulary <- getPriorityVocabularyKey(baseUrl = baseUrl)
 priorityVocabulary
 
-definitionsMetadata <- getDefinitionsMetadata(baseUrl = baseUrl)
-
-
 # concepts and concept sets --------------------------------------------------------
 conceptSetDefinition <- getConceptSetDefinition(conceptSetId = 10677, baseUrl = baseUrl)
 
