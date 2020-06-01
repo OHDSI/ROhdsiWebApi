@@ -176,12 +176,12 @@ deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' checkIfConceptSetNameExists(conceptSetName = "this text string needs to be checked",
-#'                             baseUrl = "http://server.org:80/WebAPI")
+#' existsConceptSetName(conceptSetName = "this text string needs to be checked",
+#'                      baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
 # Check name
-checkIfConceptSetNameExists <- function(conceptSetName, baseUrl) {
+existsConceptSetName <- function(conceptSetName, baseUrl) {
   definitionsMetaData <- getConceptSetDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(name == !!conceptSetName)
 
@@ -349,12 +349,12 @@ deleteCohortDefinition <- function(cohortId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' checkIfCohortNameExists(cohortName = "this text string needs to be checked",
-#'                         baseUrl = "http://server.org:80/WebAPI")
+#' existsCohortName(cohortName = "this text string needs to be checked",
+#'                  baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
 # Check name
-checkIfCohortNameExists <- function(cohortName, baseUrl) {
+existsCohortName <- function(cohortName, baseUrl) {
   definitionsMetaData <- getCohortDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(name == !!cohortName)
 
@@ -629,12 +629,12 @@ deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' checkIfIncidenceRateNameExists(incidenceRateName = "this text string needs to be checked",
-#'                                baseUrl = "http://server.org:80/WebAPI")
+#' existsIncidenceRateName(incidenceRateName = "this text string needs to be checked",
+#'                         baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
 # Check name
-checkIfIncidenceRateNameExists <- function(incidenceRateName, baseUrl) {
+existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
   definitionsMetaData <- getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(name == !!incidenceRateName)
 
@@ -909,12 +909,12 @@ deleteEstimationDefinition <- function(estimationId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' checkIfEstimationNameExists(estimationName = "this text string needs to be checked",
-#'                             baseUrl = "http://server.org:80/WebAPI")
+#' existsEstimationName(estimationName = "this text string needs to be checked",
+#'                      baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
 # Check name
-checkIfEstimationNameExists <- function(estimationName, baseUrl) {
+existsEstimationName <- function(estimationName, baseUrl) {
   definitionsMetaData <- getEstimationDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(name == !!estimationName)
 
@@ -1082,12 +1082,12 @@ deletePredictionDefinition <- function(predictionId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' checkIfPredictionNameExists(predictionName = "this text string needs to be checked",
-#'                             baseUrl = "http://server.org:80/WebAPI")
+#' existsPredictionName(predictionName = "this text string needs to be checked",
+#'                      baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
 # Check name
-checkIfPredictionNameExists <- function(predictionName, baseUrl) {
+existsPredictionName <- function(predictionName, baseUrl) {
   definitionsMetaData <- getPredictionDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(name == !!predictionName)
 
@@ -1261,12 +1261,12 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' checkIfCharacterizationNameExists(characterizationName = "this text string needs to be checked",
-#'                                   baseUrl = "http://server.org:80/WebAPI")
+#' existsCharacterizationName(characterizationName = "this text string needs to be checked",
+#'                            baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
 # Check name
-checkIfCharacterizationNameExists <- function(characterizationName, baseUrl) {
+existsCharacterizationName <- function(characterizationName, baseUrl) {
   definitionsMetaData <- getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(name == !!characterizationName)
 
@@ -1542,12 +1542,12 @@ deletePathwayDefinition <- function(pathwayId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' checkIfPathwayNameExists(pathwayName = "this text string needs to be checked",
-#'                          baseUrl = "http://server.org:80/WebAPI")
+#' existsPathwayName(pathwayName = "this text string needs to be checked",
+#'                   baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
 # Check name
-checkIfPathwayNameExists <- function(pathwayName, baseUrl) {
+existsPathwayName <- function(pathwayName, baseUrl) {
   definitionsMetaData <- getPathwayDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(name == !!pathwayName)
 
