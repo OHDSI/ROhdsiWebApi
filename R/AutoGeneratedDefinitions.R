@@ -161,6 +161,38 @@ deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
 }
 
 
+
+
+#' Check if ConceptSet definition name exists.
+#'
+#' @details
+#' Check if a string name already exists in the WebApi as a ConceptSet definition name.
+#'
+#' @template BaseUrl
+#' @param conceptSetName   A string name for the ConceptSet to be checked.
+#' @return
+#' If found, the function will return a tibble with details of the specification. If not found, FALSE
+#' will be returned.
+#'
+#' @examples
+#' \dontrun{
+#' existsConceptSetName(conceptSetName = "this text string needs to be checked",
+#'                      baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+# Check name
+existsConceptSetName <- function(conceptSetName, baseUrl) {
+  definitionsMetaData <- getConceptSetDefinitionsMetaData(baseUrl = baseUrl)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$conceptSetName)
+
+  if (nrow(matched) > 0) {
+    return(matched)
+  } else {
+    FALSE
+  }
+}
+
+
 #' Retrieve the meta data for Cohort definitions.
 #'
 #' @details
@@ -298,6 +330,38 @@ deleteCohortDefinition <- function(cohortId, baseUrl) {
     response <- httr::http_status(response)
   } else {
     stop("CohortId : cohortId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Check if Cohort definition name exists.
+#'
+#' @details
+#' Check if a string name already exists in the WebApi as a Cohort definition name.
+#'
+#' @template BaseUrl
+#' @param cohortName   A string name for the Cohort to be checked.
+#' @return
+#' If found, the function will return a tibble with details of the specification. If not found, FALSE
+#' will be returned.
+#'
+#' @examples
+#' \dontrun{
+#' existsCohortName(cohortName = "this text string needs to be checked",
+#'                  baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+# Check name
+existsCohortName <- function(cohortName, baseUrl) {
+  definitionsMetaData <- getCohortDefinitionsMetaData(baseUrl = baseUrl)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$cohortName)
+
+  if (nrow(matched) > 0) {
+    return(matched)
+  } else {
+    FALSE
   }
 }
 
@@ -546,6 +610,38 @@ deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
     response <- httr::http_status(response)
   } else {
     stop("IncidenceRateId : incidenceRateId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Check if IncidenceRate definition name exists.
+#'
+#' @details
+#' Check if a string name already exists in the WebApi as a IncidenceRate definition name.
+#'
+#' @template BaseUrl
+#' @param incidenceRateName   A string name for the IncidenceRate to be checked.
+#' @return
+#' If found, the function will return a tibble with details of the specification. If not found, FALSE
+#' will be returned.
+#'
+#' @examples
+#' \dontrun{
+#' existsIncidenceRateName(incidenceRateName = "this text string needs to be checked",
+#'                         baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+# Check name
+existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
+  definitionsMetaData <- getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$incidenceRateName)
+
+  if (nrow(matched) > 0) {
+    return(matched)
+  } else {
+    FALSE
   }
 }
 
@@ -798,6 +894,38 @@ deleteEstimationDefinition <- function(estimationId, baseUrl) {
 }
 
 
+
+
+#' Check if Estimation definition name exists.
+#'
+#' @details
+#' Check if a string name already exists in the WebApi as a Estimation definition name.
+#'
+#' @template BaseUrl
+#' @param estimationName   A string name for the Estimation to be checked.
+#' @return
+#' If found, the function will return a tibble with details of the specification. If not found, FALSE
+#' will be returned.
+#'
+#' @examples
+#' \dontrun{
+#' existsEstimationName(estimationName = "this text string needs to be checked",
+#'                      baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+# Check name
+existsEstimationName <- function(estimationName, baseUrl) {
+  definitionsMetaData <- getEstimationDefinitionsMetaData(baseUrl = baseUrl)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$estimationName)
+
+  if (nrow(matched) > 0) {
+    return(matched)
+  } else {
+    FALSE
+  }
+}
+
+
 #' Retrieve the meta data for Prediction definitions.
 #'
 #' @details
@@ -935,6 +1063,38 @@ deletePredictionDefinition <- function(predictionId, baseUrl) {
     response <- httr::http_status(response)
   } else {
     stop("PredictionId : predictionId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Check if Prediction definition name exists.
+#'
+#' @details
+#' Check if a string name already exists in the WebApi as a Prediction definition name.
+#'
+#' @template BaseUrl
+#' @param predictionName   A string name for the Prediction to be checked.
+#' @return
+#' If found, the function will return a tibble with details of the specification. If not found, FALSE
+#' will be returned.
+#'
+#' @examples
+#' \dontrun{
+#' existsPredictionName(predictionName = "this text string needs to be checked",
+#'                      baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+# Check name
+existsPredictionName <- function(predictionName, baseUrl) {
+  definitionsMetaData <- getPredictionDefinitionsMetaData(baseUrl = baseUrl)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$predictionName)
+
+  if (nrow(matched) > 0) {
+    return(matched)
+  } else {
+    FALSE
   }
 }
 
@@ -1082,6 +1242,38 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
     response <- httr::http_status(response)
   } else {
     stop("CharacterizationId : characterizationId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Check if Characterization definition name exists.
+#'
+#' @details
+#' Check if a string name already exists in the WebApi as a Characterization definition name.
+#'
+#' @template BaseUrl
+#' @param characterizationName   A string name for the Characterization to be checked.
+#' @return
+#' If found, the function will return a tibble with details of the specification. If not found, FALSE
+#' will be returned.
+#'
+#' @examples
+#' \dontrun{
+#' existsCharacterizationName(characterizationName = "this text string needs to be checked",
+#'                            baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+# Check name
+existsCharacterizationName <- function(characterizationName, baseUrl) {
+  definitionsMetaData <- getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$characterizationName)
+
+  if (nrow(matched) > 0) {
+    return(matched)
+  } else {
+    FALSE
   }
 }
 
@@ -1331,6 +1523,38 @@ deletePathwayDefinition <- function(pathwayId, baseUrl) {
     response <- httr::http_status(response)
   } else {
     stop("PathwayId : pathwayId is not present in the WebApi.")
+  }
+}
+
+
+
+
+#' Check if Pathway definition name exists.
+#'
+#' @details
+#' Check if a string name already exists in the WebApi as a Pathway definition name.
+#'
+#' @template BaseUrl
+#' @param pathwayName   A string name for the Pathway to be checked.
+#' @return
+#' If found, the function will return a tibble with details of the specification. If not found, FALSE
+#' will be returned.
+#'
+#' @examples
+#' \dontrun{
+#' existsPathwayName(pathwayName = "this text string needs to be checked",
+#'                   baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+# Check name
+existsPathwayName <- function(pathwayName, baseUrl) {
+  definitionsMetaData <- getPathwayDefinitionsMetaData(baseUrl = baseUrl)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$pathwayName)
+
+  if (nrow(matched) > 0) {
+    return(matched)
+  } else {
+    FALSE
   }
 }
 

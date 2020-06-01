@@ -140,3 +140,35 @@ delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
     stop("%categoryFirstUpper%Id : %category%Id is not present in the WebApi.")
   }
 }
+
+
+
+
+#' Check if %categoryFirstUpper% definition name exists.
+#'
+#' @details
+#' Check if a string name already exists in the WebApi as a %categoryFirstUpper% definition name.
+#'  
+#' @template BaseUrl
+#' @param %category%Name    A string name for the %categoryFirstUpper% to be checked.
+#' @return                  If found, the function will return a tibble with details of the specification.
+#'                          If not found, FALSE will be returned.
+#' 
+#' @examples 
+#' \dontrun{
+#' exists%categoryFirstUpper%Name(%category%Name = 'this text string needs to be checked', 
+#' baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+# Check name
+exists%categoryFirstUpper%Name <- function(%category%Name, baseUrl) {
+  definitionsMetaData <- get%categoryFirstUpper%DefinitionsMetaData(baseUrl = baseUrl)
+  matched <- definitionsMetaData %>% 
+    dplyr::filter(name == .data$%category%Name)
+  
+  if (nrow(matched) > 0) {
+    return(matched)
+  } else {
+    FALSE
+  }
+}
