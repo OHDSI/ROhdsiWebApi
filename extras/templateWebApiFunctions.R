@@ -174,15 +174,15 @@ delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 #' 
 #' @examples 
 #' \dontrun{
-#' checkIf%categoryFirstUpper%NameExists(%category%Name = 'this text string needs to be checked', 
+#' exists%categoryFirstUpper%Name(%category%Name = 'this text string needs to be checked', 
 #' baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
 # Check name
-checkIf%categoryFirstUpper%NameExists <- function(%category%Name, baseUrl) {
+exists%categoryFirstUpper%Name <- function(%category%Name, baseUrl) {
   definitionsMetaData <- get%categoryFirstUpper%DefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% 
-    dplyr::filter(name == !!%category%Name)
+    dplyr::filter(name == .data$%category%Name)
   
   if (nrow(matched) > 0) {
     return(matched)
