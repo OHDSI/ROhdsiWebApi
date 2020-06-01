@@ -131,3 +131,57 @@ getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
   })
   do.call(rbind.data.frame, results)
 }
+
+
+
+
+#' Get a cohort definition's SQL from WebAPI
+#'
+#' @details
+#' Obtains the template SQL of a cohort. When using generateStats = TRUE, the following tables are
+#' required to exist when executing the SQL: cohort_inclusion, cohort_inclusion_result,
+#' cohort_inclusion_stats, and cohort_summary_stats. Also note that the cohort_inclusion table should
+#' be populated with the names of the rules prior to executing the cohort definition SQL.
+#'
+#' @template BaseUrl
+#' @template CohortId
+#' @param generateStats   Should the SQL include the code for generating inclusion rule statistics?
+#'                        Note that if TRUE, several additional tables are expected to exists as
+#'                        described in the details. By default this is TRUE.
+#'
+#' @return
+#' The templated SQL to generate the cohort
+#'
+#' @export
+getCohortDefinitionSql <- function(cohortId, baseUrl, generateStats = TRUE) {
+  .Deprecated(new = "getCohortDefinitionSql",
+              package = "ROhdsiWebApi",
+              msg = "This function has been deprecated. As an alternative please use getCohortSql",
+              old = as.character(sys.call(sys.parent()))[1L])
+  .checkBaseUrl(baseUrl)
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertLogical(generateStats, add = errorMessage)
+  checkmate::assertInt(cohortId, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+  
+  url <- sprintf("%1s/cohortdefinition/sql", baseUrl)
+  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
+  
+  cohortDefinition <- ROhdsiWebApi::getCohortDefinition(baseUrl = baseUrl,
+                                                        cohortId = cohortId)
+  validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
+  
+  webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
+  if (compareVersion(a = "2.7.2", b = webApiVersion) == 0) {
+    body <- RJSONIO::toJSON(list(expression = validJsonExpression,
+                                 options = list(generateStats = generateStats)), digits = 23)
+    
+  } else {
+    body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression),
+                                 options = list(generateStats = generateStats)), digits = 23)
+  }
+  
+  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
+  sql <- (httr::content(req))$templateSql
+  return(sql)
+}

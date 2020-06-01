@@ -380,7 +380,9 @@ existsCohortName <- function(cohortName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getCohortGenerationInformation(CohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' getCohortGenerationInformation(cohortId = 13242,
+#'                                baseUrl = "http://server.org:80/WebAPI",
+#'                                sourceKey = "HCUP")
 #' }
 #' @export
 getCohortGenerationInformation <- function(cohortId, sourceKey, baseUrl) {
@@ -469,6 +471,47 @@ invokeCohortDefinition <- function(cohortId, baseUrl, sourceKey) {
   } else {
     stop("CohortId : cohortId is not present in the WebApi.")
   }
+}
+
+#' Get SQL query for Cohort definition.
+#'
+#' @details
+#' Given a valid Cohort definition R-object (not JSON) this function will return the parameterized SQL
+#' in OHDSI SQL dialect. This SQL then may be used along with OHDSI R-package 'SQLRender' to
+#' render/translate to target SQL dialect and parameters rendered.
+#'
+#' @template BaseUrl
+#' @param cohortDefinition   An R list object (not JSON) representing the Cohort definition. It is the
+#'                           output R expression object of list object from \code{CohortDefinition}
+#' @return
+#' An R object containing the SQL for Cohort definition.
+#'
+#' @examples
+#' \dontrun{
+#' getCohortSql(CohortDefinition = (getCohortDefinition(cohortId = 13242, baseUrl = baseUrl)),
+#'              baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getCohortSql <- function(cohortDefinition, baseUrl) {
+  .checkBaseUrl(baseUrl)
+
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertList(x = cohortDefinition, min.len = 1, add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+
+  url <- paste0(baseUrl, "/", "cohortdefinition", "/sql/")
+  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
+
+  if ("expression" %in% names(cohortDefinition)) {
+    expression <- cohortDefinition$expression
+  } else {
+    expression <- cohortDefinition
+  }
+  validJsonExpression <- RJSONIO::toJSON(expression)
+  body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression)), digits = 23)
+  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
+  sql <- (httr::content(req))$templateSql
+  return(sql)
 }
 
 
@@ -660,8 +703,9 @@ existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getIncidenceRateGenerationInformation(IncidenceRateId = 13242,
-#'                                       baseUrl = "http://server.org:80/WebAPI")
+#' getIncidenceRateGenerationInformation(incidenceRateId = 13242,
+#'                                       baseUrl = "http://server.org:80/WebAPI",
+#'                                       sourceKey = "HCUP")
 #' }
 #' @export
 getIncidenceRateGenerationInformation <- function(incidenceRateId, sourceKey, baseUrl) {
@@ -1292,8 +1336,9 @@ existsCharacterizationName <- function(characterizationName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getCharacterizationGenerationInformation(CharacterizationId = 13242,
-#'                                          baseUrl = "http://server.org:80/WebAPI")
+#' getCharacterizationGenerationInformation(characterizationId = 13242,
+#'                                          baseUrl = "http://server.org:80/WebAPI",
+#'                                          sourceKey = "HCUP")
 #' }
 #' @export
 getCharacterizationGenerationInformation <- function(characterizationId, sourceKey, baseUrl) {
@@ -1573,7 +1618,9 @@ existsPathwayName <- function(pathwayName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getPathwayGenerationInformation(PathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' getPathwayGenerationInformation(pathwayId = 13242,
+#'                                 baseUrl = "http://server.org:80/WebAPI",
+#'                                 sourceKey = "HCUP")
 #' }
 #' @export
 getPathwayGenerationInformation <- function(pathwayId, sourceKey, baseUrl) {

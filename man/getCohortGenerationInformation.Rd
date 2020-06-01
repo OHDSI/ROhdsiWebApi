@@ -29,6 +29,8 @@ cohortId.
 }
 \examples{
 \dontrun{
-getCohortGenerationInformation(CohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+getCohortGenerationInformation(cohortId = 13242,
+                               baseUrl = "http://server.org:80/WebAPI",
+                               sourceKey = "HCUP")
 }
 }

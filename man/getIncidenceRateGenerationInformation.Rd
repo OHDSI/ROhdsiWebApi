@@ -29,7 +29,8 @@ incidenceRateId.
 }
 \examples{
 \dontrun{
-getIncidenceRateGenerationInformation(IncidenceRateId = 13242,
-                                      baseUrl = "http://server.org:80/WebAPI")
+getIncidenceRateGenerationInformation(incidenceRateId = 13242,
+                                      baseUrl = "http://server.org:80/WebAPI",
+                                      sourceKey = "HCUP")
 }
 }

@@ -14,7 +14,9 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' get%categoryFirstUpper%GenerationInformation(%categoryFirstUpper%Id = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' get%categoryFirstUpper%GenerationInformation(%category%Id = 13242, 
+#'                                              baseUrl = "http://server.org:80/WebAPI",
+#'                                              sourceKey = 'HCUP')
 #' }
 #' @export
 get%categoryFirstUpper%GenerationInformation <- function(%category%Id, sourceKey, baseUrl){
