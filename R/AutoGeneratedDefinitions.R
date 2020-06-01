@@ -412,24 +412,23 @@ invokeCohortDefinition <- function(cohortId, baseUrl, sourceKey) {
 #' Get SQL query for Cohort definition.
 #'
 #' @details
-#' Given a valid Cohort specification R-object (not JSON) this function will return the parameterized
-#' SQL in OHDSI SQL dialect. This SQL then may be used along with OHDSI R-package 'SQLRender' to
+#' Given a valid Cohort definition R-object (not JSON) this function will return the parameterized SQL
+#' in OHDSI SQL dialect. This SQL then may be used along with OHDSI R-package 'SQLRender' to
 #' render/translate to target SQL dialect and parameters rendered.
 #'
 #' @template BaseUrl
-#' @param cohortDefinitionExpression   An R list object (not JSON) representing the Cohort definition.
-#'                                     It is the output R expression object of list object from
-#'                                     \code{CohortDefinition}
+#' @param cohortDefinition   An R list object (not JSON) representing the Cohort definition. It is the
+#'                           output R expression object of list object from \code{CohortDefinition}
 #' @return
 #' An R object containing the SQL for Cohort definition.
 #'
 #' @examples
 #' \dontrun{
-#' getCohortDefinitionSqlFromExpression(CohortDefinitionExpression = 13242,
-#'                                      baseUrl = "http://server.org:80/WebAPI")
+#' getCohortSql(CohortDefinition = (getCohortDefinition(cohortId = 13242, baseUrl = baseUrl)),
+#'              baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-getCohortDefinitionSqlFromExpression <- function(cohortDefinitionExpression, baseUrl) {
+getCohortSql <- function(cohortDefinition, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
@@ -438,7 +437,13 @@ getCohortDefinitionSqlFromExpression <- function(cohortDefinitionExpression, bas
 
   url <- paste0(baseUrl, "/", "cohortdefinition", "/sql/")
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  validJsonExpression <- RJSONIO::toJSON(cohortDefinitionExpression)
+
+  if ("expression" %in% names(cohortDefinition)) {
+    expression <- cohortDefinition$expression
+  } else {
+    expression <- cohortDefinition
+  }
+  validJsonExpression <- RJSONIO::toJSON(expression)
   body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression)), digits = 23)
   req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
   sql <- (httr::content(req))$templateSql
