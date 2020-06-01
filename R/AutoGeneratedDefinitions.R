@@ -169,7 +169,7 @@ deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a ConceptSet definition name.
 #'
 #' @template BaseUrl
-#' @param conceptSetName   A string name for the $categoryFirstUpper% to be checked.
+#' @param conceptSetName   A string name for the ConceptSet to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -183,7 +183,7 @@ deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
 # Check name
 existsConceptSetName <- function(conceptSetName, baseUrl) {
   definitionsMetaData <- getConceptSetDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(name == !!conceptSetName)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$conceptSetName)
 
   if (nrow(matched) > 0) {
     return(matched)
@@ -342,7 +342,7 @@ deleteCohortDefinition <- function(cohortId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a Cohort definition name.
 #'
 #' @template BaseUrl
-#' @param cohortName   A string name for the $categoryFirstUpper% to be checked.
+#' @param cohortName   A string name for the Cohort to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -356,7 +356,7 @@ deleteCohortDefinition <- function(cohortId, baseUrl) {
 # Check name
 existsCohortName <- function(cohortName, baseUrl) {
   definitionsMetaData <- getCohortDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(name == !!cohortName)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$cohortName)
 
   if (nrow(matched) > 0) {
     return(matched)
@@ -622,7 +622,7 @@ deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a IncidenceRate definition name.
 #'
 #' @template BaseUrl
-#' @param incidenceRateName   A string name for the $categoryFirstUpper% to be checked.
+#' @param incidenceRateName   A string name for the IncidenceRate to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -636,7 +636,7 @@ deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 # Check name
 existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
   definitionsMetaData <- getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(name == !!incidenceRateName)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$incidenceRateName)
 
   if (nrow(matched) > 0) {
     return(matched)
@@ -902,7 +902,7 @@ deleteEstimationDefinition <- function(estimationId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a Estimation definition name.
 #'
 #' @template BaseUrl
-#' @param estimationName   A string name for the $categoryFirstUpper% to be checked.
+#' @param estimationName   A string name for the Estimation to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -916,7 +916,7 @@ deleteEstimationDefinition <- function(estimationId, baseUrl) {
 # Check name
 existsEstimationName <- function(estimationName, baseUrl) {
   definitionsMetaData <- getEstimationDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(name == !!estimationName)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$estimationName)
 
   if (nrow(matched) > 0) {
     return(matched)
@@ -1075,7 +1075,7 @@ deletePredictionDefinition <- function(predictionId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a Prediction definition name.
 #'
 #' @template BaseUrl
-#' @param predictionName   A string name for the $categoryFirstUpper% to be checked.
+#' @param predictionName   A string name for the Prediction to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -1089,7 +1089,7 @@ deletePredictionDefinition <- function(predictionId, baseUrl) {
 # Check name
 existsPredictionName <- function(predictionName, baseUrl) {
   definitionsMetaData <- getPredictionDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(name == !!predictionName)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$predictionName)
 
   if (nrow(matched) > 0) {
     return(matched)
@@ -1254,7 +1254,7 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a Characterization definition name.
 #'
 #' @template BaseUrl
-#' @param characterizationName   A string name for the $categoryFirstUpper% to be checked.
+#' @param characterizationName   A string name for the Characterization to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -1268,7 +1268,7 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
 # Check name
 existsCharacterizationName <- function(characterizationName, baseUrl) {
   definitionsMetaData <- getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(name == !!characterizationName)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$characterizationName)
 
   if (nrow(matched) > 0) {
     return(matched)
@@ -1535,7 +1535,7 @@ deletePathwayDefinition <- function(pathwayId, baseUrl) {
 #' Check if a string name already exists in the WebApi as a Pathway definition name.
 #'
 #' @template BaseUrl
-#' @param pathwayName   A string name for the $categoryFirstUpper% to be checked.
+#' @param pathwayName   A string name for the Pathway to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
 #' will be returned.
@@ -1549,7 +1549,7 @@ deletePathwayDefinition <- function(pathwayId, baseUrl) {
 # Check name
 existsPathwayName <- function(pathwayName, baseUrl) {
   definitionsMetaData <- getPathwayDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(name == !!pathwayName)
+  matched <- definitionsMetaData %>% dplyr::filter(name == .data$pathwayName)
 
   if (nrow(matched) > 0) {
     return(matched)

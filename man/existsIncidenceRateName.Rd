@@ -7,7 +7,7 @@
 existsIncidenceRateName(incidenceRateName, baseUrl)
 }
 \arguments{
-\item{incidenceRateName}{A string name for the $categoryFirstUpper% to be checked.}
+\item{incidenceRateName}{A string name for the IncidenceRate to be checked.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.

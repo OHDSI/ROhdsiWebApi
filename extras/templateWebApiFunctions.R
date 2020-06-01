@@ -150,7 +150,7 @@ delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 #' Check if a string name already exists in the WebApi as a %categoryFirstUpper% definition name.
 #'  
 #' @template BaseUrl
-#' @param %category%Name    A string name for the $categoryFirstUpper% to be checked.
+#' @param %category%Name    A string name for the %categoryFirstUpper% to be checked.
 #' @return                  If found, the function will return a tibble with details of the specification.
 #'                          If not found, FALSE will be returned.
 #' 
@@ -164,7 +164,7 @@ delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 exists%categoryFirstUpper%Name <- function(%category%Name, baseUrl) {
   definitionsMetaData <- get%categoryFirstUpper%DefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% 
-    dplyr::filter(name == !!%category%Name)
+    dplyr::filter(name == .data$%category%Name)
   
   if (nrow(matched) > 0) {
     return(matched)
