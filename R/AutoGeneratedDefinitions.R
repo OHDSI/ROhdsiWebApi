@@ -432,7 +432,7 @@ getCohortSql <- function(cohortDefinition, baseUrl) {
   .checkBaseUrl(baseUrl)
 
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertList(x = cohortDefinitionExpression, min.len = 1, add = errorMessage)
+  checkmate::assertList(x = cohortDefinition, min.len = 1, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   url <- paste0(baseUrl, "/", "cohortdefinition", "/sql/")

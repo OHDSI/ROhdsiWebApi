@@ -25,7 +25,7 @@ get%categoryFirstUpper%Sql <- function(%category%Definition, baseUrl){
   .checkBaseUrl(baseUrl)
   
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertList(x = %category%DefinitionExpression, min.len = 1, add = errorMessage)
+  checkmate::assertList(x = %category%Definition, min.len = 1, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   
   url <- paste0(baseUrl, "/", "%categoryWebApi%", "/sql/")
