@@ -156,7 +156,7 @@ getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
 getCohortDefinitionSql <- function(cohortId, baseUrl, generateStats = TRUE) {
   .Deprecated(new = "getCohortDefinitionSql",
               package = "ROhdsiWebApi",
-              msg = "This function has been deprecated. As an alternative please use getCohortDefinitionSqlFromExpression",
+              msg = "This function has been deprecated. As an alternative please use getCohortSql",
               old = as.character(sys.call(sys.parent()))[1L])
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
