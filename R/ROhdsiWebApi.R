@@ -16,9 +16,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' ROhdsiWebApi
-#'
-#' @docType package
-#' @name ROhdsiWebApi
+#' @keywords internal
+"_PACKAGE"
+
 #' @importFrom utils compareVersion read.csv write.csv
+#' @importFrom dplyr "%>%"
+#' @importFrom rlang .data
 NULL

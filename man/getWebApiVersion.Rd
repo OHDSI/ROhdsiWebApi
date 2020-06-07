@@ -2,19 +2,21 @@
 % Please edit documentation in R/WebApi.R
 \name{getWebApiVersion}
 \alias{getWebApiVersion}
-\title{Get the version of the WebAPI}
+\title{Get the WebAPI version number}
 \usage{
 getWebApiVersion(baseUrl)
 }
 \arguments{
-\item{baseUrl}{The base URL for the WebApi instance, for example: "http://server.org:80/WebAPI".}
+\item{baseUrl}{The base URL for the WebApi instance, for example:
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 }
 \value{
-The WebAPI version
+A string.
 }
 \description{
-Get the version of the WebAPI
+Get the WebAPI version number
 }
 \details{
-Obtains the WebAPI version number
+Obtains the WebAPI version number.
 }

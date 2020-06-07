@@ -12,34 +12,43 @@ reference:
     desc: >
       Functions for interfacing with WebAPI
     contents:
-      - getPriorityVocabKey
+      - getPriorityVocabularyKey
       - getWebApiVersion
       - getCdmSources
+      - getMetadataForAllSpecifications
+      - postDefinition
+  - title: "Conceps"
+    desc: >
+      Functions for interfacing with concepts in Atlas
+    contents:
+      - matches("Concept[^S]")      
   - title: "Concept Set"
     desc: >
       Functions for interfacing with concept sets in Atlas
     contents:
-      - getConceptSetName
-      - getConceptSetExpression
-      - insertConceptSetConceptIdsInPackage
-      - getSetExpressionConceptIds
-      - getConceptSetConceptIds
-      - createConceptSetWorkbook
+      - matches("ConceptSet")
   - title: "Cohort Defintion"
     desc: >
       Functions for interfacing with cohort definitions in Atlas
     contents:
-      - getCohortDefinitionExpression
-      - insertCohortDefinitionInPackage
-      - insertCohortDefinitionSetInPackage
-      - getCohortDefinitionName
-      - getCohortDefinitionSql
-      - getConceptSetsAndConceptsFromCohort
-      - getCohortGenerationStatuses
-      - invokeCohortSetGeneration
-      - getCohortInclusionRulesAndCounts
+      - matches("Cohort[^C]")
+  - title: "Estimation"
+    desc: >
+      Functions for interfacing with estimation definitions in Atlas
+    contents:
+      - matches("Estimation")
   - title: "Cohort Characterization"
     desc: >
-      Functions for interfacing with cohort definitions in Atlas
+      Functions for interfacing with cohort characterizations in Atlas
     contents:
-      - getCohortCharacterizationResults
+      - matches("CohortCharacterization")
+  - title: "Incidence Rates"
+    desc: >
+      Functions for interfacing with incidence rates in Atlas
+    contents:
+      - matches("IncidenceRate")
+  - title: "Person Profiles"
+    desc: >
+      Functions for interfacing with person profiles in Atlas
+    contents:
+      - matches("PersonProfile")

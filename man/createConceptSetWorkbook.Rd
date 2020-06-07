@@ -6,7 +6,7 @@
 \usage{
 createConceptSetWorkbook(
   conceptSetIds,
-  workFolder = NULL,
+  fileName,
   baseUrl,
   included = FALSE,
   mapped = FALSE
@@ -15,20 +15,20 @@ createConceptSetWorkbook(
 \arguments{
 \item{conceptSetIds}{A vector of concept set IDs.}
 
-\item{workFolder}{Directory location where the workbook will be saved, defaults to working
-directory.}
+\item{fileName}{The name of the XLSX workbook file.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
 \item{included}{Should included concepts be included in the workbook?}
 
 \item{mapped}{Should mapped concepts be included in the workbook?}
 }
 \value{
-A xlsx workbook (conceptSetExpressions.xlsx) that includes a list of all concept set IDs and names
-and a worksheet for the concepts in each set. Options to include an included concepts and mapped
-concepts worksheet for each concept set are avaialble.
+A xlsx workbook that includes a list of all concept set IDs and names and a worksheet for the
+concepts in each set. Options to include an included concepts and mapped concepts worksheet for
+each concept set are available.
 }
 \description{
 Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook

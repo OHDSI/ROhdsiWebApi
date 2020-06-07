@@ -12,7 +12,6 @@ insertCohortDefinitionSetInPackage(
   rFileName = "R/CreateCohorts.R",
   insertTableSql = TRUE,
   insertCohortCreationR = TRUE,
-  generateStats = FALSE,
   packageName
 )
 }
@@ -21,7 +20,8 @@ insertCohortDefinitionSetInPackage(
 the expected file format.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".}
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 
 \item{jsonFolder}{Path to the folder where the JSON representations will be saved.}
 
@@ -35,8 +35,6 @@ package as well? This file will be called CreateCohortTable.sql.}
 \item{insertCohortCreationR}{Insert R code that will create the cohort table and instantiate the
 cohorts? This will create a file called R/CreateCohorts.R containing
 a function called \code{.createCohorts}.}
-
-\item{generateStats}{Should cohort inclusion rule statistics be created?}
 
 \item{packageName}{The name of the package (only needed when inserting the R code as
 well).}
