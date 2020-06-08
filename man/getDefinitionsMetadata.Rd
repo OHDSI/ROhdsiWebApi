@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetDefinitionsMetadata.R
 \name{getDefinitionsMetadata}
 \alias{getDefinitionsMetadata}
-\title{Retrieve the meta data for WebApi definitions of a certain category}
+\title{Retrieve the meta data for WebApi definitions of a certain category \lifecycle{stable}}
 \usage{
 getDefinitionsMetadata(baseUrl, category)
 }
@@ -18,7 +18,7 @@ If trailing '/' is used, you may receive an error.}
 A tibble of specification metadata.
 }
 \description{
-Retrieve the meta data for WebApi definitions of a certain category
+Retrieve the meta data for WebApi definitions of a certain category \lifecycle{stable}
 }
 \details{
 Obtains the meta data of WebApi specifications such as id, name, created/modified details, hash

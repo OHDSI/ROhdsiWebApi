@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetGenerationInformation.R
 \name{getGenerationInformation}
 \alias{getGenerationInformation}
-\title{Get generation information.}
+\title{Get generation information. \lifecycle{stable}}
 \usage{
 getGenerationInformation(id, category, baseUrl)
 }
@@ -21,7 +21,7 @@ If trailing '/' is used, you may receive an error.}
 An R object with the generation information.
 }
 \description{
-Get generation information.
+Get generation information. \lifecycle{stable}
 }
 \details{
 Get generation (execution) information.

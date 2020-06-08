@@ -17,8 +17,7 @@
 # limitations under the License.
 
 
-#' Get generation information.
-#'
+#' Get generation information. \lifecycle{stable}
 #' @details
 #' Get generation (execution) information.
 #'

@@ -31,7 +31,8 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    rlang
+    rlang,
+    lifecycle
 Suggests:
     testthat,
     knitr,
@@ -43,3 +44,4 @@ RoxygenNote: 7.1.0
 Encoding: UTF-8
 VignetteBuilder: knitr
 Language: en-US
+RdMacros: lifecycle

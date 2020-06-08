@@ -129,97 +129,53 @@
     <div id="rohdsiwebapi-100" class="section level1">
 <h1 class="page-header" data-toc-text="1.0.0">
 <a href="#rohdsiwebapi-100" class="anchor"></a>ROhdsiWebApi 1.0.0</h1>
-<p>Changes: Note: This is a major release. This release is expected to break implementations that rely on prior iterations of ROhdsiWebApi.</p>
+<p>Note: This is a major release. This release is expected to break implementations that rely on prior iterations of ROhdsiWebApi.</p>
+<div id="changes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changes" class="anchor"></a>Changes:</h3>
 <ol>
-<li>Generic design pattern: Starting with this version, we have implemented a new generic design pattern.<br>
-</li>
+<li>Generic design pattern: Starting with version 1.0.0, we have implemented a new generic design pattern.</li>
 </ol>
-<ul>
+<!-- end list --><ul>
 <li>Functions that go from WebApi to R: will return a R-object (e.g. list, data frame). The function will handle the conversion of non R-objects like JSON objects into R-objects in the background. The returned objects may be inspected in R.</li>
-<li>Functions that go from R into WebApi: will start with a R-object (e.g. list, data frame). If the WebApi requires a JSON object, the function will handle the conversion of R-object into JSON in the background. More discussion <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/37">here.</a>
+<li>Functions that go from R into WebApi: will start with a R-object (e.g. list, data frame). If the WebApi requires a JSON object, the function will handle the conversion of R-object into JSON in the background. More discussion <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/37"><a href='https://github.com/OHDSI/ROhdsiWebApi/issues/37'>#37</a></a>
 </li>
 </ul>
-<ol>
+<!-- end list --><ol>
 <li>Consistent naming conventions:</li>
 </ol>
-<ul>
-<li>References to ‘Atlas’ has been replaced by ‘WebApi’ - because this function is designed to interface directly with WebApi. <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/21">See issue <a href='https://github.com/OHDSI/ROhdsiWebApi/issues/21'>#21</a></a>
+<!-- end list --><ul>
+<li>References to ‘Atlas’ has been replaced by ‘WebApi’. This is because the package is designed to interface directly with WebApi. <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/21"><a href='https://github.com/OHDSI/ROhdsiWebApi/issues/21'>#21</a></a>
 </li>
-<li>Analysis categories in WebApi such as concept sets, cohorts will use standard names as listed <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/86">here</a> These may now be used in string searches of objects returned by ROhdsiWebApi.</li>
+<li>Analysis categories in WebApi such as concept sets, cohorts have been standardized <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/86"><a href='https://github.com/OHDSI/ROhdsiWebApi/issues/86'>#86</a></a> These may now be used in string searches of objects returned by ROhdsiWebApi.</li>
 </ul>
-<table>
-<thead><tr class="header">
-<th>name</th>
-<th>idField</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>dataSource</td>
-<td>dataSourceId</td>
-</tr>
-<tr class="even">
-<td>concept</td>
-<td>conceptId</td>
-</tr>
-<tr class="odd">
-<td>conceptSet</td>
-<td>conceptSetId</td>
-</tr>
-<tr class="even">
-<td>cohort</td>
-<td>cohortId</td>
-</tr>
-<tr class="odd">
-<td>characterization</td>
-<td>characterizationIds</td>
-</tr>
-<tr class="even">
-<td>pathway</td>
-<td>pathwayId</td>
-</tr>
-<tr class="odd">
-<td>incidenceRate</td>
-<td>incidenceRateIds</td>
-</tr>
-<tr class="even">
-<td>person</td>
-<td>personId</td>
-</tr>
-<tr class="odd">
-<td>estimation</td>
-<td>estimationId</td>
-</tr>
-<tr class="even">
-<td>prediction</td>
-<td>predictionId</td>
-</tr>
-</tbody>
-</table>
+<!-- end list --><div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">magrittr</span>)
+<span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">:::</span><span class="fu">.getStandardCategories</span>() <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span>(<span class="no">categoryStandard</span>)</pre></div>
 <ul>
 <li>Enforcement of OHDSI R style guide. We have enforced the use of <a href="https://ohdsi.github.io/MethodsLibrary/codeStyle.html#ohdsi_code_style_for_r">OHDSI R style guide</a> such as use of <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/22">camel case</a>
 </li>
 </ul>
-<ol>
+<!-- end list --><ol>
 <li>Function deprecation:</li>
 </ol>
-<ul>
+<!-- end list --><ul>
 <li>We have made efforts to retain functions (no support) that do not follow design conventions.</li>
 <li>Note: no support is provided for deprecated functions and may be purged without further notice.</li>
 <li>See issues <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/91">here</a> and <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/66">here</a> for not following design pattern</li>
 </ul>
-<ol>
+<!-- end list --><ol>
 <li>Added Vignette:</li>
 </ol>
-<ul>
+<!-- end list --><ul>
 <li>Working with cohorts</li>
 <li>Working with concept set</li>
 <li>Working with incidence rate</li>
 </ul>
-<ol>
+<!-- end list --><ol>
 <li><p>We have implemented a method to provide user with informative effor message using package <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/56">checkmate</a>. This implementation will attempt to check many potential errors and return them together (instead of default behavior of only showing the first error message.) This implementation is expected to improve usability and efficiency.</p></li>
 <li><p>New functions have been added to the following functional categories.</p></li>
 </ol>
-<ul>
+<!-- end list --><ul>
 <li><a href="https://github.com/OHDSI/ROhdsiWebApi/issues/59">Incidence rate</a></li>
 <li><a href="https://github.com/OHDSI/ROhdsiWebApi/issues/57">Patient profile</a></li>
 <li><a href="https://github.com/OHDSI/ROhdsiWebApi/issues/42">Ability to post definitions</a></li>
@@ -227,12 +183,16 @@
 <li><a href="https://github.com/OHDSI/ROhdsiWebApi/issues/40">Retrieve a list of definition metadata</a></li>
 <li><a href="https://github.com/OHDSI/ROhdsiWebApi/issues/38">Delete definitions</a></li>
 </ul>
-<p>Bug fixes:</p>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes:</h2>
 <ul>
 <li>This is a major change to package with significant code rewrite.</li>
 <li>No specific bug fixes were targeted in this release.</li>
 <li>Future releases will target bug fixes.</li>
 </ul>
+</div>
 </div>
   </div>
 

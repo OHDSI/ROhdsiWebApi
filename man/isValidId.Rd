@@ -2,7 +2,7 @@
 % Please edit documentation in R/WebApi.R
 \name{isValidId}
 \alias{isValidId}
-\title{Check if a webApi id is valid.}
+\title{Check if an id is valid. \lifecycle{stable}}
 \usage{
 isValidId(ids, baseUrl, category)
 }
@@ -20,7 +20,7 @@ If trailing '/' is used, you may receive an error.}
 A logical vector indicating if an ID is valid.
 }
 \description{
-Check if a webApi id is valid.
+Check if an id is valid. \lifecycle{stable}
 }
 \details{
 Checks if a set of id for a category is valid, i.e. checks if all the ids exists in the WebApi i.e.

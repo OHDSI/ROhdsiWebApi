@@ -2,7 +2,7 @@
 % Please edit documentation in R/InvokeGeneration.R
 \name{invokeGeneration}
 \alias{invokeGeneration}
-\title{Invoke generation.}
+\title{Invoke generation. \lifecycle{stable}}
 \usage{
 invokeGeneration(id, baseUrl, sourceKey, category)
 }
@@ -24,7 +24,7 @@ Configuration page}
 Error message if invoke failed.
 }
 \description{
-Invoke generation.
+Invoke generation. \lifecycle{stable}
 }
 \details{
 Invoke generation (execution) information.

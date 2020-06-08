@@ -16,8 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Post a definition into WebApi
-#'
+#' Post a definition into WebApi \lifecycle{maturing}
 #' @details
 #' Post a definition into WebAPI. Currently only cohort and concept-set are supported.
 #'

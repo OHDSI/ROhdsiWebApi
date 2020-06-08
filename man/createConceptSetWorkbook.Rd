@@ -2,7 +2,8 @@
 % Please edit documentation in R/ConceptSet.R
 \name{createConceptSetWorkbook}
 \alias{createConceptSetWorkbook}
-\title{Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook}
+\title{Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook
+\lifecycle{maturing}}
 \usage{
 createConceptSetWorkbook(
   conceptSetIds,
@@ -32,4 +33,5 @@ each concept set are available.
 }
 \description{
 Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook
+\lifecycle{maturing}
 }

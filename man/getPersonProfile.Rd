@@ -2,7 +2,7 @@
 % Please edit documentation in R/PersonProfile.R
 \name{getPersonProfile}
 \alias{getPersonProfile}
-\title{Get person profile data}
+\title{Get person profile data \lifecycle{maturing}}
 \usage{
 getPersonProfile(baseUrl, sourceKey, personId, indexCohortId = NULL)
 }
@@ -30,7 +30,7 @@ A list of tibble data frame objects corresponding to cohorts, observationPeriod,
 person.
 }
 \description{
-Get person profile data
+Get person profile data \lifecycle{maturing}
 }
 \details{
 Get a R object with person profile data. This function may be used for visualizing a patients

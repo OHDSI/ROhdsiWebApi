@@ -1,5 +1,5 @@
 #' Get the meta data for %categoryFirstUpper% definitions.
-#'
+#' \lifecycle{stable}
 #' @details
 #' Get the meta data of WebApi specifications such as id, name, created/modified 
 #' details, hash object, etc. from WebApi for %categoryFirstUpper%. This function is useful 
@@ -22,7 +22,7 @@ get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl){
 
 
 #' is %categoryFirstUpper% id a valid definition in the WebApi.
-#'
+#' \lifecycle{stable}
 #' @details
 #' Checks if a set of id for a %categoryFirstUpper% is valid. The following checks are 
 #' performed. 1) checks if all the ids exists in the WebApi i.e. valid. 
@@ -43,7 +43,7 @@ isValid%categoryFirstUpper%Id <- function(%category%Ids, baseUrl) {
 
 
 #' Get %categoryFirstUpper% id definition.
-#'
+#' \lifecycle{stable}
 #' @details
 #' Obtain the %categoryFirstUpper% definition from WebAPI for a given %categoryFirstUpper% id
 #'  
@@ -65,7 +65,7 @@ get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 
 
 #' Delete %categoryFirstUpper% id definition.
-#'
+#' \lifecycle{stable}
 #' @details
 #' Delete the %categoryFirstUpper% definition from WebAPI for a given %categoryFirstUpper% id
 #'  
@@ -86,7 +86,7 @@ delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 
 
 #' Check if %categoryFirstUpper% definition name exists.
-#'
+#' \lifecycle{stable}
 #' @details
 #' Check if a string name already exists in the WebApi as a %categoryFirstUpper% definition name.
 #'  
@@ -115,7 +115,7 @@ exists%categoryFirstUpper%Name <- function(%category%Name, baseUrl) {
 
 
 #' Detect the presence of string matched %categoryFirstUpper% definitions.
-#'
+#' \lifecycle{stable}
 #' @details
 #' Detect string matched %categoryFirstUpper% definition names from the WebApi, and retrieve
 #' metadata definitions.
@@ -147,7 +147,7 @@ detect%categoryFirstUpper%sByName <- function(pattern, negate = FALSE, baseUrl) 
 
 
 #' Post %categoryFirstUpper% definition.
-#'
+#' \lifecycle{maturing}
 #' @details
 #' Post %categoryFirstUpper% definition to WebAPI
 #'  

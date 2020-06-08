@@ -2,7 +2,7 @@
 % Please edit documentation in R/ConceptSet.R
 \name{resolveConceptSet}
 \alias{resolveConceptSet}
-\title{Resolve a concept set to the included standard concept IDs}
+\title{Resolve a concept set to the included standard concept IDs \lifecycle{stable}}
 \usage{
 resolveConceptSet(conceptSetDefinition, baseUrl, vocabularySourceKey = NULL)
 }
@@ -21,7 +21,7 @@ used.}
 A vector of standard concept ids.
 }
 \description{
-Resolve a concept set to the included standard concept IDs
+Resolve a concept set to the included standard concept IDs \lifecycle{stable}
 }
 \details{
 Resolve a concept set to the included standard concept IDs

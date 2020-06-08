@@ -2,7 +2,7 @@
 % Please edit documentation in R/DeleteDefinition.R
 \name{deleteDefinition}
 \alias{deleteDefinition}
-\title{Delete a definition id of a chosen category.}
+\title{Delete a definition id of a chosen category. \lifecycle{stable}}
 \usage{
 deleteDefinition(id, baseUrl, category)
 }
@@ -21,7 +21,7 @@ If trailing '/' is used, you may receive an error.}
 An R object representing the %categoryFirstUpper% definition
 }
 \description{
-Delete a definition id of a chosen category.
+Delete a definition id of a chosen category. \lifecycle{stable}
 }
 \details{
 Delete the definition for an id of chosen category in WebApi.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/PostDefinition.R
 \name{postDefinition}
 \alias{postDefinition}
-\title{Post a definition into WebApi}
+\title{Post a definition into WebApi \lifecycle{maturing}}
 \usage{
 postDefinition(baseUrl, name, category, definition)
 }
@@ -27,7 +27,7 @@ This function will return a dataframe object with one row describing the posted 
 and its details. If unsuccessful a STOP message will be shown.
 }
 \description{
-Post a definition into WebApi
+Post a definition into WebApi \lifecycle{maturing}
 }
 \details{
 Post a definition into WebAPI. Currently only cohort and concept-set are supported.

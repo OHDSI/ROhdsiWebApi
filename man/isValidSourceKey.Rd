@@ -2,7 +2,7 @@
 % Please edit documentation in R/WebApi.R
 \name{isValidSourceKey}
 \alias{isValidSourceKey}
-\title{Check if source key is valid.}
+\title{Check if source key is valid. \lifecycle{stable}}
 \usage{
 isValidSourceKey(sourceKeys, baseUrl)
 }
@@ -18,7 +18,7 @@ If trailing '/' is used, you may receive an error.}
 A logical vector indicating if an ID is valid.
 }
 \description{
-Check if source key is valid.
+Check if source key is valid. \lifecycle{stable}
 }
 \details{
 Checks if a set of sourceKey(s) are valid, i.e. checks if all the sourceKey(s) exists in the WebApi

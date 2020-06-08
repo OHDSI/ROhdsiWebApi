@@ -17,8 +17,7 @@
 # limitations under the License.
 
 
-#' Invoke generation.
-#'
+#' Invoke generation. \lifecycle{stable}
 #' @details
 #' Invoke generation (execution) information.
 #'

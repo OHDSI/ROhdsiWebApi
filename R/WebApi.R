@@ -16,8 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get Priority Vocabulary Source Key
-#'
+#' Get Priority Vocabulary Source Key \lifecycle{stable}
 #' @details
 #' Obtains the source key of the default OMOP Vocabulary in WebApi.
 #'
@@ -35,8 +34,7 @@ getPriorityVocabularyKey <- function(baseUrl) {
   json$sourceKey
 }
 
-#' Get the WebAPI version number
-#'
+#' Get the WebAPI version number \lifecycle{stable}
 #' @details
 #' Obtains the WebAPI version number.
 #'
@@ -69,8 +67,7 @@ getWebApiVersion <- function(baseUrl) {
   return(version)
 }
 
-#' Get the data sources in the WebAPI instance
-#'
+#' Get the data sources in the WebAPI instance \lifecycle{stable}
 #' @details
 #' Obtains the data sources configured in the WebAPI instance.
 #'
@@ -119,8 +116,7 @@ getCdmSources <- function(baseUrl) {
 }
 
 
-#' Check if a webApi id is valid.
-#'
+#' Check if an id is valid. \lifecycle{stable}
 #' @details
 #' Checks if a set of id for a category is valid, i.e. checks if all the ids exists in the WebApi i.e.
 #' valid.
@@ -152,8 +148,7 @@ isValidId <- function(ids, baseUrl, category) {
 }
 
 
-#' Check if source key is valid.
-#'
+#' Check if source key is valid. \lifecycle{stable}
 #' @details
 #' Checks if a set of sourceKey(s) are valid, i.e. checks if all the sourceKey(s) exists in the WebApi
 #' i.e. valid.

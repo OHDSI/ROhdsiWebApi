@@ -16,6 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+## usethis namespace: start
+#' @importFrom lifecycle deprecate_soft
+## usethis namespace: end
+
+
 #' @keywords internal
 "_PACKAGE"
 

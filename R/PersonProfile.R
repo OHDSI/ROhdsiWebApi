@@ -16,8 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get person profile data
-#'
+#' Get person profile data \lifecycle{maturing}
 #' @details
 #' Get a R object with person profile data. This function may be used for visualizing a patients
 #' profile in tables or visualization.
@@ -47,9 +46,6 @@
 getPersonProfile <- function(baseUrl, sourceKey, personId, indexCohortId = NULL) {
 
   errorMessage <- checkmate::makeAssertCollection()
-  # checkmate::assertInt(personId, add = errorMessage) -- fails for big integer. TODO if
-  # (!is.null(indexCohortId)) { checkmate::assertInt(indexCohortId, add = errorMessage) -- fails for
-  # big integer. TODO }
   checkmate::assertScalar(sourceKey, add = errorMessage)
   checkmate::assertCharacter(sourceKey, add = errorMessage)
   checkmate::reportAssertions(errorMessage)

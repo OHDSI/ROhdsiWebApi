@@ -17,8 +17,7 @@
 # limitations under the License.
 
 
-#' Load a cohort definition and insert it into this package
-#'
+#' Load a cohort definition and insert it into this package \lifecycle{maturing}
 #' @details
 #' Load a cohort definition from a WebApi instance and insert it into this package. This will fetch
 #' the json object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the
@@ -79,8 +78,7 @@ insertCohortDefinitionInPackage <- function(cohortId,
   writeLines(paste("- Created SQL file:", sqlFileName))
 }
 
-#' Insert a set of cohort definitions into package
-#'
+#' Insert a set of cohort definitions into package \lifecycle{maturing}
 #' @param fileName                Name of a CSV file specifying the cohorts to insert. See details for
 #'                                the expected file format.
 #' @template BaseUrl

@@ -15,8 +15,7 @@
 # limitations under the License.
 
 
-#' Resolve a concept set to the included standard concept IDs
-#'
+#' Resolve a concept set to the included standard concept IDs \lifecycle{stable}
 #' @details
 #' Resolve a concept set to the included standard concept IDs
 #'
@@ -62,8 +61,7 @@ resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey
 }
 
 
-#' Convert a concept set definition to a table
-#'
+#' Convert a concept set definition to a table \lifecycle{maturing}
 #' @template ConceptSetDefinition
 #'
 #' @return
@@ -99,7 +97,7 @@ convertConceptSetDefinitionToTable <- function(conceptSetDefinition) {
 }
 
 #' Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook
-#'
+#' \lifecycle{maturing}
 #' @param conceptSetIds   A vector of concept set IDs.
 #' @param fileName        The name of the XLSX workbook file.
 #' @template BaseUrl

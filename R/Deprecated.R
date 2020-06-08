@@ -47,7 +47,7 @@ getCohortDefinitionExpression <- function(cohortId, baseUrl) {
   steps as in the example below:
   1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
   2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
-  3) save validJsonExpression object as .txt", old = as.character(sys.call(sys.parent()))[1L])
+  3) save validJsonExpression object as .txt", old = as.character(s.call(s.parent()))[1L])
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)

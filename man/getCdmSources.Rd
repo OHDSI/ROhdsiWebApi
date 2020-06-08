@@ -2,7 +2,7 @@
 % Please edit documentation in R/WebApi.R
 \name{getCdmSources}
 \alias{getCdmSources}
-\title{Get the data sources in the WebAPI instance}
+\title{Get the data sources in the WebAPI instance \lifecycle{stable}}
 \usage{
 getCdmSources(baseUrl)
 }
@@ -15,7 +15,7 @@ If trailing '/' is used, you may receive an error.}
 A data frame.
 }
 \description{
-Get the data sources in the WebAPI instance
+Get the data sources in the WebAPI instance \lifecycle{stable}
 }
 \details{
 Obtains the data sources configured in the WebAPI instance.

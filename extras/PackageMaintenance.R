@@ -14,6 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# git actions
+usethis::git_vaccinate()
+
+
 # Format and check code
 OhdsiRTools::formatRFolder("R")
 OhdsiRTools::checkUsagePackage("ROhdsiWebApi")
@@ -31,6 +35,14 @@ rmarkdown::render("vignettes/WorkingWithCohorts.Rmd",
                                           toc = TRUE,
                                           number_sections = TRUE))
 unlink("inst/doc/WorkingWithCohorts.tex")
+rmarkdown::render("README.Rmd",
+                  output_format = 'all',
+                  clean = TRUE)
+unlink("README.tex")
+rmarkdown::render("NEWS.Rmd",
+                  output_format = 'all',
+                  clean = TRUE)
+unlink("NEWS.tex")
 
 pkgdown::build_site()
 

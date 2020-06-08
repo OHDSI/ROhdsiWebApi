@@ -2,7 +2,7 @@
 % Please edit documentation in R/CohortDefinition.R
 \name{insertCohortDefinitionInPackage}
 \alias{insertCohortDefinitionInPackage}
-\title{Load a cohort definition and insert it into this package}
+\title{Load a cohort definition and insert it into this package \lifecycle{maturing}}
 \usage{
 insertCohortDefinitionInPackage(
   cohortId,
@@ -28,7 +28,7 @@ in cohort will be used, but this may not lead to valid file names.}
 If trailing '/' is used, you may receive an error.}
 }
 \description{
-Load a cohort definition and insert it into this package
+Load a cohort definition and insert it into this package \lifecycle{maturing}
 }
 \details{
 Load a cohort definition from a WebApi instance and insert it into this package. This will fetch

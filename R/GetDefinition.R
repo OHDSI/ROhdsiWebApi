@@ -17,8 +17,7 @@
 # limitations under the License.
 
 
-#' Get the definition for an id of chosen category in WebApi.
-#'
+#' Get the definition for an id of chosen category in WebApi. \lifecycle{stable}
 #' @details
 #' Get the definition for an id of chosen category in WebApi. The return object will be a R
 #' representation of the definition, that may be reconverted to JSON.

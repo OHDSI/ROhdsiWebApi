@@ -17,8 +17,7 @@
 # limitations under the License.
 
 
-#' Delete a definition id of a chosen category.
-#'
+#' Delete a definition id of a chosen category. \lifecycle{stable}
 #' @details
 #' Delete the definition for an id of chosen category in WebApi.
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ConceptSet.R
 \name{convertConceptSetDefinitionToTable}
 \alias{convertConceptSetDefinitionToTable}
-\title{Convert a concept set definition to a table}
+\title{Convert a concept set definition to a table \lifecycle{maturing}}
 \usage{
 convertConceptSetDefinitionToTable(conceptSetDefinition)
 }
@@ -16,7 +16,7 @@ representing the concept set expression. This is useful to create publication fr
 the concept set expression.
 }
 \description{
-Convert a concept set definition to a table
+Convert a concept set definition to a table \lifecycle{maturing}
 }
 \examples{
 \dontrun{

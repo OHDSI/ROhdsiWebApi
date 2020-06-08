@@ -2,7 +2,7 @@
 % Please edit documentation in R/CohortDefinition.R
 \name{insertCohortDefinitionSetInPackage}
 \alias{insertCohortDefinitionSetInPackage}
-\title{Insert a set of cohort definitions into package}
+\title{Insert a set of cohort definitions into package \lifecycle{maturing}}
 \usage{
 insertCohortDefinitionSetInPackage(
   fileName = "inst/settings/CohortsToCreate.csv",
@@ -40,7 +40,7 @@ a function called \code{.createCohorts}.}
 well).}
 }
 \description{
-Insert a set of cohort definitions into package
+Insert a set of cohort definitions into package \lifecycle{maturing}
 }
 \details{
 The CSV file should have at least the following fields: \describe{ \item{atlasId}{The cohort ID in

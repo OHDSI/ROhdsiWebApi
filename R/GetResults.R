@@ -16,8 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get generation results
-#'
+#' Get generation results \lifecycle{stable}
 #' @details
 #' Get the results objects from WebApi for a definition of a certain category in WebApi.
 #'
