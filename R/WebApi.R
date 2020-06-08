@@ -101,15 +101,26 @@ getWebApiVersion <- function(baseUrl) {
 #' Obtains the data sources configured in the WebAPI instance.
 #'
 #' @template BaseUrl
-#'
+#' @param bearerToken A bearer token used to authenticate to WebAPI. Can be NULL (default)
+#'                    or a character string containing a bearer token that can be used to 
+#'                    authenticate to WebAPI.
+#'                    
 #' @return
 #' A data frame.
-#'
+#' 
 #' @export
-getCdmSources <- function(baseUrl) {
+getCdmSources <- function(baseUrl, bearerToken = NULL) {
   .checkBaseUrl(baseUrl)
   url <- sprintf("%s/source/sources", baseUrl)
-  request <- httr::GET(url)
+  
+  if (is.null(bearer)) {
+    request <- httr::GET(url)
+  } else if (is.character(bearerToken) & length(bearerToken) == 1) {
+    request <- httr::GET(url, httr::add_headers(Authorization = bearerToken))
+  } else {
+    stop("The bearerToken argument should be a character vector of length 1 or NULL.")
+  }
+  
   httr::stop_for_status(request)
   sources <- httr::content(request)
   
