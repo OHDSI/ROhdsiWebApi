@@ -1,7 +1,16 @@
 library(testthat)
 
 baseUrl <- Sys.getenv("ohdsiBaseUrl")
+testAuthMethod <- Sys.getenv("testAuthMethod")
+keyringUsername <- Sys.getenv("keyringUsername")
+bearerToken <- NULL
 
+test_that("Test createBearerToken", {
+  authMethods <- c("db")
+  skip_if(!(testAuthMethod %in% authMethods) | baseUrl == "" | keyringUsername == "")
+  bearerToken <<- createBearerToken(baseUrl, testAuthMethod, keyringUsername)
+  expect_match(bearerToken, "^Bearer .+$")
+})
 
 test_that("Test .checkBaseUrl", {
   skip_if(baseUrl == "")
@@ -12,7 +21,7 @@ test_that("Test .checkBaseUrl", {
 
 test_that("Test getCdmSources", {
   skip_if(baseUrl == "")
-  cdmSources <- getCdmSources(baseUrl = baseUrl)
+  cdmSources <- getCdmSources(baseUrl = baseUrl, bearerToken = bearerToken)
   expect_s3_class(cdmSources, "data.frame")
   expect_gt(nrow(cdmSources), 0)
 })

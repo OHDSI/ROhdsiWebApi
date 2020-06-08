@@ -356,3 +356,41 @@ postDefinition <- function(baseUrl,
     stop(paste0('type = ', type, " is not supported in this version. Post attempt failed."))
   }
 }
+
+#' Authenticate to WebAPI and create a bearer token
+#'
+#' @template baseUrl 
+#' @param authMethod The WebAPI authentication method to be used to create the bearer token.
+#' @param keyringUsername (Optional) A string that can be used to pull the WebAPI password 
+#'                        from keyring::key_get() if using keyring. 
+#' @return A character string containing a bearer token to a WebAPI instance.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' bearer <- createBearerToken(baseUrl, authMethod = "db")
+#' getCdmSources(baseUrl, bearer)
+#' }
+createBearerToken <- function(baseUrl, authMethod = "db", keyringUsername = "") {
+  .checkBaseUrl(baseUrl)
+  
+   if (authMethod == "db") {
+    authUrl <- paste0(baseUrl, "/user/login/db")
+    if (nchar(keyringUsername) > 1 & is.character(keyringUsername)) {
+      login <- list(login = keyringUsername, password = keyring::key_get(keyringUsername))
+    } else if (rstudioapi::isAvailable()) {
+      login <- list(
+        login = rstudioapi::showPrompt(title = "Username", "Please enter WebAPI login username"), 
+        password = rstudioapi::askForPassword()
+      )
+    } else {
+      login <- list(
+        login = readline(prompt = "Enter WebAPI username: "), 
+        password = askpass::askpass()
+      )
+    }
+    r <- httr::POST(authUrl, body = login, encode = "form", httr::verbose())
+    if (is.null(httr::headers(r)$bearer)) stop("WebAPI login failed.")
+    paste0("Bearer ", httr::headers(r)$bearer)
+  }
+}
