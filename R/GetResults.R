@@ -114,14 +114,19 @@ getResults <- function(id, baseUrl, category) {
           })
 
           inclusionRuleStatsMode[[mode + 1]] <- tidyr::tibble(inclusionRuleStat = inclusionRuleStat) %>%
-          tidyr::unnest_wider(.data$inclusionRuleStat) %>% dplyr::mutate(percentExcluded = as.numeric(sub("%",
-                                                                                                          "",
-                                                                                                          .data$percentExcluded))/100,
-                                                                         percentSatisfying = as.numeric(sub("%",
-                                                                                                            "",
-                                                                                                            .data$percentSatisfying))/100) %>%
-          utils::type.convert(as.is = TRUE,
-                              dec = ".") %>% dplyr::mutate(mode = mode, modeLong = modeLong)
+          tidyr::unnest_wider(.data$inclusionRuleStat)
+
+          if (nrow(inclusionRuleStatsMode[[mode + 1]]) > 0) {
+          inclusionRuleStatsMode[[mode + 1]] <- inclusionRuleStatsMode[[mode + 1]] %>% dplyr::mutate(percentExcluded = as.numeric(sub("%",
+                                                                                                                                      "",
+                                                                                                                                      .data$percentExcluded))/100,
+                                                                                                     percentSatisfying = as.numeric(sub("%",
+                                                                                                                                        "",
+                                                                                                                                        .data$percentSatisfying))/100) %>%
+            utils::type.convert(as.is = TRUE,
+                                dec = ".") %>% dplyr::mutate(mode = mode, modeLong = modeLong)
+          }
+
 
           tMapData <- jsonlite::fromJSON(response$treemapData, simplifyDataFrame = FALSE)
           treeMapResult <- list(name = c(), size = c())

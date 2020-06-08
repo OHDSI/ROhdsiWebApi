@@ -25,7 +25,6 @@ Imports:
     openxlsx (>= 4.0.17),
     ParallelLogger,
     purrr,
-    readr,
     RJSONIO,
     scales,
     SqlRender,
