@@ -471,68 +471,6 @@ getCohortResults <- function(cohortId, baseUrl) {
   result <- getResults(baseUrl = baseUrl, id = cohortId, category = "cohort")
   return(result)
 }
-
-#' Get SQL query for Cohort definition.
-#'
-#' @details
-#' Given a valid Cohort definition R-object (not JSON) this function will return the parameterized SQL
-#' in OHDSI SQL dialect. This SQL then may be used along with OHDSI R-package 'SQLRender' to
-#' render/translate to target SQL dialect and parameters rendered.
-#'
-#' @template BaseUrl
-#' @param cohortDefinition   An R list object (not JSON) representing the Cohort definition. It is the
-#'                           output R expression object of list object from \code{CohortDefinition}
-#' @return
-#' An R object containing the SQL for Cohort definition.
-#'
-#' @examples
-#' \dontrun{
-#' getCohortSql(CohortDefinition = (getCohortDefinition(cohortId = 13242, baseUrl = baseUrl)),
-#'              baseUrl = "http://server.org:80/WebAPI")
-#' }
-#' @export
-getCohortSql <- function(cohortDefinition, baseUrl) {
-  .checkBaseUrl(baseUrl)
-
-  arguments <- .getStandardCategories()
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == "cohort")
-
-  if (!"cohort" %in% c("cohort")) {
-    ParallelLogger::logError("Retrieving SQL for ",
-                             argument$categoryFirstUpper,
-                             " is not supported")
-    stop()
-  }
-
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertList(x = cohortDefinition, min.len = 1, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-
-  url <- paste0(baseUrl, "/", argument$categoryUrl, "/sql/")
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-
-  if ("cohort" %in% "cohort") {
-    if ("expression" %in% names(cohortDefinition)) {
-      expression <- cohortDefinition$expression
-    } else {
-      expression <- cohortDefinition
-    }
-  }
-
-  # this code does not work for incidence rate if ('incidenceRate' %in% 'cohort') { expression <-
-  # list() if ('expression' %in% names(Definition)) { expression$expression <- Definition$expression
-  # expression$option <- list(cohortTable = '@cohortTable', tempSchema = '@tempSchema',
-  # vocabularySchema = '@vocabularyDatabaseSchema', resultsSchema = '@resultsDatabaseSchema', cdmSchema
-  # = '@cdmDatabaseSchema') } else { expression$expression <- Definition expression$option <-
-  # list(cohortTable = '@cohortTable', tempSchema = '@tempSchema', vocabularySchema =
-  # '@vocabularyDatabaseSchema', resultsSchema = '@resultsDatabaseSchema', cdmSchema =
-  # '@cdmDatabaseSchema') } }
-  validJsonExpression <- RJSONIO::toJSON(expression)
-  body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression)), digits = 23)
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
-  sql <- (httr::content(req))$templateSql
-  return(sql)
-}
 #' Get the meta data for IncidenceRate definitions. \lifecycle{stable}
 #' @details
 #' Get the meta data of WebApi specifications such as id, name, created/modified details, hash object,
@@ -815,70 +753,6 @@ cancelIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
 getIncidenceRateResults <- function(incidenceRateId, baseUrl) {
   result <- getResults(baseUrl = baseUrl, id = incidenceRateId, category = "incidenceRate")
   return(result)
-}
-
-#' Get SQL query for IncidenceRate definition.
-#'
-#' @details
-#' Given a valid IncidenceRate definition R-object (not JSON) this function will return the
-#' parameterized SQL in OHDSI SQL dialect. This SQL then may be used along with OHDSI R-package
-#' 'SQLRender' to render/translate to target SQL dialect and parameters rendered.
-#'
-#' @template BaseUrl
-#' @param incidenceRateDefinition   An R list object (not JSON) representing the IncidenceRate
-#'                                  definition. It is the output R expression object of list object
-#'                                  from \code{IncidenceRateDefinition}
-#' @return
-#' An R object containing the SQL for IncidenceRate definition.
-#'
-#' @examples
-#' \dontrun{
-#' getIncidenceRateSql(IncidenceRateDefinition = (getIncidenceRateDefinition(cohortId = 13242,
-#'                                                                           baseUrl = baseUrl)),
-#'                     baseUrl = "http://server.org:80/WebAPI")
-#' }
-#' @export
-getIncidenceRateSql <- function(incidenceRateDefinition, baseUrl) {
-  .checkBaseUrl(baseUrl)
-
-  arguments <- .getStandardCategories()
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == "incidenceRate")
-
-  if (!"incidenceRate" %in% c("cohort")) {
-    ParallelLogger::logError("Retrieving SQL for ",
-                             argument$categoryFirstUpper,
-                             " is not supported")
-    stop()
-  }
-
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertList(x = incidenceRateDefinition, min.len = 1, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-
-  url <- paste0(baseUrl, "/", argument$categoryUrl, "/sql/")
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-
-  if ("cohort" %in% "incidenceRate") {
-    if ("expression" %in% names(incidenceRateDefinition)) {
-      expression <- incidenceRateDefinition$expression
-    } else {
-      expression <- incidenceRateDefinition
-    }
-  }
-
-  # this code does not work for incidence rate if ('incidenceRate' %in% 'incidenceRate') { expression
-  # <- list() if ('expression' %in% names(Definition)) { expression$expression <- Definition$expression
-  # expression$option <- list(cohortTable = '@cohortTable', tempSchema = '@tempSchema',
-  # vocabularySchema = '@vocabularyDatabaseSchema', resultsSchema = '@resultsDatabaseSchema', cdmSchema
-  # = '@cdmDatabaseSchema') } else { expression$expression <- Definition expression$option <-
-  # list(cohortTable = '@cohortTable', tempSchema = '@tempSchema', vocabularySchema =
-  # '@vocabularyDatabaseSchema', resultsSchema = '@resultsDatabaseSchema', cdmSchema =
-  # '@cdmDatabaseSchema') } }
-  validJsonExpression <- RJSONIO::toJSON(expression)
-  body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression)), digits = 23)
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
-  sql <- (httr::content(req))$templateSql
-  return(sql)
 }
 #' Get the meta data for Estimation definitions. \lifecycle{stable}
 #' @details

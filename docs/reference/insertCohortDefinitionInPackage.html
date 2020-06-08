@@ -137,7 +137,8 @@
   <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>jsonFolder</span> <span class='kw'>=</span> <span class='st'>"inst/cohorts"</span>,
   <span class='kw'>sqlFolder</span> <span class='kw'>=</span> <span class='st'>"inst/sql/sql_server"</span>,
-  <span class='no'>baseUrl</span>
+  <span class='no'>baseUrl</span>,
+  <span class='kw'>generateStats</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -166,6 +167,12 @@ in cohort will be used, but this may not lead to valid file names.</p></td>
       <td><p>The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.</p></td>
+    </tr>
+    <tr>
+      <th>generateStats</th>
+      <td><p>Should the SQL include the code for generating inclusion rule statistics?
+Note that if TRUE, several additional tables are expected to exists as
+described in the details.</p></td>
     </tr>
     </table>
 

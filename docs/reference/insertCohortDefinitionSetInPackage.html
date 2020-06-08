@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Insert a set of cohort definitions into package <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a> — insertCohortDefinitionSetInPackage • ROhdsiWebApi</title>
+<title>Insert a set of cohort definitions into package — insertCohortDefinitionSetInPackage • ROhdsiWebApi</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Insert a set of cohort definitions into package <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a> — insertCohortDefinitionSetInPackage" />
-<meta property="og:description" content="Insert a set of cohort definitions into package " />
+<meta property="og:title" content="Insert a set of cohort definitions into package — insertCohortDefinitionSetInPackage" />
+<meta property="og:description" content="Insert a set of cohort definitions into package" />
 
 
 
@@ -123,13 +123,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Insert a set of cohort definitions into package <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></h1>
+    <h1>Insert a set of cohort definitions into package</h1>
     <small class="dont-index">Source: <a href='https://github.com/OHDSI/ROhdsiWebApi/blob/master/R/CohortDefinition.R'><code>R/CohortDefinition.R</code></a></small>
     <div class="hidden name"><code>insertCohortDefinitionSetInPackage.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Insert a set of cohort definitions into package <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></p>
+    <p>Insert a set of cohort definitions into package</p>
     </div>
 
     <pre class="usage"><span class='fu'>insertCohortDefinitionSetInPackage</span>(
@@ -140,6 +140,7 @@
   <span class='kw'>rFileName</span> <span class='kw'>=</span> <span class='st'>"R/CreateCohorts.R"</span>,
   <span class='kw'>insertTableSql</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>insertCohortCreationR</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>generateStats</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='no'>packageName</span>
 )</pre>
 
@@ -154,8 +155,7 @@ the expected file format.</p></td>
     <tr>
       <th>baseUrl</th>
       <td><p>The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.</p></td>
+"http://server.org:80/WebAPI".</p></td>
     </tr>
     <tr>
       <th>jsonFolder</th>
@@ -179,6 +179,10 @@ package as well? This file will be called CreateCohortTable.sql.</p></td>
       <td><p>Insert R code that will create the cohort table and instantiate the
 cohorts? This will create a file called R/CreateCohorts.R containing
 a function called <code>.createCohorts</code>.</p></td>
+    </tr>
+    <tr>
+      <th>generateStats</th>
+      <td><p>Should cohort inclusion rule statistics be created?</p></td>
     </tr>
     <tr>
       <th>packageName</th>

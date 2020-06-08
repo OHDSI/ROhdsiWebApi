@@ -61,10 +61,6 @@ for (i in (1:nrow(arguments))) { #i = 1
   if (argument$categoryStandard %in% c('cohort', 'incidenceRate', 'pathway', 'characterization')) {
     code <- c(code, readLines("extras/templateWebApiFunctionsGeneratableCategories.R"))
   }
-  if (argument$categoryStandard %in% c('cohort', 'incidenceRate')) { # only cohort is exposed by WebApi
-    # https://github.com/OHDSI/ROhdsiWebApi/issues/97
-    code <- c(code, readLines("extras/templateWebApiFunctionsSqlCategories.R"))
-  }
   code <- stringr::str_replace_all(string = code, pattern = "%category%", replacement = argument$categoryStandard)
   code <- stringr::str_replace_all(string = code, pattern = "%categoryFirstUpper%", replacement = argument$categoryFirstUpper)
   

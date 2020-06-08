@@ -9,15 +9,16 @@ insertCohortDefinitionInPackage(
   name = NULL,
   jsonFolder = "inst/cohorts",
   sqlFolder = "inst/sql/sql_server",
-  baseUrl
+  baseUrl,
+  generateStats = FALSE
 )
 }
 \arguments{
 \item{cohortId}{An integer id representing the id that uniquely identifies a cohort definition
 in a WebApi instance.}
 
-\item{name}{The name that will be used for the JSON and SQL files. If not provided, the name
-in cohort will be used, but this may not lead to valid file names.}
+\item{name}{The name that will be used for the JSON and SQL files. If not provided, the
+name in cohort will be used, but this may not lead to valid file names.}
 
 \item{jsonFolder}{Path to the folder where the JSON representation will be saved.}
 
@@ -26,6 +27,10 @@ in cohort will be used, but this may not lead to valid file names.}
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
+
+\item{generateStats}{Should the SQL include the code for generating inclusion rule statistics?
+Note that if TRUE, several additional tables are expected to exists as
+described in the details.}
 }
 \description{
 Load a cohort definition and insert it into this package \lifecycle{maturing}
