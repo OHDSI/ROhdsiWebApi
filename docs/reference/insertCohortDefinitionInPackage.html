@@ -6,27 +6,31 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load a cohort definition and insert it into this package — insertCohortDefinitionInPackage • ROhdsiWebApi</title>
+<title>Load a cohort definition and insert it into this package <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a> — insertCohortDefinitionInPackage • ROhdsiWebApi</title>
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -35,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Load a cohort definition and insert it into this package — insertCohortDefinitionInPackage" />
-<meta property="og:description" content="Load a cohort definition and insert it into this package" />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Load a cohort definition and insert it into this package <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a> — insertCohortDefinitionInPackage" />
+<meta property="og:description" content="Load a cohort definition and insert it into this package " />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -84,10 +87,25 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/WorkingWithCohorts.html">Working With Cohorts</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/OHDSI/ROhdsiWebApi">
+  <a href="https://github.com/OHDSI/ROhdsiWebApi/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -105,35 +123,35 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load a cohort definition and insert it into this package</h1>
+    <h1>Load a cohort definition and insert it into this package <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></h1>
     <small class="dont-index">Source: <a href='https://github.com/OHDSI/ROhdsiWebApi/blob/master/R/CohortDefinition.R'><code>R/CohortDefinition.R</code></a></small>
     <div class="hidden name"><code>insertCohortDefinitionInPackage.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Load a cohort definition and insert it into this package</p>
+    <p>Load a cohort definition and insert it into this package <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></p>
     </div>
 
     <pre class="usage"><span class='fu'>insertCohortDefinitionInPackage</span>(
-  <span class='no'>definitionId</span>,
+  <span class='no'>cohortId</span>,
   <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>jsonFolder</span> <span class='kw'>=</span> <span class='st'>"inst/cohorts"</span>,
   <span class='kw'>sqlFolder</span> <span class='kw'>=</span> <span class='st'>"inst/sql/sql_server"</span>,
-  <span class='no'>baseUrl</span>,
-  <span class='kw'>generateStats</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='no'>baseUrl</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>definitionId</th>
-      <td><p>The number indicating which cohort definition to fetch.</p></td>
+      <th>cohortId</th>
+      <td><p>An integer id representing the id that uniquely identifies a cohort definition
+in a WebApi instance.</p></td>
     </tr>
     <tr>
       <th>name</th>
-      <td><p>The name that will be used for the json and SQL files. If not provided, the
-name in cohort will be used, but this may not lead to valid file names.</p></td>
+      <td><p>The name that will be used for the JSON and SQL files. If not provided, the name
+in cohort will be used, but this may not lead to valid file names.</p></td>
     </tr>
     <tr>
       <th>jsonFolder</th>
@@ -146,55 +164,46 @@ name in cohort will be used, but this may not lead to valid file names.</p></td>
     <tr>
       <th>baseUrl</th>
       <td><p>The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI".</p></td>
-    </tr>
-    <tr>
-      <th>generateStats</th>
-      <td><p>Should the SQL include the code for generating inclusion rule statistics?
-Note that if TRUE, several additional tables are expected to exists as
-described in the details.</p></td>
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Load a cohort definition from a WebApi instance and insert it into this package. This will fetch
-the json object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the
+the JSON object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the
 template SQL and store it in another folder (defaults to the 'inst/sql/sql_server' folder). Both
-folders will be created if they don't exist.
-When using generateStats = TRUE, the following tables are required to exist when executing the SQL:
-cohort_inclusion, cohort_inclusion_result, cohort_inclusion_stats, and cohort_summary_stats. Also
-note that the cohort_inclusion table should be populated with the names of the rules prior to
-executing the cohort definition SQL.</p>
+folders will be created if they don't exist. When using generateStats = TRUE, the following tables
+are required to exist when executing the SQL: cohort_inclusion, cohort_inclusion_result,
+cohort_inclusion_stats, and cohort_summary_stats. Also note that the cohort_inclusion table should
+be populated with the names of the rules prior to executing the cohort definition SQL. Note:
+generate inclusion statistics are created for all by default.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># This will create 'inst/cohorts/Angioedema.json' and 'inst/sql/sql_server/Angioedema.sql':</span>
 
-<span class='fu'>insertCohortDefinitionInPackage</span>(<span class='kw'>definitionId</span> <span class='kw'>=</span> <span class='fl'>282</span>,
+<span class='fu'>insertCohortDefinitionInPackage</span>(<span class='kw'>cohortId</span> <span class='kw'>=</span> <span class='fl'>282</span>,
                                 <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"Angioedema"</span>,
                                 <span class='kw'>baseUrl</span> <span class='kw'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span>)
 }</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Ajit Londhe, Martijn Schuemie, Frank DeFalco.</p>
+  <p>Developed by Gowtham Rao, Martijn Schuemie, Ajit Londhe, Frank DeFalco.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

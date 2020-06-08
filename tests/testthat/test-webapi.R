@@ -84,14 +84,14 @@ test_that("Test getCohortDefinition", {
 
 test_that("Test getCohortGenerationInformation", {
   skip_if(baseUrl == "")
-  info <- getCohortGenerationInformation(1774139, baseUrl = baseUrl, sourceKey = "SYNPUF5PCT")
+  info <- getCohortGenerationInformation(1774139, baseUrl = baseUrl)
   expect_s3_class(info, "data.frame")
   expect_gt(nrow(info), 0)
 })
 
 test_that("Test getCohortResults", {
   skip_if(baseUrl == "")
-  results <- getCohortResults(1774139, baseUrl = baseUrl, sourceKey = "SYNPUF5PCT")
+  results <- getCohortResults(1774139, baseUrl = baseUrl)
   expect_type(results, "list")
   expect_gt(length(results), 0)
 })
@@ -109,7 +109,7 @@ test_that("Test getDefinitionsMetadata", {
                 "pathway")
   for (category in categories) {
     writeLines(sprintf("Testing category '%s'", category))
-    metaData <- getDefinitionsMetadata(baseUrl = baseUrl, categories = category)
+    metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
     expect_s3_class(metaData, "data.frame")
     expect_gt(nrow(metaData), 0)
   }
@@ -131,3 +131,4 @@ test_that("Test isValid...", {
 })
 
 # TODO: add cohort characterization and incidence rates
+

@@ -2,7 +2,7 @@
 % Please edit documentation in R/WebApi.R
 \name{getWebApiVersion}
 \alias{getWebApiVersion}
-\title{Get the WebAPI version number}
+\title{Get the WebAPI version number \lifecycle{stable}}
 \usage{
 getWebApiVersion(baseUrl)
 }
@@ -15,7 +15,7 @@ If trailing '/' is used, you may receive an error.}
 A string.
 }
 \description{
-Get the WebAPI version number
+Get the WebAPI version number \lifecycle{stable}
 }
 \details{
 Obtains the WebAPI version number.

@@ -1,13 +1,13 @@
 # Copyright 2020 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,12 +15,13 @@
 # limitations under the License.
 
 
+#' Resolve a concept set to the included standard concept IDs \lifecycle{stable}
+#' @details
 #' Resolve a concept set to the included standard concept IDs
-#'
-#' @template vocabularySourceKey
 #'
 #' @template BaseUrl
 #' @template ConceptSetDefinition
+#' @template vocabularySourceKey
 #' @return
 #' A vector of standard concept ids.
 #'
@@ -34,32 +35,39 @@
 #'
 #' @export
 resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey = NULL) {
-
   .checkBaseUrl(baseUrl)
 
   if (missing(vocabularySourceKey) || is.null(vocabularySourceKey)) {
     vocabularySourceKey <- getPriorityVocabularyKey(baseUrl = baseUrl)
   }
 
-  url <- sprintf("%1s/vocabulary/%2s/resolveConceptSetExpression", baseUrl, vocabularySourceKey)
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  expression <- RJSONIO::toJSON(conceptSetDefinition$expression)
-  data <- httr::POST(url, body = expression, config = httr::add_headers(httpheader))
-  data <- httr::content(data)
-  if (!is.null(data$payload$message)) {
-    stop(data$payload$message)
+  url <- paste0(baseUrl, "/vocabulary/", vocabularySourceKey, "/resolveConceptSetExpression")
+
+  if ("expression" %in% names(conceptSetDefinition)) {
+    expression <- conceptSetDefinition$expression
+  } else {
+    expression <- conceptSetDefinition
   }
-  data <- unlist(data)
-  return(data)
+  expression <- RJSONIO::toJSON(expression)
+  response <- .postJson(url = url, json = expression)
+  if (!response$status_code == 200) {
+    ParallelLogger::logError("The concept set definition was not accepted by the WebApi. Status code = ",
+                             httr::content(response)$status_code)
+    stop()
+  }
+  response <- httr::content(response)
+  response <- unlist(response) %>% unique() %>% sort()
+  return(response)
 }
 
-#' Convert a concept set definition to a table
-#'
+
+#' Convert a concept set definition to a table \lifecycle{maturing}
 #' @template ConceptSetDefinition
-#' @template SnakeCaseToCamelCase
 #'
 #' @return
-#' A tibble representing the concept set expression.
+#' Takes a R (list) representation of the Concept Set expression and returns a table (dataframe)
+#' representing the concept set expression. This is useful to create publication friendly output of
+#' the concept set expression.
 #'
 #' @examples
 #' \dontrun{
@@ -69,59 +77,27 @@ resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey
 #' }
 #'
 #' @export
-convertConceptSetDefinitionToTable <- function(conceptSetDefinition, snakeCaseToCamelCase = TRUE) {
-  lists <- lapply(conceptSetDefinition$expression$items, function(x) {
+convertConceptSetDefinitionToTable <- function(conceptSetDefinition) {
+
+  if ("expression" %in% names(conceptSetDefinition)) {
+    expression <- conceptSetDefinition$expression
+  } else {
+    expression <- conceptSetDefinition
+  }
+
+  lists <- lapply(expression$items, function(x) {
     x <- append(x$concept, x)
     x$concept <- NULL
     return(tibble::as_tibble(x))
   })
-  result <- dplyr::bind_rows(lists)
-  if (snakeCaseToCamelCase) {
-    colnames(result) <- SqlRender::snakeCaseToCamelCase(colnames(result))
-  }
-  return(result)
-}
-
-.setExpressionToDf <- function(json) {
-
-  lists <- lapply(json$items, function(j) {
-    as.data.frame(j)
-  })
-
-  do.call("rbind", lists)
-}
-
-.getIncludedConceptsDf <- function(baseUrl, vocabularySourceKey, includedConcepts) {
-  url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabularySourceKey)
-  body <- RJSONIO::toJSON(includedConcepts, digits = 23)
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
-  req <- httr::content(req)
-
-  lists <- lapply(req, function(r) {
-    as.data.frame(r)
-  })
-
-  do.call("rbind", lists)
-}
-
-.getMappedConceptsDf <- function(baseUrl, vocabularySourceKey, includedConcepts) {
-  url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabularySourceKey)
-  body <- RJSONIO::toJSON(includedConcepts, digits = 23)
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
-  req <- httr::content(req)
-
-  lists <- lapply(req, function(r) {
-    modList <- .convertNulltoNA(r)
-    as.data.frame(modList, stringsAsFactors = FALSE)
-  })
-
-  do.call("rbind", lists)
+  items <- dplyr::bind_rows(lists) %>% dplyr::rename_at(dplyr::vars(dplyr::contains("_")),
+                                                        .funs = SqlRender::snakeCaseToCamelCase) %>%
+    .normalizeDateAndTimeTypes()
+  return(items)
 }
 
 #' Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook
-#'
+#' \lifecycle{maturing}
 #' @param conceptSetIds   A vector of concept set IDs.
 #' @param fileName        The name of the XLSX workbook file.
 #' @template BaseUrl

@@ -17,26 +17,23 @@
 # limitations under the License.
 
 
-#' Load a cohort definition and insert it into this package
-#'
+#' Load a cohort definition and insert it into this package \lifecycle{maturing}
 #' @details
 #' Load a cohort definition from a WebApi instance and insert it into this package. This will fetch
-#' the json object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the
+#' the JSON object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the
 #' template SQL and store it in another folder (defaults to the 'inst/sql/sql_server' folder). Both
 #' folders will be created if they don't exist. When using generateStats = TRUE, the following tables
 #' are required to exist when executing the SQL: cohort_inclusion, cohort_inclusion_result,
 #' cohort_inclusion_stats, and cohort_summary_stats. Also note that the cohort_inclusion table should
-#' be populated with the names of the rules prior to executing the cohort definition SQL.
+#' be populated with the names of the rules prior to executing the cohort definition SQL. Note:
+#' generate inclusion statistics are created for all by default.
 #'
 #' @template BaseUrl
 #' @template CohortId
-#' @param name            The name that will be used for the json and SQL files. If not provided, the
-#'                        name in cohort will be used, but this may not lead to valid file names.
-#' @param jsonFolder      Path to the folder where the JSON representation will be saved.
-#' @param sqlFolder       Path to the folder where the SQL representation will be saved.
-#' @param generateStats   Should the SQL include the code for generating inclusion rule statistics?
-#'                        Note that if TRUE, several additional tables are expected to exists as
-#'                        described in the details.
+#' @param name         The name that will be used for the JSON and SQL files. If not provided, the name
+#'                     in cohort will be used, but this may not lead to valid file names.
+#' @param jsonFolder   Path to the folder where the JSON representation will be saved.
+#' @param sqlFolder    Path to the folder where the SQL representation will be saved.
 #'
 #' @examples
 #' \dontrun{
@@ -52,14 +49,12 @@ insertCohortDefinitionInPackage <- function(cohortId,
                                             name = NULL,
                                             jsonFolder = "inst/cohorts",
                                             sqlFolder = "inst/sql/sql_server",
-                                            baseUrl,
-                                            generateStats = FALSE) {
+                                            baseUrl) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(cohortId, add = errorMessage)
-  checkmate::assertLogical(generateStats, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
-  
+
   object <- getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl)
   if (is.null(name)) {
     name <- object$name
@@ -70,13 +65,11 @@ insertCohortDefinitionInPackage <- function(cohortId,
   jsonFileName <- file.path(jsonFolder, paste(name, "json", sep = "."))
   json <- RJSONIO::toJSON(object$expression, pretty = TRUE)
   SqlRender::writeSql(sql = json, targetFile = jsonFileName)
-  
+
   writeLines(paste("- Created JSON file:", jsonFileName))
-  
+
   # Fetch SQL
-  sql <- getCohortDefinitionSql(baseUrl = baseUrl,
-                                cohortId = cohortId,
-                                generateStats = generateStats)
+  sql <- getCohortSql(baseUrl = baseUrl, cohortDefinition = object)
   if (!file.exists(sqlFolder)) {
     dir.create(sqlFolder, recursive = TRUE)
   }
@@ -85,8 +78,7 @@ insertCohortDefinitionInPackage <- function(cohortId,
   writeLines(paste("- Created SQL file:", sqlFileName))
 }
 
-#' Insert a set of cohort definitions into package
-#'
+#' Insert a set of cohort definitions into package \lifecycle{maturing}
 #' @param fileName                Name of a CSV file specifying the cohorts to insert. See details for
 #'                                the expected file format.
 #' @template BaseUrl
@@ -98,7 +90,6 @@ insertCohortDefinitionInPackage <- function(cohortId,
 #' @param insertCohortCreationR   Insert R code that will create the cohort table and instantiate the
 #'                                cohorts? This will create a file called R/CreateCohorts.R containing
 #'                                a function called \code{.createCohorts}.
-#' @param generateStats           Should cohort inclusion rule statistics be created?
 #' @param packageName             The name of the package (only needed when inserting the R code as
 #'                                well).
 #'
@@ -116,28 +107,26 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
                                                rFileName = "R/CreateCohorts.R",
                                                insertTableSql = TRUE,
                                                insertCohortCreationR = TRUE,
-                                               generateStats = FALSE,
                                                packageName) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertLogical(insertTableSql, add = errorMessage)
   checkmate::assertLogical(insertCohortCreationR, add = errorMessage)
-  checkmate::assertLogical(generateStats, add = errorMessage)
   checkmate::assertScalar(packageName, add = errorMessage)
   checkmate::assertCharacter(packageName, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
-  
+
   if (insertCohortCreationR && !insertTableSql)
     stop("Need to insert table SQL in order to generate R code")
-  if (insertCohortCreationR && generateStats && jsonFolder != "inst/cohorts")
+  if (insertCohortCreationR && jsonFolder != "inst/cohorts")
     stop("When generating R code and generating stats, the jsonFolder must be 'inst/cohorts'")
   if (insertCohortCreationR && sqlFolder != "inst/sql/sql_server")
     stop("When generating R code, the sqlFolder must be 'inst/sql/sql_server'")
   if (insertCohortCreationR && !grepl("inst", fileName))
     stop("When generating R code, the input CSV file must be in the inst folder.")
-  
+
   cohortsToCreate <- readr::read_csv(fileName, col_types = readr::cols())
-  
+
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Inserting cohort:", cohortsToCreate$name[i]))
@@ -145,27 +134,25 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
                                     name = cohortsToCreate$name[i],
                                     baseUrl = baseUrl,
                                     jsonFolder = jsonFolder,
-                                    sqlFolder = sqlFolder,
-                                    generateStats = generateStats)
+                                    sqlFolder = sqlFolder)
   }
-  
+
   # Insert SQL to create empty cohort table
   if (insertTableSql) {
     writeLines("Creating SQL to create empty cohort table")
-    .insertSqlForCohortTableInPackage(statsTables = generateStats, sqlFolder = sqlFolder)
+    .insertSqlForCohortTableInPackage(sqlFolder = sqlFolder)
   }
-  
+
   # Store information on inclusion rules
-  if (generateStats) {
-    writeLines("Storing information on inclusion rules")
-    rules <- .getCohortInclusionRules(jsonFolder)
-    rules <- merge(rules, data.frame(cohortId = cohortsToCreate$cohortId,
-                                     cohortName = cohortsToCreate$name))
-    csvFileName <- file.path(jsonFolder, "InclusionRules.csv")
-    write.csv(rules, csvFileName, row.names = FALSE)
-    writeLines(paste("- Created CSV file:", csvFileName))
-  }
-  
+  writeLines("Storing information on inclusion rules")
+  rules <- .getCohortInclusionRules(jsonFolder)
+  rules <- merge(rules,
+                 data.frame(cohortId = cohortsToCreate$cohortId, cohortName = cohortsToCreate$name))
+  csvFileName <- file.path(jsonFolder, "InclusionRules.csv")
+  write.csv(rules, csvFileName, row.names = FALSE)
+  writeLines(paste("- Created CSV file:", csvFileName))
+
+
   # Generate R code to create cohorts
   if (insertCohortCreationR) {
     writeLines("Generating R code to create cohorts")
@@ -176,12 +163,10 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
     libPath <- gsub(".*inst[/\\]", "", fileName)
     libPath <- gsub("/|\\\\", "\", \"", libPath)
     rCode <- gsub("#fileName#", libPath, rCode)
-    if (generateStats) {
-      rCode <- gsub("#stats_start#", "", rCode)
-      rCode <- gsub("#stats_end#", "", rCode)
-    } else {
-      rCode <- gsub("#stats_start#.*?#stats_end#", "", rCode)
-    }
+
+    rCode <- gsub("#stats_start#", "", rCode)
+    rCode <- gsub("#stats_end#", "", rCode)
+
     fileConn <- file(rFileName)
     writeChar(rCode, fileConn, eos = NULL)
     close(fileConn)
@@ -225,74 +210,4 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   close(fileConn)
   writeLines(paste("- Created SQL file:", sqlFileName))
   invisible(sql)
-}
-
-
-#' Get cohort generation results
-#'
-#' @details
-#' Obtains a list with data frame containing details of output for cohort generation
-#'
-#' @template BaseUrl
-#' @template CohortId
-#' @template SourceKey
-#' @param mode   Mode is used to differentiate between inclusion rules and count by events (mode = 0,
-#'               default) or persons (mode = 1). Default value = 0.
-#' @return
-#' A list of data frames containing cohort generation report
-#' @examples
-#' \dontrun{
-#' getCohortResults(cohortId = 282,
-#'                  baseUrl = "http://server.org:80/WebAPI",
-#'                  sourceKey = "HCUP",
-#'                  mode = 1)
-#' }
-#' @export
-getCohortResults <- function(cohortId, baseUrl, sourceKey, mode = 0) {
-  
-  .checkBaseUrl(baseUrl)
-  
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(cohortId)
-  checkmate::assertScalar(sourceKey)
-  checkmate::assertCharacter(sourceKey)
-  checkmate::assertInt(mode, lower = 0, upper = 1)
-  checkmate::reportAssertions(errorMessage)
-  
-  cohortGenerationInformation <- getCohortGenerationInformation(baseUrl = baseUrl,
-                                                                sourceKey = sourceKey,
-                                                                cohortId = cohortId)
-  
-  if (cohortGenerationInformation$status == "COMPLETE") {
-    url <- sprintf("%s/cohortdefinition/%d/report/%s?mode=", baseUrl, cohortId, sourceKey, mode)
-    json <- httr::GET(url)
-    json <- httr::content(json)
-    
-    results <- list()
-    if (is.null(json$summary$percentMatched)) {
-      json$summary$percentMatched <- 0
-    }
-    results$summary <- json$summary %>% tidyr::as_tibble()
-    if (length(json$inclusionRuleStats) == 0) {
-      results$inclusionRuleStats <- NULL
-      results$treemapData <- NULL
-    } else {
-      inclusionRuleStats <- lapply(json$inclusionRuleStats, tibble::as_tibble)
-      results$inclusionRuleStats <- do.call("rbind", inclusionRuleStats)
-      
-      treemapData <- jsonlite::fromJSON(json$treemapData, simplifyDataFrame = FALSE)
-      treeMapResult <- list(name = c(), size = c())
-      treeMapResult <- .flattenTree(node = treemapData, accumulated = treeMapResult)
-      results$treemapData <- dplyr::tibble(bits = treeMapResult$name, size = treeMapResult$size)
-      results$treemapData$SatisfiedNumber <- stringr::str_count(string = results$treemapData$bits,
-                                                                pattern = "1")
-    }
-    return(results)
-  } else if (cohortGenerationInformation$status %in% c("STARTING", "STARTED", "RUNNING")) {
-    stop(paste("Cohort generation not complete. Status is reported to be ",
-               cohortGenerationInformation$status,
-               "please wait till generation status is COMPLETE."))
-  } else {
-    stop("No results found. Cohort generation may not have been invoked.")
-  }
 }
