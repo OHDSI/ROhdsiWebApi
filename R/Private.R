@@ -109,8 +109,10 @@
 }
 
 .normalizeDateAndTimeTypes <- function(df) {
-  df <- df %>% dplyr::mutate_if(.predicate = (stringr::str_detect(string = tolower(colnames(.data$.)),
-                                                                  pattern = "date") | stringr::str_detect(string = tolower(colnames(.data$.)), pattern = "time")), .funs = .convertToDateTime)
+  df <- df %>% dplyr::mutate_if(.predicate = (stringr::str_detect(string = tolower(colnames(.)),
+                                                                  pattern = "date") |
+    stringr::str_detect(string = tolower(colnames(.)),
+                        pattern = "time")), .funs = .convertToDateTime)
   return(df)
 }
 
