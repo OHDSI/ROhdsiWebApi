@@ -166,11 +166,11 @@ detect%categoryFirstUpper%sByName <- function(pattern, negate = FALSE, baseUrl) 
 #' @examples 
 #' \dontrun{
 #' post%categoryFirstUpper%Definition(name = "new valid name", 
-#' %categoryFirstUpper%Definition = definition, 
+#' %category%Definition = definition, 
 #' baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-post%categoryFirstUpper%Definition <- function(name, %categoryFirstUpper%Definition, baseUrl){
-  result <- postDefinition(name = name, baseUrl = baseUrl, category = '%category%', definition = %categoryFirstUpper%Definition)
+post%categoryFirstUpper%Definition <- function(name, %category%Definition, baseUrl){
+  result <- postDefinition(name = name, baseUrl = baseUrl, category = '%category%', definition = %category%Definition)
   return(result)
 }

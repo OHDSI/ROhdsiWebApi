@@ -184,15 +184,15 @@ detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postConceptSetDefinition(name = "new valid name",
-#'                          ConceptSetDefinition = definition,
+#'                          conceptSetDefinition = definition,
 #'                          baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postConceptSetDefinition <- function(name, ConceptSetDefinition, baseUrl) {
+postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "conceptSet",
-                           definition = ConceptSetDefinition)
+                           definition = conceptSetDefinition)
   return(result)
 }
 #' Get the meta data for Cohort definitions. \lifecycle{stable}
@@ -359,15 +359,15 @@ detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postCohortDefinition(name = "new valid name",
-#'                      CohortDefinition = definition,
+#'                      cohortDefinition = definition,
 #'                      baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postCohortDefinition <- function(name, CohortDefinition, baseUrl) {
+postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "cohort",
-                           definition = CohortDefinition)
+                           definition = cohortDefinition)
   return(result)
 }
 
@@ -639,15 +639,15 @@ detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postIncidenceRateDefinition(name = "new valid name",
-#'                             IncidenceRateDefinition = definition,
+#'                             incidenceRateDefinition = definition,
 #'                             baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postIncidenceRateDefinition <- function(name, IncidenceRateDefinition, baseUrl) {
+postIncidenceRateDefinition <- function(name, incidenceRateDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "incidenceRate",
-                           definition = IncidenceRateDefinition)
+                           definition = incidenceRateDefinition)
   return(result)
 }
 
@@ -920,15 +920,15 @@ detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postEstimationDefinition(name = "new valid name",
-#'                          EstimationDefinition = definition,
+#'                          estimationDefinition = definition,
 #'                          baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postEstimationDefinition <- function(name, EstimationDefinition, baseUrl) {
+postEstimationDefinition <- function(name, estimationDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "estimation",
-                           definition = EstimationDefinition)
+                           definition = estimationDefinition)
   return(result)
 }
 #' Get the meta data for Prediction definitions. \lifecycle{stable}
@@ -1097,15 +1097,15 @@ detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postPredictionDefinition(name = "new valid name",
-#'                          PredictionDefinition = definition,
+#'                          predictionDefinition = definition,
 #'                          baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postPredictionDefinition <- function(name, PredictionDefinition, baseUrl) {
+postPredictionDefinition <- function(name, predictionDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "prediction",
-                           definition = PredictionDefinition)
+                           definition = predictionDefinition)
   return(result)
 }
 #' Get the meta data for Characterization definitions. \lifecycle{stable}
@@ -1281,15 +1281,15 @@ detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postCharacterizationDefinition(name = "new valid name",
-#'                                CharacterizationDefinition = definition,
+#'                                characterizationDefinition = definition,
 #'                                baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postCharacterizationDefinition <- function(name, CharacterizationDefinition, baseUrl) {
+postCharacterizationDefinition <- function(name, characterizationDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "characterization",
-                           definition = CharacterizationDefinition)
+                           definition = characterizationDefinition)
   return(result)
 }
 
@@ -1561,15 +1561,15 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postPathwayDefinition(name = "new valid name",
-#'                       PathwayDefinition = definition,
+#'                       pathwayDefinition = definition,
 #'                       baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postPathwayDefinition <- function(name, PathwayDefinition, baseUrl) {
+postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "pathway",
-                           definition = PathwayDefinition)
+                           definition = pathwayDefinition)
   return(result)
 }
 

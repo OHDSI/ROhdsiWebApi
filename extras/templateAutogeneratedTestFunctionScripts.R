@@ -142,3 +142,91 @@ testthat::test_that("Test isValid...", {
 })
 
 
+testthat::test_that("Test evaluate conceptSetExpression (positive test)", {
+  testthat::skip_if(baseUrl == "")
+  name = paste0("this is a test and may be deleted-", paste0(sample(letters, size = 10, replace = TRUE)))
+  expression <- jsonlite::read_json("tests/testthat/json/conceptSetExpression.txt")
+  postDefinition <- ROhdsiWebApi::postConceptSetDefinition(name = name, 
+                                                       baseUrl = baseUrl, conceptSetDefinition = expression)
+  testthat::expect_s3_class(object = postDefinition, class = 'tbl')
+  conceptSetDefinition <- ROhdsiWebApi::getConceptSetDefinition(conceptSetId = postDefinition$id, baseUrl = baseUrl)
+  expressionFromWebApi <- conceptSetDefinition$expression
+  testthat::expect_type(object = expressionFromWebApi,type = 'list' )
+  testthat::expect_gt(object = length(expressionFromWebApi), expected = 0)
+  
+  
+  resolveConcepts <- ROhdsiWebApi::resolveConceptSet(conceptSetDefinition = conceptSetDefinition, baseUrl = baseUrl)
+  testthat::expect_type(object = resolveConcepts, type = 'integer')
+  concepts <- ROhdsiWebApi::getConcepts(conceptIds = resolveConcepts, baseUrl = baseUrl)
+  testthat::expect_s3_class(object = concepts, class = 'tbl')
+  sourceConcepts <- ROhdsiWebApi::getSourceConcepts(conceptIds = resolveConcepts, baseUrl = baseUrl)
+  testthat::expect_s3_class(object = concepts, class = 'tbl')
+  validTest <- ROhdsiWebApi::isValidConceptSetId(conceptSetIds = postDefinition$id, baseUrl = baseUrl)
+  testthat::expect_true(object = validTest)
+  })
+
+
+testthat::test_that("Test postCohortInvokeStop (positive test)", {
+  testthat::skip_if(baseUrl == "")
+  name = paste0("this is a test and may be deleted-", paste0(sample(letters, size = 10, replace = TRUE)))
+  expression <- jsonlite::read_json("tests/testthat/json/cohort.txt")
+  postDefinition <- ROhdsiWebApi::postCohortDefinition(name = name, 
+                                                       baseUrl = baseUrl, cohortDefinition = expression)
+  testthat::expect_s3_class(object = postDefinition, class = 'tbl')
+  expressionFromWebApi <- ROhdsiWebApi::getCohortDefinition(cohortId = postDefinition$id, baseUrl = baseUrl)$expression
+  testthat::expect_type(object = expressionFromWebApi,type = 'list' )
+  testthat::expect_gt(object = length(expressionFromWebApi), expected = 0)
+  
+  invoke <- ROhdsiWebApi::invokeCohortGeneration(cohortId = postDefinition$id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K')
+  testthat::expect_s3_class(object = invoke, class = 'tbl')
+  testthat::expect_equal(object = invoke$status, expected = c('STARTING') )
+  stopGeneration <- ROhdsiWebApi::cancelCohortGeneration(cohortId = postDefinition$id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K' )
+  testthat::expect_null(object = stopGeneration)
+})
+
+
+testthat::test_that("Test CharacterizationGetInvokeStop (positive test)", {
+  testthat::skip_if(baseUrl == "")
+  metadata <- ROhdsiWebApi::getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
+  testthat::expect_s3_class(object = metadata, class = 'tbl')
+  id <- metadata %>% dplyr::sample_n(1) %>% dplyr::pull(id)
+  
+  invoke <- ROhdsiWebApi::invokeCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K')
+  testthat::expect_s3_class(object = invoke, class = 'tbl')
+  testthat::expect_equal(object = invoke$status, expected = c('STARTING') )
+  stopGeneration <- ROhdsiWebApi::cancelCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K' )
+  testthat::expect_null(object = stopGeneration)
+})
+
+testthat::test_that("Test PathwayGetInvokeStop (positive test)", {
+  testthat::skip_if(baseUrl == "")
+  metadata <- ROhdsiWebApi::getPathwayDefinitionsMetaData(baseUrl = baseUrl)
+  testthat::expect_s3_class(object = metadata, class = 'tbl')
+  id <- metadata %>% dplyr::sample_n(1) %>% dplyr::pull(id)
+  
+  invoke <- ROhdsiWebApi::invokePathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K')
+  testthat::expect_s3_class(object = invoke, class = 'tbl')
+  testthat::expect_equal(object = invoke$status, expected = c('STARTING') )
+  stopGeneration <- ROhdsiWebApi::cancelPathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K' )
+  testthat::expect_null(object = stopGeneration)
+})
+
+testthat::test_that("Test IncidenceRateGetInvokeStop (positive test)", {
+  testthat::skip_if(baseUrl == "")
+  metadata <- ROhdsiWebApi::getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
+  testthat::expect_s3_class(object = metadata, class = 'tbl')
+  id <- metadata %>% dplyr::sample_n(1) %>% dplyr::pull(id)
+  
+  invoke <- ROhdsiWebApi::invokeIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K')
+  testthat::expect_s3_class(object = invoke, class = 'tbl')
+  testthat::expect_equal(object = invoke$status, expected = c('STARTING') )
+  stopGeneration <- ROhdsiWebApi::cancelIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K' )
+  testthat::expect_null(object = stopGeneration)
+})
+
+
+
+
+
+
+
