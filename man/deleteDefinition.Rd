@@ -18,7 +18,7 @@ If trailing '/' is used, you may receive an error.}
 'cohort', 'characterization', 'pathway, 'incidenceRate', 'estimation', 'prediction'.}
 }
 \value{
-An R object representing the %categoryFirstUpper% definition
+None, unless error.
 }
 \description{
 Delete a definition id of a chosen category. \lifecycle{stable}

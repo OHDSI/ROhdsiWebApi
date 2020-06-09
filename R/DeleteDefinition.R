@@ -25,7 +25,7 @@
 #' @template category
 #' @template id
 #' @return
-#' An R object representing the %categoryFirstUpper% definition
+#' None, unless error.
 #'
 #' @examples
 #' \dontrun{
