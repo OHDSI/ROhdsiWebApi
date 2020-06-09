@@ -106,9 +106,10 @@ testthat::test_that("Test getCohortResults", {
   testthat::expect_gt(length(results), 0)
 })
 
-testthat::test_that("Test getCohortDefinitionSql", {
+testthat::test_that("Test getCohortSql", {
   testthat::skip_if(baseUrl == "")
-  sql <- ROhdsiWebApi::getCohortDefinitionSql(1774139, baseUrl = baseUrl)
+  cohortDefinition <- getCohortDefinition(cohortId = 1774346, baseUrl = baseUrl)
+  sql <- ROhdsiWebApi::getCohortSql(cohortDefinition = cohortDefinition, baseUrl = baseUrl)
   testthat::expect_type(sql, "character")
 })
 

@@ -268,11 +268,17 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   } else {
     expression <- cohortDefinition
   }
+  listGenerateStats <- list(expression = expression,
+                            options = list(generateStats = generateStats))
 
-  validJsonExpression <- RJSONIO::toJSON(list(expression = expression,
-                                              options = list(generateStats = generateStats)), digits = 23)
-  body <- RJSONIO::toJSON(list(expression = RJSONIO::fromJSON(validJsonExpression)), digits = 23)
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
-  sql <- (httr::content(req))$templateSql
-  return(sql)
+  validJsonExpression <- RJSONIO::toJSON(listGenerateStats, digits = 23)
+  response <- httr::POST(url, body = validJsonExpression, config = httr::add_headers(httpheader))
+  if (response$status == 200) {
+    response <- httr::content(response)
+    sql <- response$templateSql
+    return(sql)
+  } else {
+    ParallelLogger::logError("Error: No Sql returned for cohort definition id: ", cohortDefinition)
+    stop()
+  }
 }
