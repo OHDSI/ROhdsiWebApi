@@ -20,6 +20,8 @@
 
 
 baseUrl <- Sys.getenv("ohdsiBaseUrl")
+library(magrittr)
+library(dplyr)
 
 ### Testing functions in WebApi.R
 
@@ -88,4 +90,55 @@ testthat::test_that(desc = "Test deleteDefinition (negative test)", code = {
   testthat::skip_if(baseUrl == "")
   testthat::expect_null(object = ROhdsiWebApi::deleteDefinition(baseUrl = baseUrl, id = -1, category = 'cohort'))
 })
+
+
+
+testthat::test_that("Test getCohortGenerationInformation", {
+  testthat::skip_if(baseUrl == "")
+  info <- ROhdsiWebApi::getCohortGenerationInformation(1774139, baseUrl = baseUrl)
+  testthat::expect_s3_class(info, "data.frame")
+  testthat::expect_gt(nrow(info), 0)
+})
+
+testthat::test_that("Test getCohortResults", {
+  testthat::skip_if(baseUrl == "")
+  results <- getCohortResults(1774139, baseUrl = baseUrl)
+  testthat::expect_type(results, "list")
+  testthat::expect_gt(length(results), 0)
+})
+
+testthat::test_that("Test getCohortDefinitionSql", {
+  testthat::skip_if(baseUrl == "")
+  sql <- ROhdsiWebApi::getCohortDefinitionSql(1774139, baseUrl = baseUrl)
+  testthat::expect_type(sql, "character")
+})
+
+testthat::test_that("Test getDefinitionsMetadata", {
+  testthat::skip_if(baseUrl == "")
+  categories <- c("conceptSet","cohort","incidenceRate",
+                  "estimation","prediction","characterization",
+                  "pathway")
+  for (category in categories) {
+    writeLines(sprintf("Testing category '%s'", category))
+    metaData <- ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, category = category)
+    testthat::expect_s3_class(metaData, "data.frame")
+    testthat::expect_gt(nrow(metaData), 0)
+  }
+})
+
+testthat::test_that("Test isValid...", {
+  testthat::skip_if(baseUrl == "")
+  categories <- c("conceptSet","cohort","incidenceRate",
+                  "estimation","prediction","characterization",
+                  "pathway")
+  arguments <- list(ids = -1, baseUrl = baseUrl)
+  for (category in categories) {
+    writeLines(sprintf("Testing category '%s'", category))
+    functionName <- paste0("isValid", toupper(substr(category, 1, 1)), substr(category, 2, nchar(category)), "Id")
+    names(arguments)[1] <- sprintf("%sIds", category)
+    value <- do.call(functionName, arguments)
+    testthat::expect_false(value)
+  }
+})
+
 
