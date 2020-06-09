@@ -4,14 +4,11 @@
 \alias{getPathwayGenerationInformation}
 \title{Get generation information for Pathway id.}
 \usage{
-getPathwayGenerationInformation(pathwayId, sourceKey, baseUrl)
+getPathwayGenerationInformation(pathwayId, baseUrl)
 }
 \arguments{
 \item{pathwayId}{An integer id representing the id that uniquely identifies a Pathway definition
 in a WebApi instance.}
-
-\item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
-Configuration page}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -24,13 +21,10 @@ An R object representing the Pathway definition
 Get generation information for Pathway id.
 }
 \details{
-Get generation (execution) information about Pathway for a given combination of sourceKey and
-pathwayId.
+Get generation (execution) information about Pathway for a pathwayId.
 }
 \examples{
 \dontrun{
-getPathwayGenerationInformation(pathwayId = 13242,
-                                baseUrl = "http://server.org:80/WebAPI",
-                                sourceKey = "HCUP")
+getPathwayGenerationInformation(pathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
 }
 }

@@ -2,11 +2,9 @@
 #' Get generation information for %categoryFirstUpper% id.
 #'
 #' @details
-#' Get generation (execution) information about %categoryFirstUpper% for a given combination of 
-#' sourceKey and %category%Id.
+#' Get generation (execution) information about %categoryFirstUpper% for a %category%Id.
 #'  
 #' @template BaseUrl
-#' @template SourceKey
 #' @param %category%Id   An integer id representing the id that uniquely identifies a 
 #'                       %categoryFirstUpper% definition in a WebApi instance.
 #' @return
@@ -15,56 +13,14 @@
 #' @examples 
 #' \dontrun{
 #' get%categoryFirstUpper%GenerationInformation(%category%Id = 13242, 
-#'                                              baseUrl = "http://server.org:80/WebAPI",
-#'                                              sourceKey = 'HCUP')
+#'                                              baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-get%categoryFirstUpper%GenerationInformation <- function(%category%Id, sourceKey, baseUrl){
+get%categoryFirstUpper%GenerationInformation <- function(%category%Id, baseUrl){
   .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(%category%Id, add = errorMessage)
-  checkmate::assertScalar(sourceKey, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-  
-  url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id, "/", "%categoryUrlGeneration%")
-  response <- httr::GET(url)
-  if (!response$status_code %in% c(100,200)) {
-    stop('No %categoryFirstUpper% generation information found.')
-  }
-  response <- httr::content(response)
-  
-  responseAll <- list()
-  for (i in (1:length(response))) {
-    responseAll[[i]] <- response[[i]] %>%
-      unlist(recursive = TRUE, use.names = TRUE) %>%
-      as.matrix() %>%
-      t() %>%
-      tidyr::as_tibble() %>%
-      dplyr::mutate_if(.integerCharacters, as.integer) %>%
-      dplyr::mutate_if(.numericCharacters, as.numeric) %>%
-      dplyr::mutate_if(.logicalCharacters, as.logical) %>% 
-      dplyr::mutate(%category%Id = !!%category%Id) %>% 
-      dplyr::mutate(listId = !!i)
-  }
-  response <- dplyr::bind_rows(responseAll)
-  
-  cdmDataSources <- getCdmSources(baseUrl) %>% dplyr::select(.data$sourceId, .data$sourceKey)
-  
-  if ("executionInfo.id.sourceId" %in% colnames(response)) {
-    names(response) <- stringr::str_replace(string = names(response), pattern = 'executionInfo.', replacement = "")
-  }
-  if ("id.sourceId" %in% colnames(response)) {
-    names(response) <- stringr::str_replace(string = names(response), pattern = 'id.', replacement = "")
-  }
-  if ("sourceId" %in% colnames(response)) {
-    response <- response %>% 
-      dplyr::left_join(y = cdmDataSources, by = "sourceId")
-  }
-  return(response)
+  response <- getGenerationInformation(id = %category%Id, baseUrl = baseUrl, category = '%category%')
+ return(response)
 }
-
-
-
 
 
 #' Invoke generation of %categoryFirstUpper% id.
@@ -76,37 +32,75 @@ get%categoryFirstUpper%GenerationInformation <- function(%category%Id, sourceKey
 #' @param %category%Id   An integer id representing the id that uniquely identifies a 
 #'                       %categoryFirstUpper% definition in a WebApi instance.
 #' @template SourceKey
-#' @return
-#' An R object representing the %categoryFirstUpper% definition
+#' @return   A tibble with job status information.
 #' 
 #' @examples 
 #' \dontrun{
-#' invoke%categoryFirstUpper%Definition(%categoryFirstUpper%Id = 13242, 
+#' invoke%categoryFirstUpper%Generation(%category%Id = 13242, 
 #' baseUrl = "http://server.org:80/WebAPI",
 #' sourceKey = 'HCUP')
 #' }
 #' @export
-invoke%categoryFirstUpper%Definition <- function(%category%Id, baseUrl, sourceKey){
+invoke%categoryFirstUpper%Generation <- function(%category%Id, baseUrl, sourceKey){
   .checkBaseUrl(baseUrl)
-  #get valid source keys from webapi
-  validSourceKeys <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(sourceKey) %>% dplyr::distinct() %>% dplyr::pull()
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(%category%Id, add = errorMessage)
-  checkmate::assertScalar(sourceKey, add = errorMessage)
-  checkmate::assertNames(sourceKey, 
-                         subset.of = validSourceKeys %>% 
-                           dplyr::select(sourceKey) %>% 
-                           dplyr::distinct() %>% 
-                           dplyr::pull(),
-                         add = errorMessage
-  )
-  checkmate::reportAssertions(errorMessage)
-  
-  if (isTRUE(isValid%categoryFirstUpper%Id(%category%Ids = %category%Id, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
-    response <- httr::DELETE(url)
-    response <- httr::http_status(response)
-  } else {
-    stop("%categoryFirstUpper%Id : %category%Id is not present in the WebApi.")
-  }
+  response <-
+    invokeGeneration(
+      id = %category%Id,
+      baseUrl = baseUrl,
+      category = '%category%',
+      sourceKey = sourceKey
+    )
+  return(response)
+}
+
+#' Cancel generation of %categoryFirstUpper% id.
+#'
+#' @details
+#' Cancel the generation of %categoryFirstUpper% id in the WebApi.
+#'  
+#' @template BaseUrl
+#' @param %category%Id   An integer id representing the id that uniquely identifies a 
+#'                       %categoryFirstUpper% definition in a WebApi instance.
+#' @template SourceKey
+#' @return   A tibble with job status information.
+#' 
+#' @examples 
+#' \dontrun{
+#' cancel%categoryFirstUpper%Generation(%category%Id = 13242, 
+#' baseUrl = "http://server.org:80/WebAPI",
+#' sourceKey = 'HCUP')
+#' }
+#' @export
+cancel%categoryFirstUpper%Generation <- function(%category%Id, baseUrl, sourceKey){
+  .checkBaseUrl(baseUrl)
+  response <-
+    cancelGeneration(
+      id = %category%Id,
+      baseUrl = baseUrl,
+      category = '%category%',
+      sourceKey = sourceKey
+    )
+  return(response)
+}
+
+
+#' Get results for a %categoryFirstUpper% Id.
+#'
+#' @details
+#' Get the results for %categoryFirstUpper% id.
+#'  
+#' @template BaseUrl
+#' @template %categoryFirstUpper%Id
+#' @return            An R object with results.
+#' 
+#' @examples 
+#' \dontrun{
+#' get%categoryFirstUpper%Results(%category%Id = 342, 
+#' baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+# Check name
+get%categoryFirstUpper%Results <- function(%category%Id, baseUrl) {
+  result <- getResults(baseUrl = baseUrl, id = %category%Id, category = '%category%')
+  return(result)
 }

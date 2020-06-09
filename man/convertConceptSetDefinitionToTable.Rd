@@ -2,24 +2,21 @@
 % Please edit documentation in R/ConceptSet.R
 \name{convertConceptSetDefinitionToTable}
 \alias{convertConceptSetDefinitionToTable}
-\title{Convert a concept set definition to a table}
+\title{Convert a concept set definition to a table \lifecycle{maturing}}
 \usage{
-convertConceptSetDefinitionToTable(
-  conceptSetDefinition,
-  snakeCaseToCamelCase = TRUE
-)
+convertConceptSetDefinitionToTable(conceptSetDefinition)
 }
 \arguments{
 \item{conceptSetDefinition}{A concept set definition, for example as obtained through the \code{\link{getConceptSetDefinition}} function, 
 or taken from a cohort definition.}
-
-\item{snakeCaseToCamelCase}{Should the column names of the result be converted to camelCase?}
 }
 \value{
-A tibble representing the concept set expression.
+Takes a R (list) representation of the Concept Set expression and returns a table (dataframe)
+representing the concept set expression. This is useful to create publication friendly output of
+the concept set expression.
 }
 \description{
-Convert a concept set definition to a table
+Convert a concept set definition to a table \lifecycle{maturing}
 }
 \examples{
 \dontrun{

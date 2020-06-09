@@ -1,13 +1,11 @@
-
-
-#' Retrieve the meta data for %categoryFirstUpper% definitions.
-#'
+#' Get the meta data for %categoryFirstUpper% definitions.
+#' \lifecycle{stable}
 #' @details
-#' Obtains the meta data of WebApi specifications such as id, name, created/modified 
+#' Get the meta data of WebApi specifications such as id, name, created/modified 
 #' details, hash object, etc. from WebApi for %categoryFirstUpper%. This function is useful 
 #' to retrieve the current %categoryFirstUpper% specifications.  
 #'  
-#' @template BaseUrl
+#' @template BaseUrl                        
 #' @return
 #' A tibble of specification metadata for %categoryFirstUpper%. Note: modifiedDate and createdDate are
 #' returned as text/character.
@@ -18,44 +16,34 @@
 #' }
 #' @export
 get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl){
-  .checkBaseUrl(baseUrl)
-  return(getDefinitionsMetadata(baseUrl = baseUrl,
-                                      categories = c("%category%")))
+  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("%category%"))
+  return(metaData)
 }
 
 
-#' Check if %categoryFirstUpper% id is valid.
-#'
+#' is %categoryFirstUpper% id a valid definition in the WebApi.
+#' \lifecycle{stable}
 #' @details
-#' Checks if a set of id for a %categoryFirstUpper% is valid, i.e. checks if all the ids
-#' exists in the WebApi i.e. valid. 
+#' Checks if a set of id for a %categoryFirstUpper% is valid. The following checks are 
+#' performed. 1) checks if all the ids exists in the WebApi i.e. valid. 
 #'  
 #' @template BaseUrl
 #' @param %category%Ids        A list of integer id(s) of the %categoryFirstUpper% to be tested for validity.
-#' @return
-#' A logical vector indicating which of the ids are valid.
+#' @return                     A logical vector indicating if an ID is valid.
 #' 
 #' @examples 
 #' \dontrun{
 #' isValid%categoryFirstUpper%Id(%category%Ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-isValid%categoryFirstUpper%Id <- function(%category%Ids, baseUrl){
-  .checkBaseUrl(baseUrl)
-  
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertIntegerish(%category%Ids, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-  
-  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "%category%")
-  return(%category%Ids %in% validIds$id)
+isValid%categoryFirstUpper%Id <- function(%category%Ids, baseUrl) {
+  result <- isValidId(baseUrl = baseUrl, category = '%category%', ids = %category%Ids)
+  return(result)
 }
 
 
-
-
 #' Get %categoryFirstUpper% id definition.
-#'
+#' \lifecycle{stable}
 #' @details
 #' Obtain the %categoryFirstUpper% definition from WebAPI for a given %categoryFirstUpper% id
 #'  
@@ -71,55 +59,20 @@ isValid%categoryFirstUpper%Id <- function(%category%Ids, baseUrl){
 #' }
 #' @export
 get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
-  .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(%category%Id, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-  
-  if (isTRUE(isValid%categoryFirstUpper%Id(%category%Ids = %category%Id, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
-    if ('characterization' == "%category%") {
-      url <- paste0(url, "/export")
-    }
-    metaData <- httr::GET(url)
-    metaData <- httr::content(metaData)
-    if (!is.null(metaData$payload$message)) {
-      stop(metaData$payload$message)
-    }
-    
-    if (is.null(metaData$expression)) {
-      if (!is.null(metaData$specification)) {
-        metaData$expression <- metaData$specification
-        metaData$specification <- NULL
-      } else {
-        url <- paste0(url, "/expression")
-        data <- httr::GET(url)
-        data <- httr::content(data)
-        metaData$expression <- data
-      }
-    }
-    if (is.character(metaData$expression)) {
-      metaData$expression <- RJSONIO::fromJSON(metaData$expression)
-    }
-    return(metaData)
-  } else {
-    stop("%categoryFirstUpper%Id : %category%Id is not present in the WebApi.")
-  }
+  result <- getDefinition(id = %category%Id, baseUrl = baseUrl, category = '%category%')
+  return(result)
 }
 
 
-
-
 #' Delete %categoryFirstUpper% id definition.
-#'
+#' \lifecycle{stable}
 #' @details
 #' Delete the %categoryFirstUpper% definition from WebAPI for a given %categoryFirstUpper% id
 #'  
 #' @template BaseUrl
 #' @param %category%Id   An integer id representing the id that uniquely identifies a 
 #'                       %categoryFirstUpper% definition in a WebApi instance.
-#' @return
-#' An R object representing the %categoryFirstUpper% definition
+#' @return               None, unless error.
 #' 
 #' @examples 
 #' \dontrun{
@@ -127,25 +80,13 @@ get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 #' }
 #' @export
 delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
-  .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertInt(%category%Id, add = errorMessage)
-  checkmate::reportAssertions(errorMessage)
-  
-  if (isTRUE(isValid%categoryFirstUpper%Id(%category%Ids = %category%Id, baseUrl = baseUrl))) {
-    url <- paste0(baseUrl, "/", "%categoryWebApi%", "/", %category%Id)
-    response <- httr::DELETE(url)
-    response <- httr::http_status(response)
-  } else {
-    stop("%categoryFirstUpper%Id : %category%Id is not present in the WebApi.")
-  }
+  result <- deleteDefinition(baseUrl = baseUrl, id = %category%Id, category = '%category%')
+  return(result)
 }
 
 
-
-
 #' Check if %categoryFirstUpper% definition name exists.
-#'
+#' \lifecycle{stable}
 #' @details
 #' Check if a string name already exists in the WebApi as a %categoryFirstUpper% definition name.
 #'  
@@ -164,11 +105,72 @@ delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 exists%categoryFirstUpper%Name <- function(%category%Name, baseUrl) {
   definitionsMetaData <- get%categoryFirstUpper%DefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% 
-    dplyr::filter(name == .data$%category%Name)
-  
+    dplyr::filter(.data$name == %category%Name)
   if (nrow(matched) > 0) {
     return(matched)
   } else {
     FALSE
   }
+}
+
+
+#' Detect the presence of string matched %categoryFirstUpper% definitions.
+#' \lifecycle{stable}
+#' @details
+#' Detect string matched %categoryFirstUpper% definition names from the WebApi, and retrieve
+#' metadata definitions.
+#'  
+#' @template BaseUrl
+#' @param pattern   A pattern to look for. See \link[stringr]{str_detect} for details.
+#' @param negate    If TRUE, return non-matching elements. See \link[stringr]{str_detect} for details.
+#' @return          FALSE if no matches. If matched - output from \link[ROhdsiWebApi]{get%categoryFirstUpper%DefinitionsMetaData}
+#' 
+#' @examples 
+#' \dontrun{
+#' detect%categoryFirstUpper%s(pattern = 'this text string to search in pattern', 
+#' baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+# Check name
+detect%categoryFirstUpper%sByName <- function(pattern, negate = FALSE, baseUrl) {
+  definitionsMetaData <- get%categoryFirstUpper%DefinitionsMetaData(baseUrl = baseUrl)
+  matched <- definitionsMetaData %>% 
+    dplyr::filter(stringr::str_detect(string = .data$name, pattern = pattern, negate = negate))
+  if (nrow(matched) > 0) {
+    return(matched)
+  } else {
+    return(FALSE)
+  }
+}
+
+
+
+
+#' Post %categoryFirstUpper% definition.
+#' \lifecycle{maturing}
+#' @details
+#' Post %categoryFirstUpper% definition to WebAPI
+#'  
+#' @template BaseUrl
+#' @param name           A valid name for the definition. WebApi will use this name (if valid) as
+#'                       the name of the definition. WebApi checks for validity,
+#'                       such as uniqueness, absence of unacceptable character etc. An error might be thrown.
+#' @param %categoryFirstUpper%Definition    An R list object containing the expression for the specification. 
+#'                                          This will be converted to JSON expression by function and posted into the WebApi.
+#'                                          Note: only limited checks are performed in R to check the validity of this
+#'                                          expression.
+#' @return            This function will return a dataframe object with one row
+#'                    describing the posted WebApi expression and its details.
+#'                    If unsuccessful a STOP message will be shown.
+#' 
+#' @examples 
+#' \dontrun{
+#' post%categoryFirstUpper%Definition(name = "new valid name", 
+#' %categoryFirstUpper%Definition = definition, 
+#' baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+post%categoryFirstUpper%Definition <- function(name, %categoryFirstUpper%Definition, baseUrl){
+  result <- postDefinition(name = name, baseUrl = baseUrl, category = '%category%', definition = %categoryFirstUpper%Definition)
+  return(result)
 }

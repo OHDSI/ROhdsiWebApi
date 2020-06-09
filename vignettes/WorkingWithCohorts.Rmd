@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(ROhdsiWebApi)
 ```
-This Vignettes describes how ROhdsiWebApi maybe used to work with cohorts in a WebApi. Please review ['The Book of Ohdsi'](https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html)
+This Vignettes describes how ROhdsiWebApi maybe used to work with cohorts in a WebApi. Please review ['The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html)
 chapter on Cohorts. 
 
 > we define a cohort as a set of persons who satisfy one or more inclusion criteria for a duration of time. The term cohort is often interchanged with the term phenotype. Cohorts are used throughout OHDSI analytical tools and network studies as the primary building blocks for executing a research question. 

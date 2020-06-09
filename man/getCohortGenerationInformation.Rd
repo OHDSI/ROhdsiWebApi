@@ -4,14 +4,11 @@
 \alias{getCohortGenerationInformation}
 \title{Get generation information for Cohort id.}
 \usage{
-getCohortGenerationInformation(cohortId, sourceKey, baseUrl)
+getCohortGenerationInformation(cohortId, baseUrl)
 }
 \arguments{
 \item{cohortId}{An integer id representing the id that uniquely identifies a Cohort definition in
 a WebApi instance.}
-
-\item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
-Configuration page}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -24,13 +21,10 @@ An R object representing the Cohort definition
 Get generation information for Cohort id.
 }
 \details{
-Get generation (execution) information about Cohort for a given combination of sourceKey and
-cohortId.
+Get generation (execution) information about Cohort for a cohortId.
 }
 \examples{
 \dontrun{
-getCohortGenerationInformation(cohortId = 13242,
-                               baseUrl = "http://server.org:80/WebAPI",
-                               sourceKey = "HCUP")
+getCohortGenerationInformation(cohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
 }
 }

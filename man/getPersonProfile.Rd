@@ -2,7 +2,7 @@
 % Please edit documentation in R/PersonProfile.R
 \name{getPersonProfile}
 \alias{getPersonProfile}
-\title{Get person profile data}
+\title{Get person profile data \lifecycle{maturing}}
 \usage{
 getPersonProfile(baseUrl, sourceKey, personId, indexCohortId = NULL)
 }
@@ -16,30 +16,30 @@ Configuration page}
 
 \item{personId}{The personId of the person whose profile is being reviewed}
 
-\item{indexCohortId}{<OPTIONAL> Do you want to use a particular cohortId as the index cohort?
-If left NULL, the WebApi will identify the earliest cohort for the person by 
-cohort start date and use it as the index cohort. 
-WebApi uses the cohort start date of the index cohort to calculate the person's 
-index age (ageAtIndex). WebApi will also return the relative position, in days, 
-for each event compared to the index cohorts start date. These relative positions
-are useful to study the relationship of various events with respect to the index
-cohort start date.}
+\item{indexCohortId}{<OPTIONAL> Do you want to use a particular cohortId as the index cohort? If
+left NULL, the WebApi will identify the earliest cohort for the person by
+cohort start date and use it as the index cohort. WebApi uses the cohort
+start date of the index cohort to calculate the person's index age
+(ageAtIndex). WebApi will also return the relative position, in days, for
+each event compared to the index cohorts start date. These relative positions
+are useful to study the relationship of various events with respect to the
+index cohort start date.}
 }
 \value{
-A list of tibble data frame objects corresponding to cohorts, observationPeriod,
-                      records and person.
+A list of tibble data frame objects corresponding to cohorts, observationPeriod, records and
+person.
 }
 \description{
-Get person profile data
+Get person profile data \lifecycle{maturing}
 }
 \details{
-Get a R object with person profile data. This function may be used for 
-visualizing a patients profile in tables or visualization.
+Get a R object with person profile data. This function may be used for visualizing a patients
+profile in tables or visualization.
 }
 \examples{
-\dontrun{#'
-getPersonProfile(baseUrl = "http://server.org:80/WebAPI", 
-                 sourceKey = 'sourceKey',
+\dontrun{
+getPersonProfile(baseUrl = "http://server.org:80/WebAPI",
+                 sourceKey = "sourceKey",
                  personId = 342342)
 }
 

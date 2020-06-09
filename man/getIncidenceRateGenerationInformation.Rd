@@ -4,14 +4,11 @@
 \alias{getIncidenceRateGenerationInformation}
 \title{Get generation information for IncidenceRate id.}
 \usage{
-getIncidenceRateGenerationInformation(incidenceRateId, sourceKey, baseUrl)
+getIncidenceRateGenerationInformation(incidenceRateId, baseUrl)
 }
 \arguments{
 \item{incidenceRateId}{An integer id representing the id that uniquely identifies a IncidenceRate
 definition in a WebApi instance.}
-
-\item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
-Configuration page}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -24,13 +21,11 @@ An R object representing the IncidenceRate definition
 Get generation information for IncidenceRate id.
 }
 \details{
-Get generation (execution) information about IncidenceRate for a given combination of sourceKey and
-incidenceRateId.
+Get generation (execution) information about IncidenceRate for a incidenceRateId.
 }
 \examples{
 \dontrun{
 getIncidenceRateGenerationInformation(incidenceRateId = 13242,
-                                      baseUrl = "http://server.org:80/WebAPI",
-                                      sourceKey = "HCUP")
+                                      baseUrl = "http://server.org:80/WebAPI")
 }
 }

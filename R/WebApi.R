@@ -3,48 +3,20 @@
 # Copyright 2020 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-.checkBaseUrl <- function(baseUrl) {
-  success <- tryCatch({
-    getWebApiVersion(baseUrl = baseUrl)
-    TRUE
-  }, error = function(e) {
-    FALSE
-  })
-  
-  if (!success) {
-    stop("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
-         "Please verify\n",
-         "- is it in the form http://server.org:80/WebAPI,\n",
-         "- are you are connected to the network")
-  }
-  
-  return(success)
-}
-
-.convertNulltoNA <- function(thisList) {
-  for (n in names(thisList)) {
-    if (is.null(thisList[n][[1]])) {
-      thisList[n] <- NA
-    }
-  }
-  thisList
-}
-
-#' Get Priority Vocabulary Source Key
-#'
+#' Get Priority Vocabulary Source Key \lifecycle{stable}
 #' @details
 #' Obtains the source key of the default OMOP Vocabulary in WebApi.
 #'
@@ -62,8 +34,7 @@ getPriorityVocabularyKey <- function(baseUrl) {
   json$sourceKey
 }
 
-#' Get the WebAPI version number
-#'
+#' Get the WebAPI version number \lifecycle{stable}
 #' @details
 #' Obtains the WebAPI version number.
 #'
@@ -74,17 +45,29 @@ getPriorityVocabularyKey <- function(baseUrl) {
 #'
 #' @export
 getWebApiVersion <- function(baseUrl) {
-  url <- sprintf("%s/info", baseUrl)
-  json <- httr::GET(url)
-  (httr::content(json))$version
+  url <- paste0(baseUrl, "/info")
+  if (!.isValidUrl(url)) {
+    ParallelLogger::logError("Please check if the url is valid. ",
+                             baseUrl,
+                             " . Failed while retrieving WebApi information.")
+    stop()
+  }
+  response <- httr::GET(url)
+  if (response$status %in% c(200)) {
+    version <- (httr::content(response))$version
+  } else {
+    ParallelLogger::logError("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
+                             "Please verify\n",
+                             "- is it in the form http://server.org:80/WebAPI,\n",
+                             "- are you are connected to the network",
+                             "Status code: ",
+                             response$status)
+    stop()
+  }
+  return(version)
 }
 
-.formatName <- function(name) {
-  gsub("_", " ", gsub("\\[(.*?)\\]_", "", gsub(" ", "_", name)))
-}
-
-#' Get the data sources in the WebAPI instance
-#'
+#' Get the data sources in the WebAPI instance \lifecycle{stable}
 #' @details
 #' Obtains the data sources configured in the WebAPI instance.
 #'
@@ -100,7 +83,7 @@ getCdmSources <- function(baseUrl) {
   request <- httr::GET(url)
   httr::stop_for_status(request)
   sources <- httr::content(request)
-  
+
   sourceDetails <- lapply(sources, function(s) {
     cdmDatabaseSchema <- NA
     vocabDatabaseSchema <- NA
@@ -109,13 +92,13 @@ getCdmSources <- function(baseUrl) {
       for (i in 1:length(s$daimons)) {
         if (!is.na(s$daimons[[i]]$daimonType)) {
           if (toupper(s$daimons[[i]]$daimonType) == toupper("cdm")) {
-            cdmDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          cdmDatabaseSchema <- s$daimons[[i]]$tableQualifier
           }
           if (toupper(s$daimons[[i]]$daimonType) == toupper("vocabulary")) {
-            vocabDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          vocabDatabaseSchema <- s$daimons[[i]]$tableQualifier
           }
           if (toupper(s$daimons[[i]]$daimonType) == toupper("results")) {
-            resultsDatabaseSchema <- s$daimons[[i]]$tableQualifier
+          resultsDatabaseSchema <- s$daimons[[i]]$tableQualifier
           }
         }
       }
@@ -128,189 +111,63 @@ getCdmSources <- function(baseUrl) {
                    vocabDatabaseSchema = vocabDatabaseSchema,
                    resultsDatabaseSchema = resultsDatabaseSchema)
   })
-  
+
   return(dplyr::bind_rows(sourceDetails))
 }
 
 
-#' Retrieve the meta data of all WebApi definitions
-#' 
-#' @param categories        These are the categories in WebApi. The valid options are conceptSet, 
-#'                          cohort, incidenceRate, estimation, prediction, characterization, pathway.
-#'
+#' Check if an id is valid. \lifecycle{stable}
 #' @details
-#' Obtains the meta data of WebApi specifications such as id, name, created/modified 
-#' details, hash object, etc. The following function categories are supported. 
-#' Concept-set, Cohort-definition, Cohort-characterization, Pathway-analysis, Incidence rate (ir), 
-#' estimation and prediction. This function is useful to retrieve the current specifications.
+#' Checks if a set of id for a category is valid, i.e. checks if all the ids exists in the WebApi i.e.
+#' valid.
 #'
 #' @template BaseUrl
+#' @template Category
+#' @param ids   A list of integer id(s) of the category to be tested for validity.
+#' @return
+#' A logical vector indicating if an ID is valid.
 #'
-#' @return          
-#' A tibble of specification metadata. Note: modifiedDate and createdDate are
-#' returned as text/character.
-#' 
 #' @examples
 #' \dontrun{
-#' getDefinitionsMetadata(baseUrl = "http://server.org:80/WebAPI")
+#' isValidId(ids = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI", category = "cohort")
 #' }
-#' 
 #' @export
-getDefinitionsMetadata <- function(baseUrl, categories) {
-  .checkBaseUrl(baseUrl)
-  
-  # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis'
-  # the return are nested within 'content'
-  # group1 and group2 are categories that are different based on how WebApi is implemented.
-  group1 <- c('conceptSet','cohort','incidenceRate','estimation','prediction')
-  group2 <- c('characterization','pathway')
-  
+isValidId <- function(ids, baseUrl, category) {
+  arguments <- .getStandardCategories()
+  argument <- arguments %>% dplyr::filter(.data$categoryStandard == !!category)
+
   errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertCharacter(categories, min.len = 1, add = errorMessage)
-  checkmate::assertNames(x = categories, subset.of = c(group1, group2) )
+  checkmate::assertIntegerish(ids, add = errorMessage)
+  checkmate::assertChoice(x = category, choices = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
-  
-  listOfIds <- list()
-  for (i in length(categories)) {
-    category <- categories[[i]]
-    if (category %in% group1) {
-      if (category == 'conceptSet') 
-      {
-        categoryUrl = 'conceptset'
-      } else if (category == 'cohort') 
-      {
-        categoryUrl = 'cohortdefinition'
-      } else if (category == 'incidenceRate') 
-      {
-        categoryUrl = 'ir'
-      } else if (category == 'estimation') 
-      {
-        categoryUrl = 'estimation'
-      } else if (category == 'prediction') 
-      {
-        categoryUrl = 'prediction'
-      }
-      
-      url <- paste(baseUrl, categoryUrl, '?size=100000000', sep = "/")
-      request <- httr::GET(url)
-      httr::stop_for_status(request)
-      listOfIds[[category]] <- httr::content(request) %>%
-        purrr::map(function(x)
-          purrr::map(x, function(y)
-            ifelse(is.null(y), NA, y))) %>% # convert NULL to NA in list
-        dplyr::bind_rows() %>%
-        dplyr::mutate(createdDate = as.character(.data$createdDate),
-                      modifiedDate = as.character(.data$modifiedDate))
-      
-    } else if (category %in% group2) {
-      if (category == 'characterization') 
-      {
-        categoryUrl = 'cohort-characterization'
-      } else if (category == 'pathway') 
-      {
-        categoryUrl = 'pathway-analysis'
-      }
-      
-      url <- paste(baseUrl, categoryUrl, '?size=100000000', sep = "/")
-      request <- httr::GET(url)
-      httr::stop_for_status(request)
-      listOfIds[[category]] <-
-        httr::content(request)$content %>%
-        purrr::map(function(x)
-          purrr::map(x, function(y)
-            ifelse(is.null(y), NA, y))) %>%  # convert NULL to NA in list
-        dplyr::bind_rows()
-      
-      if (category == 'characterization') {
-        listOfIds[[category]] <-
-          listOfIds[[category]] %>%
-          dplyr::rename(createdDate = .data$createdAt,
-                        modifiedDate = .data$updatedAt,
-                        modifiedBy = .data$updatedBy )
-      }
-      
-      listOfIds[[category]] <-
-        listOfIds[[category]] %>%
-        dplyr::mutate(category = category) %>%
-        dplyr::mutate(createdDate = as.character(.data$createdDate),
-                      modifiedDate = as.character(.data$modifiedDate))
-      
-    }
-  }
-  # to do: createdDate and modifiedDate are in character format. Need to make them date/time.
-  # but this does not appear to be consistent.
-  listOfIds <- dplyr::bind_rows(listOfIds) %>%
-    dplyr::mutate(category = SqlRender::camelCaseToTitleCase(category))
-  return(listOfIds)
+
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl,
+                                     category = argument$categoryStandard) %>% dplyr::select(.data$id) %>%
+    dplyr::distinct() %>% dplyr::pull(.data$id) %>% as.integer()
+  return(as.integer(ids) %in% validIds)
 }
 
 
-
-#' Post a definition into WebApi
-#'
+#' Check if source key is valid. \lifecycle{stable}
 #' @details
-#' Post a definition into WebAPI
+#' Checks if a set of sourceKey(s) are valid, i.e. checks if all the sourceKey(s) exists in the WebApi
+#' i.e. valid.
 #'
-#' @template BaseUrl 
-#' @param name        A valid name for the definition. WebApi will use this name (if valid) as
-#'                    the name of the definition. WebApi checks for validity,
-#'                    such as uniqueness, unaccepted character etc. An error might be thrown.
-#' @param type        The type of expression in WebApi. Currently only 'cohort' is supported 
-#'                    to refer cohort definition specification expression.
-#' @param object      An R list object containing the expression for the specification. 
-#'                    This will be converted to JSON by function and posted into the WebApi.
-#'                    Note: only limited checks are performed in R to check the validity of this
-#'                    expression.               
-#' @return            This function will return a dataframe object with one row
-#'                    describing the posted WebApi expression and its details.
-#'                    If unsuccessful a STOP message will be shown.
-#'                         
+#' @template BaseUrl
+#' @param sourceKeys   The source key(s) for a CDM instance in WebAPI, as defined in the Configuration
+#'                     page.
+#' @return
+#' A logical vector indicating if an ID is valid.
+#'
 #' @examples
 #' \dontrun{
-#' validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, 
-#'                                            cohortId = 15873)$expression
-#' postSpecification(name = 'new name for expression in target',
-#'                   baseUrl = "http://server.org:80/WebAPI",
-#'                   jsonExpression = validJsonExpression)
+#' isValidSourceKey(sourceKeys = c("HCUP", "CCA"),
+#'                  baseUrl = "http://server.org:80/WebAPI",
+#'                  category = "cohort")
 #' }
 #' @export
-postDefinition <- function(baseUrl, 
-                           name,
-                           type = 'cohort',
-                           object) {
-  .checkBaseUrl(baseUrl)
-  errorMessage <- checkmate::makeAssertCollection()
-  checkmate::assertCharacter(name, add = errorMessage)
-  checkmate::assertCharacter(type, add = errorMessage)
-  checkmate::assertList(x = object, 
-                        types = c('character', 'list'), 
-                        any.missing = FALSE,
-                        null.ok = FALSE, 
-                        add = errorMessage
-  )
-  checkmate::reportAssertions(errorMessage)
-  
-  jsonExpression <- RJSONIO::toJSON(object)
-  
-  if (type == 'cohort') {
-    json_body <- paste0("{\"name\":\"",
-                        as.character(name),
-                        "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
-                        jsonExpression,
-                        "}")
-    # POST the JSON
-    response <- httr::POST(url = paste0(baseUrl, "/cohortdefinition/"),
-                           body = json_body,
-                           config = httr::add_headers(.headers = c('Content-Type' = 'application/json')))
-    # Expect a "200" response that it worked
-    if (response$status_code != 200) {
-      stop(paste0("Post attempt failed for cohort : ", name))
-    } else {
-      metadataForAllSpecifications <- getDefinitionsMetadata(baseUrl = baseUrl, categories = "cohortdefinition") %>% 
-        dplyr::filter(.data$name == !!name)
-      return(metadataForAllSpecifications)
-    }
-  } else {
-    stop(paste0('type = ', type, " is not supported in this version. Post attempt failed."))
-  }
+isValidSourceKey <- function(sourceKeys, baseUrl) {
+  cdmSources <- getCdmSources(baseUrl)
+  validSourceKeys <- cdmSources %>% dplyr::select(.data$sourceKey) %>% dplyr::distinct() %>% dplyr::pull(.data$sourceKey)
+  return(sourceKeys %in% validSourceKeys)
 }

@@ -4,18 +4,11 @@
 \alias{getCharacterizationGenerationInformation}
 \title{Get generation information for Characterization id.}
 \usage{
-getCharacterizationGenerationInformation(
-  characterizationId,
-  sourceKey,
-  baseUrl
-)
+getCharacterizationGenerationInformation(characterizationId, baseUrl)
 }
 \arguments{
 \item{characterizationId}{An integer id representing the id that uniquely identifies a
 Characterization definition in a WebApi instance.}
-
-\item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
-Configuration page}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
@@ -28,13 +21,11 @@ An R object representing the Characterization definition
 Get generation information for Characterization id.
 }
 \details{
-Get generation (execution) information about Characterization for a given combination of sourceKey
-and characterizationId.
+Get generation (execution) information about Characterization for a characterizationId.
 }
 \examples{
 \dontrun{
 getCharacterizationGenerationInformation(characterizationId = 13242,
-                                         baseUrl = "http://server.org:80/WebAPI",
-                                         sourceKey = "HCUP")
+                                         baseUrl = "http://server.org:80/WebAPI")
 }
 }

@@ -21,8 +21,8 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Ajit Londhe \email{alondhe@amgen.com}
   \item Martijn Schuemie
+  \item Ajit Londhe \email{alondhe@amgen.com}
   \item Frank DeFalco
 }
 

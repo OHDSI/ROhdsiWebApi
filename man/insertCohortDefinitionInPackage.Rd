@@ -2,7 +2,7 @@
 % Please edit documentation in R/CohortDefinition.R
 \name{insertCohortDefinitionInPackage}
 \alias{insertCohortDefinitionInPackage}
-\title{Load a cohort definition and insert it into this package}
+\title{Load a cohort definition and insert it into this package \lifecycle{maturing}}
 \usage{
 insertCohortDefinitionInPackage(
   cohortId,
@@ -17,7 +17,7 @@ insertCohortDefinitionInPackage(
 \item{cohortId}{An integer id representing the id that uniquely identifies a cohort definition
 in a WebApi instance.}
 
-\item{name}{The name that will be used for the json and SQL files. If not provided, the
+\item{name}{The name that will be used for the JSON and SQL files. If not provided, the
 name in cohort will be used, but this may not lead to valid file names.}
 
 \item{jsonFolder}{Path to the folder where the JSON representation will be saved.}
@@ -33,16 +33,17 @@ Note that if TRUE, several additional tables are expected to exists as
 described in the details.}
 }
 \description{
-Load a cohort definition and insert it into this package
+Load a cohort definition and insert it into this package \lifecycle{maturing}
 }
 \details{
 Load a cohort definition from a WebApi instance and insert it into this package. This will fetch
-the json object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the
+the JSON object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the
 template SQL and store it in another folder (defaults to the 'inst/sql/sql_server' folder). Both
 folders will be created if they don't exist. When using generateStats = TRUE, the following tables
 are required to exist when executing the SQL: cohort_inclusion, cohort_inclusion_result,
 cohort_inclusion_stats, and cohort_summary_stats. Also note that the cohort_inclusion table should
-be populated with the names of the rules prior to executing the cohort definition SQL.
+be populated with the names of the rules prior to executing the cohort definition SQL. Note:
+generate inclusion statistics are created for all by default.
 }
 \examples{
 \dontrun{
