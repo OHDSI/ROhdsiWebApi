@@ -4,7 +4,7 @@
 \alias{postCharacterizationDefinition}
 \title{Post Characterization definition. \lifecycle{maturing}}
 \usage{
-postCharacterizationDefinition(name, CharacterizationDefinition, baseUrl)
+postCharacterizationDefinition(name, characterizationDefinition, baseUrl)
 }
 \arguments{
 \item{name}{A valid name for the definition. WebApi will use this name (if
@@ -12,7 +12,7 @@ valid) as the name of the definition. WebApi checks for
 validity, such as uniqueness, absence of unacceptable character
 etc. An error might be thrown.}
 
-\item{CharacterizationDefinition}{An R list object containing the expression for the
+\item{characterizationDefinition}{An R list object containing the expression for the
 specification. This will be converted to JSON expression by
 function and posted into the WebApi. Note: only limited checks
 are performed in R to check the validity of this expression.}
@@ -34,7 +34,7 @@ Post Characterization definition to WebAPI
 \examples{
 \dontrun{
 postCharacterizationDefinition(name = "new valid name",
-                               CharacterizationDefinition = definition,
+                               characterizationDefinition = definition,
                                baseUrl = "http://server.org:80/WebAPI")
 }
 }

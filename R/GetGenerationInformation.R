@@ -78,20 +78,26 @@ getGenerationInformation <- function(id, category, baseUrl) {
       stop()
     }
     response <- httr::content(response)
-    responseAll <- list()
-    for (i in (1:length(response))) {
-      responseAll[[i]] <- response[[i]] %>% purrr::map(function(x) {
-        purrr::map(x, function(y) {
-          ifelse(is.null(y), NA, y)
-        })
-      }) %>% unlist(recursive = TRUE,
-                    use.names = TRUE) %>% as.matrix() %>% t() %>% tidyr::as_tibble() %>%
-        .removeStringFromDataFrameName(string = "id.") %>% utils::type.convert(as.is = TRUE, dec = ".") %>% .addSourceKeyToSourceId(baseUrl = baseUrl) %>% .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
-        .normalizeDateAndTimeTypes()
+    if (!length(response) == 0) {
+      responseAll <- list()
+      for (i in (1:length(response))) {
+        responseAll[[i]] <- response[[i]] %>% purrr::map(function(x) {
+          purrr::map(x, function(y) {
+            ifelse(is.null(y), NA, y)
+          })
+        }) %>% unlist(recursive = TRUE,
+                      use.names = TRUE) %>% as.matrix() %>% t() %>% tidyr::as_tibble() %>%
+          .removeStringFromDataFrameName(string = "id.") %>% utils::type.convert(as.is = TRUE, dec = ".") %>% .addSourceKeyToSourceId(baseUrl = baseUrl) %>% .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
+          .normalizeDateAndTimeTypes()
+      }
+      response <- dplyr::bind_rows(responseAll)
+      denominator <- nrow(response)
+      numerator <- nrow(response %>% dplyr::filter(.data$status %in% c("COMPLETE", "COMPLETED")))
+    } else {
+      denominator = 0
+      numerator = 0
+      response <- tidyr::tibble()
     }
-    response <- dplyr::bind_rows(responseAll)
-    denominator <- nrow(response)
-    numerator <- nrow(response %>% dplyr::filter(.data$status %in% c("COMPLETE", "COMPLETED")))
   }
 
   ##### incidence rate ####

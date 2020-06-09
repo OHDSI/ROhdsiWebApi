@@ -173,7 +173,7 @@ detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                               as the name of the definition. WebApi checks for validity, such as
 #'                               uniqueness, absence of unacceptable character etc. An error might be
 #'                               thrown.
-#' @param ConceptSetDefinition   An R list object containing the expression for the specification. This
+#' @param conceptSetDefinition   An R list object containing the expression for the specification. This
 #'                               will be converted to JSON expression by function and posted into the
 #'                               WebApi. Note: only limited checks are performed in R to check the
 #'                               validity of this expression.
@@ -184,15 +184,15 @@ detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postConceptSetDefinition(name = "new valid name",
-#'                          ConceptSetDefinition = definition,
+#'                          conceptSetDefinition = definition,
 #'                          baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postConceptSetDefinition <- function(name, ConceptSetDefinition, baseUrl) {
+postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "conceptSet",
-                           definition = ConceptSetDefinition)
+                           definition = conceptSetDefinition)
   return(result)
 }
 #' Get the meta data for Cohort definitions. \lifecycle{stable}
@@ -348,7 +348,7 @@ detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                           the name of the definition. WebApi checks for validity, such as
 #'                           uniqueness, absence of unacceptable character etc. An error might be
 #'                           thrown.
-#' @param CohortDefinition   An R list object containing the expression for the specification. This
+#' @param cohortDefinition   An R list object containing the expression for the specification. This
 #'                           will be converted to JSON expression by function and posted into the
 #'                           WebApi. Note: only limited checks are performed in R to check the validity
 #'                           of this expression.
@@ -359,15 +359,15 @@ detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postCohortDefinition(name = "new valid name",
-#'                      CohortDefinition = definition,
+#'                      cohortDefinition = definition,
 #'                      baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postCohortDefinition <- function(name, CohortDefinition, baseUrl) {
+postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "cohort",
-                           definition = CohortDefinition)
+                           definition = cohortDefinition)
   return(result)
 }
 
@@ -628,7 +628,7 @@ detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                                  valid) as the name of the definition. WebApi checks for validity,
 #'                                  such as uniqueness, absence of unacceptable character etc. An error
 #'                                  might be thrown.
-#' @param IncidenceRateDefinition   An R list object containing the expression for the specification.
+#' @param incidenceRateDefinition   An R list object containing the expression for the specification.
 #'                                  This will be converted to JSON expression by function and posted
 #'                                  into the WebApi. Note: only limited checks are performed in R to
 #'                                  check the validity of this expression.
@@ -639,15 +639,15 @@ detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postIncidenceRateDefinition(name = "new valid name",
-#'                             IncidenceRateDefinition = definition,
+#'                             incidenceRateDefinition = definition,
 #'                             baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postIncidenceRateDefinition <- function(name, IncidenceRateDefinition, baseUrl) {
+postIncidenceRateDefinition <- function(name, incidenceRateDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "incidenceRate",
-                           definition = IncidenceRateDefinition)
+                           definition = incidenceRateDefinition)
   return(result)
 }
 
@@ -909,7 +909,7 @@ detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                               as the name of the definition. WebApi checks for validity, such as
 #'                               uniqueness, absence of unacceptable character etc. An error might be
 #'                               thrown.
-#' @param EstimationDefinition   An R list object containing the expression for the specification. This
+#' @param estimationDefinition   An R list object containing the expression for the specification. This
 #'                               will be converted to JSON expression by function and posted into the
 #'                               WebApi. Note: only limited checks are performed in R to check the
 #'                               validity of this expression.
@@ -920,15 +920,15 @@ detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postEstimationDefinition(name = "new valid name",
-#'                          EstimationDefinition = definition,
+#'                          estimationDefinition = definition,
 #'                          baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postEstimationDefinition <- function(name, EstimationDefinition, baseUrl) {
+postEstimationDefinition <- function(name, estimationDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "estimation",
-                           definition = EstimationDefinition)
+                           definition = estimationDefinition)
   return(result)
 }
 #' Get the meta data for Prediction definitions. \lifecycle{stable}
@@ -1086,7 +1086,7 @@ detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                               as the name of the definition. WebApi checks for validity, such as
 #'                               uniqueness, absence of unacceptable character etc. An error might be
 #'                               thrown.
-#' @param PredictionDefinition   An R list object containing the expression for the specification. This
+#' @param predictionDefinition   An R list object containing the expression for the specification. This
 #'                               will be converted to JSON expression by function and posted into the
 #'                               WebApi. Note: only limited checks are performed in R to check the
 #'                               validity of this expression.
@@ -1097,15 +1097,15 @@ detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postPredictionDefinition(name = "new valid name",
-#'                          PredictionDefinition = definition,
+#'                          predictionDefinition = definition,
 #'                          baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postPredictionDefinition <- function(name, PredictionDefinition, baseUrl) {
+postPredictionDefinition <- function(name, predictionDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "prediction",
-                           definition = PredictionDefinition)
+                           definition = predictionDefinition)
   return(result)
 }
 #' Get the meta data for Characterization definitions. \lifecycle{stable}
@@ -1270,7 +1270,7 @@ detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                                     valid) as the name of the definition. WebApi checks for
 #'                                     validity, such as uniqueness, absence of unacceptable character
 #'                                     etc. An error might be thrown.
-#' @param CharacterizationDefinition   An R list object containing the expression for the
+#' @param characterizationDefinition   An R list object containing the expression for the
 #'                                     specification. This will be converted to JSON expression by
 #'                                     function and posted into the WebApi. Note: only limited checks
 #'                                     are performed in R to check the validity of this expression.
@@ -1281,15 +1281,15 @@ detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postCharacterizationDefinition(name = "new valid name",
-#'                                CharacterizationDefinition = definition,
+#'                                characterizationDefinition = definition,
 #'                                baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postCharacterizationDefinition <- function(name, CharacterizationDefinition, baseUrl) {
+postCharacterizationDefinition <- function(name, characterizationDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "characterization",
-                           definition = CharacterizationDefinition)
+                           definition = characterizationDefinition)
   return(result)
 }
 
@@ -1550,7 +1550,7 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                            the name of the definition. WebApi checks for validity, such as
 #'                            uniqueness, absence of unacceptable character etc. An error might be
 #'                            thrown.
-#' @param PathwayDefinition   An R list object containing the expression for the specification. This
+#' @param pathwayDefinition   An R list object containing the expression for the specification. This
 #'                            will be converted to JSON expression by function and posted into the
 #'                            WebApi. Note: only limited checks are performed in R to check the
 #'                            validity of this expression.
@@ -1561,15 +1561,15 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @examples
 #' \dontrun{
 #' postPathwayDefinition(name = "new valid name",
-#'                       PathwayDefinition = definition,
+#'                       pathwayDefinition = definition,
 #'                       baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postPathwayDefinition <- function(name, PathwayDefinition, baseUrl) {
+postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "pathway",
-                           definition = PathwayDefinition)
+                           definition = pathwayDefinition)
   return(result)
 }
 
