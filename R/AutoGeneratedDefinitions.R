@@ -173,7 +173,7 @@ detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                               as the name of the definition. WebApi checks for validity, such as
 #'                               uniqueness, absence of unacceptable character etc. An error might be
 #'                               thrown.
-#' @param ConceptSetDefinition   An R list object containing the expression for the specification. This
+#' @param conceptSetDefinition   An R list object containing the expression for the specification. This
 #'                               will be converted to JSON expression by function and posted into the
 #'                               WebApi. Note: only limited checks are performed in R to check the
 #'                               validity of this expression.
@@ -348,7 +348,7 @@ detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                           the name of the definition. WebApi checks for validity, such as
 #'                           uniqueness, absence of unacceptable character etc. An error might be
 #'                           thrown.
-#' @param CohortDefinition   An R list object containing the expression for the specification. This
+#' @param cohortDefinition   An R list object containing the expression for the specification. This
 #'                           will be converted to JSON expression by function and posted into the
 #'                           WebApi. Note: only limited checks are performed in R to check the validity
 #'                           of this expression.
@@ -628,7 +628,7 @@ detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                                  valid) as the name of the definition. WebApi checks for validity,
 #'                                  such as uniqueness, absence of unacceptable character etc. An error
 #'                                  might be thrown.
-#' @param IncidenceRateDefinition   An R list object containing the expression for the specification.
+#' @param incidenceRateDefinition   An R list object containing the expression for the specification.
 #'                                  This will be converted to JSON expression by function and posted
 #'                                  into the WebApi. Note: only limited checks are performed in R to
 #'                                  check the validity of this expression.
@@ -909,7 +909,7 @@ detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                               as the name of the definition. WebApi checks for validity, such as
 #'                               uniqueness, absence of unacceptable character etc. An error might be
 #'                               thrown.
-#' @param EstimationDefinition   An R list object containing the expression for the specification. This
+#' @param estimationDefinition   An R list object containing the expression for the specification. This
 #'                               will be converted to JSON expression by function and posted into the
 #'                               WebApi. Note: only limited checks are performed in R to check the
 #'                               validity of this expression.
@@ -1086,7 +1086,7 @@ detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                               as the name of the definition. WebApi checks for validity, such as
 #'                               uniqueness, absence of unacceptable character etc. An error might be
 #'                               thrown.
-#' @param PredictionDefinition   An R list object containing the expression for the specification. This
+#' @param predictionDefinition   An R list object containing the expression for the specification. This
 #'                               will be converted to JSON expression by function and posted into the
 #'                               WebApi. Note: only limited checks are performed in R to check the
 #'                               validity of this expression.
@@ -1270,7 +1270,7 @@ detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                                     valid) as the name of the definition. WebApi checks for
 #'                                     validity, such as uniqueness, absence of unacceptable character
 #'                                     etc. An error might be thrown.
-#' @param CharacterizationDefinition   An R list object containing the expression for the
+#' @param characterizationDefinition   An R list object containing the expression for the
 #'                                     specification. This will be converted to JSON expression by
 #'                                     function and posted into the WebApi. Note: only limited checks
 #'                                     are performed in R to check the validity of this expression.
@@ -1550,7 +1550,7 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                            the name of the definition. WebApi checks for validity, such as
 #'                            uniqueness, absence of unacceptable character etc. An error might be
 #'                            thrown.
-#' @param PathwayDefinition   An R list object containing the expression for the specification. This
+#' @param pathwayDefinition   An R list object containing the expression for the specification. This
 #'                            will be converted to JSON expression by function and posted into the
 #'                            WebApi. Note: only limited checks are performed in R to check the
 #'                            validity of this expression.

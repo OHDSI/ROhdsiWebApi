@@ -12,14 +12,14 @@ as the name of the definition. WebApi checks for validity, such as
 uniqueness, absence of unacceptable character etc. An error might be
 thrown.}
 
-\item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
-
-\item{PredictionDefinition}{An R list object containing the expression for the specification. This
+\item{predictionDefinition}{An R list object containing the expression for the specification. This
 will be converted to JSON expression by function and posted into the
 WebApi. Note: only limited checks are performed in R to check the
 validity of this expression.}
+
+\item{baseUrl}{The base URL for the WebApi instance, for example:
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
 }
 \value{
 This function will return a dataframe object with one row describing the posted WebApi expression
