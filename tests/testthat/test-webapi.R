@@ -170,6 +170,11 @@ testthat::test_that("Test postCohortInvokeStop (positive test)", {
   testthat::skip_if(baseUrl == "")
   name = paste0("this is a test and may be deleted-", paste0(sample(letters, size = 10, replace = TRUE)))
   expression <- jsonlite::read_json("tests/testthat/json/cohort.txt")
+  postDefinition1 <- ROhdsiWebApi::postDefinition(name = paste0(name, 'd'), category = 'cohort',
+                                                       baseUrl = baseUrl, definition = expression)
+  testthat::expect_s3_class(object = postDefinition1, class = 'tbl')
+  delete <- ROhdsiWebApi::deleteCohortDefinition(cohortId = postDefinition1$id, baseUrl = baseUrl)
+  testthat::expect_null(object = delete)
   postDefinition <- ROhdsiWebApi::postCohortDefinition(name = name, 
                                                        baseUrl = baseUrl, cohortDefinition = expression)
   testthat::expect_s3_class(object = postDefinition, class = 'tbl')
