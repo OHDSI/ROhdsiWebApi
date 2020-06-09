@@ -146,12 +146,15 @@ testthat::test_that("Test evaluate conceptSetExpression (positive test)", {
   testthat::skip_if(baseUrl == "")
   name = paste0("this is a test and may be deleted-", paste0(sample(letters, size = 10, replace = TRUE)))
   expression <- jsonlite::read_json(system.file("/tests/testthat/json/conceptSetExpression.txt", package = "ROhdsiWebApi"))
-  postDefinition1 <- ROhdsiWebApi::postDefinition(name = name, category = 'conceptSet',
+  postDefinition1 <- ROhdsiWebApi::postDefinition(name = paste0(name,"d"), category = 'conceptSet',
                                                            baseUrl = baseUrl, definition = expression)
-  postDefinition <- ROhdsiWebApi::postConceptSetDefinition(name = name, 
+  testthat::expect_s3_class(object = postDefinition1, class = 'tbl')
+  deleteP <- ROhdsiWebApi::deleteConceptSetDefinition(conceptSetId = postDefinition1$id, baseUrl = baseUrl)
+  testthat::expect_null(object = deleteP)
+  postDefinition2 <- ROhdsiWebApi::postConceptSetDefinition(name = name, 
                                                        baseUrl = baseUrl, conceptSetDefinition = expression)
-  testthat::expect_s3_class(object = postDefinition, class = 'tbl')
-  conceptSetDefinition <- ROhdsiWebApi::getConceptSetDefinition(conceptSetId = postDefinition$id, baseUrl = baseUrl)
+  testthat::expect_s3_class(object = postDefinition2, class = 'tbl')
+  conceptSetDefinition <- ROhdsiWebApi::getConceptSetDefinition(conceptSetId = postDefinition2$id, baseUrl = baseUrl)
   expressionFromWebApi <- conceptSetDefinition$expression
   testthat::expect_type(object = expressionFromWebApi,type = 'list' )
   testthat::expect_gt(object = length(expressionFromWebApi), expected = 0)
@@ -165,6 +168,8 @@ testthat::test_that("Test evaluate conceptSetExpression (positive test)", {
   testthat::expect_s3_class(object = concepts, class = 'tbl')
   validTest <- ROhdsiWebApi::isValidConceptSetId(conceptSetIds = postDefinition$id, baseUrl = baseUrl)
   testthat::expect_true(object = validTest)
+  deleteP2 <- ROhdsiWebApi::deleteDefinition(id = postDefinition1$id, baseUrl = baseUrl, category = 'conceptSet')
+  testthat::expect_null(object = deleteP2)
   })
 
 
@@ -177,18 +182,20 @@ testthat::test_that("Test postCohortInvokeStop (positive test)", {
   testthat::expect_s3_class(object = postDefinition1, class = 'tbl')
   delete <- ROhdsiWebApi::deleteCohortDefinition(cohortId = postDefinition1$id, baseUrl = baseUrl)
   testthat::expect_null(object = delete)
-  postDefinition <- ROhdsiWebApi::postCohortDefinition(name = name, 
+  postDefinition2 <- ROhdsiWebApi::postCohortDefinition(name = name, 
                                                        baseUrl = baseUrl, cohortDefinition = expression)
-  testthat::expect_s3_class(object = postDefinition, class = 'tbl')
-  expressionFromWebApi <- ROhdsiWebApi::getCohortDefinition(cohortId = postDefinition$id, baseUrl = baseUrl)$expression
+  testthat::expect_s3_class(object = postDefinition2, class = 'tbl')
+  expressionFromWebApi <- ROhdsiWebApi::getCohortDefinition(cohortId = postDefinition2$id, baseUrl = baseUrl)$expression
   testthat::expect_type(object = expressionFromWebApi,type = 'list' )
   testthat::expect_gt(object = length(expressionFromWebApi), expected = 0)
   
-  invoke <- ROhdsiWebApi::invokeCohortGeneration(cohortId = postDefinition$id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K')
+  invoke <- ROhdsiWebApi::invokeCohortGeneration(cohortId = postDefinition2$id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K')
   testthat::expect_s3_class(object = invoke, class = 'tbl')
   testthat::expect_equal(object = invoke$status, expected = c('STARTING') )
-  stopGeneration <- ROhdsiWebApi::cancelCohortGeneration(cohortId = postDefinition$id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K' )
+  stopGeneration <- ROhdsiWebApi::cancelCohortGeneration(cohortId = postDefinition2$id, baseUrl = baseUrl, sourceKey = 'SYNPUF1K' )
   testthat::expect_null(object = stopGeneration)
+  deleteP2 <- ROhdsiWebApi::deleteDefinition(id = postDefinition2$id, baseUrl = baseUrl, category = 'cohort')
+  testthat::expect_null(object = deleteP2)
 })
 
 
