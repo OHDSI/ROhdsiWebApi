@@ -24,7 +24,9 @@ output
 ```
 
 The package follows a generic design pattern: 
+
 * Functions that go from WebApi to R: will return a R-object (e.g. list, data frame). The function will handle the conversion of non R-objects like JSON objects into R-objects in the background. The returned objects may be inspected in R. We have ensured that all returned objects are represented in the proper data types e.g. dates in are type date, instead of string, use of integer where appropriate etc.
+
 * Functions that go from R into WebApi: will start with a R-object (e.g. list, data frame). If the WebApi requires a JSON object, the function will handle the conversion of R-object into JSON in the background. 
 
 The package follows a consistent naming conventions - with the identifier for the functional category clearly in the name. There are no direct reference to 'Atlas', and instead 'WebApi' is used = because the package is designed to interface directly with WebApi.
@@ -43,6 +45,7 @@ remotes::install_github("OHDSI/ROhdsiWebApi")
 ```
 
 ## User Documentation
+
 * Documentation can be found on the [package website](https://ohdsi.github.io/ROhdsiWebApi).
 
 PDF versions of the documentation are also available:
