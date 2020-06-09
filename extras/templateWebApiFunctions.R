@@ -155,7 +155,7 @@ detect%categoryFirstUpper%sByName <- function(pattern, negate = FALSE, baseUrl) 
 #' @param name           A valid name for the definition. WebApi will use this name (if valid) as
 #'                       the name of the definition. WebApi checks for validity,
 #'                       such as uniqueness, absence of unacceptable character etc. An error might be thrown.
-#' @param %categoryFirstUpper%Definition    An R list object containing the expression for the specification. 
+#' @param %category%Definition    An R list object containing the expression for the specification. 
 #'                                          This will be converted to JSON expression by function and posted into the WebApi.
 #'                                          Note: only limited checks are performed in R to check the validity of this
 #'                                          expression.
