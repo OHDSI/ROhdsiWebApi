@@ -145,7 +145,9 @@ testthat::test_that("Test isValid...", {
 testthat::test_that("Test evaluate conceptSetExpression (positive test)", {
   testthat::skip_if(baseUrl == "")
   name = paste0("this is a test and may be deleted-", paste0(sample(letters, size = 10, replace = TRUE)))
-  expression <- jsonlite::read_json("tests/testthat/json/conceptSetExpression.txt")
+  expression <- jsonlite::read_json("inst/tests/testthat/json/conceptSetExpression.txt")
+  postDefinition1 <- ROhdsiWebApi::postDefinition(name = name, category = 'conceptSet',
+                                                           baseUrl = baseUrl, definition = expression)
   postDefinition <- ROhdsiWebApi::postConceptSetDefinition(name = name, 
                                                        baseUrl = baseUrl, conceptSetDefinition = expression)
   testthat::expect_s3_class(object = postDefinition, class = 'tbl')
@@ -169,7 +171,7 @@ testthat::test_that("Test evaluate conceptSetExpression (positive test)", {
 testthat::test_that("Test postCohortInvokeStop (positive test)", {
   testthat::skip_if(baseUrl == "")
   name = paste0("this is a test and may be deleted-", paste0(sample(letters, size = 10, replace = TRUE)))
-  expression <- jsonlite::read_json("tests/testthat/json/cohort.txt")
+  expression <- jsonlite::read_json("inst/tests/testthat/json/cohort.txt")
   postDefinition1 <- ROhdsiWebApi::postDefinition(name = paste0(name, 'd'), category = 'cohort',
                                                        baseUrl = baseUrl, definition = expression)
   testthat::expect_s3_class(object = postDefinition1, class = 'tbl')
