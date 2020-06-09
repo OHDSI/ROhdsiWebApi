@@ -107,14 +107,17 @@ getResults <- function(id, baseUrl, category) {
                                                                                                                                                                       .data$percentMatched))/100) %>%
           utils::type.convert(as.is = TRUE, dec = ".")
 
-          inclusionRuleStat <- response$inclusionRuleStats %>% purrr::map(function(x) {
-          purrr::map(x, function(y) {
-            ifelse(is.null(y), NA, y)
-          })
-          })
-
-          inclusionRuleStatsMode[[mode + 1]] <- tidyr::tibble(inclusionRuleStat = inclusionRuleStat) %>%
-          tidyr::unnest_wider(.data$inclusionRuleStat)
+          if (length(response$inclusionRuleStats) > 0 ) {
+            inclusionRuleStat <- response$inclusionRuleStats %>% purrr::map(function(x) {
+            purrr::map(x, function(y) {
+              ifelse(is.null(y), NA, y)
+            })
+            })
+            inclusionRuleStatsMode[[mode + 1]] <- tidyr::tibble(inclusionRuleStat = inclusionRuleStat) %>% 
+              tidyr::unnest_wider(.data$inclusionRuleStat)
+          } else {
+            inclusionRuleStatsMode[[mode + 1]] <- tidyr::tibble()
+          }
 
           if (nrow(inclusionRuleStatsMode[[mode + 1]]) > 0) {
           inclusionRuleStatsMode[[mode + 1]] <- inclusionRuleStatsMode[[mode + 1]] %>% dplyr::mutate(percentExcluded = as.numeric(sub("%",
@@ -131,11 +134,20 @@ getResults <- function(id, baseUrl, category) {
           tMapData <- jsonlite::fromJSON(response$treemapData, simplifyDataFrame = FALSE)
           treeMapResult <- list(name = c(), size = c())
           treeMapResult <- .flattenTree(node = tMapData, accumulated = treeMapResult)
-          treemapDataMode[[mode + 1]] <- dplyr::tibble(bits = treeMapResult$name,
-                                                       size = treeMapResult$size) %>%
-          dplyr::mutate(SatisfiedNumber = stringr::str_count(string = .data$bits, pattern = "1"),
-                        mode = mode,
-                        modeLong = modeLong)
+          if (is.null(treeMapResult$name) | is.null(treeMapResult$size)) {
+            treemapDataMode[[mode + 1]] <- tidyr::tibble()
+          } else {
+            treemapDataMode[[mode + 1]] <- dplyr::tibble(bits = treeMapResult$name,
+                                                         size = treeMapResult$size) %>%
+              dplyr::mutate(SatisfiedNumber = stringr::str_count(string = .data$bits, pattern = "1"),
+                            mode = mode,
+                            modeLong = modeLong)
+          }
+
+        } else {
+          inclusionRuleStats[[mode + 1]] <- tidyr::tibble()
+          treemapData[[mode + 1]] <- tidyr::tibble()
+          summary[[mode + 1]] <- tidyr::tibble()
         }
         inclusionRuleStats[[i]] <- dplyr::bind_rows(inclusionRuleStatsMode) %>% dplyr::mutate(sourceKey = generation$sourceKey,
                                                                                               sourceName = generation$sourceName)
@@ -174,6 +186,8 @@ getResults <- function(id, baseUrl, category) {
                               dec = ".") %>% .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
           dplyr::mutate(generationId = generation$id)
         response$. <- NULL
+      } else {
+        response <- tidyr::tibble()
       }
       responseAll[[i]] <- response
     }
@@ -232,6 +246,10 @@ getResults <- function(id, baseUrl, category) {
                         outcomeId = generationLoop$outcomeId,
                         incidenceRateId = id)
         }
+      } else {
+        stratifyStats[[i]] <- tidyr::tibble()
+        treemapData[[i]] <- tidyr::tibble()
+        summary[[i]] <- tidyr::tibble()
       }
     }
     stratifyStats <- dplyr::bind_rows(stratifyStats)
@@ -272,6 +290,9 @@ getResults <- function(id, baseUrl, category) {
           tidyr::pivot_wider(names_from = .data$pathways_id, values_from = .data$pathways) %>%
           utils::type.convert(as.is = TRUE,
                               dec = ".") %>% dplyr::select(-.data$.id) %>% dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName, pathwayId = id)
+      } else {
+        pathwayGroups[[i]] <- tidyr::tibble()
+        eventCodes[[i]] <- tidyr::tibble()
       }
     }
     eventCodes <- dplyr::bind_rows(eventCodes)

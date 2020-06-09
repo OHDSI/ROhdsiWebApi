@@ -20,7 +20,6 @@
 
 
 baseUrl <- Sys.getenv("ohdsiBaseUrl")
-library(magrittr)
 library(dplyr)
 
 ### Testing functions in WebApi.R
@@ -107,9 +106,9 @@ testthat::test_that("Test getCohortResults", {
   testthat::expect_gt(length(results), 0)
 })
 
-testthat::test_that("Test getCohortSql", {
+testthat::test_that("Test getCohortDefinitionSql", {
   testthat::skip_if(baseUrl == "")
-  sql <- ROhdsiWebApi::getCohortSql(cohortDefinition = getCohortDefinition(cohortId = 1774139, baseUrl = baseUrl), baseUrl = baseUrl)
+  sql <- ROhdsiWebApi::getCohortDefinitionSql(1774139, baseUrl = baseUrl)
   testthat::expect_type(sql, "character")
 })
 

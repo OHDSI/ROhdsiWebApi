@@ -9,3 +9,7 @@ compare_versions
 _pkgdown.yml
 docs
 man-roxygen
+^README.Rmd
+^NEWS.Rmd
+^README.html
+^NEWS.html

@@ -20,7 +20,6 @@
 
 
 baseUrl <- Sys.getenv("ohdsiBaseUrl")
-library(magrittr)
 library(dplyr)
 
 ### Testing functions in WebApi.R
