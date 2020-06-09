@@ -217,6 +217,25 @@ testthat::test_that("Test postCohortInvokeStop (positive test)", {
   testthat::expect_null(object = deleteP2)
 })
 
+testthat::test_that(desc = "Test getConcepts function (positive test)", {
+  testthat::skip_if(baseUrl == "")
+  getConc <- ROhdsiWebApi::getConcepts(conceptIds = c(21604686) 
+                                               , baseUrl = baseUrl)
+  testthat::expect_s3_class(object = getConc, class = 'tbl')
+  testthat::expect_equal(object = nrow(getConc), expected = 1)
+  testthat::expect_equal(object = getConc$standardConcept, expected = 'C')
+})
+
+
+
+testthat::test_that(desc = "Test getSourceConcepts function (positive test)", {
+  testthat::skip_if(baseUrl == "")
+  sourceConcept <- ROhdsiWebApi::getSourceConcepts(conceptIds = 21604686, baseUrl = baseUrl)
+  testthat::expect_s3_class(object = sourceConcept, class = 'tbl')
+  testthat::expect_equal(object = nrow(sourceConcept), expected = 1)
+  testthat::expect_equal(object = sourceConcept$standardConcept, expected = 'C')
+})
+
 
 testthat::test_that("Test CharacterizationGetInvokeStop (positive test)", {
   testthat::skip_if(baseUrl == "")
