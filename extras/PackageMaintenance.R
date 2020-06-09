@@ -129,12 +129,12 @@ for (i in (1:nrow(arguments))) { #i = 1
   
   
   
-  code <- stringr::str_replace_all(string = code, pattern = "%category%", replacement = argument$categoryStandard)
-  code <- stringr::str_replace_all(string = code, pattern = "%categoryFirstUpper%", replacement = argument$categoryFirstUpper)
+  code1 <- stringr::str_replace_all(string = code1, pattern = "%category%", replacement = argument$categoryStandard)
+  code1 <- stringr::str_replace_all(string = code1, pattern = "%categoryFirstUpper%", replacement = argument$categoryFirstUpper)
   
   sink(file = "tests/testthat/test-webapi.R",
        append = TRUE,
        type = "output")
-  writeLines(code)
+  writeLines(code1)
   sink()
 }

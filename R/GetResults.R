@@ -44,19 +44,23 @@ getResults <- function(id, baseUrl, category) {
   } else if (category %in% c("incidenceRate")) {
     executionInfo <- generationInformation$executionInfo
   }
-  generatedSuccess <- executionInfo %>% dplyr::filter(.data$status %in% c("COMPLETE",
-                                                                          "COMPLETED")) %>%
-    dplyr::filter(!is.na(.data$sourceKey))
-
-  if ("canceled" %in% colnames(generatedSuccess)) {
-    if (!is.null(generatedSuccess$canceled)) {
-      generatedSuccess <- generatedSuccess %>% dplyr::filter(.data$canceled == "FALSE")
+  if (length(executionInfo) > 0) {
+    generatedSuccess <- executionInfo %>% dplyr::filter(.data$status %in% c("COMPLETE",
+                                                                            "COMPLETED")) %>%
+      dplyr::filter(!is.na(.data$sourceKey))
+  
+    if ("canceled" %in% colnames(generatedSuccess)) {
+      if (!is.null(generatedSuccess$canceled)) {
+        generatedSuccess <- generatedSuccess %>% dplyr::filter(.data$canceled == "FALSE")
+      }
     }
-  }
-  if ("isCanceled" %in% colnames(generatedSuccess)) {
-    if (!is.null(generatedSuccess$isCanceled)) {
-      generatedSuccess <- generatedSuccess %>% dplyr::filter(.data$isCanceled == "FALSE")
+    if ("isCanceled" %in% colnames(generatedSuccess)) {
+      if (!is.null(generatedSuccess$isCanceled)) {
+        generatedSuccess <- generatedSuccess %>% dplyr::filter(.data$isCanceled == "FALSE")
+      }
     }
+  } else {
+    generatedSuccess <- tidyr::tibble()
   }
 
   ParallelLogger::logInfo("Found ",
@@ -69,7 +73,7 @@ getResults <- function(id, baseUrl, category) {
                           " result generations) to have configured source key in WebApi. Results will be retrieved for this subset.")
 
 
-  if (category == "cohort") {
+  if (category == "cohort" & nrow(generatedSuccess) > 0 ) {
     inclusionRuleStats <- list()
     treemapData <- list()
     summary <- list()
@@ -164,12 +168,16 @@ getResults <- function(id, baseUrl, category) {
     response <- list(inclusionRuleStats = inclusionRuleStats,
                      treemapData = treemapData,
                      summary = summary)
+  } else {
+    response <- list(inclusionRuleStats = tidyr::tibble(),
+                     treemapData = tidyr::tibble(),
+                     summary = tidyr::tibble())
   }
 
 
 
 
-  if (category == "characterization") {
+  if (category == "characterization" & nrow(generatedSuccess) > 0) {
     responseAll <- list()
     for (i in (1:nrow(generatedSuccess))) {
       generation <- generatedSuccess %>% dplyr::slice(i)
@@ -192,12 +200,14 @@ getResults <- function(id, baseUrl, category) {
       responseAll[[i]] <- response
     }
     response <- dplyr::bind_rows(responseAll)
+  } else {
+    response <- tidyr::tibble()
   }
 
 
 
 
-  if (category == "incidenceRate") {
+  if (category == "incidenceRate" & nrow(generatedSuccess) > 0) {
     stratifyStats <- list()
     treemapData <- list()
     summary <- list()
@@ -256,10 +266,12 @@ getResults <- function(id, baseUrl, category) {
     treemapData <- dplyr::bind_rows(treemapData)
     summary <- dplyr::bind_rows(summary)
     response <- list(summary = summary, stratifyStats = stratifyStats, treemapData = treemapData)
+  } else {
+    response <- list(summary = tidyr::tibble(), stratifyStats = tidyr::tibble(), treemapData = tidyr::tibble())
   }
 
 
-  if (category == "pathway") {
+  if (category == "pathway" & nrow(generatedSuccess) > 0) {
     eventCodes <- list()
     pathwayGroups <- list()
     for (i in (1:nrow(generatedSuccess))) {
@@ -298,6 +310,8 @@ getResults <- function(id, baseUrl, category) {
     eventCodes <- dplyr::bind_rows(eventCodes)
     pathwayGroups <- dplyr::bind_rows(pathwayGroups)
     response <- list(eventCodes = eventCodes, pathwayGroups = pathwayGroups)
+  } else {
+    response <- list(eventCodes = tidyr::tibble(), pathwayGroups = tidyr::tibble())
   }
   return(response)
 }
