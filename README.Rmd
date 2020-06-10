@@ -3,16 +3,13 @@ title: "ROhdsiWebApi"
 output: github_document
 ---
 
-ROhdsiWebApi
-
-
 [![Build Status](https://travis-ci.org/OHDSI/ROhdsiWebApi.svg?branch=master)](https://travis-ci.org/OHDSI/ROhdsiWebApi)
 [![codecov.io](https://codecov.io/github/OHDSI/ROhdsiWebApi/coverage.svg?branch=master)](https://codecov.io/github/OHDSI/ROhdsiWebApi?branch=master)
 
+ROhdsiWebApi is part of [HADES](https://ohdsi.github.io/Hades).
+
 ## Introduction
 An R package with functions to interact with OHDSI WebAPI web services, identified by baseUrl. This package is useful to use R to make GET, POST, PUT, DELETE API calls using R-script. This is very useful for reproducible research, and also to run long running studies in batch mode. An example of a WebApi endpoint is "http://server.org:80/WebAPI".
-
-ROhdsiWebApi is part of [HADES](https://ohdsi.github.io/Hades/index.html)
 
 The package supports the following functional categories in WebApi.
 
@@ -32,10 +29,10 @@ The package follows a generic design pattern:
 The package follows a consistent naming conventions - with the identifier for the functional category clearly in the name. There are no direct reference to 'Atlas', and instead 'WebApi' is used = because the package is designed to interface directly with WebApi.
 
 ## Technology
-* ROhdsiWebApi is an R package.
+ROhdsiWebApi is an R package.
 
 ## System Requirements
-* Requires R.
+Requires R.
 
 ## Installation
 * In R, use the following commands to download and install ROhdsiWebApi:
@@ -46,7 +43,7 @@ remotes::install_github("OHDSI/ROhdsiWebApi")
 
 ## User Documentation
 
-* Documentation can be found on the [package website](https://ohdsi.github.io/ROhdsiWebApi).
+Documentation can be found on the [package website](https://ohdsi.github.io/ROhdsiWebApi).
 
 PDF versions of the documentation are also available:
 
@@ -61,11 +58,11 @@ PDF versions of the documentation are also available:
 * We use the <a href="https://github.com/OHDSI/ROhdsiWebApi/issues">GitHub issue tracker</a> for all bugs/issues/enhancements 
  
 ## Contributing
-* Read [here](https://ohdsi.github.io/Hades/contribute.html) how you can contribute to this package.
+Read [here](https://ohdsi.github.io/Hades/contribute.html) how you can contribute to this package.
  
 ## License
-* ROhdsiWebApi is licensed under Apache License 2.0
+ROhdsiWebApi is licensed under Apache License 2.0
 
 ## Development
-* ROhdsiWebApi is being developed in R Studio.
+ROhdsiWebApi is being developed in R Studio.
 

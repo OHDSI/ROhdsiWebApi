@@ -52,3 +52,11 @@ reference:
       Functions for interfacing with person profiles in Atlas
     contents:
       - matches("PersonProfile")
+      
+navbar:
+  structure:
+    right: [hades, github]
+  components:
+    hades:
+      text: hadesLogo
+      href: https://ohdsi.github.io/Hades

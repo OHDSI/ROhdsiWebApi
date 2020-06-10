@@ -45,7 +45,7 @@ rmarkdown::render("NEWS.Rmd",
 unlink("NEWS.tex")
 
 pkgdown::build_site()
-
+OhdsiRTools::fixHadesLogo()
 
 # Generate functions from template ----------------------
 library(dplyr)
