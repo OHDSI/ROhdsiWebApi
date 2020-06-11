@@ -47,33 +47,128 @@ From Package [Readme](https://github.com/OHDSI/ROhdsiWebApi/blob/master/README.m
 
 This document will attempt to explain how ROhdsiWebApi maybe used to achieve reproducible research. 
 
-# Knowing your WebApi configurations
+# WebApi configurations and ROhdsiWebApi
 To successfully use ROhdsiWebApi, it is necessary to have an active ['WebApi'](https://github.com/ohdsi/webapi) endpoint with a known baseUrl such as "http://server.org:80/WebAPI". ['WebApi'](https://github.com/ohdsi/webapi) has many functional categories. 
 
+To ensure reproducibility of work it is best to know the version of the WebApi (i.e. Atlas backend) being used. An easy way to do that is (and output maybe included in your study results)
+```{r eval=TRUE, echo = TRUE}
 
-### Supported WebApi functional categories.
+version <- ROhdsiWebApi:::getWebApiVersion(baseUrl = baseUrl)
+message1 <- paste0('This Vignette was created using WebApi version: ', version, ' on baseUrl: ', baseUrl, ". The CDM had the following source data configured: ")
+cdmSources <- ROhdsiWebApi::getCdmSources(baseUrl = baseUrl)
+priorityVocabulary <- ROhdsiWebApi::getPriorityVocabularyKey(baseUrl = baseUrl)
+
+```
+
+The object `version` will show your webApi version. Example: `r message1`. 
+
+```{r eval=TRUE, echo = TRUE}
+
+cdmSources
+
+```
+The priority vocabulary for the WebApi is `r priorityVocabulary`.
+
+We can also perform checks on the WebApi, example - we may want to see if the 'HCUP' & 'SYNPUF1K' is a valid SourceKey in the current webApi.
+
+```{r eval=TRUE, echo = TRUE}
+
+ROhdsiWebApi::isValidSourceKey(sourceKeys = c('HCUP', 'SYNPUF1K'), baseUrl = baseUrl)
+
+```
+
+
+## WebApi Analytical categories.
+WebApi maybe considered to have certain modular analytic categories. ROhdsiWebApi supports the following categories:
+
 ```{r eval=TRUE, echo = FALSE}
 
-library(magrittr) 
-output <- ROhdsiWebApi:::.getStandardCategories() %>% 
-  dplyr::select(.data$categoryFirstUpper) %>% 
-  dplyr::rename(Category = .data$categoryFirstUpper) %>% 
-  dplyr::arrange() %>% 
-  dplyr::mutate(features = paste0("Functions for interfacing with ", .data$Category, " in WebApi"))
-colnames(output) <- SqlRender::camelCaseToTitleCase(colnames(output))
+
+output <- ROhdsiWebApi:::.getStandardCategories() %>%
+  dplyr::select(.data$categoryFirstUpper) %>%
+  dplyr::rename(Category = .data$categoryFirstUpper) %>%
+  dplyr::arrange() %>%
+  dplyr::mutate(features = paste0("Functions for interfacing with ", 
+                                  .data$Category, 
+                                  " in WebApi"))
+colnames(output) <-
+  SqlRender::camelCaseToTitleCase(colnames(output))
 output
 
 ```
 
-# General framework
-One approach to understand the general framework for this package is to understand the [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) framework for [WebApi](https://github.com/ohdsi/webapi), i.e. the GET, PUT, DELETE, POST calls to the API. See [the documentation of the WebApi](http://webapidoc.ohdsi.org/index.html). For each category supported the WebApi, ROhdsiWebAPi supports GET, PUT, DELETE, POST calls to the API, where appropriate. e.g. `getDefinitionMetaData` function is a general function that is able to get the Metadata for all specifications within a category.
+# Framework of ROhdsiWebApi
+
+ROhdsiWebApi maybe better understood by having atleast a high level understanding of [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) framework for [WebApi](https://github.com/ohdsi/webapi), i.e. the GET, PUT, DELETE, POST calls to the API. See [the documentation of the WebApi](http://webapidoc.ohdsi.org/index.html). 
+
+For each supported category, ROhdsiWebAPi performs GET, PUT, DELETE, POST calls to WebApi in background. The details of what calls are actually performed is less important to an analyst, but it is useful to understand the naming conventions of ROhdsiWebApi.
+
+## Naming conventions of ROhdsiWebApi
+
+Most functions in ROhdsiWebApi start with an action oriented 'verb' - such as
+
+
+```{r eval=TRUE, echo = FALSE}
+output <- tidyr::tibble(functionName = library(help = "ROhdsiWebApi" )$info[[2]]) %>% 
+  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'isValid', replacement = 'isvalid')) %>% 
+  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'CdmSources', replacement = 'Cdmsources')) %>% 
+  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'MetaData', replacement = 'Metadata')) %>%
+  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'PersonProfile', replacement = 'PersonProfile')) %>% 
+  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'PriorityVocabularyKey', replacement = 'Priorityvocabularykey')) %>%
+  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'InclusionRulesAndCounts', replacement = 'Inclusionrulesandcounts')) %>% 
+  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'GenerationInformation', replacement = 'Generationinformation')) %>%  
+  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'SourceConcepts', replacement = 'Sourceconcepts')) %>% 
+  dplyr::mutate(functionName = stringr::word(string = .data$functionName, 1)) %>% 
+  dplyr::mutate(functionNameTitle = SqlRender::camelCaseToTitleCase(.data$functionName)) %>% 
+  dplyr::mutate(functionNameFirst = stringr::word(string = .data$functionNameTitle, start = 1 , end = 1),
+                functionNameLast = stringr::word(string = .data$functionNameTitle,start = -1)) %>%
+  dplyr::filter(!functionNameFirst == '') %>% 
+  dplyr::mutate(functionNameMiddle = dplyr::case_when(functionNameTitle == paste(functionNameFirst, functionNameLast) ~ '',
+                                                      TRUE ~ stringr::str_replace(string = .data$functionNameTitle, 
+                                                                                  pattern = .data$functionNameFirst, 
+                                                                                  replacement = ''
+                                                      ) %>% 
+                                                        stringr::str_replace(pattern = .data$functionNameLast, 
+                                                                             replacement = ''
+                                                        ) %>% 
+                                                        stringr::str_squish()
+  )
+  ) %>% 
+  dplyr::mutate(functionsWithPattern = dplyr::case_when(.data$functionNameFirst %in% 
+                                                          c('Cancel','Create','Delete','Detect','Exists',
+                                                            'Get','Invoke',  'IsValid', 'Post','Resolve')
+                                                        ~ TRUE, TRUE ~ FALSE
+                                                        )
+  )
+```
+
+
+Most of the functions start with the following verbs:
+```{r eval=TRUE, echo = FALSE}
+verb <- output %>% 
+  dplyr::filter(functionsWithPattern = TRUE) %>% 
+  dplyr::group_by(.data$functionNameFirst) %>% 
+  dplyr::summarise(numberOfFunctions = dplyr::n(), .groups = 'keep') %>% 
+  dplyr::arrange() %>% 
+  dplyr::ungroup() %>% 
+  dplyr::arrange(desc(numberOfFunctions)) %>% 
+  dplyr::distinct() %>% 
+  dplyr::rename(functionVerb = functionNameFirst) %>% 
+  dplyr::rename_all(SqlRender::camelCaseToTitleCase)
+  
+verb
+```
+
+A function to get `Definition` is `getDefinitionMetaData` function. This is a general function that is able to get the Metadata for all specifications within a category.
 
 ```{r eval=TRUE, echo = TRUE}
 
-ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, category = 'cohort') %>% 
-  dplyr::arrange(.data$id) %>% 
-  dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  head() 
+ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, 
+                                     category = 'cohort') %>%
+  dplyr::arrange(.data$id) %>%
+  dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>%
+  tail() 
+
 ```
 
 The same output may be achieved using
@@ -83,25 +178,28 @@ The same output may be achieved using
 ROhdsiWebApi::getCohortDefinitionsMetaData(baseUrl = baseUrl) %>% 
   dplyr::arrange(.data$id) %>% 
   dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  head() 
+  tail() 
 ```
 
 Similar approach may be used for all categories as follows:
 
 ```{r eval=TRUE, echo = TRUE}
 
-ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, category = 'estimation') %>% 
+ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, 
+                                     category = 'estimation') %>% 
   dplyr::arrange(.data$id) %>% 
   dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  head()
+  tail()
 ```
+
+
 
 ```{r eval=TRUE, echo = TRUE}
 
 ROhdsiWebApi::getEstimationDefinitionsMetaData(baseUrl = baseUrl) %>% 
   dplyr::arrange(.data$id) %>% 
   dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  head()
+  tail()
 ```
 
 This is a generic framework that applies to most WebApi categories, and supports different types of CRUD functionalities like deleteConceptSetDefinition() vs deleteDefinition(category = 'conceptSet').
@@ -113,6 +211,7 @@ Please review ['Concept sets - The Book of OHDSI'](https://ohdsi.github.io/TheBo
 We commonly post concept set expression into WebApi/Atlas, or try get an expression from Atlas/WebApi based on a conceptSetDefinitionId. 
 
 Example: lets say we have concept set expression as follows, that is being used for a Rheumatoid Arthritis study.
+
 
 ```{r eval=TRUE, echo = TRUE}
 
@@ -209,9 +308,12 @@ The id of the newly posted concept-set definition is `r returnFromPostRequest$id
 
 ## if want to print ready expression of the concept set definition
 ```{r eval=TRUE, echo = TRUE} 
-conceptSetDefinition = getConceptSetDefinition(conceptSetId = returnFromPostRequest$id, baseUrl = baseUrl)
-conceptTbl <- convertConceptSetDefinitionToTable(conceptSetDefinition)
-names(conceptTbl) <- SqlRender::camelCaseToTitleCase(names(conceptTbl))
+conceptSetDefinition = getConceptSetDefinition(conceptSetId = returnFromPostRequest$id, 
+                                               baseUrl = baseUrl)
+conceptTbl <-
+  convertConceptSetDefinitionToTable(conceptSetDefinition)
+names(conceptTbl) <-
+  SqlRender::camelCaseToTitleCase(names(conceptTbl))
 conceptTbl
 ```
 
@@ -222,12 +324,17 @@ If we want a list of all conceptId's (including descendants) from the concept se
 
 ```{r eval=TRUE, echo = TRUE} 
 resolvedConcepts = resolveConceptSet(conceptSetDefinition = conceptSetDefinition, baseUrl = baseUrl)
-resolvedConcepts
+print("Note: Showing only the first 10 concept id's")
+resolvedConcepts[1:10]
 ```
 
 The concept set expression json expression can be recaptured from WebApi as follows
 ```{r eval=FALSE, echo = TRUE} 
-json <- getConceptSetDefinition(baseUrl = baseUrl, conceptSetId = returnFromPostRequest$id)$expression %>% RJSONIO::toJSON(pretty = TRUE)
+json <-
+  getConceptSetDefinition(baseUrl = baseUrl, 
+                          conceptSetId = returnFromPostRequest$id
+                          )$expression %>% 
+  RJSONIO::toJSON(pretty = TRUE)
 ```
 
 
@@ -244,14 +351,14 @@ Cohorts/Characterization/Incidence Rate are WebApi categories, where WebApi mana
 Example: We may want to know if a certain cohort specification has been generated by checking cohort generation status `getCohortGenerationInformation(baseUrl = baseUrl, cohortId= 4234)`. If a cohort is not previously generated, it may be generated using `invokeCohortSetGeneration(baseUrl = baseUrl, cohortId = 4234, sourceKey = 'HCUP')` . If it is already generated, we can extract its output of cohort generation using `getCohortResults(baseUrl, cohortId = 4234)`. 
 
 
-# Characterization (TO Do)
+# Characterization 
 Please review ['Characterization - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/Characterization.html). 
 
 
-# Population Level Effect Estimation (TO Do)
+# Population Level Effect Estimation
 Please review ['Population Level Effect Estimation - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/PopulationLevelEstimation.html). 
 
 
-# Patient Level Prediction (TO Do)
+# Patient Level Prediction
 Please review ['Patient Level Prediction - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/PatientLevelPrediction.html).
 
