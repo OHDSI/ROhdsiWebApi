@@ -61,7 +61,7 @@ output <- ROhdsiWebApi:::.getStandardCategories() %>%
   dplyr::arrange() %>% 
   dplyr::mutate(features = paste0("Functions for interfacing with ", .data$Category, " in WebApi"))
 colnames(output) <- SqlRender::camelCaseToTitleCase(colnames(output))
-output %>% knitr::kable()
+output
 
 ```
 
@@ -73,8 +73,7 @@ One approach to understand the general framework for this package is to understa
 ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, category = 'cohort') %>% 
   dplyr::arrange(.data$id) %>% 
   dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  head() %>% 
-  knitr::kable()
+  head() 
 ```
 
 The same output may be achieved using
@@ -84,8 +83,7 @@ The same output may be achieved using
 ROhdsiWebApi::getCohortDefinitionsMetaData(baseUrl = baseUrl) %>% 
   dplyr::arrange(.data$id) %>% 
   dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  head() %>% 
-  knitr::kable()
+  head() 
 ```
 
 Similar approach may be used for all categories as follows:
@@ -95,8 +93,7 @@ Similar approach may be used for all categories as follows:
 ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, category = 'estimation') %>% 
   dplyr::arrange(.data$id) %>% 
   dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  head() %>% 
-  knitr::kable()
+  head()
 ```
 
 ```{r eval=TRUE, echo = TRUE}
@@ -104,8 +101,7 @@ ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, category = 'estimation')
 ROhdsiWebApi::getEstimationDefinitionsMetaData(baseUrl = baseUrl) %>% 
   dplyr::arrange(.data$id) %>% 
   dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  head() %>% 
-  knitr::kable()
+  head()
 ```
 
 This is a generic framework that applies to most WebApi categories, and supports different types of CRUD functionalities like deleteConceptSetDefinition() vs deleteDefinition(category = 'conceptSet').
@@ -118,7 +114,7 @@ We commonly post concept set expression into WebApi/Atlas, or try get an express
 
 Example: lets say we have concept set expression as follows, that is being used for a Rheumatoid Arthritis study.
 
-```{r eval=FALSE, echo = TRUE}
+```{r eval=TRUE, echo = TRUE}
 
 jsonExpression <- '{
   "items": [
@@ -198,7 +194,6 @@ Note: function does not accept JSON. It needs to be converted to R (list) expres
 
 rExpression <- RJSONIO::fromJSON(jsonExpression)
 
-
 ```
 
 We can post the concept set expression into WebApi as follows:
@@ -208,7 +203,7 @@ returnFromPostRequest <- ROhdsiWebApi::postConceptSetDefinition(baseUrl = baseUr
 
 If successful, we will get a return object as follows into R.
 ```{r eval=TRUE, echo = FALSE} 
-knitr::kable(returnFromPostRequest )
+returnFromPostRequest
 ```
 The id of the newly posted concept-set definition is `r returnFromPostRequest$id`. We can now use this concept-set for many concept set queries eg., 
 
@@ -217,7 +212,7 @@ The id of the newly posted concept-set definition is `r returnFromPostRequest$id
 conceptSetDefinition = getConceptSetDefinition(conceptSetId = returnFromPostRequest$id, baseUrl = baseUrl)
 conceptTbl <- convertConceptSetDefinitionToTable(conceptSetDefinition)
 names(conceptTbl) <- SqlRender::camelCaseToTitleCase(names(conceptTbl))
-knitr::kable(conceptTbl)
+conceptTbl
 ```
 
 `createConceptSetWorkbook` maybe used to create an Excel workbook of the concept set.

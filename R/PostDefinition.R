@@ -43,7 +43,7 @@
 #' @export
 postDefinition <- function(baseUrl, name, category, definition) {
   .checkBaseUrl(baseUrl)
-  arguments <- ROhdsiWebApi:::.getStandardCategories()
+  arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
 
   errorMessage <- checkmate::makeAssertCollection()
@@ -73,7 +73,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
   if (category == "characterization") {
     url <- paste0(url, argument$categoryUrlPostExpression, "/")
   }
-  response <- ROhdsiWebApi:::.postJson(url = url, json = json)
+  response <- .postJson(url = url, json = json)
 
   if (!response$status_code == 200) {
     definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
