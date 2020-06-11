@@ -268,8 +268,7 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   } else {
     expression <- cohortDefinition
   }
-  listGenerateStats <- list(expression = expression,
-                            options = list(generateStats = generateStats))
+  listGenerateStats <- list(expression = expression, options = list(generateStats = generateStats))
 
   validJsonExpression <- RJSONIO::toJSON(listGenerateStats, digits = 23)
   response <- httr::POST(url, body = validJsonExpression, config = httr::add_headers(httpheader))

@@ -43,7 +43,7 @@
 #' @export
 postDefinition <- function(baseUrl, name, category, definition) {
   .checkBaseUrl(baseUrl)
-  arguments <- .getStandardCategories()
+  arguments <- ROhdsiWebApi:::.getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
 
   errorMessage <- checkmate::makeAssertCollection()
@@ -73,7 +73,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
   if (category == "characterization") {
     url <- paste0(url, argument$categoryUrlPostExpression, "/")
   }
-  response <- .postJson(url = url, json = json)
+  response <- ROhdsiWebApi:::.postJson(url = url, json = json)
 
   if (!response$status_code == 200) {
     definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
@@ -159,6 +159,6 @@ postDefinition <- function(baseUrl, name, category, definition) {
   }
   ParallelLogger::logInfo("Post ", argument$categoryFirstUpper, " definition was successful")
   output <- response %>% list() %>% purrr::map_df(.f = purrr::flatten) %>% utils::type.convert(as.is = TRUE,
-                                                                                               dec = ".") %>% .normalizeDateAndTimeTypes
+                                                                                               dec = ".") %>% .normalizeDateAndTimeTypes()
   return(output)
 }

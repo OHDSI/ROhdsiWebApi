@@ -78,22 +78,22 @@ resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey
 #'
 #' @export
 convertConceptSetDefinitionToTable <- function(conceptSetDefinition) {
-
   if ("expression" %in% names(conceptSetDefinition)) {
     expression <- conceptSetDefinition$expression
   } else {
     expression <- conceptSetDefinition
   }
+  simplify <- expression %>% jsonlite::toJSON() %>% jsonlite::fromJSON(simplifyVector = TRUE,
+                                                                       simplifyDataFrame = TRUE,
+                                                                       flatten = TRUE)
 
-  lists <- lapply(expression$items, function(x) {
-    x <- append(x$concept, x)
-    x$concept <- NULL
-    return(tibble::as_tibble(x))
-  })
-  items <- dplyr::bind_rows(lists) %>% dplyr::rename_at(dplyr::vars(dplyr::contains("_")),
-                                                        .funs = SqlRender::snakeCaseToCamelCase) %>%
-    .normalizeDateAndTimeTypes()
-  return(items)
+  df <- simplify$items %>% ROhdsiWebApi:::.removeStringFromDataFrameName(dataFrame = .,
+                                                                         string = "concept.") %>%
+    dplyr::rename_at(dplyr::vars(dplyr::contains("_")),
+                     .funs = SqlRender::snakeCaseToCamelCase) %>%
+    ROhdsiWebApi:::.normalizeDateAndTimeTypes() %>% tidyr::unnest(colnames(.))
+
+  return(df)
 }
 
 #' Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook

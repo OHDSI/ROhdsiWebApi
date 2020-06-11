@@ -1,0 +1,262 @@
+---
+title: "Vignette"
+author: "Gowtham Rao"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: 
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{WorkingWithCohorts}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r, include = FALSE}
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r setup}
+
+library(ROhdsiWebApi)
+library(magrittr)
+
+if (Sys.getenv("baseUrl") == '') {
+  server <- "ohdsiBaseUrl" 
+} else {server <- "baseUrl"}
+baseUrl <- Sys.getenv(server)
+```
+
+
+ROhdsiWebApi is part of [HADES](https://ohdsi.github.io/Hades).
+
+# Introduction
+From Package [Readme](https://github.com/OHDSI/ROhdsiWebApi/blob/master/README.md)
+
+> ROhdsiWebApi is a R based interface to ['WebApi'](https://github.com/ohdsi/webapi) (OHDSI RESTful services), and performs GET/PULL/POST/DELETE calls via the WebApi. All objects starting from R or output to R - are analysis ready R-objects like list and data.frame. The package handles the intermediary steps by converting R-objects to JSON and vice versa. To ensure r-objects are analysis ready, the objects are type converted where possible, e.g. date/date time are converted from string to POSIXct.
+
+> This package makes reproducible research easier, by offering ability to retrieve detailed study specifications, transport study specifications from one instance to another, programmatically invoke the generation of a sequence of steps that are part of a study, manage running studies in batch mode. 
+
+This document will attempt to explain how ROhdsiWebApi maybe used to achieve reproducible research. 
+
+# Knowing your WebApi configurations
+To successfully use ROhdsiWebApi, it is necessary to have an active ['WebApi'](https://github.com/ohdsi/webapi) endpoint with a known baseUrl such as "http://server.org:80/WebAPI". ['WebApi'](https://github.com/ohdsi/webapi) has many functional categories. 
+
+
+### Supported WebApi functional categories.
+```{r eval=TRUE, echo = FALSE}
+
+library(magrittr) 
+output <- ROhdsiWebApi:::.getStandardCategories() %>% 
+  dplyr::select(.data$categoryFirstUpper) %>% 
+  dplyr::rename(Category = .data$categoryFirstUpper) %>% 
+  dplyr::arrange() %>% 
+  dplyr::mutate(features = paste0("Functions for interfacing with ", .data$Category, " in WebApi"))
+colnames(output) <- SqlRender::camelCaseToTitleCase(colnames(output))
+output %>% knitr::kable()
+
+```
+
+# General framework
+One approach to understand the general framework for this package is to understand the [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) framework for [WebApi](https://github.com/ohdsi/webapi), i.e. the GET, PUT, DELETE, POST calls to the API. See [the documentation of the WebApi](http://webapidoc.ohdsi.org/index.html). For each category supported the WebApi, ROhdsiWebAPi supports GET, PUT, DELETE, POST calls to the API, where appropriate. e.g. `getDefinitionMetaData` function is a general function that is able to get the Metadata for all specifications within a category.
+
+```{r eval=TRUE, echo = TRUE}
+
+ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, category = 'cohort') %>% 
+  dplyr::arrange(.data$id) %>% 
+  dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
+  head() %>% 
+  knitr::kable()
+```
+
+The same output may be achieved using
+
+```{r eval=TRUE, echo = TRUE}
+
+ROhdsiWebApi::getCohortDefinitionsMetaData(baseUrl = baseUrl) %>% 
+  dplyr::arrange(.data$id) %>% 
+  dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
+  head() %>% 
+  knitr::kable()
+```
+
+Similar approach may be used for all categories as follows:
+
+```{r eval=TRUE, echo = TRUE}
+
+ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, category = 'estimation') %>% 
+  dplyr::arrange(.data$id) %>% 
+  dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
+  head() %>% 
+  knitr::kable()
+```
+
+```{r eval=TRUE, echo = TRUE}
+
+ROhdsiWebApi::getEstimationDefinitionsMetaData(baseUrl = baseUrl) %>% 
+  dplyr::arrange(.data$id) %>% 
+  dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
+  head() %>% 
+  knitr::kable()
+```
+
+This is a generic framework that applies to most WebApi categories, and supports different types of CRUD functionalities like deleteConceptSetDefinition() vs deleteDefinition(category = 'conceptSet').
+
+
+# Concept Set
+Please review ['Concept sets - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html#conceptSets)
+
+We commonly post concept set expression into WebApi/Atlas, or try get an expression from Atlas/WebApi based on a conceptSetDefinitionId. 
+
+Example: lets say we have concept set expression as follows, that is being used for a Rheumatoid Arthritis study.
+
+```{r eval=FALSE, echo = TRUE}
+
+jsonExpression <- '{
+  "items": [
+    {
+      "concept": {
+        "CONCEPT_ID": 81097,
+        "CONCEPT_NAME": "Feltys syndrome",
+        "STANDARD_CONCEPT": "S",
+        "STANDARD_CONCEPT_CAPTION": "Standard",
+        "INVALID_REASON": "V",
+        "INVALID_REASON_CAPTION": "Valid",
+        "CONCEPT_CODE": "57160007",
+        "DOMAIN_ID": "Condition",
+        "VOCABULARY_ID": "SNOMED",
+        "CONCEPT_CLASS_ID": "Clinical Finding"
+      },
+      "isExcluded": true,
+      "includeDescendants": false,
+      "includeMapped": false
+    },
+    {
+      "concept": {
+        "CONCEPT_ID": 80809,
+        "CONCEPT_NAME": "Rheumatoid arthritis",
+        "STANDARD_CONCEPT": "S",
+        "STANDARD_CONCEPT_CAPTION": "Standard",
+        "INVALID_REASON": "V",
+        "INVALID_REASON_CAPTION": "Valid",
+        "CONCEPT_CODE": "69896004",
+        "DOMAIN_ID": "Condition",
+        "VOCABULARY_ID": "SNOMED",
+        "CONCEPT_CLASS_ID": "Clinical Finding"
+      },
+      "isExcluded": false,
+      "includeDescendants": true,
+      "includeMapped": false
+    },
+    {
+      "concept": {
+        "CONCEPT_ID": 4035611,
+        "CONCEPT_NAME": "Seropositive rheumatoid arthritis",
+        "STANDARD_CONCEPT": "S",
+        "STANDARD_CONCEPT_CAPTION": "Standard",
+        "INVALID_REASON": "V",
+        "INVALID_REASON_CAPTION": "Valid",
+        "CONCEPT_CODE": "239791005",
+        "DOMAIN_ID": "Condition",
+        "VOCABULARY_ID": "SNOMED",
+        "CONCEPT_CLASS_ID": "Clinical Finding"
+      },
+      "isExcluded": false,
+      "includeDescendants": true,
+      "includeMapped": false
+    }
+  ]
+}'
+
+
+```
+
+Lets call this concept set expression - '[ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set'. 
+
+`r conceptSetName = '[ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set'`
+
+```{r eval=TRUE, echo = FALSE}
+# check if there is a concept set by this name, if yes, delete it
+exists = ROhdsiWebApi::existsConceptSetName(conceptSetName = conceptSetName, baseUrl = baseUrl)
+if (!isFALSE(exists)) {
+  ROhdsiWebApi::deleteConceptSetDefinition(conceptSetId = exists$id, baseUrl = baseUrl)
+}
+
+```
+
+Note: function does not accept JSON. It needs to be converted to R (list) expression
+
+```{r eval=TRUE, echo = FALSE}
+
+rExpression <- RJSONIO::fromJSON(jsonExpression)
+
+
+```
+
+We can post the concept set expression into WebApi as follows:
+```{r eval=TRUE, echo = FALSE}
+returnFromPostRequest <- ROhdsiWebApi::postConceptSetDefinition(baseUrl = baseUrl, conceptSetDefinition = rExpression, name = conceptSetName)
+```
+
+If successful, we will get a return object as follows into R.
+```{r eval=TRUE, echo = FALSE} 
+knitr::kable(returnFromPostRequest )
+```
+The id of the newly posted concept-set definition is `r returnFromPostRequest$id`. We can now use this concept-set for many concept set queries eg., 
+
+## if want to print ready expression of the concept set definition
+```{r eval=TRUE, echo = TRUE} 
+conceptSetDefinition = getConceptSetDefinition(conceptSetId = returnFromPostRequest$id, baseUrl = baseUrl)
+conceptTbl <- convertConceptSetDefinitionToTable(conceptSetDefinition)
+names(conceptTbl) <- SqlRender::camelCaseToTitleCase(names(conceptTbl))
+knitr::kable(conceptTbl)
+```
+
+`createConceptSetWorkbook` maybe used to create an Excel workbook of the concept set.
+
+If we want a list of all conceptId's (including descendants) from the concept set expression
+
+
+```{r eval=TRUE, echo = TRUE} 
+resolvedConcepts = resolveConceptSet(conceptSetDefinition = conceptSetDefinition, baseUrl = baseUrl)
+resolvedConcepts
+```
+
+The concept set expression json expression can be recaptured from WebApi as follows
+```{r eval=FALSE, echo = TRUE} 
+json <- getConceptSetDefinition(baseUrl = baseUrl, conceptSetId = returnFromPostRequest$id)$expression %>% RJSONIO::toJSON(pretty = TRUE)
+```
+
+
+
+# Cohorts/Characterization/Incidence rate
+Please review ['What is a cohort - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html#what-is-a-cohort). 
+
+> We define a cohort as a set of persons who satisfy one or more inclusion criteria for a duration of time. The term cohort is often interchanged with the term phenotype. Cohorts are used throughout OHDSI analytical tools and network studies as the primary building blocks for executing a research question. 
+
+> A cohort is defined as the set of persons satisfying one or more inclusion criteria for a duration of time. One person may qualify for one cohort multiple times during non-overlapping time intervals. Cohorts are constructed in ATLAS by specifying cohort entry criteria and cohort exit criteria. Cohort entry criteria involve selecting one or more initial events, which determine the start date for cohort entry, and optionally specifying additional inclusion criteria which filter to the qualifying events. Cohort exit criteria are applied to each cohort entry record to determine the end date when the person’s episode no longer qualifies for the cohort.
+
+Cohorts/Characterization/Incidence Rate are WebApi categories, where WebApi manages the execution of generations. 
+
+Example: We may want to know if a certain cohort specification has been generated by checking cohort generation status `getCohortGenerationInformation(baseUrl = baseUrl, cohortId= 4234)`. If a cohort is not previously generated, it may be generated using `invokeCohortSetGeneration(baseUrl = baseUrl, cohortId = 4234, sourceKey = 'HCUP')` . If it is already generated, we can extract its output of cohort generation using `getCohortResults(baseUrl, cohortId = 4234)`. 
+
+
+# Characterization (TO Do)
+Please review ['Characterization - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/Characterization.html). 
+
+
+# Population Level Effect Estimation (TO Do)
+Please review ['Population Level Effect Estimation - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/PopulationLevelEstimation.html). 
+
+
+# Patient Level Prediction (TO Do)
+Please review ['Patient Level Prediction - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/PatientLevelPrediction.html).
+

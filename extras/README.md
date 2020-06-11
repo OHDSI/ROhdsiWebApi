@@ -60,11 +60,17 @@ package is designed to interface directly with WebApi.
 
 ## Technology
 
-ROhdsiWebApi is an R package.
+ROhdsiWebApi is an R package. Note: ROhdsiWebApi relies on the
+availability of a [WebApi](https://github.com/ohdsi/webapi). The
+[documentation of the WebApi](http://webapidoc.ohdsi.org/index.html)
+(OHDSI RESTful services).
+
+Note: As of V1.0.0, we do not support WebApi that has security enabled.
+This is considered a road map item.
 
 ## System Requirements
 
-Requires R.
+Requires R. WebApi.
 
 ## Installation
 
@@ -84,10 +90,10 @@ website](https://ohdsi.github.io/ROhdsiWebApi).
 
 PDF versions of the documentation are also available:
 
-  - [Vignette](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/WorkingWithCohorts.pdf)
+  - [Vignette](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/Vignette.pdf)
 
-  - {Package
-    manual}(<https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/extras/ROhdsiWebApi.pdf>)
+  - [Package
+    manual](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/extras/ROhdsiWebApi.pdf)
 
 ## Support
 
