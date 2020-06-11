@@ -33,6 +33,10 @@ if (Sys.getenv("baseUrl") == '') {
   server <- "ohdsiBaseUrl" 
 } else {server <- "baseUrl"}
 baseUrl <- Sys.getenv(server)
+
+if (baseUrl == '') {
+  baseUrl <- 'http://api.ohdsi.org:80/WebAPI'
+}
 ```
 
 
@@ -84,6 +88,7 @@ WebApi maybe considered to have certain modular analytic categories. ROhdsiWebAp
 ```{r eval=TRUE, echo = FALSE}
 
 
+library(magrittr)
 output <- ROhdsiWebApi:::.getStandardCategories() %>%
   dplyr::select(.data$categoryFirstUpper) %>%
   dplyr::rename(Category = .data$categoryFirstUpper) %>%
