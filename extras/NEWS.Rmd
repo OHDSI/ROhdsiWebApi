@@ -7,7 +7,11 @@ output: github_document
 
 Note: This is a major release. This release is expected to break implementations that rely on prior iterations of ROhdsiWebApi. 
 
+(last updated : `r Sys.Date()`)
+
+
 ### Changes:
+
 1. Generic design pattern: Starting with version 1.0.0, we have implemented a new generic design pattern.  
 + Functions that go from WebApi to R: will return a R-object (e.g. list, data frame). The function will handle the conversion of non R-objects like JSON objects into R-objects in the background. The returned objects may be inspected in R. We have ensured that all returned objects are represented in the proper data types e.g. dates in are type date, instead of string.
 + Functions that go from R into WebApi: will start with a R-object (e.g. list, data frame). If the WebApi requires a JSON object, the function will handle the conversion of R-object into JSON in the background. 

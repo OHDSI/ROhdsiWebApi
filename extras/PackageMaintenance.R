@@ -36,11 +36,11 @@ rmarkdown::render("vignettes/UsingROhdsiWebApi.Rmd",
                                           number_sections = TRUE))
 unlink("inst/doc/UsingROhdsiWebApi.tex")
 rmarkdown::render("extras/README.Rmd",
-                  output_format = 'all',
+                  output_file = "../README.md",
                   clean = TRUE)
 unlink("README.tex")
 rmarkdown::render("extras/NEWS.Rmd",
-                  output_format = 'all',
+                  output_file = "../NEWS.md",
                   clean = TRUE)
 unlink("NEWS.tex")
 

@@ -6,6 +6,8 @@ News
 Note: This is a major release. This release is expected to break
 implementations that rely on prior iterations of ROhdsiWebApi.
 
+(last updated : 2020-06-12)
+
 ### Changes:
 
 1.  Generic design pattern: Starting with version 1.0.0, we have
