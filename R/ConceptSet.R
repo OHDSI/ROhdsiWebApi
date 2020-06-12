@@ -83,18 +83,13 @@ convertConceptSetDefinitionToTable <- function(conceptSetDefinition) {
   } else {
     expression <- conceptSetDefinition
   }
-  simplify <- expression %>% 
-    jsonlite::toJSON() %>% 
-    jsonlite::fromJSON(simplifyVector = TRUE,
-                       simplifyDataFrame = TRUE,
-                       flatten = TRUE)
-  
+  simplify <- expression %>% jsonlite::toJSON() %>% jsonlite::fromJSON(simplifyVector = TRUE,
+                                                                       simplifyDataFrame = TRUE,
+                                                                       flatten = TRUE)
+
   df <- .removeStringFromDataFrameName(dataFrame = simplify$items,
-                                                      string = "concept.") %>%
-    dplyr::rename_at(dplyr::vars(dplyr::contains("_")),
-                     .funs = SqlRender::snakeCaseToCamelCase) %>% 
-    .normalizeDateAndTimeTypes()
-  
+                                       string = "concept.") %>% dplyr::rename_at(dplyr::vars(dplyr::contains("_")), .funs = SqlRender::snakeCaseToCamelCase) %>% .normalizeDateAndTimeTypes()
+
   df <- tidyr::unnest(data = df, colnames(df))
 
   return(df)

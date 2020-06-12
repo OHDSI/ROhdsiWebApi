@@ -603,6 +603,7 @@ body {
 <h1 id="news">News</h1>
 <h1 id="rohdsiwebapi-100">ROhdsiWebApi 1.0.0</h1>
 <p>Note: This is a major release. This release is expected to break implementations that rely on prior iterations of ROhdsiWebApi.</p>
+<p>(last updated : `r Sys.Date()’)</p>
 <h3 id="changes">Changes:</h3>
 <ol>
 <li>Generic design pattern: Starting with version 1.0.0, we have implemented a new generic design pattern.</li>
@@ -626,16 +627,16 @@ body {
 </ul>
 <!-- end list -->
 
-<pre><code>#&gt; # A tibble: 7 x 1
-#&gt;   ` Category`     
-#&gt;   &lt;chr&gt;           
-#&gt; 1 ConceptSet      
-#&gt; 2 Cohort          
-#&gt; 3 IncidenceRate   
-#&gt; 4 Estimation      
-#&gt; 5 Prediction      
-#&gt; 6 Characterization
-#&gt; 7 Pathway
+<pre><code>## # A tibble: 7 x 1
+##   ` Category`     
+##   &lt;chr&gt;           
+## 1 ConceptSet      
+## 2 Cohort          
+## 3 IncidenceRate   
+## 4 Estimation      
+## 5 Prediction      
+## 6 Characterization
+## 7 Pathway
 </code></pre>
 <ul>
 <li>Enforcement of OHDSI R style guide. We have enforced the use of <a href="https://ohdsi.github.io/MethodsLibrary/codeStyle.html#ohdsi_code_style_for_r">OHDSI R style guide</a> such as use of <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/22">camel case</a></li>

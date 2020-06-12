@@ -7,6 +7,8 @@ Status](https://travis-ci.org/OHDSI/ROhdsiWebApi.svg?branch=master)](https://tra
 
 ROhdsiWebApi is part of [HADES](https://ohdsi.github.io/Hades).
 
+(last updated : \`r Sys.Date()’)
+
 ## Introduction
 
 ROhdsiWebApi is a R based interface to
@@ -90,7 +92,7 @@ website](https://ohdsi.github.io/ROhdsiWebApi).
 
 PDF versions of the documentation are also available:
 
-  - [Vignette](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/Vignette.pdf)
+  - [Vignette](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/UsingROhdsiWebApi.pdf)
 
   - [Package
     manual](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/extras/ROhdsiWebApi.pdf)

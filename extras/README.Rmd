@@ -8,6 +8,8 @@ output: github_document
 
 ROhdsiWebApi is part of [HADES](https://ohdsi.github.io/Hades).
 
+(last updated : `r Sys.Date()')
+
 ## Introduction
 ROhdsiWebApi is a R based interface to ['WebApi'](https://github.com/ohdsi/webapi) (OHDSI RESTful services), and performs GET/PULL/POST/DELETE calls via the WebApi. All objects starting from R or output to R - are analysis ready R-objects like list and data.frame. The package handles the intermediary steps by converting R-objects to JSON and vice versa. To ensure r-objects are analysis ready, the objects are type converted where possible, e.g. date/date time are converted from string to POSIXct.
 

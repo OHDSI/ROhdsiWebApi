@@ -6,6 +6,8 @@ News
 Note: This is a major release. This release is expected to break
 implementations that rely on prior iterations of ROhdsiWebApi.
 
+(last updated : \`r Sys.Date()’)
+
 ### Changes:
 
 1.  Generic design pattern: Starting with version 1.0.0, we have
@@ -41,16 +43,16 @@ implementations that rely on prior iterations of ROhdsiWebApi.
 
 <!-- end list -->
 
-    #> # A tibble: 7 x 1
-    #>   ` Category`     
-    #>   <chr>           
-    #> 1 ConceptSet      
-    #> 2 Cohort          
-    #> 3 IncidenceRate   
-    #> 4 Estimation      
-    #> 5 Prediction      
-    #> 6 Characterization
-    #> 7 Pathway
+    ## # A tibble: 7 x 1
+    ##   ` Category`     
+    ##   <chr>           
+    ## 1 ConceptSet      
+    ## 2 Cohort          
+    ## 3 IncidenceRate   
+    ## 4 Estimation      
+    ## 5 Prediction      
+    ## 6 Characterization
+    ## 7 Pathway
 
   - Enforcement of OHDSI R style guide. We have enforced the use of
     [OHDSI R style
