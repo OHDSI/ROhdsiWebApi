@@ -708,12 +708,12 @@
 <span class="co">#&gt; # A tibble: 1 x 6</span>
 <span class="co">#&gt;   createdBy modifiedBy    id name        modifiedDate        createdDate        </span>
 <span class="co">#&gt;   &lt;lgl&gt;     &lt;lgl&gt;      &lt;int&gt; &lt;chr&gt;       &lt;dttm&gt;              &lt;dttm&gt;             </span>
-<span class="co">#&gt; 1 NA        NA         11379 [ROhdsiWeb~ 2020-06-12 00:19:02 2020-06-12 00:19:02</span></pre></body></html></div>
+<span class="co">#&gt; 1 NA        NA         11380 [ROhdsiWeb~ 2020-06-12 06:09:58 2020-06-12 06:09:58</span></pre></body></html></div>
 <p>If there is a concept set with this name, then we could either choose another name - or delete the old concept set. For this vignette we have chosen to delete any matching concept set as follows:</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/Logic.html">isFALSE</a></span>(<span class="no">exists</span>)) {
   <span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/deleteConceptSetDefinition.html">deleteConceptSetDefinition</a></span>(<span class="kw">conceptSetId</span> <span class="kw">=</span> <span class="no">exists</span>$<span class="no">id</span>, <span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>)
 }
-<span class="co">#&gt; Successfully deleted conceptSet definition id 11379. Request status code: Success: (204) No Content</span>
+<span class="co">#&gt; Successfully deleted conceptSet definition id 11380. Request status code: Success: (204) No Content</span>
 <span class="co">#&gt; NULL</span></pre></body></html></div>
 <p>Now we need to ensure the JSON expression above is converted to R-data object. Note: By design, ROhdsiWebAPi does not accept JSON. It needs to be converted to R (list) expression</p>
 <p>We can now post this R-object into WebApi as follows:</p>
@@ -725,8 +725,8 @@
 <pre><code>#&gt; # A tibble: 1 x 6
 #&gt;   createdBy modifiedBy createdDate         modifiedDate           id name       
 #&gt;   &lt;lgl&gt;     &lt;lgl&gt;      &lt;dttm&gt;              &lt;dttm&gt;              &lt;int&gt; &lt;chr&gt;      
-#&gt; 1 NA        NA         2020-06-12 06:09:58 2020-06-12 06:09:58 11380 [ROhdsiWeb~</code></pre>
-<p>The id of the newly posted concept-set definition is 11380. We can now use this concept-set for many concept set queries eg.,</p>
+#&gt; 1 NA        NA         2020-06-12 06:22:01 2020-06-12 06:22:01 11381 [ROhdsiWeb~</code></pre>
+<p>The id of the newly posted concept-set definition is 11381. We can now use this concept-set for many concept set queries eg.,</p>
 <div id="if-want-to-print-ready-expression-of-the-concept-set-definition" class="section level2">
 <h2 class="hasAnchor">
 <a href="#if-want-to-print-ready-expression-of-the-concept-set-definition" class="anchor"></a>if want to print ready expression of the concept set definition</h2>
