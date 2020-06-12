@@ -84,7 +84,7 @@ website](https://ohdsi.github.io/ROhdsiWebApi).
 
 PDF versions of the documentation are also available:
 
-  - [Vignette](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/WorkingWithCohorts.pdf)
+  - [Vignette](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/UsingROhdsiWebApi.pdf)
 
   - {Package
     manual}(<https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/extras/ROhdsiWebApi.pdf>)

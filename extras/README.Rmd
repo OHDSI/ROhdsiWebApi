@@ -53,7 +53,7 @@ Documentation can be found on the [package website](https://ohdsi.github.io/ROhd
 
 PDF versions of the documentation are also available:
 
-* [Vignette](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/Vignette.pdf)
+* [Vignette](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/UsingROhdsiWebApi.pdf)
 
 * [Package manual](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/extras/ROhdsiWebApi.pdf)
 

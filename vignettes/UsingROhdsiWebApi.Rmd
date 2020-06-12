@@ -1,5 +1,5 @@
 ---
-title: "Vignette"
+title: "Using ROhdsiWebApi"
 author: "Gowtham Rao"
 date: "`r Sys.Date()`"
 output:
@@ -10,7 +10,7 @@ output:
     number_sections: yes
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{Vignette}
+  %\VignetteIndexEntry{Using ROhdsiWebApi}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -24,10 +24,10 @@ knitr::opts_chunk$set(
 ```
 
 
-```{r setup}
+```{r echo=FALSE,warning=FALSE,message=FALSE}
 
 library(ROhdsiWebApi)
-library(magrittr)
+library(dplyr)
 
 if (Sys.getenv("baseUrl") == '') {
   server <- "ohdsiBaseUrl" 
@@ -58,7 +58,11 @@ To ensure reproducibility of work it is best to know the version of the WebApi (
 ```{r eval=TRUE, echo = TRUE}
 
 version <- ROhdsiWebApi:::getWebApiVersion(baseUrl = baseUrl)
-message1 <- paste0('This Vignette was created using WebApi version: ', version, ' on baseUrl: ', baseUrl, ". The CDM had the following source data configured: ")
+message1 <- paste0('This Vignette was created using WebApi version: ', 
+                   version, 
+                   ' on baseUrl: ', 
+                   baseUrl, 
+                   ". The CDM had the following source data configured: ")
 cdmSources <- ROhdsiWebApi::getCdmSources(baseUrl = baseUrl)
 priorityVocabulary <- ROhdsiWebApi::getPriorityVocabularyKey(baseUrl = baseUrl)
 
@@ -86,20 +90,15 @@ ROhdsiWebApi::isValidSourceKey(sourceKeys = c('HCUP', 'SYNPUF1K'), baseUrl = bas
 WebApi maybe considered to have certain modular analytic categories. ROhdsiWebApi supports the following categories:
 
 ```{r eval=TRUE, echo = FALSE}
-
-
-library(magrittr)
 output <- ROhdsiWebApi:::.getStandardCategories() %>%
-  dplyr::select(.data$categoryFirstUpper) %>%
-  dplyr::rename(Category = .data$categoryFirstUpper) %>%
-  dplyr::arrange() %>%
-  dplyr::mutate(features = paste0("Functions for interfacing with ", 
+  select(.data$categoryFirstUpper) %>%
+  rename(Category = .data$categoryFirstUpper) %>%
+  arrange() %>%
+  mutate(features = paste0("Functions for interfacing with ", 
                                   .data$Category, 
                                   " in WebApi"))
-colnames(output) <-
-  SqlRender::camelCaseToTitleCase(colnames(output))
-output
-
+colnames(output) <- SqlRender::camelCaseToTitleCase(colnames(output))
+knitr::kable(output)
 ```
 
 # Framework of ROhdsiWebApi
@@ -115,20 +114,20 @@ Most functions in ROhdsiWebApi start with an action oriented 'verb' - such as
 
 ```{r eval=TRUE, echo = FALSE}
 output <- tidyr::tibble(functionName = library(help = "ROhdsiWebApi" )$info[[2]]) %>% 
-  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'isValid', replacement = 'isvalid')) %>% 
-  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'CdmSources', replacement = 'Cdmsources')) %>% 
-  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'MetaData', replacement = 'Metadata')) %>%
-  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'PersonProfile', replacement = 'PersonProfile')) %>% 
-  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'PriorityVocabularyKey', replacement = 'Priorityvocabularykey')) %>%
-  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'InclusionRulesAndCounts', replacement = 'Inclusionrulesandcounts')) %>% 
-  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'GenerationInformation', replacement = 'Generationinformation')) %>%  
-  dplyr::mutate(functionName = stringr::str_replace(string = functionName, pattern = 'SourceConcepts', replacement = 'Sourceconcepts')) %>% 
-  dplyr::mutate(functionName = stringr::word(string = .data$functionName, 1)) %>% 
-  dplyr::mutate(functionNameTitle = SqlRender::camelCaseToTitleCase(.data$functionName)) %>% 
-  dplyr::mutate(functionNameFirst = stringr::word(string = .data$functionNameTitle, start = 1 , end = 1),
+  mutate(functionName = stringr::str_replace(string = functionName, pattern = 'isValid', replacement = 'isvalid')) %>% 
+  mutate(functionName = stringr::str_replace(string = functionName, pattern = 'CdmSources', replacement = 'Cdmsources')) %>% 
+  mutate(functionName = stringr::str_replace(string = functionName, pattern = 'MetaData', replacement = 'Metadata')) %>%
+  mutate(functionName = stringr::str_replace(string = functionName, pattern = 'PersonProfile', replacement = 'PersonProfile')) %>% 
+  mutate(functionName = stringr::str_replace(string = functionName, pattern = 'PriorityVocabularyKey', replacement = 'Priorityvocabularykey')) %>%
+  mutate(functionName = stringr::str_replace(string = functionName, pattern = 'InclusionRulesAndCounts', replacement = 'Inclusionrulesandcounts')) %>% 
+  mutate(functionName = stringr::str_replace(string = functionName, pattern = 'GenerationInformation', replacement = 'Generationinformation')) %>%  
+  mutate(functionName = stringr::str_replace(string = functionName, pattern = 'SourceConcepts', replacement = 'Sourceconcepts')) %>% 
+  mutate(functionName = stringr::word(string = .data$functionName, 1)) %>% 
+  mutate(functionNameTitle = SqlRender::camelCaseToTitleCase(.data$functionName)) %>% 
+  mutate(functionNameFirst = stringr::word(string = .data$functionNameTitle, start = 1 , end = 1),
                 functionNameLast = stringr::word(string = .data$functionNameTitle,start = -1)) %>%
-  dplyr::filter(!functionNameFirst == '') %>% 
-  dplyr::mutate(functionNameMiddle = dplyr::case_when(functionNameTitle == paste(functionNameFirst, functionNameLast) ~ '',
+  filter(!functionNameFirst == '') %>% 
+  mutate(functionNameMiddle = case_when(functionNameTitle == paste(functionNameFirst, functionNameLast) ~ '',
                                                       TRUE ~ stringr::str_replace(string = .data$functionNameTitle, 
                                                                                   pattern = .data$functionNameFirst, 
                                                                                   replacement = ''
@@ -139,29 +138,30 @@ output <- tidyr::tibble(functionName = library(help = "ROhdsiWebApi" )$info[[2]]
                                                         stringr::str_squish()
   )
   ) %>% 
-  dplyr::mutate(functionsWithPattern = dplyr::case_when(.data$functionNameFirst %in% 
+  mutate(functionsWithPattern = case_when(.data$functionNameFirst %in% 
                                                           c('Cancel','Create','Delete','Detect','Exists',
                                                             'Get','Invoke',  'IsValid', 'Post','Resolve')
                                                         ~ TRUE, TRUE ~ FALSE
                                                         )
   )
+knitr::kable(output %>% select('Function Name' = functionName, 'Description' = functionNameTitle))
 ```
 
 
 Most of the functions start with the following verbs:
 ```{r eval=TRUE, echo = FALSE}
 verb <- output %>% 
-  dplyr::filter(functionsWithPattern = TRUE) %>% 
-  dplyr::group_by(.data$functionNameFirst) %>% 
-  dplyr::summarise(numberOfFunctions = dplyr::n(), .groups = 'keep') %>% 
-  dplyr::arrange() %>% 
-  dplyr::ungroup() %>% 
-  dplyr::arrange(desc(numberOfFunctions)) %>% 
-  dplyr::distinct() %>% 
-  dplyr::rename(functionVerb = functionNameFirst) %>% 
-  dplyr::rename_all(SqlRender::camelCaseToTitleCase)
+  filter(functionsWithPattern = TRUE) %>% 
+  group_by(.data$functionNameFirst) %>% 
+  summarise(numberOfFunctions = n(), .groups = 'keep') %>% 
+  arrange() %>% 
+  ungroup() %>% 
+  arrange(desc(numberOfFunctions)) %>% 
+  distinct() %>% 
+  rename(functionVerb = functionNameFirst) %>% 
+  rename_all(SqlRender::camelCaseToTitleCase)
   
-verb
+knitr::kable(verb)
 ```
 
 A function to get `Definition` is `getDefinitionMetaData` function. This is a general function that is able to get the Metadata for all specifications within a category.
@@ -170,8 +170,8 @@ A function to get `Definition` is `getDefinitionMetaData` function. This is a ge
 
 ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, 
                                      category = 'cohort') %>%
-  dplyr::arrange(.data$id) %>%
-  dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>%
+  arrange(.data$id) %>%
+  rename_all(.funs = SqlRender::camelCaseToTitleCase) %>%
   tail() 
 
 ```
@@ -181,8 +181,8 @@ The same output may be achieved using
 ```{r eval=TRUE, echo = TRUE}
 
 ROhdsiWebApi::getCohortDefinitionsMetaData(baseUrl = baseUrl) %>% 
-  dplyr::arrange(.data$id) %>% 
-  dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
+  arrange(.data$id) %>% 
+  rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
   tail() 
 ```
 
@@ -192,8 +192,8 @@ Similar approach may be used for all categories as follows:
 
 ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, 
                                      category = 'estimation') %>% 
-  dplyr::arrange(.data$id) %>% 
-  dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
+  arrange(.data$id) %>% 
+  rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
   tail()
 ```
 
@@ -202,8 +202,8 @@ ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl,
 ```{r eval=TRUE, echo = TRUE}
 
 ROhdsiWebApi::getEstimationDefinitionsMetaData(baseUrl = baseUrl) %>% 
-  dplyr::arrange(.data$id) %>% 
-  dplyr::rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
+  arrange(.data$id) %>% 
+  rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
   tail()
 ```
 
@@ -283,9 +283,9 @@ Lets call this concept set expression - '[ROhdsiWebApi Vignette] Rheumatoid Arth
 
 `r conceptSetName = '[ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set'`
 
-```{r eval=TRUE, echo = FALSE}
+```{r eval=TRUE, echo = FALSE, warning=FALSE, message = FALSE}
 # check if there is a concept set by this name, if yes, delete it
-exists = ROhdsiWebApi::existsConceptSetName(conceptSetName = conceptSetName, baseUrl = baseUrl)
+exists <- ROhdsiWebApi::existsConceptSetName(conceptSetName = conceptSetName, baseUrl = baseUrl)
 if (!isFALSE(exists)) {
   ROhdsiWebApi::deleteConceptSetDefinition(conceptSetId = exists$id, baseUrl = baseUrl)
 }
@@ -301,8 +301,10 @@ rExpression <- RJSONIO::fromJSON(jsonExpression)
 ```
 
 We can post the concept set expression into WebApi as follows:
-```{r eval=TRUE, echo = FALSE}
-returnFromPostRequest <- ROhdsiWebApi::postConceptSetDefinition(baseUrl = baseUrl, conceptSetDefinition = rExpression, name = conceptSetName)
+```{r eval=TRUE, echo = TRUE}
+returnFromPostRequest <- ROhdsiWebApi::postConceptSetDefinition(baseUrl = baseUrl, 
+                                                                conceptSetDefinition = rExpression, 
+                                                                name = conceptSetName)
 ```
 
 If successful, we will get a return object as follows into R.
