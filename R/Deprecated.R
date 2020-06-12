@@ -43,11 +43,11 @@ getCohortDefinitionExpression <- function(cohortId, baseUrl) {
   .Deprecated(new = "getCohortDefinition",
               package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use the following
-      steps as in the example below:
-      1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
-      2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
-      3) save validJsonExpression object
-      ", old = as.character(sys.call(sys.parent()))[1L])
+  steps as in the example below:
+  1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
+  2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
+  3) save validJsonExpression object
+  ", old = as.character(sys.call(sys.parent()))[1L])
   validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
   validJsonExpression <- RJSONIO::toJSON(validJsonExpression$expression)
   return(validJsonExpression)

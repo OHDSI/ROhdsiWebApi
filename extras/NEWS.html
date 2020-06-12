@@ -600,72 +600,77 @@ body {
 
 <body>
 
-<h1 id="rohdsiwebapi">ROhdsiWebApi</h1>
-<p>ROhdsiWebApi</p>
-<p><a href="https://travis-ci.org/OHDSI/ROhdsiWebApi"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIyMCI+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4Mj0iMCIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JiYiIgc3RvcC1vcGFjaXR5PSIuMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPjwvbGluZWFyR3JhZGllbnQ+PHJlY3Qgcng9IjMiIHdpZHRoPSI5MCIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPjxyZWN0IHJ4PSIzIiB4PSIzNyIgd2lkdGg9IjUzIiBoZWlnaHQ9IjIwIiBmaWxsPSIjNGMxIi8+PHBhdGggZmlsbD0iIzRjMSIgZD0iTTM3IDBoNHYyMGgtNHoiLz48cmVjdCByeD0iMyIgd2lkdGg9IjkwIiBoZWlnaHQ9IjIwIiBmaWxsPSJ1cmwoI2EpIi8+PGcgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkRlamFWdSBTYW5zLFZlcmRhbmEsR2VuZXZhLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiPjx0ZXh0IHg9IjE5LjUiIHk9IjE1IiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIj5idWlsZDwvdGV4dD48dGV4dCB4PSIxOS41IiB5PSIxNCI+YnVpbGQ8L3RleHQ+PHRleHQgeD0iNjIuNSIgeT0iMTUiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiPnBhc3Npbmc8L3RleHQ+PHRleHQgeD0iNjIuNSIgeT0iMTQiPnBhc3Npbmc8L3RleHQ+PC9nPjwvc3ZnPg==" alt="Build Status" /></a> <a href="https://codecov.io/github/OHDSI/ROhdsiWebApi?branch=master"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMTIiIGhlaWdodD0iMjAiPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJiIiB4Mj0iMCIgeTI9IjEwMCUiPgogICAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JiYiIgc3RvcC1vcGFjaXR5PSIuMSIgLz4KICAgICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3Atb3BhY2l0eT0iLjEiIC8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPG1hc2sgaWQ9ImEiPgogICAgICAgIDxyZWN0IHdpZHRoPSIxMTIiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIiAvPgogICAgPC9tYXNrPgogICAgPGcgbWFzaz0idXJsKCNhKSI+CiAgICAgICAgPHBhdGggZmlsbD0iIzU1NSIgZD0iTTAgMGg3NnYyMEgweiIgLz4KICAgICAgICA8cGF0aCBmaWxsPSIjZTA1ZDQ0IiBkPSJNNzYgMGgzNnYyMEg3NnoiIC8+CiAgICAgICAgPHBhdGggZmlsbD0idXJsKCNiKSIgZD0iTTAgMGgxMTJ2MjBIMHoiIC8+CiAgICA8L2c+CiAgICA8ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSI+CiAgICAgICAgPHRleHQgeD0iNDYiIHk9IjE1IiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIj5jb2RlY292PC90ZXh0PgogICAgICAgIDx0ZXh0IHg9IjQ2IiB5PSIxNCI+Y29kZWNvdjwvdGV4dD4KICAgICAgICA8dGV4dCB4PSI5MyIgeT0iMTUiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiPjklPC90ZXh0PgogICAgICAgIDx0ZXh0IHg9IjkzIiB5PSIxNCI+OSU8L3RleHQ+CiAgICA8L2c+CiAgICA8c3ZnIHZpZXdCb3g9IjEyMCAtOCA2MCA2MCI+CiAgICAgICAgPHBhdGggZD0iTTIzLjAxMyAwQzEwLjMzMy4wMDkuMDEgMTAuMjIgMCAyMi43NjJ2LjA1OGwzLjkxNCAyLjI3NS4wNTMtLjAzNmExMS4yOTEgMTEuMjkxIDAgMCAxIDguMzUyLTEuNzY3IDEwLjkxMSAxMC45MTEgMCAwIDEgNS41IDIuNzI2bC42NzMuNjI0LjM4LS44MjhjLjM2OC0uODAyLjc5My0xLjU1NiAxLjI2NC0yLjI0LjE5LS4yNzYuMzk4LS41NTQuNjM3LS44NTFsLjM5My0uNDktLjQ4NC0uNDA0YTE2LjA4IDE2LjA4IDAgMCAwLTcuNDUzLTMuNDY2IDE2LjQ4MiAxNi40ODIgMCAwIDAtNy43MDUuNDQ5QzcuMzg2IDEwLjY4MyAxNC41NiA1LjAxNiAyMy4wMyA1LjAxYzQuNzc5IDAgOS4yNzIgMS44NCAxMi42NTEgNS4xOCAyLjQxIDIuMzgyIDQuMDY5IDUuMzUgNC44MDcgOC41OTFhMTYuNTMgMTYuNTMgMCAwIDAtNC43OTItLjcyM2wtLjI5Mi0uMDAyYTE2LjcwNyAxNi43MDcgMCAwIDAtMS45MDIuMTRsLS4wOC4wMTJjLS4yOC4wMzctLjUyNC4wNzQtLjc0OC4xMTUtLjExLjAxOS0uMjE4LjA0MS0uMzI3LjA2My0uMjU3LjA1Mi0uNTEuMTA4LS43NS4xNjlsLS4yNjUuMDY3YTE2LjM5IDE2LjM5IDAgMCAwLS45MjYuMjc2bC0uMDU2LjAxOGMtLjY4Mi4yMy0xLjM2LjUxMS0yLjAxNi44MzhsLS4wNTIuMDI2Yy0uMjkuMTQ1LS41ODQuMzA1LS44OTkuNDlsLS4wNjkuMDRhMTUuNTk2IDE1LjU5NiAwIDAgMC00LjA2MSAzLjQ2NmwtLjE0NS4xNzVjLS4yOS4zNi0uNTIxLjY2Ni0uNzIzLjk2LS4xNy4yNDctLjM0LjUxMy0uNTUyLjg2NGwtLjExNi4xOTljLS4xNy4yOTItLjMyLjU3LS40NDkuODI0bC0uMDMuMDU3YTE2LjExNiAxNi4xMTYgMCAwIDAtLjg0MyAyLjAyOWwtLjAzNC4xMDJhMTUuNjUgMTUuNjUgMCAwIDAtLjc4NiA1LjE3NGwuMDAzLjIxNGEyMS41MjMgMjEuNTIzIDAgMCAwIC4wNC43NTRjLjAwOS4xMTkuMDIuMjM3LjAzMi4zNTUuMDE0LjE0NS4wMzIuMjkuMDQ5LjQzMmwuMDEuMDhjLjAxLjA2Ny4wMTcuMTMzLjAyNi4xOTcuMDM0LjI0Mi4wNzQuNDguMTE5LjcyLjQ2MyAyLjQxOSAxLjYyIDQuODM2IDMuMzQ1IDYuOTlsLjA3OC4wOTguMDgtLjA5NWMuNjg4LS44MSAyLjM5NS0zLjM4IDIuNTM5LTQuOTIybC4wMDMtLjAyOS0uMDE0LS4wMjVhMTAuNzI3IDEwLjcyNyAwIDAgMS0xLjIyNi00Ljk1NmMwLTUuNzYgNC41NDUtMTAuNTQ0IDEwLjM0My0xMC44OWwuMzgxLS4wMTRhMTEuNDAzIDExLjQwMyAwIDAgMSA2LjY1MSAxLjk1N2wuMDU0LjAzNiAzLjg2Mi0yLjIzNy4wNS0uMDN2LS4wNTZjLjAwNi02LjA4LTIuMzg0LTExLjc5My02LjcyOS0xNi4wODlDMzQuOTMyIDIuMzYxIDI5LjE2IDAgMjMuMDEzIDAiIGZpbGw9IiNGMDFGN0EiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPgogICAgPC9zdmc+Cjwvc3ZnPg==" alt="codecov.io" /></a></p>
-<h2 id="introduction">Introduction</h2>
-<p>An R package with functions to interact with OHDSI WebAPI web services, identified by baseUrl. This package is useful to use R to make GET, POST, PUT, DELETE API calls using R-script. This is very useful for reproducible research, and also to run long running studies in batch mode. An example of a WebApi endpoint is “<a href="http://server.org:80/WebAPI">http://server.org:80/WebAPI</a>”.</p>
-<p>ROhdsiWebApi is part of <a href="https://ohdsi.github.io/Hades/index.html">HADES</a></p>
-<p>The package supports the following functional categories in WebApi.</p>
-<pre><code>## # A tibble: 7 x 2
-##   ` Category`      Features                                                 
-##   &lt;chr&gt;            &lt;chr&gt;                                                    
-## 1 ConceptSet       Functions for interfacing with ConceptSet in WebApi      
-## 2 Cohort           Functions for interfacing with Cohort in WebApi          
-## 3 IncidenceRate    Functions for interfacing with IncidenceRate in WebApi   
-## 4 Estimation       Functions for interfacing with Estimation in WebApi      
-## 5 Prediction       Functions for interfacing with Prediction in WebApi      
-## 6 Characterization Functions for interfacing with Characterization in WebApi
-## 7 Pathway          Functions for interfacing with Pathway in WebApi
-</code></pre>
-<p>The package follows a generic design pattern: * Functions that go from WebApi to R: will return a R-object (e.g. list, data frame). The function will handle the conversion of non R-objects like JSON objects into R-objects in the background. The returned objects may be inspected in R. We have ensured that all returned objects are represented in the proper data types e.g. dates in are type date, instead of string, use of integer where appropriate etc. * Functions that go from R into WebApi: will start with a R-object (e.g. list, data frame). If the WebApi requires a JSON object, the function will handle the conversion of R-object into JSON in the background.</p>
-<p>The package follows a consistent naming conventions - with the identifier for the functional category clearly in the name. There are no direct reference to ‘Atlas’, and instead ‘WebApi’ is used = because the package is designed to interface directly with WebApi.</p>
-<h2 id="technology">Technology</h2>
+<h1 id="news">News</h1>
+<h1 id="rohdsiwebapi-100">ROhdsiWebApi 1.0.0</h1>
+<p>Note: This is a major release. This release is expected to break implementations that rely on prior iterations of ROhdsiWebApi.</p>
+<h3 id="changes">Changes:</h3>
+<ol>
+<li>Generic design pattern: Starting with version 1.0.0, we have implemented a new generic design pattern.</li>
+</ol>
+<!-- end list -->
+
 <ul>
-<li>ROhdsiWebApi is an R package.</li>
-</ul>
-<h2 id="system-requirements">System Requirements</h2>
-<ul>
-<li>Requires R.</li>
-</ul>
-<h2 id="installation">Installation</h2>
-<ul>
-<li>In R, use the following commands to download and install ROhdsiWebApi:</li>
+<li>Functions that go from WebApi to R: will return a R-object (e.g. list, data frame). The function will handle the conversion of non R-objects like JSON objects into R-objects in the background. The returned objects may be inspected in R. We have ensured that all returned objects are represented in the proper data types e.g. dates in are type date, instead of string.</li>
+<li>Functions that go from R into WebApi: will start with a R-object (e.g. list, data frame). If the WebApi requires a JSON object, the function will handle the conversion of R-object into JSON in the background. More discussion <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/37">#37</a></li>
 </ul>
 <!-- end list -->
 
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;OHDSI/ROhdsiWebApi&quot;</span>)</a></code></pre></div>
-<h2 id="user-documentation">User Documentation</h2>
+<ol start="2">
+<li>Consistent naming conventions:</li>
+</ol>
+<!-- end list -->
+
 <ul>
-<li>Documentation can be found on the <a href="https://ohdsi.github.io/ROhdsiWebApi">package website</a>.</li>
+<li>References to ‘Atlas’ has been replaced by ‘WebApi’. This is because the package is designed to interface directly with WebApi. <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/21">#21</a></li>
+<li>Analysis categories in WebApi such as concept sets, cohorts have been standardized <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/86">#86</a> These may now be used in string searches of objects returned by ROhdsiWebApi.</li>
 </ul>
-<p>PDF versions of the documentation are also available:</p>
+<!-- end list -->
+
+<pre><code>#&gt; # A tibble: 7 x 1
+#&gt;   ` Category`     
+#&gt;   &lt;chr&gt;           
+#&gt; 1 ConceptSet      
+#&gt; 2 Cohort          
+#&gt; 3 IncidenceRate   
+#&gt; 4 Estimation      
+#&gt; 5 Prediction      
+#&gt; 6 Characterization
+#&gt; 7 Pathway
+</code></pre>
 <ul>
-<li>Vignette:
-<ul>
-<li><a href="https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/WorkingWithCohorts.pdf">Working With Cohorts</a></li>
-</ul></li>
-<li>Package manual:
-<ul>
-<li><a href="https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/extras/ROhdsiWebApi.pdf">ROhdsiWebApi</a></li>
-</ul></li>
+<li>Enforcement of OHDSI R style guide. We have enforced the use of <a href="https://ohdsi.github.io/MethodsLibrary/codeStyle.html#ohdsi_code_style_for_r">OHDSI R style guide</a> such as use of <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/22">camel case</a></li>
 </ul>
-<h2 id="support">Support</h2>
+<!-- end list -->
+
+<ol start="3">
+<li>Function deprecation:</li>
+</ol>
+<!-- end list -->
+
 <ul>
-<li>Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a></li>
-<li>We use the <a href="https://github.com/OHDSI/ROhdsiWebApi/issues">GitHub issue tracker</a> for all bugs/issues/enhancements</li>
+<li>We have made efforts to retain functions (no support) that do not follow design conventions.</li>
+<li>Note: no support is provided for deprecated functions and may be purged without further notice.</li>
+<li>See issues <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/91">#91</a> and <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/66">#66</a> for not following design pattern</li>
 </ul>
-<h2 id="contributing">Contributing</h2>
+<!-- end list -->
+
+<ol start="4">
+<li><p>Added Vignette</p></li>
+<li><p>We have implemented a method to provide user with informative error message using package <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/56">#66</a>. This implementation will attempt to check many potential errors and return them together (instead of default behavior of only showing the first error message.) This implementation is expected to improve usability and efficiency.</p></li>
+<li><p>New functions</p></li>
+</ol>
+<!-- end list -->
+
 <ul>
-<li>Read <a href="https://ohdsi.github.io/Hades/contribute.html">here</a> how you can contribute to this package.</li>
+<li>Get list of definitions, post definitions, search for definitions by id or string name.</li>
+<li>Job management: execute/invoke, cancel, generation status information.</li>
+<li>Names have been chosen so that they follow an easy to remember pattern and are intuitive.</li>
 </ul>
-<h2 id="license">License</h2>
+<h2 id="bug-fixes">Bug fixes:</h2>
 <ul>
-<li>ROhdsiWebApi is licensed under Apache License 2.0</li>
-</ul>
-<h2 id="development">Development</h2>
-<ul>
-<li>ROhdsiWebApi is being developed in R Studio.</li>
+<li>This is a major change to package with significant code rewrite.</li>
+<li>No specific bug fixes were targeted in this release.</li>
+<li>Future releases will target bug fixes.</li>
 </ul>
 
 </body>

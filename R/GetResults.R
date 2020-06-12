@@ -48,7 +48,7 @@ getResults <- function(id, baseUrl, category) {
     generatedSuccess <- executionInfo %>% dplyr::filter(.data$status %in% c("COMPLETE",
                                                                             "COMPLETED")) %>%
       dplyr::filter(!is.na(.data$sourceKey))
-  
+
     if ("canceled" %in% colnames(generatedSuccess)) {
       if (!is.null(generatedSuccess$canceled)) {
         generatedSuccess <- generatedSuccess %>% dplyr::filter(.data$canceled == "FALSE")
@@ -73,7 +73,7 @@ getResults <- function(id, baseUrl, category) {
                           " result generations) to have configured source key in WebApi. Results will be retrieved for this subset.")
 
 
-  if (category == "cohort" & nrow(generatedSuccess) > 0 ) {
+  if (category == "cohort" & nrow(generatedSuccess) > 0) {
     inclusionRuleStats <- list()
     treemapData <- list()
     summary <- list()
@@ -111,16 +111,16 @@ getResults <- function(id, baseUrl, category) {
                                                                                                                                                                       .data$percentMatched))/100) %>%
           utils::type.convert(as.is = TRUE, dec = ".")
 
-          if (length(response$inclusionRuleStats) > 0 ) {
-            inclusionRuleStat <- response$inclusionRuleStats %>% purrr::map(function(x) {
+          if (length(response$inclusionRuleStats) > 0) {
+          inclusionRuleStat <- response$inclusionRuleStats %>% purrr::map(function(x) {
             purrr::map(x, function(y) {
-              ifelse(is.null(y), NA, y)
+            ifelse(is.null(y), NA, y)
             })
-            })
-            inclusionRuleStatsMode[[mode + 1]] <- tidyr::tibble(inclusionRuleStat = inclusionRuleStat) %>% 
-              tidyr::unnest_wider(.data$inclusionRuleStat)
+          })
+          inclusionRuleStatsMode[[mode + 1]] <- tidyr::tibble(inclusionRuleStat = inclusionRuleStat) %>%
+            tidyr::unnest_wider(.data$inclusionRuleStat)
           } else {
-            inclusionRuleStatsMode[[mode + 1]] <- tidyr::tibble()
+          inclusionRuleStatsMode[[mode + 1]] <- tidyr::tibble()
           }
 
           if (nrow(inclusionRuleStatsMode[[mode + 1]]) > 0) {
@@ -139,13 +139,13 @@ getResults <- function(id, baseUrl, category) {
           treeMapResult <- list(name = c(), size = c())
           treeMapResult <- .flattenTree(node = tMapData, accumulated = treeMapResult)
           if (is.null(treeMapResult$name) | is.null(treeMapResult$size)) {
-            treemapDataMode[[mode + 1]] <- tidyr::tibble()
+          treemapDataMode[[mode + 1]] <- tidyr::tibble()
           } else {
-            treemapDataMode[[mode + 1]] <- dplyr::tibble(bits = treeMapResult$name,
-                                                         size = treeMapResult$size) %>%
-              dplyr::mutate(SatisfiedNumber = stringr::str_count(string = .data$bits, pattern = "1"),
-                            mode = mode,
-                            modeLong = modeLong)
+          treemapDataMode[[mode + 1]] <- dplyr::tibble(bits = treeMapResult$name,
+                                                       size = treeMapResult$size) %>%
+            dplyr::mutate(SatisfiedNumber = stringr::str_count(string = .data$bits, pattern = "1"),
+                          mode = mode,
+                          modeLong = modeLong)
           }
 
         } else {
@@ -267,7 +267,9 @@ getResults <- function(id, baseUrl, category) {
     summary <- dplyr::bind_rows(summary)
     response <- list(summary = summary, stratifyStats = stratifyStats, treemapData = treemapData)
   } else {
-    response <- list(summary = tidyr::tibble(), stratifyStats = tidyr::tibble(), treemapData = tidyr::tibble())
+    response <- list(summary = tidyr::tibble(),
+                     stratifyStats = tidyr::tibble(),
+                     treemapData = tidyr::tibble())
   }
 
 

@@ -87,6 +87,9 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
@@ -95,16 +98,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/WorkingWithCohorts.html">Working With Cohorts</a>
+      <a href="../articles/Vignette.html">Vignette</a>
     </li>
   </ul>
-</li>
-<li>
-  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+</li>
+<li>
   <a href="https://github.com/OHDSI/ROhdsiWebApi/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
@@ -132,7 +135,7 @@
     <p>Post IncidenceRate definition. <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>postIncidenceRateDefinition</span>(<span class='no'>name</span>, <span class='no'>IncidenceRateDefinition</span>, <span class='no'>baseUrl</span>)</pre>
+    <pre class="usage"><span class='fu'>postIncidenceRateDefinition</span>(<span class='no'>name</span>, <span class='no'>incidenceRateDefinition</span>, <span class='no'>baseUrl</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,7 +148,7 @@ such as uniqueness, absence of unacceptable character etc. An error
 might be thrown.</p></td>
     </tr>
     <tr>
-      <th>IncidenceRateDefinition</th>
+      <th>incidenceRateDefinition</th>
       <td><p>An R list object containing the expression for the specification.
 This will be converted to JSON expression by function and posted
 into the WebApi. Note: only limited checks are performed in R to
@@ -170,7 +173,7 @@ and its details. If unsuccessful a STOP message will be shown.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'>postIncidenceRateDefinition</span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"new valid name"</span>,
-                            <span class='kw'>IncidenceRateDefinition</span> <span class='kw'>=</span> <span class='no'>definition</span>,
+                            <span class='kw'>incidenceRateDefinition</span> <span class='kw'>=</span> <span class='no'>definition</span>,
                             <span class='kw'>baseUrl</span> <span class='kw'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span>)
 }</div></pre>
   </div>

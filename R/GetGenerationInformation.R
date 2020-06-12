@@ -83,7 +83,7 @@ getGenerationInformation <- function(id, category, baseUrl) {
       for (i in (1:length(response))) {
         responseAll[[i]] <- response[[i]] %>% purrr::map(function(x) {
           purrr::map(x, function(y) {
-            ifelse(is.null(y), NA, y)
+          ifelse(is.null(y), NA, y)
           })
         }) %>% unlist(recursive = TRUE,
                       use.names = TRUE) %>% as.matrix() %>% t() %>% tidyr::as_tibble() %>%
@@ -94,8 +94,8 @@ getGenerationInformation <- function(id, category, baseUrl) {
       denominator <- nrow(response)
       numerator <- nrow(response %>% dplyr::filter(.data$status %in% c("COMPLETE", "COMPLETED")))
     } else {
-      denominator = 0
-      numerator = 0
+      denominator <- 0
+      numerator <- 0
       response <- tidyr::tibble()
     }
   }

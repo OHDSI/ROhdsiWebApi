@@ -22,6 +22,7 @@ Imports:
     jsonlite,
     lifecycle,
     lubridate,
+    magrittr,
     openxlsx (>= 4.0.17),
     ParallelLogger,
     purrr,

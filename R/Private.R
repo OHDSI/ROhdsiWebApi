@@ -100,20 +100,18 @@
     x <- lubridate::as_datetime(x = x,
                                 tz = Sys.timezone(),
                                 lubridate::guess_formats(x = x, orders = c("y-m-d H:M",
-                                                                           "y-m-d H:M:S",
-                                                                           "ymdHMS",
-                                                                           "ymd HMS")))
+                                                                                                       "y-m-d H:M:S",
+                                                                                                       "ymdHMS",
+                                                                                                       "ymd HMS")))
     x <- min(x)
   }
   return(x)
 }
 
 .normalizeDateAndTimeTypes <- function(df) {
-  df <- dplyr::mutate_if(.tbl = df, 
+  df <- dplyr::mutate_if(.tbl = df,
                          .predicate = (stringr::str_detect(string = tolower(colnames(df)),
-                                                                  pattern = "date") |
-                                      stringr::str_detect(string = tolower(colnames(df)),
-                                                          pattern = "time")), 
+                                                           pattern = "date") | stringr::str_detect(string = tolower(colnames(df)), pattern = "time")),
                          .funs = .convertToDateTime)
   return(df)
 }

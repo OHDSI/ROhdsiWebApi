@@ -29,17 +29,17 @@ unlink("extras/ROhdsiWebApi.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/ROhdsiWebApi.pdf")
 
 dir.create("inst/doc", recursive = TRUE)
-rmarkdown::render("vignettes/WorkingWithCohorts.Rmd",
-                  output_file = "../inst/doc/WorkingWithCohorts.pdf",
+rmarkdown::render("vignettes/vignette.Rmd",
+                  output_file = "../inst/doc/vignette.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
                                           toc = TRUE,
                                           number_sections = TRUE))
-unlink("inst/doc/WorkingWithCohorts.tex")
-rmarkdown::render("README.Rmd",
+unlink("inst/doc/vignette.tex")
+rmarkdown::render("extras/README.Rmd",
                   output_format = 'all',
                   clean = TRUE)
 unlink("README.tex")
-rmarkdown::render("NEWS.Rmd",
+rmarkdown::render("extras/NEWS.Rmd",
                   output_format = 'all',
                   clean = TRUE)
 unlink("NEWS.tex")

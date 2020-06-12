@@ -159,6 +159,6 @@ postDefinition <- function(baseUrl, name, category, definition) {
   }
   ParallelLogger::logInfo("Post ", argument$categoryFirstUpper, " definition was successful")
   output <- response %>% list() %>% purrr::map_df(.f = purrr::flatten) %>% utils::type.convert(as.is = TRUE,
-                                                                                               dec = ".") %>% .normalizeDateAndTimeTypes
+                                                                                               dec = ".") %>% .normalizeDateAndTimeTypes()
   return(output)
 }
