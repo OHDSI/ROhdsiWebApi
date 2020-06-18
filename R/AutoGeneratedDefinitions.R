@@ -241,7 +241,7 @@ isValidCohortId <- function(cohortIds, baseUrl) {
 #' @details
 #' Obtain the Cohort definition from WebAPI for a given Cohort id
 #'
-#' @template BaseUrl
+#' @param wc         A WebApiConnection object 
 #' @param cohortId   An integer id representing the id that uniquely identifies a Cohort definition in
 #'                   a WebApi instance.
 #' @return
@@ -249,11 +249,15 @@ isValidCohortId <- function(cohortIds, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getCohortDefinition(cohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- function(baseUrl = "http://server.org:80/WebAPI", 
+#'                authMethod = "db",
+#'                atlasUsername = "ohdsi",
+#'                keyringServiceName = "ohdsi")
+#' getCohortDefinition(wc, cohortId = 13242)
 #' }
 #' @export
-getCohortDefinition <- function(cohortId, baseUrl) {
-  result <- getDefinition(id = cohortId, baseUrl = baseUrl, category = "cohort")
+getCohortDefinition <- function(wc, cohortId) {
+  result <- getDefinition(wc, id = cohortId, category = "cohort")
   return(result)
 }
 

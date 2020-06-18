@@ -33,7 +33,9 @@
 #' getDefinition(id = 13242, category = "cohort", baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-getDefinition <- function(id, category, baseUrl) {
+getDefinition <- function(wc, id, category) {
+  stopifnot("WebApiConnection" %in% class(wc))
+  baseUrl <- wc[["baseUrl"]]
   .checkBaseUrl(baseUrl)
 
   arguments <- .getStandardCategories()
@@ -45,9 +47,18 @@ getDefinition <- function(id, category, baseUrl) {
   checkmate::reportAssertions(errorMessage)
 
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/", id)
-  response <- httr::GET(url)
-
+  if(is.null(wc[["authHeader"]])) {
+    response <- httr::GET(url)
+  } else {
+    response <- httr::GET(url, httr::add_headers(Authorization = wc[["authHeader"]]))
+  }
   if (!response$status_code == 200) {
+    if (response$status_code == 401) {
+      err <- paste0("WebApi Authentication expired or not provided.\n", 
+                    "Status code = 401 Unauthorized")
+      ParallelLogger::logError(err)
+      stop(err)
+    }
     definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
     if (!id %in% definitionsMetaData$id) {
       error <- paste0(argument$categoryFirstUpper, ": ", id, " not found.")
