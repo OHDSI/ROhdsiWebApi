@@ -52,8 +52,9 @@ deleteDefinition <- function(id, baseUrl, category) {
     } else {
       error <- ""
     }
-    ParallelLogger::logError(error, "Request status code: ", httr::http_status(request)$message)
-    stop()
+    err <- paste0(error, "Request status code: ", httr::http_status(request)$message)
+    ParallelLogger::logError(err)
+    stop(err)
   } else {
     ParallelLogger::logInfo("Successfully deleted ",
                             category,

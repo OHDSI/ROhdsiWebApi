@@ -53,8 +53,9 @@ postDefinition <- function(baseUrl, name, category, definition) {
   checkmate::reportAssertions(errorMessage)
 
   if (!category %in% c("cohort", "conceptSet")) {
-    ParallelLogger::logError("Posting definitions of ", category, " is not supported.")
-    stop()
+    err <- paste0("Posting definitions of ", category, " is not supported.")
+    ParallelLogger::logError(err)
+    stop(err)
   }
 
   if ("expression" %in% names(definition)) {
@@ -82,8 +83,9 @@ postDefinition <- function(baseUrl, name, category, definition) {
     } else {
       error <- ""
     }
-    ParallelLogger::logError(error, "Status code = ", httr::content(response)$status_code)
-    stop()
+    err <- paste0(error, "Status code = ", httr::content(response)$status_code)
+    ParallelLogger::logError(err)
+    stop(err)
   }
   response <- httr::content(response)
   structureCreated <- response
@@ -112,11 +114,12 @@ postDefinition <- function(baseUrl, name, category, definition) {
                                          "/",
                                          argument$categoryUrlPut), json = expression)
     if (!responsePut$status_code == 200) {
-      ParallelLogger::logError("Failed to post ",
-                               argument$categoryFirstUpper,
-                               " definition. Status code = ",
-                               httr::content(responsePut)$status_code)
-      stop()
+      err <- paste0("Failed to post ",
+                    argument$categoryFirstUpper,
+                    " definition. Status code = ",
+                    httr::content(responsePut)$status_code)
+      ParallelLogger::logError(err)
+      stop(err)
     }
   }
 

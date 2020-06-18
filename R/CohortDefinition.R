@@ -250,10 +250,11 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == "cohort")
 
   if (!"cohort" %in% c("cohort")) {
-    ParallelLogger::logError("Retrieving SQL for ",
-                             argument$categoryFirstUpper,
-                             " is not supported")
-    stop()
+    err <- paste0("Retrieving SQL for ",
+                  argument$categoryFirstUpper,
+                  " is not supported")
+    ParallelLogger::logError(err)
+    stop(err)
   }
 
   errorMessage <- checkmate::makeAssertCollection()
@@ -277,7 +278,8 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
     sql <- response$templateSql
     return(sql)
   } else {
-    ParallelLogger::logError("Error: No Sql returned for cohort definition id: ", cohortDefinition)
-    stop()
+    err <- paste0("Error: No Sql returned for cohort definition id: ", cohortDefinition)
+    ParallelLogger::logError(err)
+    stop(err)
   }
 }

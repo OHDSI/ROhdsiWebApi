@@ -35,11 +35,12 @@
 .checkBaseUrl <- function(baseUrl) {
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   if (is.null(webApiVersion) | length(webApiVersion) == 0) {
-    ParallelLogger::logError("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
-                             "Please verify\n",
-                             "- is it in the form http://server.org:80/WebAPI,\n",
-                             "- are you are connected to the network")
-    stop()
+    err <- paste0("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
+                  "Please verify\n",
+                  "- is it in the form http://server.org:80/WebAPI,\n",
+                  "- are you are connected to the network")
+    ParallelLogger::logError(err)
+    stop(err)
   }
 }
 

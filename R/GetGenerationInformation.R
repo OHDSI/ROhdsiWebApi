@@ -74,8 +74,9 @@ getGenerationInformation <- function(id, category, baseUrl) {
       } else {
         error <- ""
       }
-      ParallelLogger::logError(error, "Status code = ", httr::content(response)$status_code)
-      stop()
+      err <- paste0(error, "Status code = ", httr::content(response)$status_code)
+      ParallelLogger::logError(err)
+      stop(err)
     }
     response <- httr::content(response)
     if (!length(response) == 0) {
@@ -115,8 +116,9 @@ getGenerationInformation <- function(id, category, baseUrl) {
         } else {
           error <- ""
         }
-        ParallelLogger::logError(error, "Status code = ", httr::content(response)$status_code)
-        stop()
+        err <- paste0(error, "Status code = ", httr::content(response)$status_code)
+        ParallelLogger::logError(err)
+        stop(err)
       }
       response <- httr::content(response)
       if (length(response$executionInfo) > 0) {

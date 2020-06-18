@@ -51,8 +51,9 @@ cancelGeneration <- function(id, baseUrl, sourceKey, category) {
   checkmate::reportAssertions(errorMessage)
 
   if (!all(isValidSourceKey(sourceKeys = sourceKey, baseUrl = baseUrl))) {
-    ParallelLogger::logError(sourceKey, " is not present in WebApi.")
-    stop()
+    err <- paste0(sourceKey, " is not present in WebApi.")
+    ParallelLogger::logError(err)
+    stop(err)
   }
 
   urlRoot <- paste0(baseUrl, "/", argument$categoryUrl, "/", id, "/", argument$categoryUrlCancel)
@@ -70,8 +71,9 @@ cancelGeneration <- function(id, baseUrl, sourceKey, category) {
     } else {
       error <- ""
     }
-    ParallelLogger::logError(error, response$status_code)
-    stop()
+    err <- paste0(error, response$status_code)
+    ParallelLogger::logError(err)
+    stop(err)
   }
   ParallelLogger::logInfo("Generation of ",
                           argument$categoryFirstUpper,
