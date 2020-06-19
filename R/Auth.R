@@ -27,13 +27,13 @@ connectWebApi <- function(baseUrl,
                           authMethod = guessAuthMethod(),
                           webApiUsername = NULL,
                           webApiPassword = getPass("WebApi Password")) {
-  
+  # check input
   checkmate::assertCharacter(baseUrl, len = 1, min.chars = 1)
-  if (substring(baseUrl, nchar(baseUrl)) == "/") stop("baseUrl should not end with a / (slash)")
   checkmate::assertChoice(authMethod, choices = c("db", "AD", "windows", "none"))
   checkmate::assert(checkmate::checkCharacter(webApiUsername), checkmate::checkNull(webApiUsername))
   checkmate::assert(checkmate::checkCharacter(webApiPassword), checkmate::checkNull(webPassword))
-  
+  # remove trailing forward slashes in url
+  baseUrl <- stringr::str_remove(baseUrl, "/+$")
   .checkBaseUrl(baseUrl)
   
   # run appropriate auth
