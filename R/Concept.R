@@ -15,9 +15,9 @@
 # limitations under the License.
 
 #' Get concepts \lifecycle{stable}
-#' @template vocabularySourceKey
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
+#' @template vocabularySourceKey
 #' @template SnakeCaseToCamelCase
 #' @param conceptIds   A vector of concept IDs.
 #'
@@ -26,30 +26,31 @@
 #'
 #' @examples
 #' \dontrun{
-#' conceptSet <- getConceptSet(conceptSetId = 282, baseUrl = "http://server.org:80/WebAPI")
-#' conceptIds <- resolveConceptSet(conceptSet = conceptSet, baseUrl = "http://server.org:80/WebAPI")
-#' concepts <- getConcepts(conceptIds = conceptIds, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' conceptSet <- getConceptSet(wc, conceptSetId = 282)
+#' conceptIds <- resolveConceptSet(wc, conceptSet = conceptSet)
+#' concepts <- getConcepts(wc, conceptIds = conceptIds)
 #' }
 #'
 #' @export
-getConcepts <- function(conceptIds,
-                        baseUrl,
+getConcepts <- function(wc, 
+                        conceptIds,
                         vocabularySourceKey = NULL,
                         snakeCaseToCamelCase = TRUE) {
-  .checkBaseUrl(baseUrl)
+  .checkBaseUrl(wc$baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(conceptIds, add = errorMessage)
   checkmate::assertLogical(snakeCaseToCamelCase, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (missing(vocabularySourceKey) || is.null(vocabularySourceKey)) {
-    vocabularySourceKey <- getPriorityVocabularyKey(baseUrl = baseUrl)
+    vocabularySourceKey <- getPriorityVocabularyKey(baseUrl = wc$baseUrl)
   }
 
-  url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabularySourceKey)
+  url <- sprintf("%s/vocabulary/%s/lookup/identifiers", wc$baseUrl, vocabularySourceKey)
   body <- RJSONIO::toJSON(conceptIds, digits = 23)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
+  req <- POST(url, authHeader = wc$authHeader, body = body, config = httr::add_headers(httpheader))
   req <- httr::content(req)
 
   lists <- lapply(req, function(x) {
@@ -68,8 +69,8 @@ getConcepts <- function(conceptIds,
 
 
 #' Get source concepts that map to standard concepts \lifecycle{stable}
+#' @template WebApiConnection
 #' @template vocabularySourceKey
-#' @template BaseUrl
 #' @template SnakeCaseToCamelCase
 #' @param conceptIds   A list of concept IDs referring to standard concepts.
 #'
@@ -78,32 +79,31 @@ getConcepts <- function(conceptIds,
 #'
 #' @examples
 #' \dontrun{
-#' conceptSet <- getConceptSetDefinition(conceptSetId = 282,
-#'                                       baseUrl = "http://server.org:80/WebAPI")
-#' conceptIds <- resolveConceptSet(conceptSet = conceptSet, baseUrl = "http://server.org:80/WebAPI")
-#' sourceConcepts <- getSourceConcepts(conceptIds = conceptIds,
-#'                                     baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' conceptSet <- getConceptSetDefinition(wc, conceptSetId = 282)
+#' conceptIds <- resolveConceptSet(wc, conceptSet = conceptSet)
+#' sourceConcepts <- getSourceConcepts(wc, conceptIds = conceptIds)
 #' }
 #'
 #' @export
-getSourceConcepts <- function(conceptIds,
-                              baseUrl,
+getSourceConcepts <- function(wc, 
+                              conceptIds,
                               vocabularySourceKey = NULL,
                               snakeCaseToCamelCase = TRUE) {
-  .checkBaseUrl(baseUrl)
+  .checkBaseUrl(wc$baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(conceptIds, add = errorMessage)
   checkmate::assertLogical(snakeCaseToCamelCase, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
   if (missing(vocabularySourceKey) || is.null(vocabularySourceKey)) {
-    vocabularySourceKey <- getPriorityVocabularyKey(baseUrl = baseUrl)
+    vocabularySourceKey <- getPriorityVocabularyKey(baseUrl = wc$baseUrl)
   }
 
-  url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabularySourceKey)
+  url <- sprintf("%s/vocabulary/%s/lookup/mapped", wc$baseUrl, vocabularySourceKey)
   body <- RJSONIO::toJSON(conceptIds, digits = 23)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
+  req <- POST(url, authHeader = wc$authHeader, body = body, config = httr::add_headers(httpheader))
   req <- httr::content(req)
 
   lists <- lapply(req, function(x) {

@@ -23,7 +23,7 @@
 #' Cohort-definition, Cohort-characterization, Pathway-analysis, Incidence rate (ir), estimation and
 #' prediction. This function is useful to retrieve the current specifications.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @template Category
 #'
 #' @return
@@ -31,12 +31,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' getDefinitionsMetadata(baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getDefinitionsMetadata(wc = wc)
 #' }
 #'
 #' @export
-getDefinitionsMetadata <- function(baseUrl, category) {
-  .checkBaseUrl(baseUrl)
+getDefinitionsMetadata <- function(wc, category) {
+  .checkBaseUrl(wc$baseUrl)
 
   arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == !!category)
@@ -48,7 +49,7 @@ getDefinitionsMetadata <- function(baseUrl, category) {
 
 
   categoryUrl <- argument %>% dplyr::pull(.data$categoryUrl)
-  url <- paste(baseUrl, categoryUrl, "?size=100000000", sep = "/")
+  url <- paste(wc$baseUrl, categoryUrl, "?size=100000000", sep = "/")
   request <- httr::GET(url)
 
   if (!request$status == 200) {

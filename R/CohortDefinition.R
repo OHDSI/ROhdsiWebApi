@@ -28,7 +28,7 @@
 #' be populated with the names of the rules prior to executing the cohort definition SQL. Note:
 #' generate inclusion statistics are created for all by default.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @template CohortId
 #' @param name            The name that will be used for the JSON and SQL files. If not provided, the
 #'                        name in cohort will be used, but this may not lead to valid file names.
@@ -41,20 +41,18 @@
 #' @examples
 #' \dontrun{
 #' # This will create 'inst/cohorts/Angioedema.json' and 'inst/sql/sql_server/Angioedema.sql':
-#'
-#' insertCohortDefinitionInPackage(cohortId = 282,
-#'                                 name = "Angioedema",
-#'                                 baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' insertCohortDefinitionInPackage(wc, cohortId = 282, name = "Angioedema")
 #' }
 #'
 #' @export
-insertCohortDefinitionInPackage <- function(cohortId,
+insertCohortDefinitionInPackage <- function(wc,
+                                            cohortId,
                                             name = NULL,
                                             jsonFolder = "inst/cohorts",
                                             sqlFolder = "inst/sql/sql_server",
-                                            baseUrl,
                                             generateStats = FALSE) {
-  .checkBaseUrl(baseUrl)
+  .checkBaseUrl(wc$baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertLogical(generateStats, add = errorMessage)
   checkmate::assertInt(cohortId, add = errorMessage)
@@ -74,7 +72,7 @@ insertCohortDefinitionInPackage <- function(cohortId,
   writeLines(paste("- Created JSON file:", jsonFileName))
 
   # Fetch SQL
-  sql <- getCohortSql(baseUrl = baseUrl, cohortDefinition = object, generateStats = generateStats)
+  sql <- getCohortSql(wc, cohortDefinition = object, generateStats = generateStats)
   if (!file.exists(sqlFolder)) {
     dir.create(sqlFolder, recursive = TRUE)
   }
@@ -85,10 +83,9 @@ insertCohortDefinitionInPackage <- function(cohortId,
 
 #' Insert a set of cohort definitions into package
 #'
+#' @template WebApiConnection   
 #' @param fileName                Name of a CSV file specifying the cohorts to insert. See details for
 #'                                the expected file format.
-#' @param baseUrl                 The base URL for the WebApi instance, for example:
-#'                                "http://server.org:80/WebAPI".
 #' @param jsonFolder              Path to the folder where the JSON representations will be saved.
 #' @param sqlFolder               Path to the folder where the SQL representations will be saved.
 #' @param rFileName               Name of R file to generate when \code{insertCohortCreationR = TRUE}.
@@ -108,8 +105,8 @@ insertCohortDefinitionInPackage <- function(cohortId,
 #' generate file names, so please use letters and numbers only (no spaces).} }
 #'
 #' @export
-insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/CohortsToCreate.csv",
-                                               baseUrl,
+insertCohortDefinitionSetInPackage <- function(wc,
+                                               fileName = "inst/settings/CohortsToCreate.csv",
                                                jsonFolder = "inst/cohorts",
                                                sqlFolder = "inst/sql/sql_server",
                                                rFileName = "R/CreateCohorts.R",
@@ -133,9 +130,9 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Inserting cohort:", cohortsToCreate$name[i]))
-    insertCohortDefinitionInPackage(cohortId = cohortsToCreate$atlasId[i],
+    insertCohortDefinitionInPackage(wc, 
+                                    cohortId = cohortsToCreate$atlasId[i],
                                     name = cohortsToCreate$name[i],
-                                    baseUrl = baseUrl,
                                     jsonFolder = jsonFolder,
                                     sqlFolder = sqlFolder,
                                     generateStats = generateStats)
@@ -228,7 +225,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 #' in OHDSI SQL dialect. This SQL may be used along with OHDSI R-package 'SQLRender' to
 #' render/translate to target SQL dialect and parameters rendered.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param cohortDefinition   An R list object (not JSON) representing the Cohort definition. It is the
 #'                           output R expression object of list object from \code{CohortDefinition}
 #' @param generateStats      Should the SQL include the code for generating inclusion rule statistics?
@@ -239,12 +236,12 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 #'
 #' @examples
 #' \dontrun{
-#' getCohortSql(CohortDefinition = (getCohortDefinition(cohortId = 13242, baseUrl = baseUrl)),
-#'              baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getCohortSql(wc, CohortDefinition = getCohortDefinition(wc, cohortId = 13242))
 #' }
 #' @export
-getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
-  .checkBaseUrl(baseUrl)
+getCohortSql <- function(wc, cohortDefinition, generateStats = TRUE) {
+  .checkBaseUrl(wc$baseUrl)
 
   arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == "cohort")
@@ -261,7 +258,7 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   checkmate::assertList(x = cohortDefinition, min.len = 1, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
 
-  url <- paste0(baseUrl, "/", argument$categoryUrl, "/sql/")
+  url <- paste0(wc$baseUrl, "/", argument$categoryUrl, "/sql/")
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
 
   if ("expression" %in% names(cohortDefinition)) {
@@ -272,7 +269,7 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   listGenerateStats <- list(expression = expression, options = list(generateStats = generateStats))
 
   validJsonExpression <- RJSONIO::toJSON(listGenerateStats, digits = 23)
-  response <- httr::POST(url, body = validJsonExpression, config = httr::add_headers(httpheader))
+  response <- POST(url, authHeader = wc$authHeader, body = validJsonExpression, config = httr::add_headers(httpheader))
   if (response$status == 200) {
     response <- httr::content(response)
     sql <- response$templateSql

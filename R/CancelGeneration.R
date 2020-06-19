@@ -21,7 +21,7 @@
 #' @details
 #' Invoke generation (execution) information.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @template Id
 #' @template Category
 #' @template SourceKey
@@ -31,11 +31,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' cancelGeneration(id = 13242, category = "cohort", baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' cancelGeneration(id = 13242, category = "cohort")
 #' }
 #' @export
-cancelGeneration <- function(id, baseUrl, sourceKey, category) {
-  .checkBaseUrl(baseUrl)
+cancelGeneration <- function(wc, id, sourceKey, category) {
+  .checkBaseUrl(wc$baseUrl)
 
   arguments <- .getStandardCategories() %>% dplyr::filter(.data$categoryStandard %in% c("cohort",
                                                                                         "characterization",
@@ -50,23 +51,23 @@ cancelGeneration <- function(id, baseUrl, sourceKey, category) {
   checkmate::assertSubset(x = category, choices = argument$categoryStandard)
   checkmate::reportAssertions(errorMessage)
 
-  if (!all(isValidSourceKey(sourceKeys = sourceKey, baseUrl = baseUrl))) {
+  if (!all(isValidSourceKey(sourceKeys = sourceKey, baseUrl = wc$baseUrl))) {
     err <- paste0(sourceKey, " is not present in WebApi.")
     ParallelLogger::logError(err)
     stop(err)
   }
 
-  urlRoot <- paste0(baseUrl, "/", argument$categoryUrl, "/", id, "/", argument$categoryUrlCancel)
+  urlRoot <- paste0(wc$baseUrl, "/", argument$categoryUrl, "/", id, "/", argument$categoryUrlCancel)
   url <- paste0(urlRoot, "/", sourceKey)
 
   if (argument$categoryStandard %in% c("cohort")) {
-    response <- httr::GET(url)
+    response <- GET(url, authHeader = wc$authHeader)
   }
   if (argument$categoryStandard %in% c("characterization", "pathway", "incidenceRate")) {
-    response <- httr::DELETE(url)
+    response <- DELETE(url, authHeader = wc$authHeader)
   }
   if (!response$status_code %in% c(200, 204)) {
-    if (isValidId(ids = id, baseUrl = baseUrl, category = category)) {
+    if (isValidId(ids = id, baseUrl = wc$baseUrl, category = category)) {
       error <- paste0(argument$categoryFirstUpper, " ", id, " is not present in WebApi.")
     } else {
       error <- ""
