@@ -4,7 +4,7 @@
 #' @details
 #' Get generation (execution) information about %categoryFirstUpper% for a %category%Id.
 #'  
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param %category%Id   An integer id representing the id that uniquely identifies a 
 #'                       %categoryFirstUpper% definition in a WebApi instance.
 #' @return
@@ -12,13 +12,13 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' get%categoryFirstUpper%GenerationInformation(%category%Id = 13242, 
-#'                                              baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' get%categoryFirstUpper%GenerationInformation(wc, %category%Id = 13242)
 #' }
 #' @export
-get%categoryFirstUpper%GenerationInformation <- function(%category%Id, baseUrl){
-  .checkBaseUrl(baseUrl)
-  response <- getGenerationInformation(id = %category%Id, baseUrl = baseUrl, category = '%category%')
+get%categoryFirstUpper%GenerationInformation <- function(wc, %category%Id){
+  .checkBaseUrl(wc$baseUrl)
+  response <- getGenerationInformation(wc = wc, id = %category%Id, category = '%category%')
  return(response)
 }
 
@@ -28,7 +28,7 @@ get%categoryFirstUpper%GenerationInformation <- function(%category%Id, baseUrl){
 #' @details
 #' Invoke the generation of %categoryFirstUpper% id in the WebApi.
 #'  
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param %category%Id   An integer id representing the id that uniquely identifies a 
 #'                       %categoryFirstUpper% definition in a WebApi instance.
 #' @template SourceKey
@@ -36,17 +36,18 @@ get%categoryFirstUpper%GenerationInformation <- function(%category%Id, baseUrl){
 #' 
 #' @examples 
 #' \dontrun{
-#' invoke%categoryFirstUpper%Generation(%category%Id = 13242, 
-#' baseUrl = "http://server.org:80/WebAPI",
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' invoke%categoryFirstUpper%Generation(wc, 
+#' %category%Id = 13242,
 #' sourceKey = 'HCUP')
 #' }
 #' @export
-invoke%categoryFirstUpper%Generation <- function(%category%Id, baseUrl, sourceKey){
-  .checkBaseUrl(baseUrl)
+invoke%categoryFirstUpper%Generation <- function(wc, %category%Id, sourceKey){
+  .checkBaseUrl(wc$baseUrl)
   response <-
     invokeGeneration(
+      wc,
       id = %category%Id,
-      baseUrl = baseUrl,
       category = '%category%',
       sourceKey = sourceKey
     )
@@ -58,7 +59,7 @@ invoke%categoryFirstUpper%Generation <- function(%category%Id, baseUrl, sourceKe
 #' @details
 #' Cancel the generation of %categoryFirstUpper% id in the WebApi.
 #'  
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param %category%Id   An integer id representing the id that uniquely identifies a 
 #'                       %categoryFirstUpper% definition in a WebApi instance.
 #' @template SourceKey
@@ -66,17 +67,17 @@ invoke%categoryFirstUpper%Generation <- function(%category%Id, baseUrl, sourceKe
 #' 
 #' @examples 
 #' \dontrun{
-#' cancel%categoryFirstUpper%Generation(%category%Id = 13242, 
-#' baseUrl = "http://server.org:80/WebAPI",
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' cancel%categoryFirstUpper%Generation(wc, %category%Id = 13242, 
 #' sourceKey = 'HCUP')
 #' }
 #' @export
-cancel%categoryFirstUpper%Generation <- function(%category%Id, baseUrl, sourceKey){
-  .checkBaseUrl(baseUrl)
+cancel%categoryFirstUpper%Generation <- function(wc, %category%Id, sourceKey){
+  .checkBaseUrl(wc$baseUrl)
   response <-
     cancelGeneration(
+      wc,
       id = %category%Id,
-      baseUrl = baseUrl,
       category = '%category%',
       sourceKey = sourceKey
     )
@@ -89,18 +90,18 @@ cancel%categoryFirstUpper%Generation <- function(%category%Id, baseUrl, sourceKe
 #' @details
 #' Get the results for %categoryFirstUpper% id.
 #'  
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @template %categoryFirstUpper%Id
 #' @return            An R object with results.
 #' 
 #' @examples 
 #' \dontrun{
-#' get%categoryFirstUpper%Results(%category%Id = 342, 
-#' baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' get%categoryFirstUpper%Results(wc, %category%Id = 342)
 #' }
 #' @export
 # Check name
-get%categoryFirstUpper%Results <- function(%category%Id, baseUrl) {
-  result <- getResults(baseUrl = baseUrl, id = %category%Id, category = '%category%')
+get%categoryFirstUpper%Results <- function(wc, %category%Id) {
+  result <- getResults(wc = wc, id = %category%Id, category = '%category%')
   return(result)
 }

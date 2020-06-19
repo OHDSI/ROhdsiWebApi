@@ -24,18 +24,19 @@
 #' etc. from WebApi for ConceptSet. This function is useful to retrieve the current ConceptSet
 #' specifications.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @return
 #' A tibble of specification metadata for ConceptSet. Note: modifiedDate and createdDate are returned
 #' as text/character.
 #'
 #' @examples
 #' \dontrun{
-#' getConceptSetDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getConceptSetDefinitionsMetaData(wc)
 #' }
 #' @export
-getConceptSetDefinitionsMetaData <- function(baseUrl) {
-  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("conceptSet"))
+getConceptSetDefinitionsMetaData <- function(wc) {
+  metaData <- getDefinitionsMetadata(wc = wc, category = c("conceptSet"))
   return(metaData)
 }
 
@@ -45,18 +46,19 @@ getConceptSetDefinitionsMetaData <- function(baseUrl) {
 #' Checks if a set of id for a ConceptSet is valid. The following checks are performed. 1) checks if
 #' all the ids exists in the WebApi i.e. valid.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param conceptSetIds   A list of integer id(s) of the ConceptSet to be tested for validity.
 #' @return
 #' A logical vector indicating if an ID is valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidConceptSetId(conceptSetIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' isValidConceptSetId(wc, conceptSetIds = c(13242, 3423, 34))
 #' }
 #' @export
-isValidConceptSetId <- function(conceptSetIds, baseUrl) {
-  result <- isValidId(baseUrl = baseUrl, category = "conceptSet", ids = conceptSetIds)
+isValidConceptSetId <- function(wc, conceptSetIds) {
+  result <- isValidId(wc = wc, category = "conceptSet", ids = conceptSetIds)
   return(result)
 }
 
@@ -65,7 +67,7 @@ isValidConceptSetId <- function(conceptSetIds, baseUrl) {
 #' @details
 #' Obtain the ConceptSet definition from WebAPI for a given ConceptSet id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param conceptSetId   An integer id representing the id that uniquely identifies a ConceptSet
 #'                       definition in a WebApi instance.
 #' @return
@@ -73,11 +75,12 @@ isValidConceptSetId <- function(conceptSetIds, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getConceptSetDefinition(conceptSetId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getConceptSetDefinition(wc, conceptSetId = 13242)
 #' }
 #' @export
-getConceptSetDefinition <- function(conceptSetId, baseUrl) {
-  result <- getDefinition(id = conceptSetId, baseUrl = baseUrl, category = "conceptSet")
+getConceptSetDefinition <- function(wc, conceptSetId) {
+  result <- getDefinition(wc = wc, id = conceptSetId, category = "conceptSet")
   return(result)
 }
 
@@ -86,7 +89,7 @@ getConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #' @details
 #' Delete the ConceptSet definition from WebAPI for a given ConceptSet id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param conceptSetId   An integer id representing the id that uniquely identifies a ConceptSet
 #'                       definition in a WebApi instance.
 #' @return
@@ -94,11 +97,12 @@ getConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' deleteConceptSetDefinition(conceptSetId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' deleteConceptSetDefinition(wc, conceptSetId = 13242)
 #' }
 #' @export
-deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
-  result <- deleteDefinition(baseUrl = baseUrl, id = conceptSetId, category = "conceptSet")
+deleteConceptSetDefinition <- function(wc, conceptSetId) {
+  result <- deleteDefinition(wc = wc, id = conceptSetId, category = "conceptSet")
   return(result)
 }
 
@@ -107,7 +111,7 @@ deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #' @details
 #' Check if a string name already exists in the WebApi as a ConceptSet definition name.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param conceptSetName   A string name for the ConceptSet to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
@@ -115,13 +119,13 @@ deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' existsConceptSetName(conceptSetName = "this text string needs to be checked",
-#'                      baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' existsConceptSetName(wc, conceptSetName = "this text string needs to be checked")
 #' }
 #' @export
 # Check name
-existsConceptSetName <- function(conceptSetName, baseUrl) {
-  definitionsMetaData <- getConceptSetDefinitionsMetaData(baseUrl = baseUrl)
+existsConceptSetName <- function(wc, conceptSetName) {
+  definitionsMetaData <- getConceptSetDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == conceptSetName)
   if (nrow(matched) > 0) {
     return(matched)
@@ -136,7 +140,7 @@ existsConceptSetName <- function(conceptSetName, baseUrl) {
 #' Detect string matched ConceptSet definition names from the WebApi, and retrieve metadata
 #' definitions.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pattern   A pattern to look for. See \link[stringr]{str_detect} for details.
 #' @param negate    If TRUE, return non-matching elements. See \link[stringr]{str_detect} for details.
 #' @return
@@ -144,13 +148,13 @@ existsConceptSetName <- function(conceptSetName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' detectConceptSets(pattern = "this text string to search in pattern",
-#'                   baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' detectConceptSets(wc, pattern = "this text string to search in pattern")
 #' }
 #' @export
 # Check name
-detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
-  definitionsMetaData <- getConceptSetDefinitionsMetaData(baseUrl = baseUrl)
+detectConceptSetsByName <- function(wc, pattern, negate = FALSE) {
+  definitionsMetaData <- getConceptSetDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
                                                                        negate = negate))
@@ -168,7 +172,7 @@ detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @details
 #' Post ConceptSet definition to WebAPI
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param name                   A valid name for the definition. WebApi will use this name (if valid)
 #'                               as the name of the definition. WebApi checks for validity, such as
 #'                               uniqueness, absence of unacceptable character etc. An error might be
@@ -183,14 +187,13 @@ detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' postConceptSetDefinition(name = "new valid name",
-#'                          conceptSetDefinition = definition,
-#'                          baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' postConceptSetDefinition(wc, name = "new valid name", conceptSetDefinition = definition)
 #' }
 #' @export
-postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
-  result <- postDefinition(name = name,
-                           baseUrl = baseUrl,
+postConceptSetDefinition <- function(wc, name, conceptSetDefinition) {
+  result <- postDefinition(wc,
+                           name = name,
                            category = "conceptSet",
                            definition = conceptSetDefinition)
   return(result)
@@ -200,18 +203,19 @@ postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
 #' Get the meta data of WebApi specifications such as id, name, created/modified details, hash object,
 #' etc. from WebApi for Cohort. This function is useful to retrieve the current Cohort specifications.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @return
 #' A tibble of specification metadata for Cohort. Note: modifiedDate and createdDate are returned as
 #' text/character.
 #'
 #' @examples
 #' \dontrun{
-#' getCohortDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getCohortDefinitionsMetaData(wc)
 #' }
 #' @export
-getCohortDefinitionsMetaData <- function(baseUrl) {
-  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("cohort"))
+getCohortDefinitionsMetaData <- function(wc) {
+  metaData <- getDefinitionsMetadata(wc = wc, category = c("cohort"))
   return(metaData)
 }
 
@@ -221,18 +225,19 @@ getCohortDefinitionsMetaData <- function(baseUrl) {
 #' Checks if a set of id for a Cohort is valid. The following checks are performed. 1) checks if all
 #' the ids exists in the WebApi i.e. valid.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param cohortIds   A list of integer id(s) of the Cohort to be tested for validity.
 #' @return
 #' A logical vector indicating if an ID is valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidCohortId(cohortIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' isValidCohortId(wc, cohortIds = c(13242, 3423, 34))
 #' }
 #' @export
-isValidCohortId <- function(cohortIds, baseUrl) {
-  result <- isValidId(baseUrl = baseUrl, category = "cohort", ids = cohortIds)
+isValidCohortId <- function(wc, cohortIds) {
+  result <- isValidId(wc = wc, category = "cohort", ids = cohortIds)
   return(result)
 }
 
@@ -241,7 +246,7 @@ isValidCohortId <- function(cohortIds, baseUrl) {
 #' @details
 #' Obtain the Cohort definition from WebAPI for a given Cohort id
 #'
-#' @param wc         A WebApiConnection object 
+#' @template WebApiConnection
 #' @param cohortId   An integer id representing the id that uniquely identifies a Cohort definition in
 #'                   a WebApi instance.
 #' @return
@@ -249,15 +254,12 @@ isValidCohortId <- function(cohortIds, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' wc <- function(baseUrl = "http://server.org:80/WebAPI", 
-#'                authMethod = "db",
-#'                atlasUsername = "ohdsi",
-#'                keyringServiceName = "ohdsi")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
 #' getCohortDefinition(wc, cohortId = 13242)
 #' }
 #' @export
 getCohortDefinition <- function(wc, cohortId) {
-  result <- getDefinition(wc, id = cohortId, category = "cohort")
+  result <- getDefinition(wc = wc, id = cohortId, category = "cohort")
   return(result)
 }
 
@@ -266,7 +268,7 @@ getCohortDefinition <- function(wc, cohortId) {
 #' @details
 #' Delete the Cohort definition from WebAPI for a given Cohort id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param cohortId   An integer id representing the id that uniquely identifies a Cohort definition in
 #'                   a WebApi instance.
 #' @return
@@ -274,11 +276,12 @@ getCohortDefinition <- function(wc, cohortId) {
 #'
 #' @examples
 #' \dontrun{
-#' deleteCohortDefinition(cohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' deleteCohortDefinition(wc, cohortId = 13242)
 #' }
 #' @export
-deleteCohortDefinition <- function(cohortId, baseUrl) {
-  result <- deleteDefinition(baseUrl = baseUrl, id = cohortId, category = "cohort")
+deleteCohortDefinition <- function(wc, cohortId) {
+  result <- deleteDefinition(wc = wc, id = cohortId, category = "cohort")
   return(result)
 }
 
@@ -287,7 +290,7 @@ deleteCohortDefinition <- function(cohortId, baseUrl) {
 #' @details
 #' Check if a string name already exists in the WebApi as a Cohort definition name.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param cohortName   A string name for the Cohort to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
@@ -295,13 +298,13 @@ deleteCohortDefinition <- function(cohortId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' existsCohortName(cohortName = "this text string needs to be checked",
-#'                  baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' existsCohortName(wc, cohortName = "this text string needs to be checked")
 #' }
 #' @export
 # Check name
-existsCohortName <- function(cohortName, baseUrl) {
-  definitionsMetaData <- getCohortDefinitionsMetaData(baseUrl = baseUrl)
+existsCohortName <- function(wc, cohortName) {
+  definitionsMetaData <- getCohortDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == cohortName)
   if (nrow(matched) > 0) {
     return(matched)
@@ -315,7 +318,7 @@ existsCohortName <- function(cohortName, baseUrl) {
 #' @details
 #' Detect string matched Cohort definition names from the WebApi, and retrieve metadata definitions.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pattern   A pattern to look for. See \link[stringr]{str_detect} for details.
 #' @param negate    If TRUE, return non-matching elements. See \link[stringr]{str_detect} for details.
 #' @return
@@ -323,13 +326,13 @@ existsCohortName <- function(cohortName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' detectCohorts(pattern = "this text string to search in pattern",
-#'               baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' detectCohorts(wc, pattern = "this text string to search in pattern")
 #' }
 #' @export
 # Check name
-detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
-  definitionsMetaData <- getCohortDefinitionsMetaData(baseUrl = baseUrl)
+detectCohortsByName <- function(wc, pattern, negate = FALSE) {
+  definitionsMetaData <- getCohortDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
                                                                        negate = negate))
@@ -347,7 +350,7 @@ detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @details
 #' Post Cohort definition to WebAPI
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param name               A valid name for the definition. WebApi will use this name (if valid) as
 #'                           the name of the definition. WebApi checks for validity, such as
 #'                           uniqueness, absence of unacceptable character etc. An error might be
@@ -362,16 +365,12 @@ detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' postCohortDefinition(name = "new valid name",
-#'                      cohortDefinition = definition,
-#'                      baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' postCohortDefinition(wc, name = "new valid name", cohortDefinition = definition)
 #' }
 #' @export
-postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
-  result <- postDefinition(name = name,
-                           baseUrl = baseUrl,
-                           category = "cohort",
-                           definition = cohortDefinition)
+postCohortDefinition <- function(wc, name, cohortDefinition) {
+  result <- postDefinition(wc, name = name, category = "cohort", definition = cohortDefinition)
   return(result)
 }
 
@@ -380,7 +379,7 @@ postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
 #' @details
 #' Get generation (execution) information about Cohort for a cohortId.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param cohortId   An integer id representing the id that uniquely identifies a Cohort definition in
 #'                   a WebApi instance.
 #' @return
@@ -388,12 +387,13 @@ postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getCohortGenerationInformation(cohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getCohortGenerationInformation(wc, cohortId = 13242)
 #' }
 #' @export
-getCohortGenerationInformation <- function(cohortId, baseUrl) {
-  .checkBaseUrl(baseUrl)
-  response <- getGenerationInformation(id = cohortId, baseUrl = baseUrl, category = "cohort")
+getCohortGenerationInformation <- function(wc, cohortId) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- getGenerationInformation(wc = wc, id = cohortId, category = "cohort")
   return(response)
 }
 
@@ -403,7 +403,7 @@ getCohortGenerationInformation <- function(cohortId, baseUrl) {
 #' @details
 #' Invoke the generation of Cohort id in the WebApi.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param cohortId   An integer id representing the id that uniquely identifies a Cohort definition in
 #'                   a WebApi instance.
 #' @template SourceKey
@@ -412,17 +412,13 @@ getCohortGenerationInformation <- function(cohortId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' invokeCohortGeneration(cohortId = 13242,
-#'                        baseUrl = "http://server.org:80/WebAPI",
-#'                        sourceKey = "HCUP")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' invokeCohortGeneration(wc, cohortId = 13242, sourceKey = "HCUP")
 #' }
 #' @export
-invokeCohortGeneration <- function(cohortId, baseUrl, sourceKey) {
-  .checkBaseUrl(baseUrl)
-  response <- invokeGeneration(id = cohortId,
-                               baseUrl = baseUrl,
-                               category = "cohort",
-                               sourceKey = sourceKey)
+invokeCohortGeneration <- function(wc, cohortId, sourceKey) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- invokeGeneration(wc, id = cohortId, category = "cohort", sourceKey = sourceKey)
   return(response)
 }
 
@@ -431,7 +427,7 @@ invokeCohortGeneration <- function(cohortId, baseUrl, sourceKey) {
 #' @details
 #' Cancel the generation of Cohort id in the WebApi.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param cohortId   An integer id representing the id that uniquely identifies a Cohort definition in
 #'                   a WebApi instance.
 #' @template SourceKey
@@ -440,17 +436,13 @@ invokeCohortGeneration <- function(cohortId, baseUrl, sourceKey) {
 #'
 #' @examples
 #' \dontrun{
-#' cancelCohortGeneration(cohortId = 13242,
-#'                        baseUrl = "http://server.org:80/WebAPI",
-#'                        sourceKey = "HCUP")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' cancelCohortGeneration(wc, cohortId = 13242, sourceKey = "HCUP")
 #' }
 #' @export
-cancelCohortGeneration <- function(cohortId, baseUrl, sourceKey) {
-  .checkBaseUrl(baseUrl)
-  response <- cancelGeneration(id = cohortId,
-                               baseUrl = baseUrl,
-                               category = "cohort",
-                               sourceKey = sourceKey)
+cancelCohortGeneration <- function(wc, cohortId, sourceKey) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- cancelGeneration(wc, id = cohortId, category = "cohort", sourceKey = sourceKey)
   return(response)
 }
 
@@ -460,19 +452,20 @@ cancelCohortGeneration <- function(cohortId, baseUrl, sourceKey) {
 #' @details
 #' Get the results for Cohort id.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @template CohortId
 #' @return
 #' An R object with results.
 #'
 #' @examples
 #' \dontrun{
-#' getCohortResults(cohortId = 342, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getCohortResults(wc, cohortId = 342)
 #' }
 #' @export
 # Check name
-getCohortResults <- function(cohortId, baseUrl) {
-  result <- getResults(baseUrl = baseUrl, id = cohortId, category = "cohort")
+getCohortResults <- function(wc, cohortId) {
+  result <- getResults(wc = wc, id = cohortId, category = "cohort")
   return(result)
 }
 #' Get the meta data for IncidenceRate definitions. \lifecycle{stable}
@@ -481,18 +474,19 @@ getCohortResults <- function(cohortId, baseUrl) {
 #' etc. from WebApi for IncidenceRate. This function is useful to retrieve the current IncidenceRate
 #' specifications.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @return
 #' A tibble of specification metadata for IncidenceRate. Note: modifiedDate and createdDate are
 #' returned as text/character.
 #'
 #' @examples
 #' \dontrun{
-#' getIncidenceRateDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getIncidenceRateDefinitionsMetaData(wc)
 #' }
 #' @export
-getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
-  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("incidenceRate"))
+getIncidenceRateDefinitionsMetaData <- function(wc) {
+  metaData <- getDefinitionsMetadata(wc = wc, category = c("incidenceRate"))
   return(metaData)
 }
 
@@ -502,19 +496,19 @@ getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
 #' Checks if a set of id for a IncidenceRate is valid. The following checks are performed. 1) checks
 #' if all the ids exists in the WebApi i.e. valid.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param incidenceRateIds   A list of integer id(s) of the IncidenceRate to be tested for validity.
 #' @return
 #' A logical vector indicating if an ID is valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidIncidenceRateId(incidenceRateIds = c(13242, 3423, 34),
-#'                        baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' isValidIncidenceRateId(wc, incidenceRateIds = c(13242, 3423, 34))
 #' }
 #' @export
-isValidIncidenceRateId <- function(incidenceRateIds, baseUrl) {
-  result <- isValidId(baseUrl = baseUrl, category = "incidenceRate", ids = incidenceRateIds)
+isValidIncidenceRateId <- function(wc, incidenceRateIds) {
+  result <- isValidId(wc = wc, category = "incidenceRate", ids = incidenceRateIds)
   return(result)
 }
 
@@ -523,7 +517,7 @@ isValidIncidenceRateId <- function(incidenceRateIds, baseUrl) {
 #' @details
 #' Obtain the IncidenceRate definition from WebAPI for a given IncidenceRate id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param incidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
 #'                          definition in a WebApi instance.
 #' @return
@@ -531,11 +525,12 @@ isValidIncidenceRateId <- function(incidenceRateIds, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getIncidenceRateDefinition(incidenceRateId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getIncidenceRateDefinition(wc, incidenceRateId = 13242)
 #' }
 #' @export
-getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
-  result <- getDefinition(id = incidenceRateId, baseUrl = baseUrl, category = "incidenceRate")
+getIncidenceRateDefinition <- function(wc, incidenceRateId) {
+  result <- getDefinition(wc = wc, id = incidenceRateId, category = "incidenceRate")
   return(result)
 }
 
@@ -544,7 +539,7 @@ getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 #' @details
 #' Delete the IncidenceRate definition from WebAPI for a given IncidenceRate id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param incidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
 #'                          definition in a WebApi instance.
 #' @return
@@ -552,11 +547,12 @@ getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' deleteIncidenceRateDefinition(incidenceRateId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' deleteIncidenceRateDefinition(wc, incidenceRateId = 13242)
 #' }
 #' @export
-deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
-  result <- deleteDefinition(baseUrl = baseUrl, id = incidenceRateId, category = "incidenceRate")
+deleteIncidenceRateDefinition <- function(wc, incidenceRateId) {
+  result <- deleteDefinition(wc = wc, id = incidenceRateId, category = "incidenceRate")
   return(result)
 }
 
@@ -565,7 +561,7 @@ deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 #' @details
 #' Check if a string name already exists in the WebApi as a IncidenceRate definition name.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param incidenceRateName   A string name for the IncidenceRate to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
@@ -573,13 +569,13 @@ deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' existsIncidenceRateName(incidenceRateName = "this text string needs to be checked",
-#'                         baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' existsIncidenceRateName(wc, incidenceRateName = "this text string needs to be checked")
 #' }
 #' @export
 # Check name
-existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
-  definitionsMetaData <- getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
+existsIncidenceRateName <- function(wc, incidenceRateName) {
+  definitionsMetaData <- getIncidenceRateDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == incidenceRateName)
   if (nrow(matched) > 0) {
     return(matched)
@@ -594,7 +590,7 @@ existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
 #' Detect string matched IncidenceRate definition names from the WebApi, and retrieve metadata
 #' definitions.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pattern   A pattern to look for. See \link[stringr]{str_detect} for details.
 #' @param negate    If TRUE, return non-matching elements. See \link[stringr]{str_detect} for details.
 #' @return
@@ -603,13 +599,13 @@ existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' detectIncidenceRates(pattern = "this text string to search in pattern",
-#'                      baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' detectIncidenceRates(wc, pattern = "this text string to search in pattern")
 #' }
 #' @export
 # Check name
-detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
-  definitionsMetaData <- getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
+detectIncidenceRatesByName <- function(wc, pattern, negate = FALSE) {
+  definitionsMetaData <- getIncidenceRateDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
                                                                        negate = negate))
@@ -627,7 +623,7 @@ detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @details
 #' Post IncidenceRate definition to WebAPI
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param name                      A valid name for the definition. WebApi will use this name (if
 #'                                  valid) as the name of the definition. WebApi checks for validity,
 #'                                  such as uniqueness, absence of unacceptable character etc. An error
@@ -642,14 +638,13 @@ detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' postIncidenceRateDefinition(name = "new valid name",
-#'                             incidenceRateDefinition = definition,
-#'                             baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' postIncidenceRateDefinition(wc, name = "new valid name", incidenceRateDefinition = definition)
 #' }
 #' @export
-postIncidenceRateDefinition <- function(name, incidenceRateDefinition, baseUrl) {
-  result <- postDefinition(name = name,
-                           baseUrl = baseUrl,
+postIncidenceRateDefinition <- function(wc, name, incidenceRateDefinition) {
+  result <- postDefinition(wc,
+                           name = name,
                            category = "incidenceRate",
                            definition = incidenceRateDefinition)
   return(result)
@@ -660,7 +655,7 @@ postIncidenceRateDefinition <- function(name, incidenceRateDefinition, baseUrl) 
 #' @details
 #' Get generation (execution) information about IncidenceRate for a incidenceRateId.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param incidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
 #'                          definition in a WebApi instance.
 #' @return
@@ -668,15 +663,13 @@ postIncidenceRateDefinition <- function(name, incidenceRateDefinition, baseUrl) 
 #'
 #' @examples
 #' \dontrun{
-#' getIncidenceRateGenerationInformation(incidenceRateId = 13242,
-#'                                       baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getIncidenceRateGenerationInformation(wc, incidenceRateId = 13242)
 #' }
 #' @export
-getIncidenceRateGenerationInformation <- function(incidenceRateId, baseUrl) {
-  .checkBaseUrl(baseUrl)
-  response <- getGenerationInformation(id = incidenceRateId,
-                                       baseUrl = baseUrl,
-                                       category = "incidenceRate")
+getIncidenceRateGenerationInformation <- function(wc, incidenceRateId) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- getGenerationInformation(wc = wc, id = incidenceRateId, category = "incidenceRate")
   return(response)
 }
 
@@ -686,7 +679,7 @@ getIncidenceRateGenerationInformation <- function(incidenceRateId, baseUrl) {
 #' @details
 #' Invoke the generation of IncidenceRate id in the WebApi.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param incidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
 #'                          definition in a WebApi instance.
 #' @template SourceKey
@@ -695,15 +688,14 @@ getIncidenceRateGenerationInformation <- function(incidenceRateId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' invokeIncidenceRateGeneration(incidenceRateId = 13242,
-#'                               baseUrl = "http://server.org:80/WebAPI",
-#'                               sourceKey = "HCUP")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' invokeIncidenceRateGeneration(wc, incidenceRateId = 13242, sourceKey = "HCUP")
 #' }
 #' @export
-invokeIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
-  .checkBaseUrl(baseUrl)
-  response <- invokeGeneration(id = incidenceRateId,
-                               baseUrl = baseUrl,
+invokeIncidenceRateGeneration <- function(wc, incidenceRateId, sourceKey) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- invokeGeneration(wc,
+                               id = incidenceRateId,
                                category = "incidenceRate",
                                sourceKey = sourceKey)
   return(response)
@@ -714,7 +706,7 @@ invokeIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
 #' @details
 #' Cancel the generation of IncidenceRate id in the WebApi.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param incidenceRateId   An integer id representing the id that uniquely identifies a IncidenceRate
 #'                          definition in a WebApi instance.
 #' @template SourceKey
@@ -723,15 +715,14 @@ invokeIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
 #'
 #' @examples
 #' \dontrun{
-#' cancelIncidenceRateGeneration(incidenceRateId = 13242,
-#'                               baseUrl = "http://server.org:80/WebAPI",
-#'                               sourceKey = "HCUP")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' cancelIncidenceRateGeneration(wc, incidenceRateId = 13242, sourceKey = "HCUP")
 #' }
 #' @export
-cancelIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
-  .checkBaseUrl(baseUrl)
-  response <- cancelGeneration(id = incidenceRateId,
-                               baseUrl = baseUrl,
+cancelIncidenceRateGeneration <- function(wc, incidenceRateId, sourceKey) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- cancelGeneration(wc,
+                               id = incidenceRateId,
                                category = "incidenceRate",
                                sourceKey = sourceKey)
   return(response)
@@ -743,19 +734,20 @@ cancelIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
 #' @details
 #' Get the results for IncidenceRate id.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @template IncidenceRateId
 #' @return
 #' An R object with results.
 #'
 #' @examples
 #' \dontrun{
-#' getIncidenceRateResults(incidenceRateId = 342, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getIncidenceRateResults(wc, incidenceRateId = 342)
 #' }
 #' @export
 # Check name
-getIncidenceRateResults <- function(incidenceRateId, baseUrl) {
-  result <- getResults(baseUrl = baseUrl, id = incidenceRateId, category = "incidenceRate")
+getIncidenceRateResults <- function(wc, incidenceRateId) {
+  result <- getResults(wc = wc, id = incidenceRateId, category = "incidenceRate")
   return(result)
 }
 #' Get the meta data for Estimation definitions. \lifecycle{stable}
@@ -764,18 +756,19 @@ getIncidenceRateResults <- function(incidenceRateId, baseUrl) {
 #' etc. from WebApi for Estimation. This function is useful to retrieve the current Estimation
 #' specifications.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @return
 #' A tibble of specification metadata for Estimation. Note: modifiedDate and createdDate are returned
 #' as text/character.
 #'
 #' @examples
 #' \dontrun{
-#' getEstimationDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getEstimationDefinitionsMetaData(wc)
 #' }
 #' @export
-getEstimationDefinitionsMetaData <- function(baseUrl) {
-  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("estimation"))
+getEstimationDefinitionsMetaData <- function(wc) {
+  metaData <- getDefinitionsMetadata(wc = wc, category = c("estimation"))
   return(metaData)
 }
 
@@ -785,18 +778,19 @@ getEstimationDefinitionsMetaData <- function(baseUrl) {
 #' Checks if a set of id for a Estimation is valid. The following checks are performed. 1) checks if
 #' all the ids exists in the WebApi i.e. valid.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param estimationIds   A list of integer id(s) of the Estimation to be tested for validity.
 #' @return
 #' A logical vector indicating if an ID is valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidEstimationId(estimationIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' isValidEstimationId(wc, estimationIds = c(13242, 3423, 34))
 #' }
 #' @export
-isValidEstimationId <- function(estimationIds, baseUrl) {
-  result <- isValidId(baseUrl = baseUrl, category = "estimation", ids = estimationIds)
+isValidEstimationId <- function(wc, estimationIds) {
+  result <- isValidId(wc = wc, category = "estimation", ids = estimationIds)
   return(result)
 }
 
@@ -805,7 +799,7 @@ isValidEstimationId <- function(estimationIds, baseUrl) {
 #' @details
 #' Obtain the Estimation definition from WebAPI for a given Estimation id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param estimationId   An integer id representing the id that uniquely identifies a Estimation
 #'                       definition in a WebApi instance.
 #' @return
@@ -813,11 +807,12 @@ isValidEstimationId <- function(estimationIds, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getEstimationDefinition(estimationId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getEstimationDefinition(wc, estimationId = 13242)
 #' }
 #' @export
-getEstimationDefinition <- function(estimationId, baseUrl) {
-  result <- getDefinition(id = estimationId, baseUrl = baseUrl, category = "estimation")
+getEstimationDefinition <- function(wc, estimationId) {
+  result <- getDefinition(wc = wc, id = estimationId, category = "estimation")
   return(result)
 }
 
@@ -826,7 +821,7 @@ getEstimationDefinition <- function(estimationId, baseUrl) {
 #' @details
 #' Delete the Estimation definition from WebAPI for a given Estimation id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param estimationId   An integer id representing the id that uniquely identifies a Estimation
 #'                       definition in a WebApi instance.
 #' @return
@@ -834,11 +829,12 @@ getEstimationDefinition <- function(estimationId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' deleteEstimationDefinition(estimationId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' deleteEstimationDefinition(wc, estimationId = 13242)
 #' }
 #' @export
-deleteEstimationDefinition <- function(estimationId, baseUrl) {
-  result <- deleteDefinition(baseUrl = baseUrl, id = estimationId, category = "estimation")
+deleteEstimationDefinition <- function(wc, estimationId) {
+  result <- deleteDefinition(wc = wc, id = estimationId, category = "estimation")
   return(result)
 }
 
@@ -847,7 +843,7 @@ deleteEstimationDefinition <- function(estimationId, baseUrl) {
 #' @details
 #' Check if a string name already exists in the WebApi as a Estimation definition name.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param estimationName   A string name for the Estimation to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
@@ -855,13 +851,13 @@ deleteEstimationDefinition <- function(estimationId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' existsEstimationName(estimationName = "this text string needs to be checked",
-#'                      baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' existsEstimationName(wc, estimationName = "this text string needs to be checked")
 #' }
 #' @export
 # Check name
-existsEstimationName <- function(estimationName, baseUrl) {
-  definitionsMetaData <- getEstimationDefinitionsMetaData(baseUrl = baseUrl)
+existsEstimationName <- function(wc, estimationName) {
+  definitionsMetaData <- getEstimationDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == estimationName)
   if (nrow(matched) > 0) {
     return(matched)
@@ -876,7 +872,7 @@ existsEstimationName <- function(estimationName, baseUrl) {
 #' Detect string matched Estimation definition names from the WebApi, and retrieve metadata
 #' definitions.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pattern   A pattern to look for. See \link[stringr]{str_detect} for details.
 #' @param negate    If TRUE, return non-matching elements. See \link[stringr]{str_detect} for details.
 #' @return
@@ -884,13 +880,13 @@ existsEstimationName <- function(estimationName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' detectEstimations(pattern = "this text string to search in pattern",
-#'                   baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' detectEstimations(wc, pattern = "this text string to search in pattern")
 #' }
 #' @export
 # Check name
-detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
-  definitionsMetaData <- getEstimationDefinitionsMetaData(baseUrl = baseUrl)
+detectEstimationsByName <- function(wc, pattern, negate = FALSE) {
+  definitionsMetaData <- getEstimationDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
                                                                        negate = negate))
@@ -908,7 +904,7 @@ detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @details
 #' Post Estimation definition to WebAPI
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param name                   A valid name for the definition. WebApi will use this name (if valid)
 #'                               as the name of the definition. WebApi checks for validity, such as
 #'                               uniqueness, absence of unacceptable character etc. An error might be
@@ -923,14 +919,13 @@ detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' postEstimationDefinition(name = "new valid name",
-#'                          estimationDefinition = definition,
-#'                          baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' postEstimationDefinition(wc, name = "new valid name", estimationDefinition = definition)
 #' }
 #' @export
-postEstimationDefinition <- function(name, estimationDefinition, baseUrl) {
-  result <- postDefinition(name = name,
-                           baseUrl = baseUrl,
+postEstimationDefinition <- function(wc, name, estimationDefinition) {
+  result <- postDefinition(wc,
+                           name = name,
                            category = "estimation",
                            definition = estimationDefinition)
   return(result)
@@ -941,18 +936,19 @@ postEstimationDefinition <- function(name, estimationDefinition, baseUrl) {
 #' etc. from WebApi for Prediction. This function is useful to retrieve the current Prediction
 #' specifications.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @return
 #' A tibble of specification metadata for Prediction. Note: modifiedDate and createdDate are returned
 #' as text/character.
 #'
 #' @examples
 #' \dontrun{
-#' getPredictionDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getPredictionDefinitionsMetaData(wc)
 #' }
 #' @export
-getPredictionDefinitionsMetaData <- function(baseUrl) {
-  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("prediction"))
+getPredictionDefinitionsMetaData <- function(wc) {
+  metaData <- getDefinitionsMetadata(wc = wc, category = c("prediction"))
   return(metaData)
 }
 
@@ -962,18 +958,19 @@ getPredictionDefinitionsMetaData <- function(baseUrl) {
 #' Checks if a set of id for a Prediction is valid. The following checks are performed. 1) checks if
 #' all the ids exists in the WebApi i.e. valid.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param predictionIds   A list of integer id(s) of the Prediction to be tested for validity.
 #' @return
 #' A logical vector indicating if an ID is valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidPredictionId(predictionIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' isValidPredictionId(wc, predictionIds = c(13242, 3423, 34))
 #' }
 #' @export
-isValidPredictionId <- function(predictionIds, baseUrl) {
-  result <- isValidId(baseUrl = baseUrl, category = "prediction", ids = predictionIds)
+isValidPredictionId <- function(wc, predictionIds) {
+  result <- isValidId(wc = wc, category = "prediction", ids = predictionIds)
   return(result)
 }
 
@@ -982,7 +979,7 @@ isValidPredictionId <- function(predictionIds, baseUrl) {
 #' @details
 #' Obtain the Prediction definition from WebAPI for a given Prediction id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param predictionId   An integer id representing the id that uniquely identifies a Prediction
 #'                       definition in a WebApi instance.
 #' @return
@@ -990,11 +987,12 @@ isValidPredictionId <- function(predictionIds, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getPredictionDefinition(predictionId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getPredictionDefinition(wc, predictionId = 13242)
 #' }
 #' @export
-getPredictionDefinition <- function(predictionId, baseUrl) {
-  result <- getDefinition(id = predictionId, baseUrl = baseUrl, category = "prediction")
+getPredictionDefinition <- function(wc, predictionId) {
+  result <- getDefinition(wc = wc, id = predictionId, category = "prediction")
   return(result)
 }
 
@@ -1003,7 +1001,7 @@ getPredictionDefinition <- function(predictionId, baseUrl) {
 #' @details
 #' Delete the Prediction definition from WebAPI for a given Prediction id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param predictionId   An integer id representing the id that uniquely identifies a Prediction
 #'                       definition in a WebApi instance.
 #' @return
@@ -1011,11 +1009,12 @@ getPredictionDefinition <- function(predictionId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' deletePredictionDefinition(predictionId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' deletePredictionDefinition(wc, predictionId = 13242)
 #' }
 #' @export
-deletePredictionDefinition <- function(predictionId, baseUrl) {
-  result <- deleteDefinition(baseUrl = baseUrl, id = predictionId, category = "prediction")
+deletePredictionDefinition <- function(wc, predictionId) {
+  result <- deleteDefinition(wc = wc, id = predictionId, category = "prediction")
   return(result)
 }
 
@@ -1024,7 +1023,7 @@ deletePredictionDefinition <- function(predictionId, baseUrl) {
 #' @details
 #' Check if a string name already exists in the WebApi as a Prediction definition name.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param predictionName   A string name for the Prediction to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
@@ -1032,13 +1031,13 @@ deletePredictionDefinition <- function(predictionId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' existsPredictionName(predictionName = "this text string needs to be checked",
-#'                      baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' existsPredictionName(wc, predictionName = "this text string needs to be checked")
 #' }
 #' @export
 # Check name
-existsPredictionName <- function(predictionName, baseUrl) {
-  definitionsMetaData <- getPredictionDefinitionsMetaData(baseUrl = baseUrl)
+existsPredictionName <- function(wc, predictionName) {
+  definitionsMetaData <- getPredictionDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == predictionName)
   if (nrow(matched) > 0) {
     return(matched)
@@ -1053,7 +1052,7 @@ existsPredictionName <- function(predictionName, baseUrl) {
 #' Detect string matched Prediction definition names from the WebApi, and retrieve metadata
 #' definitions.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pattern   A pattern to look for. See \link[stringr]{str_detect} for details.
 #' @param negate    If TRUE, return non-matching elements. See \link[stringr]{str_detect} for details.
 #' @return
@@ -1061,13 +1060,13 @@ existsPredictionName <- function(predictionName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' detectPredictions(pattern = "this text string to search in pattern",
-#'                   baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' detectPredictions(wc, pattern = "this text string to search in pattern")
 #' }
 #' @export
 # Check name
-detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
-  definitionsMetaData <- getPredictionDefinitionsMetaData(baseUrl = baseUrl)
+detectPredictionsByName <- function(wc, pattern, negate = FALSE) {
+  definitionsMetaData <- getPredictionDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
                                                                        negate = negate))
@@ -1085,7 +1084,7 @@ detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @details
 #' Post Prediction definition to WebAPI
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param name                   A valid name for the definition. WebApi will use this name (if valid)
 #'                               as the name of the definition. WebApi checks for validity, such as
 #'                               uniqueness, absence of unacceptable character etc. An error might be
@@ -1100,14 +1099,13 @@ detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' postPredictionDefinition(name = "new valid name",
-#'                          predictionDefinition = definition,
-#'                          baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' postPredictionDefinition(wc, name = "new valid name", predictionDefinition = definition)
 #' }
 #' @export
-postPredictionDefinition <- function(name, predictionDefinition, baseUrl) {
-  result <- postDefinition(name = name,
-                           baseUrl = baseUrl,
+postPredictionDefinition <- function(wc, name, predictionDefinition) {
+  result <- postDefinition(wc,
+                           name = name,
                            category = "prediction",
                            definition = predictionDefinition)
   return(result)
@@ -1118,18 +1116,19 @@ postPredictionDefinition <- function(name, predictionDefinition, baseUrl) {
 #' etc. from WebApi for Characterization. This function is useful to retrieve the current
 #' Characterization specifications.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @return
 #' A tibble of specification metadata for Characterization. Note: modifiedDate and createdDate are
 #' returned as text/character.
 #'
 #' @examples
 #' \dontrun{
-#' getCharacterizationDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getCharacterizationDefinitionsMetaData(wc)
 #' }
 #' @export
-getCharacterizationDefinitionsMetaData <- function(baseUrl) {
-  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("characterization"))
+getCharacterizationDefinitionsMetaData <- function(wc) {
+  metaData <- getDefinitionsMetadata(wc = wc, category = c("characterization"))
   return(metaData)
 }
 
@@ -1139,7 +1138,7 @@ getCharacterizationDefinitionsMetaData <- function(baseUrl) {
 #' Checks if a set of id for a Characterization is valid. The following checks are performed. 1)
 #' checks if all the ids exists in the WebApi i.e. valid.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param characterizationIds   A list of integer id(s) of the Characterization to be tested for
 #'                              validity.
 #' @return
@@ -1147,12 +1146,12 @@ getCharacterizationDefinitionsMetaData <- function(baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' isValidCharacterizationId(characterizationIds = c(13242, 3423, 34),
-#'                           baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' isValidCharacterizationId(wc, characterizationIds = c(13242, 3423, 34))
 #' }
 #' @export
-isValidCharacterizationId <- function(characterizationIds, baseUrl) {
-  result <- isValidId(baseUrl = baseUrl, category = "characterization", ids = characterizationIds)
+isValidCharacterizationId <- function(wc, characterizationIds) {
+  result <- isValidId(wc = wc, category = "characterization", ids = characterizationIds)
   return(result)
 }
 
@@ -1161,7 +1160,7 @@ isValidCharacterizationId <- function(characterizationIds, baseUrl) {
 #' @details
 #' Obtain the Characterization definition from WebAPI for a given Characterization id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param characterizationId   An integer id representing the id that uniquely identifies a
 #'                             Characterization definition in a WebApi instance.
 #' @return
@@ -1169,12 +1168,12 @@ isValidCharacterizationId <- function(characterizationIds, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getCharacterizationDefinition(characterizationId = 13242,
-#'                               baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getCharacterizationDefinition(wc, characterizationId = 13242)
 #' }
 #' @export
-getCharacterizationDefinition <- function(characterizationId, baseUrl) {
-  result <- getDefinition(id = characterizationId, baseUrl = baseUrl, category = "characterization")
+getCharacterizationDefinition <- function(wc, characterizationId) {
+  result <- getDefinition(wc = wc, id = characterizationId, category = "characterization")
   return(result)
 }
 
@@ -1183,7 +1182,7 @@ getCharacterizationDefinition <- function(characterizationId, baseUrl) {
 #' @details
 #' Delete the Characterization definition from WebAPI for a given Characterization id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param characterizationId   An integer id representing the id that uniquely identifies a
 #'                             Characterization definition in a WebApi instance.
 #' @return
@@ -1191,14 +1190,12 @@ getCharacterizationDefinition <- function(characterizationId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' deleteCharacterizationDefinition(characterizationId = 13242,
-#'                                  baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' deleteCharacterizationDefinition(wc, characterizationId = 13242)
 #' }
 #' @export
-deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
-  result <- deleteDefinition(baseUrl = baseUrl,
-                             id = characterizationId,
-                             category = "characterization")
+deleteCharacterizationDefinition <- function(wc, characterizationId) {
+  result <- deleteDefinition(wc = wc, id = characterizationId, category = "characterization")
   return(result)
 }
 
@@ -1207,7 +1204,7 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
 #' @details
 #' Check if a string name already exists in the WebApi as a Characterization definition name.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param characterizationName   A string name for the Characterization to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
@@ -1215,13 +1212,13 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' existsCharacterizationName(characterizationName = "this text string needs to be checked",
-#'                            baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' existsCharacterizationName(wc, characterizationName = "this text string needs to be checked")
 #' }
 #' @export
 # Check name
-existsCharacterizationName <- function(characterizationName, baseUrl) {
-  definitionsMetaData <- getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
+existsCharacterizationName <- function(wc, characterizationName) {
+  definitionsMetaData <- getCharacterizationDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == characterizationName)
   if (nrow(matched) > 0) {
     return(matched)
@@ -1236,7 +1233,7 @@ existsCharacterizationName <- function(characterizationName, baseUrl) {
 #' Detect string matched Characterization definition names from the WebApi, and retrieve metadata
 #' definitions.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pattern   A pattern to look for. See \link[stringr]{str_detect} for details.
 #' @param negate    If TRUE, return non-matching elements. See \link[stringr]{str_detect} for details.
 #' @return
@@ -1245,13 +1242,13 @@ existsCharacterizationName <- function(characterizationName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' detectCharacterizations(pattern = "this text string to search in pattern",
-#'                         baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' detectCharacterizations(wc, pattern = "this text string to search in pattern")
 #' }
 #' @export
 # Check name
-detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
-  definitionsMetaData <- getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
+detectCharacterizationsByName <- function(wc, pattern, negate = FALSE) {
+  definitionsMetaData <- getCharacterizationDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
                                                                        negate = negate))
@@ -1269,7 +1266,7 @@ detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @details
 #' Post Characterization definition to WebAPI
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param name                         A valid name for the definition. WebApi will use this name (if
 #'                                     valid) as the name of the definition. WebApi checks for
 #'                                     validity, such as uniqueness, absence of unacceptable character
@@ -1284,14 +1281,15 @@ detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' postCharacterizationDefinition(name = "new valid name",
-#'                                characterizationDefinition = definition,
-#'                                baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' postCharacterizationDefinition(wc,
+#'                                name = "new valid name",
+#'                                characterizationDefinition = definition)
 #' }
 #' @export
-postCharacterizationDefinition <- function(name, characterizationDefinition, baseUrl) {
-  result <- postDefinition(name = name,
-                           baseUrl = baseUrl,
+postCharacterizationDefinition <- function(wc, name, characterizationDefinition) {
+  result <- postDefinition(wc,
+                           name = name,
                            category = "characterization",
                            definition = characterizationDefinition)
   return(result)
@@ -1302,7 +1300,7 @@ postCharacterizationDefinition <- function(name, characterizationDefinition, bas
 #' @details
 #' Get generation (execution) information about Characterization for a characterizationId.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param characterizationId   An integer id representing the id that uniquely identifies a
 #'                             Characterization definition in a WebApi instance.
 #' @return
@@ -1310,14 +1308,14 @@ postCharacterizationDefinition <- function(name, characterizationDefinition, bas
 #'
 #' @examples
 #' \dontrun{
-#' getCharacterizationGenerationInformation(characterizationId = 13242,
-#'                                          baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getCharacterizationGenerationInformation(wc, characterizationId = 13242)
 #' }
 #' @export
-getCharacterizationGenerationInformation <- function(characterizationId, baseUrl) {
-  .checkBaseUrl(baseUrl)
-  response <- getGenerationInformation(id = characterizationId,
-                                       baseUrl = baseUrl,
+getCharacterizationGenerationInformation <- function(wc, characterizationId) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- getGenerationInformation(wc = wc,
+                                       id = characterizationId,
                                        category = "characterization")
   return(response)
 }
@@ -1328,7 +1326,7 @@ getCharacterizationGenerationInformation <- function(characterizationId, baseUrl
 #' @details
 #' Invoke the generation of Characterization id in the WebApi.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param characterizationId   An integer id representing the id that uniquely identifies a
 #'                             Characterization definition in a WebApi instance.
 #' @template SourceKey
@@ -1337,15 +1335,14 @@ getCharacterizationGenerationInformation <- function(characterizationId, baseUrl
 #'
 #' @examples
 #' \dontrun{
-#' invokeCharacterizationGeneration(characterizationId = 13242,
-#'                                  baseUrl = "http://server.org:80/WebAPI",
-#'                                  sourceKey = "HCUP")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' invokeCharacterizationGeneration(wc, characterizationId = 13242, sourceKey = "HCUP")
 #' }
 #' @export
-invokeCharacterizationGeneration <- function(characterizationId, baseUrl, sourceKey) {
-  .checkBaseUrl(baseUrl)
-  response <- invokeGeneration(id = characterizationId,
-                               baseUrl = baseUrl,
+invokeCharacterizationGeneration <- function(wc, characterizationId, sourceKey) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- invokeGeneration(wc,
+                               id = characterizationId,
                                category = "characterization",
                                sourceKey = sourceKey)
   return(response)
@@ -1356,7 +1353,7 @@ invokeCharacterizationGeneration <- function(characterizationId, baseUrl, source
 #' @details
 #' Cancel the generation of Characterization id in the WebApi.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param characterizationId   An integer id representing the id that uniquely identifies a
 #'                             Characterization definition in a WebApi instance.
 #' @template SourceKey
@@ -1365,15 +1362,14 @@ invokeCharacterizationGeneration <- function(characterizationId, baseUrl, source
 #'
 #' @examples
 #' \dontrun{
-#' cancelCharacterizationGeneration(characterizationId = 13242,
-#'                                  baseUrl = "http://server.org:80/WebAPI",
-#'                                  sourceKey = "HCUP")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' cancelCharacterizationGeneration(wc, characterizationId = 13242, sourceKey = "HCUP")
 #' }
 #' @export
-cancelCharacterizationGeneration <- function(characterizationId, baseUrl, sourceKey) {
-  .checkBaseUrl(baseUrl)
-  response <- cancelGeneration(id = characterizationId,
-                               baseUrl = baseUrl,
+cancelCharacterizationGeneration <- function(wc, characterizationId, sourceKey) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- cancelGeneration(wc,
+                               id = characterizationId,
                                category = "characterization",
                                sourceKey = sourceKey)
   return(response)
@@ -1385,19 +1381,20 @@ cancelCharacterizationGeneration <- function(characterizationId, baseUrl, source
 #' @details
 #' Get the results for Characterization id.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @template CharacterizationId
 #' @return
 #' An R object with results.
 #'
 #' @examples
 #' \dontrun{
-#' getCharacterizationResults(characterizationId = 342, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getCharacterizationResults(wc, characterizationId = 342)
 #' }
 #' @export
 # Check name
-getCharacterizationResults <- function(characterizationId, baseUrl) {
-  result <- getResults(baseUrl = baseUrl, id = characterizationId, category = "characterization")
+getCharacterizationResults <- function(wc, characterizationId) {
+  result <- getResults(wc = wc, id = characterizationId, category = "characterization")
   return(result)
 }
 #' Get the meta data for Pathway definitions. \lifecycle{stable}
@@ -1406,18 +1403,19 @@ getCharacterizationResults <- function(characterizationId, baseUrl) {
 #' etc. from WebApi for Pathway. This function is useful to retrieve the current Pathway
 #' specifications.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @return
 #' A tibble of specification metadata for Pathway. Note: modifiedDate and createdDate are returned as
 #' text/character.
 #'
 #' @examples
 #' \dontrun{
-#' getPathwayDefinitionsMetaData(baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getPathwayDefinitionsMetaData(wc)
 #' }
 #' @export
-getPathwayDefinitionsMetaData <- function(baseUrl) {
-  metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("pathway"))
+getPathwayDefinitionsMetaData <- function(wc) {
+  metaData <- getDefinitionsMetadata(wc = wc, category = c("pathway"))
   return(metaData)
 }
 
@@ -1427,18 +1425,19 @@ getPathwayDefinitionsMetaData <- function(baseUrl) {
 #' Checks if a set of id for a Pathway is valid. The following checks are performed. 1) checks if all
 #' the ids exists in the WebApi i.e. valid.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pathwayIds   A list of integer id(s) of the Pathway to be tested for validity.
 #' @return
 #' A logical vector indicating if an ID is valid.
 #'
 #' @examples
 #' \dontrun{
-#' isValidPathwayId(pathwayIds = c(13242, 3423, 34), baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' isValidPathwayId(wc, pathwayIds = c(13242, 3423, 34))
 #' }
 #' @export
-isValidPathwayId <- function(pathwayIds, baseUrl) {
-  result <- isValidId(baseUrl = baseUrl, category = "pathway", ids = pathwayIds)
+isValidPathwayId <- function(wc, pathwayIds) {
+  result <- isValidId(wc = wc, category = "pathway", ids = pathwayIds)
   return(result)
 }
 
@@ -1447,7 +1446,7 @@ isValidPathwayId <- function(pathwayIds, baseUrl) {
 #' @details
 #' Obtain the Pathway definition from WebAPI for a given Pathway id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pathwayId   An integer id representing the id that uniquely identifies a Pathway definition
 #'                    in a WebApi instance.
 #' @return
@@ -1455,11 +1454,12 @@ isValidPathwayId <- function(pathwayIds, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getPathwayDefinition(pathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getPathwayDefinition(wc, pathwayId = 13242)
 #' }
 #' @export
-getPathwayDefinition <- function(pathwayId, baseUrl) {
-  result <- getDefinition(id = pathwayId, baseUrl = baseUrl, category = "pathway")
+getPathwayDefinition <- function(wc, pathwayId) {
+  result <- getDefinition(wc = wc, id = pathwayId, category = "pathway")
   return(result)
 }
 
@@ -1468,7 +1468,7 @@ getPathwayDefinition <- function(pathwayId, baseUrl) {
 #' @details
 #' Delete the Pathway definition from WebAPI for a given Pathway id
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pathwayId   An integer id representing the id that uniquely identifies a Pathway definition
 #'                    in a WebApi instance.
 #' @return
@@ -1476,11 +1476,12 @@ getPathwayDefinition <- function(pathwayId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' deletePathwayDefinition(pathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' deletePathwayDefinition(wc, pathwayId = 13242)
 #' }
 #' @export
-deletePathwayDefinition <- function(pathwayId, baseUrl) {
-  result <- deleteDefinition(baseUrl = baseUrl, id = pathwayId, category = "pathway")
+deletePathwayDefinition <- function(wc, pathwayId) {
+  result <- deleteDefinition(wc = wc, id = pathwayId, category = "pathway")
   return(result)
 }
 
@@ -1489,7 +1490,7 @@ deletePathwayDefinition <- function(pathwayId, baseUrl) {
 #' @details
 #' Check if a string name already exists in the WebApi as a Pathway definition name.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pathwayName   A string name for the Pathway to be checked.
 #' @return
 #' If found, the function will return a tibble with details of the specification. If not found, FALSE
@@ -1497,13 +1498,13 @@ deletePathwayDefinition <- function(pathwayId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' existsPathwayName(pathwayName = "this text string needs to be checked",
-#'                   baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' existsPathwayName(wc, pathwayName = "this text string needs to be checked")
 #' }
 #' @export
 # Check name
-existsPathwayName <- function(pathwayName, baseUrl) {
-  definitionsMetaData <- getPathwayDefinitionsMetaData(baseUrl = baseUrl)
+existsPathwayName <- function(wc, pathwayName) {
+  definitionsMetaData <- getPathwayDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == pathwayName)
   if (nrow(matched) > 0) {
     return(matched)
@@ -1517,7 +1518,7 @@ existsPathwayName <- function(pathwayName, baseUrl) {
 #' @details
 #' Detect string matched Pathway definition names from the WebApi, and retrieve metadata definitions.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pattern   A pattern to look for. See \link[stringr]{str_detect} for details.
 #' @param negate    If TRUE, return non-matching elements. See \link[stringr]{str_detect} for details.
 #' @return
@@ -1525,13 +1526,13 @@ existsPathwayName <- function(pathwayName, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' detectPathways(pattern = "this text string to search in pattern",
-#'                baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' detectPathways(wc, pattern = "this text string to search in pattern")
 #' }
 #' @export
 # Check name
-detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
-  definitionsMetaData <- getPathwayDefinitionsMetaData(baseUrl = baseUrl)
+detectPathwaysByName <- function(wc, pattern, negate = FALSE) {
+  definitionsMetaData <- getPathwayDefinitionsMetaData(wc = wc)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
                                                                        negate = negate))
@@ -1549,7 +1550,7 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @details
 #' Post Pathway definition to WebAPI
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param name                A valid name for the definition. WebApi will use this name (if valid) as
 #'                            the name of the definition. WebApi checks for validity, such as
 #'                            uniqueness, absence of unacceptable character etc. An error might be
@@ -1564,16 +1565,12 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' postPathwayDefinition(name = "new valid name",
-#'                       pathwayDefinition = definition,
-#'                       baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' postPathwayDefinition(wc, name = "new valid name", pathwayDefinition = definition)
 #' }
 #' @export
-postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
-  result <- postDefinition(name = name,
-                           baseUrl = baseUrl,
-                           category = "pathway",
-                           definition = pathwayDefinition)
+postPathwayDefinition <- function(wc, name, pathwayDefinition) {
+  result <- postDefinition(wc, name = name, category = "pathway", definition = pathwayDefinition)
   return(result)
 }
 
@@ -1582,7 +1579,7 @@ postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
 #' @details
 #' Get generation (execution) information about Pathway for a pathwayId.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pathwayId   An integer id representing the id that uniquely identifies a Pathway definition
 #'                    in a WebApi instance.
 #' @return
@@ -1590,12 +1587,13 @@ postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' getPathwayGenerationInformation(pathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getPathwayGenerationInformation(wc, pathwayId = 13242)
 #' }
 #' @export
-getPathwayGenerationInformation <- function(pathwayId, baseUrl) {
-  .checkBaseUrl(baseUrl)
-  response <- getGenerationInformation(id = pathwayId, baseUrl = baseUrl, category = "pathway")
+getPathwayGenerationInformation <- function(wc, pathwayId) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- getGenerationInformation(wc = wc, id = pathwayId, category = "pathway")
   return(response)
 }
 
@@ -1605,7 +1603,7 @@ getPathwayGenerationInformation <- function(pathwayId, baseUrl) {
 #' @details
 #' Invoke the generation of Pathway id in the WebApi.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pathwayId   An integer id representing the id that uniquely identifies a Pathway definition
 #'                    in a WebApi instance.
 #' @template SourceKey
@@ -1614,17 +1612,13 @@ getPathwayGenerationInformation <- function(pathwayId, baseUrl) {
 #'
 #' @examples
 #' \dontrun{
-#' invokePathwayGeneration(pathwayId = 13242,
-#'                         baseUrl = "http://server.org:80/WebAPI",
-#'                         sourceKey = "HCUP")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' invokePathwayGeneration(wc, pathwayId = 13242, sourceKey = "HCUP")
 #' }
 #' @export
-invokePathwayGeneration <- function(pathwayId, baseUrl, sourceKey) {
-  .checkBaseUrl(baseUrl)
-  response <- invokeGeneration(id = pathwayId,
-                               baseUrl = baseUrl,
-                               category = "pathway",
-                               sourceKey = sourceKey)
+invokePathwayGeneration <- function(wc, pathwayId, sourceKey) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- invokeGeneration(wc, id = pathwayId, category = "pathway", sourceKey = sourceKey)
   return(response)
 }
 
@@ -1633,7 +1627,7 @@ invokePathwayGeneration <- function(pathwayId, baseUrl, sourceKey) {
 #' @details
 #' Cancel the generation of Pathway id in the WebApi.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @param pathwayId   An integer id representing the id that uniquely identifies a Pathway definition
 #'                    in a WebApi instance.
 #' @template SourceKey
@@ -1642,17 +1636,13 @@ invokePathwayGeneration <- function(pathwayId, baseUrl, sourceKey) {
 #'
 #' @examples
 #' \dontrun{
-#' cancelPathwayGeneration(pathwayId = 13242,
-#'                         baseUrl = "http://server.org:80/WebAPI",
-#'                         sourceKey = "HCUP")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' cancelPathwayGeneration(wc, pathwayId = 13242, sourceKey = "HCUP")
 #' }
 #' @export
-cancelPathwayGeneration <- function(pathwayId, baseUrl, sourceKey) {
-  .checkBaseUrl(baseUrl)
-  response <- cancelGeneration(id = pathwayId,
-                               baseUrl = baseUrl,
-                               category = "pathway",
-                               sourceKey = sourceKey)
+cancelPathwayGeneration <- function(wc, pathwayId, sourceKey) {
+  .checkBaseUrl(wc$baseUrl)
+  response <- cancelGeneration(wc, id = pathwayId, category = "pathway", sourceKey = sourceKey)
   return(response)
 }
 
@@ -1662,18 +1652,19 @@ cancelPathwayGeneration <- function(pathwayId, baseUrl, sourceKey) {
 #' @details
 #' Get the results for Pathway id.
 #'
-#' @template BaseUrl
+#' @template WebApiConnection
 #' @template PathwayId
 #' @return
 #' An R object with results.
 #'
 #' @examples
 #' \dontrun{
-#' getPathwayResults(pathwayId = 342, baseUrl = "http://server.org:80/WebAPI")
+#' wc <- connectWebApi(baseUrl = "http://server.org:80/WebAPI")
+#' getPathwayResults(wc, pathwayId = 342)
 #' }
 #' @export
 # Check name
-getPathwayResults <- function(pathwayId, baseUrl) {
-  result <- getResults(baseUrl = baseUrl, id = pathwayId, category = "pathway")
+getPathwayResults <- function(wc, pathwayId) {
+  result <- getResults(wc = wc, id = pathwayId, category = "pathway")
   return(result)
 }
