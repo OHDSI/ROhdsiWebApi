@@ -159,15 +159,15 @@
 }
 .postJson <- function(url, json) {
   # POST the JSON
-  httr::POST(url = url,
-             body = json,
-             encode = "json",
-             config = httr::add_headers(.headers = c(`Content-Type` = "application/json")))
+  POST(url = url,
+       body = json,
+       encode = "json",
+       config = httr::add_headers(.headers = c(`Content-Type` = "application/json")))
 }
 .putJson <- function(url, json) {
   # PUT the JSON
-  httr::PUT(url = url,
-            body = json,
-            encode = "json",
-            config = httr::add_headers(.headers = c(`Content-Type` = "application/json")))
+  PUT(url = url,
+      body = json,
+      encode = "json",
+      config = httr::add_headers(.headers = c(`Content-Type` = "application/json")))
 }

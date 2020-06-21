@@ -56,7 +56,7 @@ getPersonProfile <- function(baseUrl, sourceKey, personId, indexCohortId = NULL)
     url <- sprintf("%1s/%2s/person/%3s?cohort=%4s", baseUrl, sourceKey, personId, indexCohortId)
   }
 
-  getUrl <- httr::GET(url)
+  getUrl <- GET(url)
   if (httr::http_type(getUrl) != "application/json") {
     stop(paste0(url, " API for did not return json"), call. = FALSE)
   }

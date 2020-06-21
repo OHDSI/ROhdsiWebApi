@@ -49,7 +49,7 @@ getDefinitionsMetadata <- function(baseUrl, category) {
 
   categoryUrl <- argument %>% dplyr::pull(.data$categoryUrl)
   url <- paste(baseUrl, categoryUrl, "?size=100000000", sep = "/")
-  request <- httr::GET(url)
+  request <- GET(url)
 
   if (!request$status == 200) {
     ParallelLogger::logError(argument$categoryFirstUpper,
