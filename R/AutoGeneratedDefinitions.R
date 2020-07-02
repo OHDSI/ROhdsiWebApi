@@ -1567,14 +1567,19 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #' @export
 postPathwayDefinition <- function(name, pathwayDefinition, baseUrl, postCohorts = TRUE) {
 
+  if ("expression" %in% names(pathwayDefinition)) {pathwayDefinition <- pathwayDefinition$expression}
+  
   if(postCohorts){
+    
     postModifyCohortDef <- function(cohortDef){
       output <- postCohortDefinition(cohortDef$name, cohortDef, baseUrl)
       cohortDef$name <- output$name
       cohortDef$id <- output$id
       return(cohortDef)
-      }
+    }
+    
     pathwayDefinition$targetCohorts <- purrr::map(pathwayDefinition$targetCohorts, postModifyCohortDef)
+    
     pathwayDefinition$eventCohorts <- purrr::map(pathwayDefinition$eventCohorts, postModifyCohortDef)
   }
   
