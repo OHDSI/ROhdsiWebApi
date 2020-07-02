@@ -4,7 +4,7 @@
 \alias{postPathwayDefinition}
 \title{Post Pathway definition. \lifecycle{maturing}}
 \usage{
-postPathwayDefinition(name, pathwayDefinition, baseUrl)
+postPathwayDefinition(name, pathwayDefinition, baseUrl, postCohorts = TRUE)
 }
 \arguments{
 \item{name}{A valid name for the definition. WebApi will use this name (if valid) as
@@ -20,6 +20,8 @@ validity of this expression.}
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
+
+\item{postCohorts}{A post cohorts included within the pathways definition. Logical.}
 }
 \value{
 This function will return a dataframe object with one row describing the posted WebApi expression
