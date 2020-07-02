@@ -1565,7 +1565,19 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                       baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
+postPathwayDefinition <- function(name, pathwayDefinition, baseUrl, postCohorts = TRUE) {
+
+  if(postCohorts){
+    postModifyCohortDef <- function(cohortDef){
+      output <- postCohortDefinition(cohortDef$name, cohortDef, baseUrl)
+      cohortDef$name <- output$name
+      cohortDef$id <- output$id
+      return(cohortDef)
+      }
+    pathwayDefinition$targetCohorts <- purrr::map(pathwayDefinition$targetCohorts, postModifyCohortDef)
+    pathwayDefinition$eventCohorts <- purrr::map(pathwayDefinition$eventCohorts, postModifyCohortDef)
+  }
+  
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "pathway",
