@@ -52,7 +52,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
   checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
 
-  if (!category %in% c("cohort", "conceptSet","pathway")) {
+  if (!category %in% c("cohort", "conceptSet", "pathway")) {
     ParallelLogger::logError("Posting definitions of ", category, " is not supported.")
     stop()
   }
