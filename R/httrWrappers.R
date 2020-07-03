@@ -33,7 +33,7 @@ POST <- function(url, config = list(), ..., body = NULL,
 #' An internal wrapper for DELETE that accepts an authentication header
 #' 
 #' The primary reason for this wrapper is to silently ignore the authHeader if it is empty
-DELETE <- function(url, authHeader, config = list(), ..., body = NULL, 
+DELETE <- function(url, config = list(), ..., body = NULL, 
                    encode = c("multipart", "form", "json", "raw"), handle = NULL){
   
   authHeader <- Sys.getenv("WEBAPI_AUTHHEADER")
