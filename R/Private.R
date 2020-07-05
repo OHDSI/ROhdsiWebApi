@@ -102,7 +102,7 @@
                                 lubridate::guess_formats(x = x, orders = c("y-m-d H:M",
                                                                                                        "y-m-d H:M:S",
                                                                                                        "ymdHMS",
-                                                                                                       "ymd HMS")))
+                                                                                                       "ymd HMS"))[1])
     x <- min(x)
   }
   return(x)
