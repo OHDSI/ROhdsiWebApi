@@ -28,6 +28,10 @@
 #' @param definition   An R list object containing the expression for the specification. This will be
 #'                     converted to JSON expression by function and posted into the WebApi. Note: only
 #'                     limited checks are performed in R to check the validity of this expression.
+#' @param duplicateNames  How to handle importing a definition with a name that already exists in ATLAS.
+#'                       'error' will throw an error, 
+#'                       'overwrite' will attempt to overwrite the existing definition, 
+#'                       'rename' will append the new defintion name with (1) until the name is unique
 #' @return
 #' This function will return a dataframe object with one row describing the posted WebApi expression
 #' and its details. If unsuccessful a STOP message will be shown.
@@ -42,64 +46,67 @@
 #' }
 #' @export
 postDefinition <- function(baseUrl, name, category, definition, duplicateNames) {
-  
+
   .checkBaseUrl(baseUrl)
   arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
-  
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(name, add = errorMessage)
   checkmate::assertCharacter(category, add = errorMessage)
   checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
-  
+
   if (!category %in% c("cohort", "conceptSet", "pathway")) {
     ParallelLogger::logError("Posting definitions of ", category, " is not supported.")
     stop()
   }
-  
+
   if ("expression" %in% names(definition)) {
     expression <- definition$expression
   } else {
     expression <- definition
   }
-  
-  name <- .checkModifyDefinitionName(name = name, baseUrl = baseUrl, category = category, duplicateNames = duplicateNames)
-  
+
+  name <- .checkModifyDefinitionName(name = name,
+                                     baseUrl = baseUrl,
+                                     category = category,
+                                     duplicateNames = duplicateNames)
+
   if (category %in% c("pathway")) {
-    
+
     postModifyCohortDef <- function(cohortDef) {
       output <- postCohortDefinition(cohortDef$name, cohortDef, baseUrl, duplicateNames)
       cohortDef$name <- output$name
       cohortDef$id <- output$id
       return(cohortDef)
     }
-    
+
     expression$targetCohorts <- purrr::map(expression$targetCohorts, postModifyCohortDef)
     expression$eventCohorts <- purrr::map(expression$eventCohorts, postModifyCohortDef)
-    
+
   }
-  
+
   json <- .definitionToJson(expression = expression, category = category, name = name)
-  
+
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/")
-  
+
   if (category == "characterization") {
     url <- paste0(url, argument$categoryUrlPostExpression, "/")
   }
-  
+
   response <- .postJson(url = url, json = json)
-  
+
   response <- httr::content(response)
   structureCreated <- response
   response$expression <- NULL
-  
+
   if (category %in% c("pathway")) {
     response$targetCohorts <- NULL
     response$eventCohorts <- NULL
     response$createdBy <- NULL
   }
-  
+
   # create expression in the structure required to POST or PUT
   if (category %in% c("conceptSet")) {
     items <- convertConceptSetDefinitionToTable(conceptSetDefinition = definition) %>% dplyr::mutate(id = dplyr::row_number(),
@@ -130,7 +137,7 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
       stop()
     }
   }
-  
+
   if (category %in% c("characterization")) {
     characterizationPostObject <- structureCreated
     characterizationPostObject$cohorts <- definition$expression$cohorts
@@ -140,7 +147,7 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
     characterizationPostObject$strataOnly <- definition$expression$strataOnly
     characterizationPostObject$strataConceptSets <- definition$expression$strataConceptSets
     characterizationPostObject$stratifiedBy <- definition$expression$stratifiedBy
-    
+
     expressionCharacterization <- list()
     expressionCharacterization$name <- characterizationPostObject$name
     expressionCharacterization$cohorts <- characterizationPostObject$cohorts
@@ -156,10 +163,10 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
     expressionCharacterization$packageName <- characterizationPostObject$packageName
     expressionCharacterization$organizationName <- characterizationPostObject$organizationName
     expressionCharacterization$stratifiedBy <- characterizationPostObject$stratifiedBy
-    
+
     expressionCharacterization <- jsonlite::toJSON(x = expressionCharacterization,
                                                    auto_unbox = TRUE)
-    
+
     response <- .putJson(url = paste0(baseUrl,
                                       "/",
                                       argument$categoryUrl,
@@ -175,44 +182,44 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
 }
 
 .definitionToJson <- function(expression, category, name) {
-  
+
   if (category %in% c("cohort", "conceptSet")) {
-    
+
     jsonExpression <- RJSONIO::toJSON(expression)
-    
+
     json <- paste0("{\"name\":\"", as.character(name), "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
                    jsonExpression,
                    "}")
   }
-  
+
   if (category %in% c("pathway")) {
-    
+
     expression$name <- as.character(name)
     # convert R-object to JSON expression.
     json <- RJSONIO::toJSON(expression)
   }
-  
+
   return(json)
-  
+
 }
 
 .checkModifyDefinitionName <- function(baseUrl, name, category, duplicateNames) {
-  
+
   categoryMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
-  
+
   if (name %in% categoryMetaData$name) {
-    
+
     ParallelLogger::logWarn(name, " already exists in ATLAS")
-    
+
     if (duplicateNames == "error") {
       ParallelLogger::logError("Cannot write ", category)
-      ParallelLogger::logError("<<",name, ">> ALREADY EXISTS in ATLAS")
+      ParallelLogger::logError("<<", name, ">> ALREADY EXISTS in ATLAS")
       stop()
     }
-    
+
     if (duplicateNames == "overwrite") {
       deleteId <- categoryMetaData[categoryMetaData$name == name, ]$id
-      
+
       tryCatch({
         output <- deleteDefinition(deleteId, baseUrl, category)
       }, error = function(cond) {
@@ -220,27 +227,27 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
         ParallelLogger::logError("Error message: ", cond)
         stop()
       })
-      
+
       ParallelLogger::logWarn("Deleted existing cohort_definition_id ", deleteId)
       ParallelLogger::logWarn("In order to post <<", name, ">>")
-      
+
     }
-    
+
     if (duplicateNames == "rename") {
-      
+
       name_orig <- name
-      
+
       while (name %in% categoryMetaData$name) {
         name <- paste0(name, "(1)")
       }
-      
+
       ParallelLogger::logWarn("Renamed: <<", name_orig, ">>")
       ParallelLogger::logWarn("To: <<", name, ">>")
       return(name)
     }
-    
+
   }
-  
+
   return(name)
-  
+
 }
