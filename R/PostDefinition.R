@@ -47,67 +47,67 @@
 #' }
 #' @export
 postDefinition <- function(baseUrl, name, category, definition, duplicateNames) {
-
+  
   .checkBaseUrl(baseUrl)
   arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
-
+  
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(name, add = errorMessage)
   checkmate::assertCharacter(category, add = errorMessage)
   checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
-
-  if (!category %in% c("cohort", "conceptSet", "pathway")) {
+  
+  if (!category %in% c("cohort", "conceptSet", "pathway", "characterization")) {
     ParallelLogger::logError("Posting definitions of ", category, " is not supported.")
     stop()
   }
-
+  
   if ("expression" %in% names(definition)) {
     expression <- definition$expression
   } else {
     expression <- definition
   }
-
-  name <- .checkModifyDefinitionName(name = name,
-                                     baseUrl = baseUrl,
-                                     category = category,
-                                     duplicateNames = duplicateNames)
-
+  
+  name <- .checkModifyDefinitionName(name = name, baseUrl = baseUrl, category = category, duplicateNames = duplicateNames)
+  
   if (category %in% c("pathway")) {
-
-    postModifyCohortDef <- function(cohortDef) {
-      output <- postCohortDefinition(cohortDef$name, cohortDef, baseUrl, duplicateNames)
-      cohortDef$name <- output$name
-      cohortDef$id <- output$id
-      return(cohortDef)
-    }
-
-    expression$targetCohorts <- purrr::map(expression$targetCohorts, postModifyCohortDef)
-    expression$eventCohorts <- purrr::map(expression$eventCohorts, postModifyCohortDef)
-
+    
+    expression$targetCohorts <- purrr::map(expression$targetCohorts, .postModifyCohortDef, baseUrl, duplicateNames)
+    expression$eventCohorts <- purrr::map(expression$eventCohorts, .postModifyCohortDef, baseUrl, duplicateNames)
+    
   }
-
+  
+  if (category %in% c("characterization")) {
+    
+    expression$cohorts <- purrr::map(expression$cohorts, .postModifyCohortDef, baseUrl, duplicateNames)
+    
+  }
+  
   json <- .definitionToJson(expression = expression, category = category, name = name)
-
+  
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/")
-
+  
   if (category == "characterization") {
     url <- paste0(url, argument$categoryUrlPostExpression, "/")
   }
-
+  
   response <- .postJson(url = url, json = json)
-
+  
   response <- httr::content(response)
   structureCreated <- response
   response$expression <- NULL
-
+  
   if (category %in% c("pathway")) {
     response$targetCohorts <- NULL
     response$eventCohorts <- NULL
     response$createdBy <- NULL
   }
-
+  
+  if (category %in% c("characterization")) {
+    response <- response[c("id","name","createdAt","status","hashCode")]
+  }
+  
   # create expression in the structure required to POST or PUT
   if (category %in% c("conceptSet")) {
     items <- convertConceptSetDefinitionToTable(conceptSetDefinition = definition) %>% dplyr::mutate(id = dplyr::row_number(),
@@ -138,44 +138,7 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
       stop()
     }
   }
-
-  if (category %in% c("characterization")) {
-    characterizationPostObject <- structureCreated
-    characterizationPostObject$cohorts <- definition$expression$cohorts
-    characterizationPostObject$featureAnalyses <- definition$expression$featureAnalyses
-    characterizationPostObject$parameters <- definition$expression$parameters
-    characterizationPostObject$stratas <- definition$expression$stratas
-    characterizationPostObject$strataOnly <- definition$expression$strataOnly
-    characterizationPostObject$strataConceptSets <- definition$expression$strataConceptSets
-    characterizationPostObject$stratifiedBy <- definition$expression$stratifiedBy
-
-    expressionCharacterization <- list()
-    expressionCharacterization$name <- characterizationPostObject$name
-    expressionCharacterization$cohorts <- characterizationPostObject$cohorts
-    expressionCharacterization$featureAnalyses <- characterizationPostObject$featureAnalyses
-    expressionCharacterization$parameters <- characterizationPostObject$parameters
-    expressionCharacterization$stratas <- characterizationPostObject$stratas
-    expressionCharacterization$strataOnly <- characterizationPostObject$strataOnly
-    expressionCharacterization$strataConceptSets <- characterizationPostObject$strataConceptSets
-    expressionCharacterization$createdAt <- characterizationPostObject$createdAt
-    expressionCharacterization$updatedAt <- characterizationPostObject$updatedAt
-    expressionCharacterization$skeletonType <- characterizationPostObject$skeletonType
-    expressionCharacterization$skeletonVersion <- characterizationPostObject$skeletonVersion
-    expressionCharacterization$packageName <- characterizationPostObject$packageName
-    expressionCharacterization$organizationName <- characterizationPostObject$organizationName
-    expressionCharacterization$stratifiedBy <- characterizationPostObject$stratifiedBy
-
-    expressionCharacterization <- jsonlite::toJSON(x = expressionCharacterization,
-                                                   auto_unbox = TRUE)
-
-    response <- .putJson(url = paste0(baseUrl,
-                                      "/",
-                                      argument$categoryUrl,
-                                      "/",
-                                      structureCreated$id,
-                                      "/",
-                                      argument$categoryUrlPut), json = expressionCharacterization)
-  }
+  
   ParallelLogger::logInfo("Post ", argument$categoryFirstUpper, " definition was successful")
   output <- response %>% list() %>% purrr::map_df(.f = purrr::flatten) %>% utils::type.convert(as.is = TRUE,
                                                                                                dec = ".") %>% .normalizeDateAndTimeTypes()
@@ -183,44 +146,44 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
 }
 
 .definitionToJson <- function(expression, category, name) {
-
+  
   if (category %in% c("cohort", "conceptSet")) {
-
+    
     jsonExpression <- RJSONIO::toJSON(expression)
-
+    
     json <- paste0("{\"name\":\"", as.character(name), "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
                    jsonExpression,
                    "}")
   }
-
-  if (category %in% c("pathway")) {
-
+  
+  if (category %in% c("pathway", "characterization")) {
+    
     expression$name <- as.character(name)
     # convert R-object to JSON expression.
     json <- RJSONIO::toJSON(expression)
   }
-
+  
   return(json)
-
+  
 }
 
 .checkModifyDefinitionName <- function(baseUrl, name, category, duplicateNames) {
-
+  
   categoryMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
-
+  
   if (name %in% categoryMetaData$name) {
-
+    
     ParallelLogger::logWarn(name, " already exists in ATLAS")
-
+    
     if (duplicateNames == "error") {
       ParallelLogger::logError("Cannot write ", category)
-      ParallelLogger::logError("<<", name, ">> ALREADY EXISTS in ATLAS")
+      ParallelLogger::logError("<<",name, ">> ALREADY EXISTS in ATLAS")
       stop()
     }
-
+    
     if (duplicateNames == "overwrite") {
       deleteId <- categoryMetaData[categoryMetaData$name == name, ]$id
-
+      
       tryCatch({
         output <- deleteDefinition(deleteId, baseUrl, category)
       }, error = function(cond) {
@@ -228,27 +191,35 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
         ParallelLogger::logError("Error message: ", cond)
         stop()
       })
-
+      
       ParallelLogger::logWarn("Deleted existing cohort_definition_id ", deleteId)
       ParallelLogger::logWarn("In order to post <<", name, ">>")
-
+      
     }
-
+    
     if (duplicateNames == "rename") {
-
+      
       name_orig <- name
-
+      
       while (name %in% categoryMetaData$name) {
         name <- paste0(name, "(1)")
       }
-
+      
       ParallelLogger::logWarn("Renamed: <<", name_orig, ">>")
       ParallelLogger::logWarn("To: <<", name, ">>")
       return(name)
     }
-
+    
   }
-
+  
   return(name)
+  
+}
 
+
+.postModifyCohortDef <- function(cohortDef, baseUrl, duplicateNames) {
+  output <- postCohortDefinition(cohortDef$name, cohortDef, baseUrl, duplicateNames)
+  cohortDef$name <- output$name
+  cohortDef$id <- output$id
+  return(cohortDef)
 }
