@@ -4,7 +4,7 @@
 \alias{postDefinition}
 \title{Post a definition into WebApi \lifecycle{maturing}}
 \usage{
-postDefinition(baseUrl, name, category, definition)
+postDefinition(baseUrl, name, category, definition, duplicateNames)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
@@ -21,6 +21,11 @@ of unacceptable character etc. An error might be thrown.}
 \item{definition}{An R list object containing the expression for the specification. This will be
 converted to JSON expression by function and posted into the WebApi. Note: only
 limited checks are performed in R to check the validity of this expression.}
+
+\item{duplicateNames}{How to handle importing a definition with a name that already exists in ATLAS.
+'error' will throw an error, 
+'overwrite' will attempt to overwrite the existing definition, 
+'rename' will append the new defintion name with (1) until the name is unique}
 }
 \value{
 This function will return a dataframe object with one row describing the posted WebApi expression

@@ -4,7 +4,12 @@
 \alias{postPathwayDefinition}
 \title{Post Pathway definition. \lifecycle{maturing}}
 \usage{
-postPathwayDefinition(name, pathwayDefinition, baseUrl, postCohorts = TRUE)
+postPathwayDefinition(
+  name,
+  pathwayDefinition,
+  baseUrl,
+  duplicateNames = "error"
+)
 }
 \arguments{
 \item{name}{A valid name for the definition. WebApi will use this name (if valid) as
@@ -21,7 +26,10 @@ validity of this expression.}
 "http://server.org:80/WebAPI". Note, there is no trailing '/'.
 If trailing '/' is used, you may receive an error.}
 
-\item{postCohorts}{A post cohorts included within the pathways definition. Logical.}
+\item{duplicateNames}{How to handle importing a definition with a name that already exists in
+ATLAS. 'error' will throw an error, 'overwrite' will attempt to overwrite
+the existing definition, 'rename' will append the new defintion name with
+(1) until the name is unique}
 }
 \value{
 This function will return a dataframe object with one row describing the posted WebApi expression
