@@ -159,7 +159,7 @@ detect%categoryFirstUpper%sByName <- function(pattern, negate = FALSE, baseUrl) 
 #'                                          This will be converted to JSON expression by function and posted into the WebApi.
 #'                                          Note: only limited checks are performed in R to check the validity of this
 #'                                          expression.
-#' @param name           How to handle importing a definition with a name that already exists in ATLAS.
+#' @param duplicateNames  How to handle importing a definition with a name that already exists in ATLAS.
 #'                       'error' will throw an error, 
 #'                       'overwrite' will attempt to overwrite the existing definition, 
 #'                       'rename' will append the new defintion name with (1) until the name is unique
