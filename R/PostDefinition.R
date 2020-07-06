@@ -216,7 +216,6 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
   
 }
 
-
 .postModifyCohortDef <- function(cohortDef, baseUrl, duplicateNames) {
   output <- postCohortDefinition(cohortDef$name, cohortDef, baseUrl, duplicateNames)
   cohortDef$name <- output$name
