@@ -21,17 +21,18 @@
 #' Post a definition into WebAPI. Currently only cohort and concept-set are supported.
 #'
 #' @template BaseUrl
-#' @param name         A valid name for the definition. WebApi will use this name (if valid) as the
-#'                     name of the definition. WebApi checks for validity, such as uniqueness, absence
-#'                     of unacceptable character etc. An error might be thrown.
+#' @param name             A valid name for the definition. WebApi will use this name (if valid) as the
+#'                         name of the definition. WebApi checks for validity, such as uniqueness,
+#'                         absence of unacceptable character etc. An error might be thrown.
 #' @template Category
-#' @param definition   An R list object containing the expression for the specification. This will be
-#'                     converted to JSON expression by function and posted into the WebApi. Note: only
-#'                     limited checks are performed in R to check the validity of this expression.
-#' @param duplicateNames  How to handle importing a definition with a name that already exists in ATLAS.
-#'                       'error' will throw an error, 
-#'                       'overwrite' will attempt to overwrite the existing definition, 
-#'                       'rename' will append the new defintion name with (1) until the name is unique
+#' @param definition       An R list object containing the expression for the specification. This will
+#'                         be converted to JSON expression by function and posted into the WebApi.
+#'                         Note: only limited checks are performed in R to check the validity of this
+#'                         expression.
+#' @param duplicateNames   How to handle importing a definition with a name that already exists in
+#'                         ATLAS. 'error' will throw an error, 'overwrite' will attempt to overwrite
+#'                         the existing definition, 'rename' will append the new defintion name with
+#'                         (1) until the name is unique
 #' @return
 #' This function will return a dataframe object with one row describing the posted WebApi expression
 #' and its details. If unsuccessful a STOP message will be shown.

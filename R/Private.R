@@ -54,10 +54,10 @@
                                      "pathway")) %>% dplyr::mutate(categoryFirstUpper = paste0(toupper(substr(.data$categoryStandard, 1, 1)), substr(.data$categoryStandard, 2, nchar(.data$categoryStandard)))) %>% dplyr::mutate(categoryUrl = dplyr::case_when(categoryStandard ==
     "conceptSet" ~ "conceptset", categoryStandard == "cohort" ~ "cohortdefinition", categoryStandard ==
     "characterization" ~ "cohort-characterization", categoryStandard == "pathway" ~ "pathway-analysis", categoryStandard == "incidenceRate" ~ "ir", categoryStandard == "estimation" ~ "estimation", categoryStandard == "prediction" ~ "prediction", TRUE ~ "")) %>% dplyr::mutate(categoryUrlGetExpression = dplyr::case_when(categoryStandard ==
-    "conceptSet" ~ "expression", categoryStandard == "characterization" ~ "design", categoryStandard == "pathway" ~ "export", TRUE ~ "")) %>%
-    dplyr::mutate(categoryUrlGenerationInformation = dplyr::case_when(categoryStandard == "cohort" ~
-      "info", categoryStandard == "characterization" ~ "generation", categoryStandard == "pathway" ~
-      "generation", categoryStandard == "incidenceRate" ~ "info", TRUE ~ "")) %>% dplyr::mutate(categoryUrlGeneration = dplyr::case_when(categoryStandard ==
+    "conceptSet" ~ "expression", categoryStandard == "characterization" ~ "design", categoryStandard ==
+    "pathway" ~ "export", TRUE ~ "")) %>% dplyr::mutate(categoryUrlGenerationInformation = dplyr::case_when(categoryStandard ==
+    "cohort" ~ "info", categoryStandard == "characterization" ~ "generation", categoryStandard ==
+    "pathway" ~ "generation", categoryStandard == "incidenceRate" ~ "info", TRUE ~ "")) %>% dplyr::mutate(categoryUrlGeneration = dplyr::case_when(categoryStandard ==
     "cohort" ~ "generate", categoryStandard == "characterization" ~ "generation", categoryStandard ==
     "pathway" ~ "generation", categoryStandard == "incidenceRate" ~ "execute", TRUE ~ "")) %>% dplyr::mutate(categoryUrlCancel = dplyr::case_when(categoryStandard ==
     "cohort" ~ "cancel", categoryStandard == "characterization" ~ "generation", categoryStandard ==
