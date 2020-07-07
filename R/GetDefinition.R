@@ -86,7 +86,7 @@ getDefinition <- function(id, category, baseUrl) {
   }
   if (is.character(response$expression)) {
     if (jsonlite::validate(response$expression)) {
-      response$expression <- RJSONIO::fromJSON(response$expression, nullValue = NA)
+      response$expression <- RJSONIO::fromJSON(response$expression, nullValue = NA, simplify = F)
     }
   }
   return(response)

@@ -52,7 +52,7 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
   checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
 
-  if (!category %in% c("cohort", "conceptSet", "pathway", "characterization")) {
+  if (!category %in% c("cohort", "conceptSet", "pathway", "characterization", "incidenceRate")) {
     ParallelLogger::logError("Posting definitions of ", category, " is not supported.")
     stop()
   }
@@ -70,23 +70,53 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
   
   if (category %in% c("pathway")) {
     
-    expression$targetCohorts <- purrr::map(expression$targetCohorts,
-                                           .postModifyCohortDef,
-                                           baseUrl,
-                                           duplicateNames)
-    expression$eventCohorts <- purrr::map(expression$eventCohorts,
-                                          .postModifyCohortDef,
-                                          baseUrl,
-                                          duplicateNames)
+    defsIds <- purrr::map(expression$targetCohorts,
+                          .postModifyCohortDef,
+                          baseUrl,
+                          duplicateNames)
+    
+    expression$targetCohorts <- purrr::map(defsIds, ~.x$def)
+    
+    defIds <- purrr::map(expression$eventCohorts,
+                         .postModifyCohortDef,
+                         baseUrl,
+                         duplicateNames)
+    
+    expression$eventCohorts <- purrr::map(defIds, ~.x$def)
+    
+  }
+  
+  if (category %in% c("incidenceRate")) {
+    
+    defIds <- purrr::map(expression$targetCohorts,
+                                       .postModifyCohortDef,
+                                       baseUrl,
+                                       duplicateNames)
+    
+    expression$targetCohorts <- purrr::map(defIds, ~.x$def)
+    expression$targetIds <- purrr::map(defIds, ~.x$id)
+    
+    defIds <- purrr::map(expression$outcomeCohorts,
+                                        .postModifyCohortDef,
+                                        baseUrl,
+                                        duplicateNames)
+    
+    expression$outcomeCohorts <- purrr::map(defIds, ~.x$def)
+    expression$outcomeIds <- purrr::map(defIds, ~.x$id)
+    
+    definition$expression <- expression
+    expression <- definition
     
   }
   
   if (category %in% c("characterization")) {
     
-    expression$cohorts <- purrr::map(expression$cohorts,
+    defIds <- purrr::map(expression$cohorts,
                                      .postModifyCohortDef,
                                      baseUrl,
                                      duplicateNames)
+    
+    expression$cohorts <- purrr::map(defIds, ~.x$def)
     
   }
   
@@ -179,6 +209,16 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
     json <- RJSONIO::toJSON(expression)
   }
   
+  if (category %in% c("incidenceRate")){
+    
+    expression$expression <- RJSONIO::toJSON(expression$expression, collapse="")
+    expression$name <- name
+    expression$id <- NULL
+    
+    json <- expression
+    
+  }
+  
   return(json)
   
 }
@@ -236,5 +276,5 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
   output <- postCohortDefinition(cohortDef$name, cohortDef, baseUrl, duplicateNames)
   cohortDef$name <- output$name
   cohortDef$id <- output$id
-  return(cohortDef)
+  return(list(def = cohortDef, id = output$id))
 }
