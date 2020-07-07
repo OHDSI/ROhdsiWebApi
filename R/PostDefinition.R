@@ -154,43 +154,7 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
     }
   }
 
-  if (category %in% c("characterization")) {
-    characterizationPostObject <- structureCreated
-    characterizationPostObject$cohorts <- definition$expression$cohorts
-    characterizationPostObject$featureAnalyses <- definition$expression$featureAnalyses
-    characterizationPostObject$parameters <- definition$expression$parameters
-    characterizationPostObject$stratas <- definition$expression$stratas
-    characterizationPostObject$strataOnly <- definition$expression$strataOnly
-    characterizationPostObject$strataConceptSets <- definition$expression$strataConceptSets
-    characterizationPostObject$stratifiedBy <- definition$expression$stratifiedBy
-
-    expressionCharacterization <- list()
-    expressionCharacterization$name <- characterizationPostObject$name
-    expressionCharacterization$cohorts <- characterizationPostObject$cohorts
-    expressionCharacterization$featureAnalyses <- characterizationPostObject$featureAnalyses
-    expressionCharacterization$parameters <- characterizationPostObject$parameters
-    expressionCharacterization$stratas <- characterizationPostObject$stratas
-    expressionCharacterization$strataOnly <- characterizationPostObject$strataOnly
-    expressionCharacterization$strataConceptSets <- characterizationPostObject$strataConceptSets
-    expressionCharacterization$createdAt <- characterizationPostObject$createdAt
-    expressionCharacterization$updatedAt <- characterizationPostObject$updatedAt
-    expressionCharacterization$skeletonType <- characterizationPostObject$skeletonType
-    expressionCharacterization$skeletonVersion <- characterizationPostObject$skeletonVersion
-    expressionCharacterization$packageName <- characterizationPostObject$packageName
-    expressionCharacterization$organizationName <- characterizationPostObject$organizationName
-    expressionCharacterization$stratifiedBy <- characterizationPostObject$stratifiedBy
-
-    expressionCharacterization <- jsonlite::toJSON(x = expressionCharacterization,
-                                                   auto_unbox = TRUE)
-
-    response <- .putJson(url = paste0(baseUrl,
-                                      "/",
-                                      argument$categoryUrl,
-                                      "/",
-                                      structureCreated$id,
-                                      "/",
-                                      argument$categoryUrlPut), json = expressionCharacterization)
-  }
+ 
   ParallelLogger::logInfo("Post ", argument$categoryFirstUpper, " definition was successful")
   output <- response %>% list() %>% purrr::map_df(.f = purrr::flatten) %>% utils::type.convert(as.is = TRUE,
                                                                                                dec = ".") %>% .normalizeDateAndTimeTypes()
