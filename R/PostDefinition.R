@@ -52,7 +52,7 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
   checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
 
-  if (!category %in% c("cohort", "conceptSet")) {
+  if (!category %in% c("cohort", "conceptSet", "pathway")) {
     ParallelLogger::logError("Posting definitions of ", category, " is not supported.")
     stop()
   }
@@ -68,12 +68,21 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
                                      category = category,
                                      duplicateNames = duplicateNames)
   
-  # convert R-object to JSON expression.
-  jsonExpression <- RJSONIO::toJSON(expression)
-  # create json body
-  json <- paste0("{\"name\":\"", as.character(name), "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
-                 jsonExpression,
-                 "}")
+  if (category %in% c("pathway")) {
+    
+    expression$targetCohorts <- purrr::map(expression$targetCohorts,
+                                           .postModifyCohortDef,
+                                           baseUrl,
+                                           duplicateNames)
+    expression$eventCohorts <- purrr::map(expression$eventCohorts,
+                                          .postModifyCohortDef,
+                                          baseUrl,
+                                          duplicateNames)
+    
+  }
+  
+  json <- .definitionToJson(expression = expression, category = category, name = name)
+  
   # POST Json
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/")
   if (category == "characterization") {
@@ -94,6 +103,12 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
   response <- httr::content(response)
   structureCreated <- response
   response$expression <- NULL
+  
+  if (category %in% c("pathway")) {
+    response$targetCohorts <- NULL
+    response$eventCohorts <- NULL
+    response$createdBy <- NULL
+  }
 
   # create expression in the structure required to POST or PUT
   if (category %in% c("conceptSet")) {
@@ -169,6 +184,28 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
   return(output)
 }
 
+.definitionToJson <- function(expression, category, name) {
+  
+  if (category %in% c("cohort", "conceptSet")) {
+    
+    jsonExpression <- RJSONIO::toJSON(expression)
+    
+    json <- paste0("{\"name\":\"", as.character(name), "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
+                   jsonExpression,
+                   "}")
+  }
+  
+  if (category %in% c("pathway", "characterization")) {
+    
+    expression$name <- as.character(name)
+    # convert R-object to JSON expression.
+    json <- RJSONIO::toJSON(expression)
+  }
+  
+  return(json)
+  
+}
+
 .checkModifyDefinitionName <- function(baseUrl, name, category, duplicateNames) {
   
   categoryMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
@@ -216,4 +253,11 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
   
   return(name)
   
+}
+
+.postModifyCohortDef <- function(cohortDef, baseUrl, duplicateNames) {
+  output <- postCohortDefinition(cohortDef$name, cohortDef, baseUrl, duplicateNames)
+  cohortDef$name <- output$name
+  cohortDef$id <- output$id
+  return(cohortDef)
 }
