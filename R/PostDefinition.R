@@ -52,7 +52,7 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
   checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
 
-  if (!category %in% c("cohort", "conceptSet", "pathway")) {
+  if (!category %in% c("cohort", "conceptSet", "pathway", "characterization")) {
     ParallelLogger::logError("Posting definitions of ", category, " is not supported.")
     stop()
   }
@@ -78,6 +78,15 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
                                           .postModifyCohortDef,
                                           baseUrl,
                                           duplicateNames)
+    
+  }
+  
+  if (category %in% c("characterization")) {
+    
+    expression$cohorts <- purrr::map(expression$cohorts,
+                                     .postModifyCohortDef,
+                                     baseUrl,
+                                     duplicateNames)
     
   }
   
@@ -108,6 +117,10 @@ postDefinition <- function(baseUrl, name, category, definition, duplicateNames) 
     response$targetCohorts <- NULL
     response$eventCohorts <- NULL
     response$createdBy <- NULL
+  }
+  
+  if (category %in% c("characterization")) {
+    response <- response[c("id", "name", "createdAt", "status", "hashCode")]
   }
 
   # create expression in the structure required to POST or PUT
