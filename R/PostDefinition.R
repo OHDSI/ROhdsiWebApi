@@ -41,7 +41,7 @@
 #'                category = "cohort")
 #' }
 #' @export
-postDefinition <- function(baseUrl, name, category, definition) {
+postDefinition <- function(baseUrl, name, category, definition, duplicateNames) {
   .checkBaseUrl(baseUrl)
   arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
@@ -62,6 +62,12 @@ postDefinition <- function(baseUrl, name, category, definition) {
   } else {
     expression <- definition
   }
+  
+  name <- .checkModifyDefinitionName(name = name,
+                                     baseUrl = baseUrl,
+                                     category = category,
+                                     duplicateNames = duplicateNames)
+  
   # convert R-object to JSON expression.
   jsonExpression <- RJSONIO::toJSON(expression)
   # create json body
@@ -161,4 +167,53 @@ postDefinition <- function(baseUrl, name, category, definition) {
   output <- response %>% list() %>% purrr::map_df(.f = purrr::flatten) %>% utils::type.convert(as.is = TRUE,
                                                                                                dec = ".") %>% .normalizeDateAndTimeTypes()
   return(output)
+}
+
+.checkModifyDefinitionName <- function(baseUrl, name, category, duplicateNames) {
+  
+  categoryMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
+  
+  if (name %in% categoryMetaData$name) {
+    
+    ParallelLogger::logWarn(name, " already exists in ATLAS")
+    
+    if (duplicateNames == "error") {
+      ParallelLogger::logError("Cannot write ", category)
+      ParallelLogger::logError("<<", name, ">> ALREADY EXISTS in ATLAS")
+      stop()
+    }
+    
+    if (duplicateNames == "overwrite") {
+      deleteId <- categoryMetaData[categoryMetaData$name == name, ]$id
+      
+      tryCatch({
+        output <- deleteDefinition(deleteId, baseUrl, category)
+      }, error = function(cond) {
+        ParallelLogger::logError("Overwriting cohort <<", name, ">> was UNSUCESSFUL")
+        ParallelLogger::logError("Error message: ", cond)
+        stop()
+      })
+      
+      ParallelLogger::logWarn("Deleted existing cohort_definition_id ", deleteId)
+      ParallelLogger::logWarn("In order to post <<", name, ">>")
+      
+    }
+    
+    if (duplicateNames == "rename") {
+      
+      name_orig <- name
+      
+      while (name %in% categoryMetaData$name) {
+        name <- paste0(name, "(1)")
+      }
+      
+      ParallelLogger::logWarn("Renamed: <<", name_orig, ">>")
+      ParallelLogger::logWarn("To: <<", name, ">>")
+      return(name)
+    }
+    
+  }
+  
+  return(name)
+  
 }
