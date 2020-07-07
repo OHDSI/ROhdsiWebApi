@@ -177,6 +177,11 @@ detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                               will be converted to JSON expression by function and posted into the
 #'                               WebApi. Note: only limited checks are performed in R to check the
 #'                               validity of this expression.
+#' @param duplicateNames         How to handle importing a definition with a name that already exists
+#'                               in ATLAS. 'error' will throw an error, 'overwrite' will attempt to
+#'                               overwrite the existing definition, 'rename' will append the new
+#'                               defintion name with (1) until the name is unique
+#'
 #' @return
 #' This function will return a dataframe object with one row describing the posted WebApi expression
 #' and its details. If unsuccessful a STOP message will be shown.
@@ -188,11 +193,15 @@ detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                          baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
+postConceptSetDefinition <- function(name,
+                                     conceptSetDefinition,
+                                     baseUrl,
+                                     duplicateNames = "error") {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "conceptSet",
-                           definition = conceptSetDefinition)
+                           definition = conceptSetDefinition,
+                           duplicateNames = duplicateNames)
   return(result)
 }
 #' Get the meta data for Cohort definitions. \lifecycle{stable}
@@ -352,6 +361,11 @@ detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                           will be converted to JSON expression by function and posted into the
 #'                           WebApi. Note: only limited checks are performed in R to check the validity
 #'                           of this expression.
+#' @param duplicateNames     How to handle importing a definition with a name that already exists in
+#'                           ATLAS. 'error' will throw an error, 'overwrite' will attempt to overwrite
+#'                           the existing definition, 'rename' will append the new defintion name with
+#'                           (1) until the name is unique
+#'
 #' @return
 #' This function will return a dataframe object with one row describing the posted WebApi expression
 #' and its details. If unsuccessful a STOP message will be shown.
@@ -363,11 +377,12 @@ detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                      baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
+postCohortDefinition <- function(name, cohortDefinition, baseUrl, duplicateNames = "error") {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "cohort",
-                           definition = cohortDefinition)
+                           definition = cohortDefinition,
+                           duplicateNames = duplicateNames)
   return(result)
 }
 
@@ -632,6 +647,11 @@ detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                                  This will be converted to JSON expression by function and posted
 #'                                  into the WebApi. Note: only limited checks are performed in R to
 #'                                  check the validity of this expression.
+#' @param duplicateNames            How to handle importing a definition with a name that already
+#'                                  exists in ATLAS. 'error' will throw an error, 'overwrite' will
+#'                                  attempt to overwrite the existing definition, 'rename' will append
+#'                                  the new defintion name with (1) until the name is unique
+#'
 #' @return
 #' This function will return a dataframe object with one row describing the posted WebApi expression
 #' and its details. If unsuccessful a STOP message will be shown.
@@ -643,11 +663,15 @@ detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                             baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postIncidenceRateDefinition <- function(name, incidenceRateDefinition, baseUrl) {
+postIncidenceRateDefinition <- function(name,
+                                        incidenceRateDefinition,
+                                        baseUrl,
+                                        duplicateNames = "error") {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "incidenceRate",
-                           definition = incidenceRateDefinition)
+                           definition = incidenceRateDefinition,
+                           duplicateNames = duplicateNames)
   return(result)
 }
 
@@ -913,6 +937,11 @@ detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                               will be converted to JSON expression by function and posted into the
 #'                               WebApi. Note: only limited checks are performed in R to check the
 #'                               validity of this expression.
+#' @param duplicateNames         How to handle importing a definition with a name that already exists
+#'                               in ATLAS. 'error' will throw an error, 'overwrite' will attempt to
+#'                               overwrite the existing definition, 'rename' will append the new
+#'                               defintion name with (1) until the name is unique
+#'
 #' @return
 #' This function will return a dataframe object with one row describing the posted WebApi expression
 #' and its details. If unsuccessful a STOP message will be shown.
@@ -924,11 +953,15 @@ detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                          baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postEstimationDefinition <- function(name, estimationDefinition, baseUrl) {
+postEstimationDefinition <- function(name,
+                                     estimationDefinition,
+                                     baseUrl,
+                                     duplicateNames = "error") {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "estimation",
-                           definition = estimationDefinition)
+                           definition = estimationDefinition,
+                           duplicateNames = duplicateNames)
   return(result)
 }
 #' Get the meta data for Prediction definitions. \lifecycle{stable}
@@ -1090,6 +1123,11 @@ detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                               will be converted to JSON expression by function and posted into the
 #'                               WebApi. Note: only limited checks are performed in R to check the
 #'                               validity of this expression.
+#' @param duplicateNames         How to handle importing a definition with a name that already exists
+#'                               in ATLAS. 'error' will throw an error, 'overwrite' will attempt to
+#'                               overwrite the existing definition, 'rename' will append the new
+#'                               defintion name with (1) until the name is unique
+#'
 #' @return
 #' This function will return a dataframe object with one row describing the posted WebApi expression
 #' and its details. If unsuccessful a STOP message will be shown.
@@ -1101,11 +1139,15 @@ detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                          baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postPredictionDefinition <- function(name, predictionDefinition, baseUrl) {
+postPredictionDefinition <- function(name,
+                                     predictionDefinition,
+                                     baseUrl,
+                                     duplicateNames = "error") {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "prediction",
-                           definition = predictionDefinition)
+                           definition = predictionDefinition,
+                           duplicateNames = duplicateNames)
   return(result)
 }
 #' Get the meta data for Characterization definitions. \lifecycle{stable}
@@ -1274,6 +1316,11 @@ detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                                     specification. This will be converted to JSON expression by
 #'                                     function and posted into the WebApi. Note: only limited checks
 #'                                     are performed in R to check the validity of this expression.
+#' @param duplicateNames               How to handle importing a definition with a name that already
+#'                                     exists in ATLAS. 'error' will throw an error, 'overwrite' will
+#'                                     attempt to overwrite the existing definition, 'rename' will
+#'                                     append the new defintion name with (1) until the name is unique
+#'
 #' @return
 #' This function will return a dataframe object with one row describing the posted WebApi expression
 #' and its details. If unsuccessful a STOP message will be shown.
@@ -1285,11 +1332,15 @@ detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                                baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postCharacterizationDefinition <- function(name, characterizationDefinition, baseUrl) {
+postCharacterizationDefinition <- function(name,
+                                           characterizationDefinition,
+                                           baseUrl,
+                                           duplicateNames = "error") {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "characterization",
-                           definition = characterizationDefinition)
+                           definition = characterizationDefinition,
+                           duplicateNames = duplicateNames)
   return(result)
 }
 
@@ -1554,6 +1605,11 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                            will be converted to JSON expression by function and posted into the
 #'                            WebApi. Note: only limited checks are performed in R to check the
 #'                            validity of this expression.
+#' @param duplicateNames      How to handle importing a definition with a name that already exists in
+#'                            ATLAS. 'error' will throw an error, 'overwrite' will attempt to overwrite
+#'                            the existing definition, 'rename' will append the new defintion name with
+#'                            (1) until the name is unique
+#'
 #' @return
 #' This function will return a dataframe object with one row describing the posted WebApi expression
 #' and its details. If unsuccessful a STOP message will be shown.
@@ -1565,11 +1621,12 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #'                       baseUrl = "http://server.org:80/WebAPI")
 #' }
 #' @export
-postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
+postPathwayDefinition <- function(name, pathwayDefinition, baseUrl, duplicateNames = "error") {
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "pathway",
-                           definition = pathwayDefinition)
+                           definition = pathwayDefinition,
+                           duplicateNames = duplicateNames)
   return(result)
 }
 
