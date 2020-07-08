@@ -1,14 +1,33 @@
-###### TEST FNS
 baseUrl <- 'http://api.ohdsi.org:80/WebAPI'
 
-def_path <- ROhdsiWebApi::getPathwayDefinition(82, baseUrl)
-out_path <- ROhdsiWebApi::postPathwayDefinition("test123", def_path, baseUrl, "rename")
+## Post pathway
+definition_pathway <- ROhdsiWebApi::getPathwayDefinition(82, baseUrl)
+posted_pathway <- ROhdsiWebApi::postPathwayDefinition("rohdsiwebapi_test", definition_pathway, baseUrl, "rename")
+posted_pathway
 
-def_char <- ROhdsiWebApi::getCharacterizationDefinition(246, baseUrl)
-out_char <- ROhdsiWebApi::postCharacterizationDefinition("test123", def_char, baseUrl, "rename")
+## Post characterization
+definition_char <- ROhdsiWebApi::getCharacterizationDefinition(246, baseUrl)
+posted_char <- ROhdsiWebApi::postCharacterizationDefinition("rohdsiwebapi_test", definition_char, baseUrl, "rename")
+posted_char
 
-def_ir <- ROhdsiWebApi::getIncidenceRateDefinition(1747266, baseUrl)
-out_ir <- ROhdsiWebApi::postIncidenceRateDefinition("test123", def_ir, baseUrl, "rename")
+## Post incidence rate
+definition_ir <- ROhdsiWebApi::getIncidenceRateDefinition(1747266, baseUrl)
+posted_ir <- ROhdsiWebApi::postIncidenceRateDefinition("rohdsiwebapi_test", definition_ir, baseUrl, "rename")
+posted_ir
 
+############################
+### TIDY UP
+############################
+posted_pathway_def <- ROhdsiWebApi::getPathwayDefinition(posted_pathway$id, baseUrl)
+ROhdsiWebApi::deletePathwayDefinition(posted_pathway_def$id, baseUrl)
+purrr::walk(posted_pathway_def$targetCohorts, ~ROhdsiWebApi::deleteCohortDefinition(.x$id, baseUrl))
+purrr::walk(posted_pathway_def$eventCohorts, ~ROhdsiWebApi::deleteCohortDefinition(.x$id, baseUrl))
 
-for(i in x:y){ROhdsiWebApi::deleteCohortDefinition(i,baseUrl)}
+posted_char_def <- ROhdsiWebApi::getCharacterizationDefinition(posted_char$id, baseUrl)
+ROhdsiWebApi::deleteCharacterizationDefinition(posted_char_def$id, baseUrl)
+purrr::walk(posted_char_def$expression$cohorts, ~ROhdsiWebApi::deleteCohortDefinition(.x$id, baseUrl))
+
+posted_ir_def <- ROhdsiWebApi::getIncidenceRateDefinition(posted_ir$id, baseUrl)
+ROhdsiWebApi::deleteIncidenceRateDefinition(posted_ir_def$id, baseUrl)
+purrr::walk(posted_ir_def$expression$targetIds, ~ROhdsiWebApi::deleteCohortDefinition(.x, baseUrl))
+purrr::walk(posted_ir_def$expression$outcomeIds, ~ROhdsiWebApi::deleteCohortDefinition(.x, baseUrl))
