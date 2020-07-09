@@ -19,18 +19,17 @@
 #'                       By default the user will be prompted for their password when needed.
 #'
 #' @return A WebApi connection object
-#' @import getPass getPass
 #' @export
 authorizeWebApi <- function(baseUrl, 
                             authMethod,
                             webApiUsername = NULL,
-                            webApiPassword = getPass("Enter WebApi/Atlas Password")) { 
+                            webApiPassword = NULL) { 
   # check input
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(baseUrl, len = 1, min.chars = 1, add = errorMessage)
   checkmate::assertChoice(authMethod, choices = c("db", "ad"), add = errorMessage)
   checkmate::assert(checkmate::checkCharacter(webApiUsername), checkmate::checkNull(webApiUsername), add = errorMessage)
-  checkmate::assert(authMethod == "none", checkmate::checkCharacter(webApiPassword), checkmate::checkNull(webApiPassword), add = errorMessage)
+  checkmate::assert(checkmate::checkCharacter(webApiPassword), checkmate::checkNull(webApiPassword), add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   .checkBaseUrl(baseUrl)
   

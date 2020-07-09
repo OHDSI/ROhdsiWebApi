@@ -8,7 +8,7 @@ authorizeWebApi(
   baseUrl,
   authMethod,
   webApiUsername = NULL,
-  webApiPassword = getPass("Enter WebApi/Atlas Password")
+  webApiPassword = NULL
 )
 }
 \arguments{
