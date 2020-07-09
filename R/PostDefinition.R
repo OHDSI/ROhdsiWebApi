@@ -82,7 +82,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
     } else {
       error <- ""
     }
-    ParallelLogger::logError(error, "Status code = ", httr::content(response)$status_code)
+    ParallelLogger::logError(error, "Status code = ", httr::status_code(response))
     stop()
   }
   response <- httr::content(response)
