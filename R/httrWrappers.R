@@ -68,5 +68,11 @@ request <- function(url, method, config, handle, body = NULL, encode = "json", .
        The resource or action you requested was not found by WebAPI",
        class = "http-notfound")
   }
+  
+  if(httr::status_code(response) == 500) {
+    rlang::abort("http error 500: Internal server error.
+       The server encountered a problem when trying to fulfill this request.",
+       class = "http-server")
+  }
   response
 }
