@@ -52,7 +52,7 @@ getWebApiVersion <- function(baseUrl) {
                              " . Failed while retrieving WebApi information.")
     stop()
   }
-  response <- httr::GET(url)
+  response <- GET(url)
   if (response$status %in% c(200)) {
     version <- (httr::content(response))$version
   } else {
