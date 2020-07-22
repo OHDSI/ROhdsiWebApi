@@ -32,7 +32,7 @@ request <- function(url, method, config, handle, body = NULL, encode = "json", .
   baseUrls <- names(ROWebApiEnv)
   baseUrl <- baseUrls[stringr::str_detect(url, baseUrls)]
   
-  if (length(baseUrl) == 1 & !is.null(ROWebApiEnv[[baseUrl]]$authHeader)) {
+  if (length(baseUrl) == 1 && !is.null(ROWebApiEnv[[baseUrl]]$authHeader)) {
     authHeader <- ROWebApiEnv[[baseUrl]]$authHeader
     response <- method(url = url, 
                        config = config,
