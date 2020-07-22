@@ -40,8 +40,7 @@ authorizeWebApi <- function(baseUrl,
   )
   
   # store token in package environment
-  if(is.null(ROWebApiEnv[[baseUrl]])) ROWebApiEnv[[baseUrl]] <- list()
-  ROWebApiEnv[[baseUrl]]$authHeader <- authHeader
+  setAuthHeader(baseUrl, authHeader)
   
   invisible()
 }
@@ -61,4 +60,12 @@ authorizeWebApi <- function(baseUrl,
   authHeader
 }
 
-
+#' Manually set the authorization http header for a WebAPI baseUrl
+#' 
+#' @export
+setAuthHeader <- function(baseUrl, authHeader) {
+  checkmate::assertCharacter(baseUrl, min.chars = 1, len = 1)
+  checkmate::assertCharacter(authHeader, min.chars = 1, len = 1)
+  if(is.null(ROWebApiEnv[[baseUrl]])) ROWebApiEnv[[baseUrl]] <- list()
+  ROWebApiEnv[[baseUrl]]$authHeader <- authHeader
+}
