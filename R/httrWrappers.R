@@ -7,11 +7,11 @@ GET <- function(url, config = list(), ..., handle = NULL) {
 }
   
 POST <- function(url, config = list(), ..., body = NULL, encode = "json", handle = NULL) {
-  request(url, method = "DELETE", config = config, handle = handle, body = body, encode = encode, ...)
+  request(url, method = "POST", config = config, handle = handle, body = body, encode = encode, ...)
 }
 
 PUT <- function(url, config = list(), ..., body = NULL, encode = "json", handle = NULL) {
-  request(url, method = "DELETE", config = config, handle = handle, body = body, encode = encode, ...)
+  request(url, method = "PUT", config = config, handle = handle, body = body, encode = encode, ...)
 }
 
 DELETE <- function(url, config = list(), ..., body = NULL, encode = "json", handle = NULL){
