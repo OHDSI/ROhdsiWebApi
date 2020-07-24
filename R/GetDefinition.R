@@ -89,5 +89,5 @@ getDefinition <- function(id, category, baseUrl) {
       response$expression <- RJSONIO::fromJSON(response$expression, nullValue = NA)
     }
   }
-  return(response)
+  return(structure(response, class = category))
 }
