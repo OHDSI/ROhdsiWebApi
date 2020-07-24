@@ -282,7 +282,8 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   }
 }
 
-# A print method for cohort objects
+#' A print method for cohort objects
+#' @export
 print.cohort <- function(x) {
   print(str(x, max.level = 1))
 }
