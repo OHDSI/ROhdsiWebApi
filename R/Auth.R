@@ -46,6 +46,10 @@ authorizeWebApi <- function(baseUrl,
 }
 
 #' Authenticate using Atlas database authentication
+#' 
+#' @template BaseUrl
+#' @param webApiUsername 
+#' @param webApiPassword 
 #'
 #' @return a bearer token to be used in http headers in calls to WebAPI
 .authDb <- function(baseUrl, webApiUsername, webApiPassword) {
@@ -61,6 +65,15 @@ authorizeWebApi <- function(baseUrl,
 }
 
 #' Manually set the authorization http header for a WebAPI baseUrl
+#' 
+#' In some cases the user may want to manually set the authorization header.
+#' An authHeader is associated with a particular baseUrl and added to 
+#' to the header of all http requests sent to that url by ROhdsiWebApi.
+#' 
+#' @template baseUrl 
+#' @param authHeader A character string containing a Bearer token that will
+#'                   be added to the header of all http requests sent to baseUrl.
+#'                   (e.g. "Bearer lxd9n2nsdsd2329km23mexjop02m23m23mmmsioxiis0")
 #' 
 #' @export
 setAuthHeader <- function(baseUrl, authHeader) {

@@ -1,7 +1,7 @@
-#' Internal wrappers for httr request functions 
-#' 
-#' The primary reason for this wrapper is to add the appropriate authorization header to requests.
-#' This file also centralizes http error handling.
+# Internal wrappers for httr request functions 
+# 
+# The primary reason for this wrapper is to add the appropriate authorization header to requests.
+# This file also centralizes http error handling.
 GET <- function(url, config = list(), ..., handle = NULL) {
   request(url, method = "GET", config = config, handle = handle, ...)
 }
