@@ -1,6 +1,14 @@
 News
 ================
 
+# ROhdsiWebApi 1.1.0
+
+### Changes:
+1.  New functions: getConceptSetsFromCohortDefinition
+
+
+
+
 # ROhdsiWebApi 1.0.0
 
 Note: This is a major release. This release is expected to break
