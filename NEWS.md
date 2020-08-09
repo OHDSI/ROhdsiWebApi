@@ -6,7 +6,8 @@ News
 ### Changes:
 1.  New functions: getConceptSetsFromCohortDefinition
 
-
+### Bug fixes
+1.  https://github.com/OHDSI/ROhdsiWebApi/pull/144 was causing duplication of date matches.
 
 
 # ROhdsiWebApi 1.0.0
