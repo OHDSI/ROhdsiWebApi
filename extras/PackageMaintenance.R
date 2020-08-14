@@ -28,21 +28,21 @@ devtools::spell_check()
 unlink("extras/ROhdsiWebApi.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/ROhdsiWebApi.pdf")
 
-dir.create("inst/doc", recursive = TRUE)
+dir.create("inst/doc", recursive = TRUE, showWarnings = FALSE)
 rmarkdown::render("vignettes/UsingROhdsiWebApi.Rmd",
                   output_file = "../inst/doc/UsingROhdsiWebApi.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
                                           toc = TRUE,
                                           number_sections = TRUE))
-unlink("inst/doc/UsingROhdsiWebApi.tex")
-rmarkdown::render("extras/README.Rmd",
-                  output_file = "../README.md",
-                  clean = TRUE)
-unlink("README.tex")
-rmarkdown::render("extras/NEWS.Rmd",
-                  output_file = "../NEWS.md",
-                  clean = TRUE)
-unlink("NEWS.tex")
+# unlink("inst/doc/UsingROhdsiWebApi.tex")
+# rmarkdown::render("extras/README.Rmd",
+#                   output_file = "../README.md",
+#                   clean = TRUE)
+# unlink("README.tex")
+# rmarkdown::render("extras/NEWS.Rmd",
+#                   output_file = "../NEWS.md",
+#                   clean = TRUE)
+# unlink("NEWS.tex")
 
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()

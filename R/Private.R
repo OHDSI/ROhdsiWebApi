@@ -172,9 +172,8 @@
             config = httr::add_headers(.headers = c(`Content-Type` = "application/json")))
 }
 
-# This function is used in places where RJSONIO::toJSON
-# was previously used to centralize seralization to JSON
-# and to ensure the proper formatting is used to prevent
+# This function is used in places where RJSONIO::toJSON was previously used to centralize
+# seralization to JSON and to ensure the proper formatting is used to prevent
 # https://github.com/OHDSI/ROhdsiWebApi/issues/152
 .toJSON <- function(x, pretty = FALSE) {
   return(RJSONIO::toJSON(x = x, digits = 23, pretty = pretty))
