@@ -48,7 +48,7 @@ resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey
   } else {
     expression <- conceptSetDefinition
   }
-  expression <- RJSONIO::toJSON(expression)
+  expression <- .toJSON(expression)
   response <- .postJson(url = url, json = expression)
   if (!response$status_code == 200) {
     ParallelLogger::logError("The concept set definition was not accepted by the WebApi. Status code = ",
