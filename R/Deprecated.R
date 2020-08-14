@@ -48,7 +48,7 @@ getCohortDefinitionExpression <- function(cohortId, baseUrl) {
   2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
   3) save validJsonExpression object
   ", old = as.character(sys.call(sys.parent()))[1L])
-  validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
+  validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = cohortId)
   validJsonExpression <- RJSONIO::toJSON(validJsonExpression$expression)
   return(validJsonExpression)
 }

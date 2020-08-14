@@ -174,7 +174,7 @@ createConceptSetWorkbook <- function(conceptSetIds,
 #' @description
 #' Get all concept set expressions from a cohort definition object as a signel dataframe
 #'
-#' @param cohortDefinition    An R-object (not JSON) representing the cohort definition
+#' @param cohortDefinition   An R-object (not JSON) representing the cohort definition
 #'
 #' @return
 #' A tibble data frame with all the concept sets in the cohort definition R-object
@@ -186,17 +186,14 @@ getConceptSetsFromCohortDefinition <- function(cohortDefinition) {
   } else {
     expression <- cohortDefinition
   }
-  
-  conceptSets <- expression$ConceptSets %>% 
-    purrr::map_df(.f = purrr::flatten) %>% 
-    dplyr::bind_rows() %>% 
-    dplyr::mutate(items = purrr::map_df(.x = .data$items, .f = purrr::flatten)) %>% 
-    dplyr::bind_rows() %>% 
-    jsonlite::flatten(x = .) %>% 
-    dplyr::rename_with(.fn = ~ stringr::str_replace(string = ., pattern = 'items.', replacement = '')) %>% 
-    dplyr::rename_with(.fn = ~ dplyr::case_when(stringr::str_detect(string = ., pattern = "_") ~ SqlRender::snakeCaseToCamelCase(string = .),
-                                                TRUE ~ .)) %>% 
-    tidyr::tibble()
-  
+
+  conceptSets <- expression$ConceptSets %>% purrr::map_df(.f = purrr::flatten) %>% dplyr::bind_rows() %>%
+    dplyr::mutate(items = purrr::map_df(.x = .data$items,
+                                        .f = purrr::flatten)) %>% dplyr::bind_rows() %>%
+    jsonlite::flatten(x = .) %>% dplyr::rename_with(.fn = ~stringr::str_replace(string = .,
+                                                                                pattern = "items.",
+                                                                                replacement = "")) %>% dplyr::rename_with(.fn = ~dplyr::case_when(stringr::str_detect(string = ., pattern = "_") ~ SqlRender::snakeCaseToCamelCase(string = .), TRUE ~ .)) %>% tidyr::tibble()
+
   return(conceptSets)
 }
+
