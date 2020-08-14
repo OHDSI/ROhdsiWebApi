@@ -47,7 +47,7 @@ getConcepts <- function(conceptIds,
   }
 
   url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabularySourceKey)
-  body <- RJSONIO::toJSON(conceptIds, digits = 23)
+  body <- .toJSON(conceptIds)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- POST(url, body = body, config = httr::add_headers(httpheader))
   req <- httr::content(req)
@@ -101,7 +101,7 @@ getSourceConcepts <- function(conceptIds,
   }
 
   url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabularySourceKey)
-  body <- RJSONIO::toJSON(conceptIds, digits = 23)
+  body <- .toJSON(conceptIds)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
   req <- POST(url, body = body, config = httr::add_headers(httpheader))
   req <- httr::content(req)

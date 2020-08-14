@@ -1,6 +1,15 @@
 News
 ================
 
+# ROhdsiWebApi 1.1.0
+
+### Changes:
+1.  New functions: getConceptSetsFromCohortDefinition
+
+### Bug fixes
+1. https://github.com/OHDSI/ROhdsiWebApi/pull/144 was causing duplication of date matches.
+2. RJSONIO::toJSON loss of precision #152
+
 # ROhdsiWebApi 1.0.0
 
 Note: This is a major release. This release is expected to break

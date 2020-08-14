@@ -63,7 +63,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
     expression <- definition
   }
   # convert R-object to JSON expression.
-  jsonExpression <- RJSONIO::toJSON(expression)
+  jsonExpression <- .toJSON(expression)
   # create json body
   json <- paste0("{\"name\":\"", as.character(name), "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
                  jsonExpression,
