@@ -68,7 +68,7 @@ insertCohortDefinitionInPackage <- function(cohortId,
     dir.create(jsonFolder, recursive = TRUE)
   }
   jsonFileName <- file.path(jsonFolder, paste(name, "json", sep = "."))
-  json <- RJSONIO::toJSON(object$expression, pretty = TRUE)
+  json <- .toJSON(object$expression, pretty = TRUE)
   SqlRender::writeSql(sql = json, targetFile = jsonFileName)
 
   writeLines(paste("- Created JSON file:", jsonFileName))
@@ -270,7 +270,7 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   }
   listGenerateStats <- list(expression = expression, options = list(generateStats = generateStats))
 
-  validJsonExpression <- RJSONIO::toJSON(listGenerateStats, digits = 23)
+  validJsonExpression <- .toJSON(listGenerateStats)
   response <- httr::POST(url, body = validJsonExpression, config = httr::add_headers(httpheader))
   if (response$status == 200) {
     response <- httr::content(response)

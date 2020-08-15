@@ -7,7 +7,7 @@ Status](https://travis-ci.org/OHDSI/ROhdsiWebApi.svg?branch=master)](https://tra
 
 ROhdsiWebApi is part of [HADES](https://ohdsi.github.io/Hades).
 
-(last updated : 2020-06-12)
+(last updated : 2020-08-14)
 
 ## Introduction
 
@@ -50,15 +50,15 @@ package is designed to interface directly with WebApi.
 
 ## Supported WebApi functional categories.
 
-|     Category     | Features                                                  |
-| :--------------: | :-------------------------------------------------------- |
-|    ConceptSet    | Functions for interfacing with ConceptSet in WebApi       |
-|      Cohort      | Functions for interfacing with Cohort in WebApi           |
-|  IncidenceRate   | Functions for interfacing with IncidenceRate in WebApi    |
-|    Estimation    | Functions for interfacing with Estimation in WebApi       |
-|    Prediction    | Functions for interfacing with Prediction in WebApi       |
+| Category         | Features                                                  |
+| :--------------- | :-------------------------------------------------------- |
+| ConceptSet       | Functions for interfacing with ConceptSet in WebApi       |
+| Cohort           | Functions for interfacing with Cohort in WebApi           |
+| IncidenceRate    | Functions for interfacing with IncidenceRate in WebApi    |
+| Estimation       | Functions for interfacing with Estimation in WebApi       |
+| Prediction       | Functions for interfacing with Prediction in WebApi       |
 | Characterization | Functions for interfacing with Characterization in WebApi |
-|     Pathway      | Functions for interfacing with Pathway in WebApi          |
+| Pathway          | Functions for interfacing with Pathway in WebApi          |
 
 ## Technology
 

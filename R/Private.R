@@ -102,7 +102,7 @@
                                 lubridate::guess_formats(x = x, orders = c("y-m-d H:M",
                                                                                                        "y-m-d H:M:S",
                                                                                                        "ymdHMS",
-                                                                                                       "ymd HMS")))
+                                                                                                       "ymd HMS"))[1])
     x <- min(x)
   }
   return(x)
@@ -170,4 +170,11 @@
             body = json,
             encode = "json",
             config = httr::add_headers(.headers = c(`Content-Type` = "application/json")))
+}
+
+# This function is used in places where RJSONIO::toJSON was previously used to centralize
+# seralization to JSON and to ensure the proper formatting is used to prevent
+# https://github.com/OHDSI/ROhdsiWebApi/issues/152
+.toJSON <- function(x, pretty = FALSE) {
+  return(RJSONIO::toJSON(x = x, digits = 23, pretty = pretty))
 }
