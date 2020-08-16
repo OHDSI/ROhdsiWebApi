@@ -45,13 +45,7 @@ authorizeWebApi <- function(baseUrl,
   invisible()
 }
 
-#' Authenticate using Atlas database authentication
-#' 
-#' @template BaseUrl
-#' @param webApiUsername 
-#' @param webApiPassword 
-#'
-#' @return a bearer token to be used in http headers in calls to WebAPI
+
 .authDb <- function(baseUrl, webApiUsername, webApiPassword) {
   checkmate::assertCharacter(webApiUsername, min.chars = 1, len = 1)
   checkmate::assertCharacter(webApiPassword, min.chars = 1, len = 1)
