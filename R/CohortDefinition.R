@@ -281,7 +281,3 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
     stop()
   }
 }
-
-print.cohort <- function(x, ...) {
-  print(str(x, max.level = 1), ...)
-}
