@@ -6,6 +6,17 @@
 \usage{
 setAuthHeader(baseUrl, authHeader)
 }
+\arguments{
+\item{baseUrl}{The base URL for the WebApi instance, for example:
+"http://server.org:80/WebAPI". Note, there is no trailing '/'.
+If trailing '/' is used, you may receive an error.}
+
+\item{authHeader}{A character string containing a Bearer token that will
+be added to the header of all http requests sent to baseUrl.
+(e.g. "Bearer lxd9n2nsdsd2329km23mexjop02m23m23mmmsioxiis0")}
+}
 \description{
-Manually set the authorization http header for a WebAPI baseUrl
+In some cases the user may want to manually set the authorization header.
+An authHeader is associated with a particular baseUrl and added to 
+to the header of all http requests sent to that url by ROhdsiWebApi.
 }
