@@ -2,23 +2,23 @@
 # 
 # The primary reason for this wrapper is to add the appropriate authorization header to requests.
 # This file also centralizes http error handling.
-GET <- function(url, config = list(), ..., handle = NULL) {
-  request(url, method = "GET", config = config, handle = handle, ...)
+.GET <- function(url, config = list(), ..., handle = NULL) {
+  .request(url, method = "GET", config = config, handle = handle, ...)
 }
   
-POST <- function(url, config = list(), ..., body = NULL, encode = "json", handle = NULL) {
-  request(url, method = "POST", config = config, handle = handle, body = body, encode = encode, ...)
+.POST <- function(url, config = list(), ..., body = NULL, encode = "json", handle = NULL) {
+  .request(url, method = "POST", config = config, handle = handle, body = body, encode = encode, ...)
 }
 
-PUT <- function(url, config = list(), ..., body = NULL, encode = "json", handle = NULL) {
-  request(url, method = "PUT", config = config, handle = handle, body = body, encode = encode, ...)
+.PUT <- function(url, config = list(), ..., body = NULL, encode = "json", handle = NULL) {
+  .request(url, method = "PUT", config = config, handle = handle, body = body, encode = encode, ...)
 }
 
-DELETE <- function(url, config = list(), ..., body = NULL, encode = "json", handle = NULL){
-  request(url, method = "DELETE", config = config, handle = handle, body = body, encode = encode, ...)
+.DELETE <- function(url, config = list(), ..., body = NULL, encode = "json", handle = NULL){
+  .request(url, method = "DELETE", config = config, handle = handle, body = body, encode = encode, ...)
 }
 
-request <- function(url, method, config, handle, body = NULL, encode = "json", ...) {
+.request <- function(url, method, config, handle, body = NULL, encode = "json", ...) {
   method <- switch(
     method,
     GET    = httr::GET,

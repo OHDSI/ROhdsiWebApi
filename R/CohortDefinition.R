@@ -271,7 +271,7 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   listGenerateStats <- list(expression = expression, options = list(generateStats = generateStats))
 
   validJsonExpression <- .toJSON(listGenerateStats)
-  response <- POST(url, body = validJsonExpression, config = httr::add_headers(httpheader))
+  response <- .POST(url, body = validJsonExpression, config = httr::add_headers(httpheader))
   if (response$status == 200) {
     response <- httr::content(response)
     sql <- response$templateSql
@@ -282,7 +282,6 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   }
 }
 
-#' @export
 print.cohort <- function(x, ...) {
   print(str(x, max.level = 1), ...)
 }
