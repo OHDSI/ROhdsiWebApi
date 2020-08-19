@@ -3,7 +3,8 @@ library(testthat)
 
 # start the api simulation in a background R process
 webApiSimulation <- callr::r_bg(function(file, port) { plumber::plumb(file)$run(port = port) }, 
-                                args = list(file = system.file("inst", "WebApiSimulation", "plumber.R", package = "ROhdsiWebApi"), port = 8000)) 
+                                # args = list(file = system.file("inst", "WebApiSimulation", "plumber.R", package = "ROhdsiWebApi"), port = 8000)) 
+                                args = list(file = system.file("WebApiSimulation", "plumber.R", package = "ROhdsiWebApi"), port = 8000)) 
 
 baseUrl <- "http://localhost:8000"
 
@@ -30,6 +31,11 @@ test_that("Test getCdmSources", {
      2,        "synpuf",    "synpuf",   "postgresql",   "synpuf",           "synpuf",             "synpuf_results")
   
   expect_equal(getCdmSources(baseUrl), expectedCdmSources)
+})
+
+
+test_that("Test getPriorityVocabularyKey", {
+  expect_equal(getPriorityVocabularyKey(baseUrl), "synthea")
 })
 
 # end the WebApi simulation
