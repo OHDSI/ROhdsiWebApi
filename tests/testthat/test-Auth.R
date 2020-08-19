@@ -23,6 +23,17 @@ test_that("Test authorizeWebApi", {
   expect_equal(ROhdsiWebApi:::ROWebApiEnv[[baseUrl]]$authHeader, "Bearer 0000")
 })
 
+test_that("Test getCdmSources", {
+  expectedCdmSources <- tibble::tribble(
+    ~sourceId, ~sourceName, ~sourceKey, ~sourceDialect, ~cdmDatabaseSchema, ~vocabDatabaseSchema, ~resultsDatabaseSchema,
+     1,        "synthea",   "synthea",  "postgresql",   "synthea",          "synthea",            "synthea_results",      
+     2,        "synpuf",    "synpuf",   "postgresql",   "synpuf",           "synpuf",             "synpuf_results")
+  
+  expect_equal(getCdmSources(baseUrl), expectedCdmSources)
+})
+
 # end the WebApi simulation
 webApiSimulation$kill()
+
+
 

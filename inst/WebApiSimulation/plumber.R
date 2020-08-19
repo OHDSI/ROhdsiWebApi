@@ -22,3 +22,30 @@ function(login, password, res) {
   }
 }
 
+#* Get info about CDM sources
+#* @get /source/sources
+#* @serializer unboxedJSON
+function() {
+  list(
+    # source 1
+    list(sourceId = 1L, 
+      sourceName = "synthea", 
+      sourceDialect = "postgresql", 
+      sourceKey = "synthea", 
+      daimons = list(list(sourceDaimonId = 5L, daimonType = "CDM", tableQualifier = "synthea", priority = 0L), 
+                     list(sourceDaimonId = 6L, daimonType = "Vocabulary", tableQualifier = "synthea", priority = 0L), 
+                     list(sourceDaimonId = 7L, daimonType = "Results", tableQualifier = "synthea_results", priority = 0L)
+                     )
+      ), 
+    # source 2                   
+    list(sourceId = 2L, 
+      sourceName = "synpuf", 
+      sourceDialect = "postgresql", 
+      sourceKey = "synpuf", 
+      daimons = list(list(sourceDaimonId = 2L, daimonType = "CDM", tableQualifier = "synpuf", priority = 1L), 
+                     list(sourceDaimonId = 3L, daimonType = "Vocabulary", tableQualifier = "synpuf", priority = 1L), 
+                     list(sourceDaimonId = 4L, daimonType = "Results", tableQualifier = "synpuf_results", priority = 1L)
+                     ) 
+      )
+    )
+}
