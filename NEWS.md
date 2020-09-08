@@ -1,6 +1,15 @@
 News
 ================
 
+
+# ROhdsiWebApi 1.1.1
+
+### Changes:
+1.  Use BIGINT for cohort_definition_id
+
+### Bug fixes
+
+
 # ROhdsiWebApi 1.1.0
 
 ### Changes:
