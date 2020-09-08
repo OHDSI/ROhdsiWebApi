@@ -1,0 +1,1139 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Using ROhdsiWebApi},
+  pdfauthor={Gowtham Rao},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+
+\title{Using ROhdsiWebApi}
+\author{Gowtham Rao}
+\date{2020-09-07}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+ROhdsiWebApi is part of \href{https://ohdsi.github.io/Hades}{HADES}.
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+From Package
+\href{https://github.com/OHDSI/ROhdsiWebApi/blob/master/README.md}{Readme}
+
+\begin{quote}
+ROhdsiWebApi is a R based interface to
+\href{https://github.com/ohdsi/webapi}{`WebApi'} (OHDSI RESTful
+services), and performs GET/PULL/POST/DELETE calls via the WebApi. All
+objects starting from R or output to R - are analysis ready R-objects
+like list and data.frame. The package handles the intermediary steps by
+converting R-objects to JSON and vice versa. To ensure r-objects are
+analysis ready, the objects are type converted where possible,
+e.g.~date/date time are converted from string to POSIXct.
+\end{quote}
+
+\begin{quote}
+This package makes reproducible research easier, by offering ability to
+retrieve detailed study specifications, transport study specifications
+from one instance to another, programmatically invoke the generation of
+a sequence of steps that are part of a study, manage running studies in
+batch mode.
+\end{quote}
+
+This document will attempt to explain how ROhdsiWebApi maybe used to
+achieve reproducible research.
+
+\hypertarget{webapi-configurations-and-rohdsiwebapi}{%
+\section{WebApi configurations and
+ROhdsiWebApi}\label{webapi-configurations-and-rohdsiwebapi}}
+
+To successfully use ROhdsiWebApi, it is necessary to have an active
+\href{https://github.com/ohdsi/webapi}{`WebApi'} endpoint with a known
+baseUrl such as ``\url{http://server.org:80/WebAPI}''.
+\href{https://github.com/ohdsi/webapi}{`WebApi'} has many functional
+categories.
+
+To ensure reproducibility of work it is best to know the version of the
+WebApi (i.e.~Atlas backend) being used. An easy way to do that is (and
+output maybe included in your study results)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{version <-}\StringTok{ }\NormalTok{ROhdsiWebApi}\OperatorTok{:::}\KeywordTok{getWebApiVersion}\NormalTok{(}\DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
+\NormalTok{message1 <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'This Vignette was created using WebApi version: '}\NormalTok{, }
+\NormalTok{                   version, }
+                   \StringTok{' on baseUrl: '}\NormalTok{, }
+\NormalTok{                   baseUrl, }
+                   \StringTok{". The CDM had the following source data configured: "}\NormalTok{)}
+\NormalTok{cdmSources <-}\StringTok{ }\NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{getCdmSources}\NormalTok{(}\DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
+\NormalTok{priorityVocabulary <-}\StringTok{ }\NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{getPriorityVocabularyKey}\NormalTok{(}\DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
+\end{Highlighting}
+\end{Shaded}
+
+The object \texttt{version} will show your webApi version. Example: This
+Vignette was created using WebApi version: 2.7.7 on baseUrl:
+\url{http://api.ohdsi.org:80/WebAPI}. The CDM had the following source
+data configured: .
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{cdmSources}
+\CommentTok{#> # A tibble: 3 x 7}
+\CommentTok{#>   sourceId sourceName            sourceKey  sourceDialect cdmDatabaseSchema vocabDatabaseSchema resultsDatabaseSchema}
+\CommentTok{#>      <int> <chr>                 <chr>      <chr>         <chr>             <chr>               <chr>                }
+\CommentTok{#> 1        4 Common Evidence Model CEM        postgresql    <NA>              unrestricted        <NA>                 }
+\CommentTok{#> 2        6 SYNPUF 1K             SYNPUF1K   postgresql    synpuf1k          unrestricted        synpuf1k_results     }
+\CommentTok{#> 3        5 SYNPUF 5%             SYNPUF5PCT postgresql    synpuf5pct        unrestricted        synpuf5pct_results}
+\end{Highlighting}
+\end{Shaded}
+
+The priority vocabulary for the WebApi is SYNPUF5PCT.
+
+We can also perform checks on the WebApi, example - we may want to see
+if the `HCUP' \& `SYNPUF1K' is a valid SourceKey in the current webApi.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{isValidSourceKey}\NormalTok{(}\DataTypeTok{sourceKeys =} \KeywordTok{c}\NormalTok{(}\StringTok{'HCUP'}\NormalTok{, }\StringTok{'SYNPUF1K'}\NormalTok{), }\DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
+\CommentTok{#> [1] FALSE  TRUE}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{webapi-analytical-categories.}{%
+\subsection{WebApi Analytical
+categories.}\label{webapi-analytical-categories.}}
+
+WebApi maybe considered to have certain modular analytic categories.
+ROhdsiWebApi supports the following categories:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.21\columnwidth}\raggedright
+Category\strut
+\end{minipage} & \begin{minipage}[b]{0.73\columnwidth}\raggedright
+Features\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+ConceptSet\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+Functions for interfacing with ConceptSet in WebApi\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+Cohort\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+Functions for interfacing with Cohort in WebApi\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+IncidenceRate\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+Functions for interfacing with IncidenceRate in WebApi\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+Estimation\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+Functions for interfacing with Estimation in WebApi\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+Prediction\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+Functions for interfacing with Prediction in WebApi\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+Characterization\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+Functions for interfacing with Characterization in WebApi\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+Pathway\strut
+\end{minipage} & \begin{minipage}[t]{0.73\columnwidth}\raggedright
+Functions for interfacing with Pathway in WebApi\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{framework-of-rohdsiwebapi}{%
+\section{Framework of ROhdsiWebApi}\label{framework-of-rohdsiwebapi}}
+
+ROhdsiWebApi maybe better understood by having atleast a high level
+understanding of
+\href{https://en.wikipedia.org/wiki/Create,_read,_update_and_delete}{CRUD}
+framework for \href{https://github.com/ohdsi/webapi}{WebApi}, i.e.~the
+GET, PUT, DELETE, POST calls to the API. See
+\href{http://webapidoc.ohdsi.org/index.html}{the documentation of the
+WebApi}.
+
+For each supported category, ROhdsiWebAPi performs GET, PUT, DELETE,
+POST calls to WebApi in background. The details of what calls are
+actually performed is less important to an analyst, but it is useful to
+understand the naming conventions of ROhdsiWebApi.
+
+\hypertarget{naming-conventions-of-rohdsiwebapi}{%
+\subsection{Naming conventions of
+ROhdsiWebApi}\label{naming-conventions-of-rohdsiwebapi}}
+
+Most functions in ROhdsiWebApi start with an action oriented `verb' -
+such as
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.46\columnwidth}\raggedright
+Function Name\strut
+\end{minipage} & \begin{minipage}[b]{0.48\columnwidth}\raggedright
+Description\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+cancelCharacterizationGeneration\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Cancel Characterization Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+cancelCohortGeneration\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Cancel Cohort Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+cancelGeneration\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Cancel Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+cancelIncidenceRateGeneration\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Cancel Incidence Rate Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+cancelPathwayGeneration\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Cancel Pathway Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+convertConceptSetDefinitionToTable\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Convert Concept Set Definition To Table\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+createConceptSetWorkbook\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Create Concept Set Workbook\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+deleteCharacterizationDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Delete Characterization Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+deleteCohortDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Delete Cohort Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+deleteConceptSetDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Delete Concept Set Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+deleteDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Delete Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+deleteEstimationDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Delete Estimation Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+deleteIncidenceRateDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Delete Incidence Rate Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+deletePathwayDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Delete Pathway Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+deletePredictionDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Delete Prediction Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+detectCharacterizationsByName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Detect Characterizations By Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+detectCohortsByName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Detect Cohorts By Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+detectConceptSetsByName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Detect Concept Sets By Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+detectEstimationsByName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Detect Estimations By Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+detectIncidenceRatesByName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Detect Incidence Rates By Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+detectPathwaysByName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Detect Pathways By Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+detectPredictionsByName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Detect Predictions By Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+existsCharacterizationName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Exists Characterization Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+existsCohortName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Exists Cohort Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+existsConceptSetName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Exists Concept Set Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+existsEstimationName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Exists Estimation Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+existsIncidenceRateName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Exists Incidence Rate Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+existsPathwayName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Exists Pathway Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+existsPredictionName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Exists Prediction Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCdmsources\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Cdmsources\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCharacterizationDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Characterization Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCharacterizationDefinitionsMetadata\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Characterization Definitions Metadata\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCharacterizationGenerationinformation\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Characterization Generationinformation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCharacterizationResults\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Characterization Results\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCohortDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Cohort Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCohortDefinitionExpression\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Cohort Definition Expression\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCohortDefinitionName\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Cohort Definition Name\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCohortDefinitionSql\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Cohort Definition Sql\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCohortDefinitionsMetadata\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Cohort Definitions Metadata\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCohortGenerationinformation\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Cohort Generationinformation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCohortInclusionrulesandcounts\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Cohort Inclusionrulesandcounts\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCohortResults\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Cohort Results\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getCohortSql\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Cohort Sql\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getConceptSetDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Concept Set Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getConceptSetDefinitionsMetadata\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Concept Set Definitions Metadata\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getConceptSetsFromCohortDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Concept Sets From Cohort Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getConcepts\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Concepts\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getDefinitionsMetadata\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Definitions Metadata\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getEstimationDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Estimation Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getEstimationDefinitionsMetadata\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Estimation Definitions Metadata\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getGenerationinformation\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Generationinformation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getIncidenceRateDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Incidence Rate Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getIncidenceRateDefinitionsMetadata\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Incidence Rate Definitions Metadata\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getIncidenceRateGenerationinformation\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Incidence Rate Generationinformation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getIncidenceRateResults\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Incidence Rate Results\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getPathwayDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Pathway Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getPathwayDefinitionsMetadata\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Pathway Definitions Metadata\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getPathwayGenerationinformation\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Pathway Generationinformation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getPathwayResults\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Pathway Results\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getPersonProfile\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Person Profile\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getPredictionDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Prediction Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getPredictionDefinitionsMetadata\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Prediction Definitions Metadata\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getPriorityvocabularykey\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Priorityvocabularykey\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getResults\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Results\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getSourceconcepts\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Sourceconcepts\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+getWebApiVersion\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Get Web Api Version\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+insertCohortDefinitionInPackage\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Insert Cohort Definition In Package\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+insertCohortDefinitionSetInPackage\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Insert Cohort Definition Set In Package\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+invokeCharacterizationGeneration\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Invoke Characterization Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+invokeCohortGeneration\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Invoke Cohort Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+invokeGeneration\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Invoke Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+invokeIncidenceRateGeneration\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Invoke Incidence Rate Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+invokePathwayGeneration\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Invoke Pathway Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+isvalidCharacterizationId\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Isvalid Characterization Id\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+isvalidCohortId\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Isvalid Cohort Id\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+isvalidConceptSetId\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Isvalid Concept Set Id\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+isvalidEstimationId\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Isvalid Estimation Id\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+isvalidId\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Isvalid Id\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+isvalidIncidenceRateId\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Isvalid Incidence Rate Id\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+isvalidPathwayId\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Isvalid Pathway Id\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+isvalidPredictionId\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Isvalid Prediction Id\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+isvalidSourceKey\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Isvalid Source Key\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+postCharacterizationDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Post Characterization Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+postCohortDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Post Cohort Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+postConceptSetDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Post Concept Set Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+postDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Post Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+postEstimationDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Post Estimation Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+postIncidenceRateDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Post Incidence Rate Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+postPathwayDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Post Pathway Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+postPredictionDefinition\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Post Prediction Definition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+resolveConceptSet\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Resolve Concept Set\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Most of the functions start with the following verbs:
+
+\begin{longtable}[]{@{}lr@{}}
+\toprule
+Function Verb & Number Of Functions\tabularnewline
+\midrule
+\endhead
+Get & 38\tabularnewline
+Isvalid & 9\tabularnewline
+Delete & 8\tabularnewline
+Post & 8\tabularnewline
+Detect & 7\tabularnewline
+Exists & 7\tabularnewline
+Cancel & 5\tabularnewline
+Invoke & 5\tabularnewline
+Insert & 2\tabularnewline
+Convert & 1\tabularnewline
+Create & 1\tabularnewline
+Resolve & 1\tabularnewline
+\bottomrule
+\end{longtable}
+
+A function to get \texttt{Definition} is \texttt{getDefinitionMetaData}
+function. This is a general function that is able to get the Metadata
+for all specifications within a category.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{getDefinitionsMetadata}\NormalTok{(}\DataTypeTok{baseUrl =}\NormalTok{ baseUrl, }
+                                     \DataTypeTok{category =} \StringTok{'cohort'}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(.data}\OperatorTok{$}\NormalTok{id) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\DataTypeTok{.funs =}\NormalTok{ SqlRender}\OperatorTok{::}\NormalTok{camelCaseToTitleCase) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tail}\NormalTok{() }
+\CommentTok{#> # A tibble: 6 x 7}
+\CommentTok{#>        Id Name                                                             `Created By` `Created Date`      `Modified By` Description `Modified Date`    }
+\CommentTok{#>     <int> <chr>                                                            <chr>        <dttm>              <chr>         <chr>       <dttm>             }
+\CommentTok{#> 1 1775202 "[APAC HTN] Cohort #3:  ACEi/ARB (1st Drug) + Diuretic (2nd Dru~ ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
+\CommentTok{#> 2 1775203 "[APAC HTN] Cohort #5: ACEi/ARB (1st Drug) + B-blocker (2nd Dru~ ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
+\CommentTok{#> 3 1775204 "[APAC HTN] ACEi/ARB use after hypertension diagnosis "          ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
+\CommentTok{#> 4 1775205 "[APAC HTN] Diuretic use after hypertension diagnosis "          ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
+\CommentTok{#> 5 1775206 "[APAC HTN] CCB use after hypertension diagnosis "               ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
+\CommentTok{#> 6 1775207 "[APAC HTN] Beta-blocker use after hypertension diagnosis "      ""           2015-03-06 20:49:00 ""            <NA>        NA}
+\end{Highlighting}
+\end{Shaded}
+
+The same output may be achieved using
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{getCohortDefinitionsMetaData}\NormalTok{(}\DataTypeTok{baseUrl =}\NormalTok{ baseUrl) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(.data}\OperatorTok{$}\NormalTok{id) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\DataTypeTok{.funs =}\NormalTok{ SqlRender}\OperatorTok{::}\NormalTok{camelCaseToTitleCase) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{tail}\NormalTok{() }
+\CommentTok{#> # A tibble: 6 x 7}
+\CommentTok{#>        Id Name                                                             `Created By` `Created Date`      `Modified By` Description `Modified Date`    }
+\CommentTok{#>     <int> <chr>                                                            <chr>        <dttm>              <chr>         <chr>       <dttm>             }
+\CommentTok{#> 1 1775202 "[APAC HTN] Cohort #3:  ACEi/ARB (1st Drug) + Diuretic (2nd Dru~ ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
+\CommentTok{#> 2 1775203 "[APAC HTN] Cohort #5: ACEi/ARB (1st Drug) + B-blocker (2nd Dru~ ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
+\CommentTok{#> 3 1775204 "[APAC HTN] ACEi/ARB use after hypertension diagnosis "          ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
+\CommentTok{#> 4 1775205 "[APAC HTN] Diuretic use after hypertension diagnosis "          ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
+\CommentTok{#> 5 1775206 "[APAC HTN] CCB use after hypertension diagnosis "               ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
+\CommentTok{#> 6 1775207 "[APAC HTN] Beta-blocker use after hypertension diagnosis "      ""           2015-03-06 20:49:00 ""            <NA>        NA}
+\end{Highlighting}
+\end{Shaded}
+
+Similar approach may be used for all categories as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{getDefinitionsMetadata}\NormalTok{(}\DataTypeTok{baseUrl =}\NormalTok{ baseUrl, }
+                                     \DataTypeTok{category =} \StringTok{'estimation'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(.data}\OperatorTok{$}\NormalTok{id) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\DataTypeTok{.funs =}\NormalTok{ SqlRender}\OperatorTok{::}\NormalTok{camelCaseToTitleCase) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{tail}\NormalTok{()}
+\CommentTok{#> # A tibble: 6 x 6}
+\CommentTok{#>      Id Name                                                 `Created Date`      `Modified Date`     Type                      Description    }
+\CommentTok{#>   <int> <chr>                                                <dttm>              <dttm>              <chr>                     <chr>          }
+\CommentTok{#> 1   392 "VC Index CUMC"                                      2020-08-24 09:47:21 2020-08-24 09:54:28 ComparativeCohortAnalysis  <NA>          }
+\CommentTok{#> 2   393 "metforminP4_intent_to_treat"                        2020-08-26 21:14:41 2020-08-26 21:31:11 ComparativeCohortAnalysis  <NA>          }
+\CommentTok{#> 3   394 "EXAMPLE : New Population Level Estimation Analysis" 2020-08-27 09:46:44 2020-08-27 10:36:56 ComparativeCohortAnalysis  <NA>          }
+\CommentTok{#> 4   395 " [NA] 0828 AKI - procedure"                         2020-08-27 22:21:09 NA                  ComparativeCohortAnalysis  <NA>          }
+\CommentTok{#> 5   396 "jk_new"                                             2020-08-28 02:26:52 NA                  ComparativeCohortAnalysis "drug - osteo "}
+\CommentTok{#> 6   397 "[1105] DOAC - subgroups (COT)"                      2020-09-02 12:45:18 2020-09-02 12:45:44 ComparativeCohortAnalysis  <NA>}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{getEstimationDefinitionsMetaData}\NormalTok{(}\DataTypeTok{baseUrl =}\NormalTok{ baseUrl) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(.data}\OperatorTok{$}\NormalTok{id) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\DataTypeTok{.funs =}\NormalTok{ SqlRender}\OperatorTok{::}\NormalTok{camelCaseToTitleCase) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{tail}\NormalTok{()}
+\CommentTok{#> # A tibble: 6 x 6}
+\CommentTok{#>      Id Name                                                 `Created Date`      `Modified Date`     Type                      Description    }
+\CommentTok{#>   <int> <chr>                                                <dttm>              <dttm>              <chr>                     <chr>          }
+\CommentTok{#> 1   392 "VC Index CUMC"                                      2020-08-24 09:47:21 2020-08-24 09:54:28 ComparativeCohortAnalysis  <NA>          }
+\CommentTok{#> 2   393 "metforminP4_intent_to_treat"                        2020-08-26 21:14:41 2020-08-26 21:31:11 ComparativeCohortAnalysis  <NA>          }
+\CommentTok{#> 3   394 "EXAMPLE : New Population Level Estimation Analysis" 2020-08-27 09:46:44 2020-08-27 10:36:56 ComparativeCohortAnalysis  <NA>          }
+\CommentTok{#> 4   395 " [NA] 0828 AKI - procedure"                         2020-08-27 22:21:09 NA                  ComparativeCohortAnalysis  <NA>          }
+\CommentTok{#> 5   396 "jk_new"                                             2020-08-28 02:26:52 NA                  ComparativeCohortAnalysis "drug - osteo "}
+\CommentTok{#> 6   397 "[1105] DOAC - subgroups (COT)"                      2020-09-02 12:45:18 2020-09-02 12:45:44 ComparativeCohortAnalysis  <NA>}
+\end{Highlighting}
+\end{Shaded}
+
+This is a generic framework that applies to most WebApi categories, and
+supports different types of CRUD functionalities like
+deleteConceptSetDefinition() vs deleteDefinition(category =
+`conceptSet').
+
+\hypertarget{concept-set}{%
+\section{Concept Set}\label{concept-set}}
+
+Please review
+\href{https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html\#conceptSets}{`Concept
+sets - The Book of OHDSI'}
+
+We commonly post concept set expression into WebApi/Atlas, or try get an
+expression from Atlas/WebApi based on a conceptSetDefinitionId.
+
+Example: lets say we have concept set expression as follows, that is
+being used for a Rheumatoid Arthritis study.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{jsonExpression <-}\StringTok{ '\{}
+\StringTok{  "items": [}
+\StringTok{    \{}
+\StringTok{      "concept": \{}
+\StringTok{        "CONCEPT_ID": 81097,}
+\StringTok{        "CONCEPT_NAME": "Feltys syndrome",}
+\StringTok{        "STANDARD_CONCEPT": "S",}
+\StringTok{        "STANDARD_CONCEPT_CAPTION": "Standard",}
+\StringTok{        "INVALID_REASON": "V",}
+\StringTok{        "INVALID_REASON_CAPTION": "Valid",}
+\StringTok{        "CONCEPT_CODE": "57160007",}
+\StringTok{        "DOMAIN_ID": "Condition",}
+\StringTok{        "VOCABULARY_ID": "SNOMED",}
+\StringTok{        "CONCEPT_CLASS_ID": "Clinical Finding"}
+\StringTok{      \},}
+\StringTok{      "isExcluded": true,}
+\StringTok{      "includeDescendants": false,}
+\StringTok{      "includeMapped": false}
+\StringTok{    \},}
+\StringTok{    \{}
+\StringTok{      "concept": \{}
+\StringTok{        "CONCEPT_ID": 80809,}
+\StringTok{        "CONCEPT_NAME": "Rheumatoid arthritis",}
+\StringTok{        "STANDARD_CONCEPT": "S",}
+\StringTok{        "STANDARD_CONCEPT_CAPTION": "Standard",}
+\StringTok{        "INVALID_REASON": "V",}
+\StringTok{        "INVALID_REASON_CAPTION": "Valid",}
+\StringTok{        "CONCEPT_CODE": "69896004",}
+\StringTok{        "DOMAIN_ID": "Condition",}
+\StringTok{        "VOCABULARY_ID": "SNOMED",}
+\StringTok{        "CONCEPT_CLASS_ID": "Clinical Finding"}
+\StringTok{      \},}
+\StringTok{      "isExcluded": false,}
+\StringTok{      "includeDescendants": true,}
+\StringTok{      "includeMapped": false}
+\StringTok{    \},}
+\StringTok{    \{}
+\StringTok{      "concept": \{}
+\StringTok{        "CONCEPT_ID": 4035611,}
+\StringTok{        "CONCEPT_NAME": "Seropositive rheumatoid arthritis",}
+\StringTok{        "STANDARD_CONCEPT": "S",}
+\StringTok{        "STANDARD_CONCEPT_CAPTION": "Standard",}
+\StringTok{        "INVALID_REASON": "V",}
+\StringTok{        "INVALID_REASON_CAPTION": "Valid",}
+\StringTok{        "CONCEPT_CODE": "239791005",}
+\StringTok{        "DOMAIN_ID": "Condition",}
+\StringTok{        "VOCABULARY_ID": "SNOMED",}
+\StringTok{        "CONCEPT_CLASS_ID": "Clinical Finding"}
+\StringTok{      \},}
+\StringTok{      "isExcluded": false,}
+\StringTok{      "includeDescendants": true,}
+\StringTok{      "includeMapped": false}
+\StringTok{    \}}
+\StringTok{  ]}
+\StringTok{\}'}
+\end{Highlighting}
+\end{Shaded}
+
+Lets call this concept set expression - `{[}ROhdsiWebApi Vignette{]}
+Rheumatoid Arthritis concept set'.
+
+We will need to check if there is a concept set by this name.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# check if there is a concept set by this name, if yes, delete it}
+\NormalTok{exists <-}\StringTok{ }\NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{existsConceptSetName}\NormalTok{(}\DataTypeTok{conceptSetName =}\NormalTok{ conceptSetName, }\DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
+\NormalTok{exists}
+\CommentTok{#> # A tibble: 1 x 6}
+\CommentTok{#>   createdBy modifiedBy createdDate         modifiedDate             id name                                                    }
+\CommentTok{#>   <chr>     <chr>      <dttm>              <dttm>                <int> <chr>                                                   }
+\CommentTok{#> 1 ""        ""         2020-08-18 22:58:17 2020-08-18 22:58:17 1865261 [ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set}
+\end{Highlighting}
+\end{Shaded}
+
+If there is a concept set with this name, then we could either choose
+another name - or delete the old concept set. For this vignette we have
+chosen to delete any matching concept set as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{isFALSE}\NormalTok{(exists)) \{}
+\NormalTok{  ROhdsiWebApi}\OperatorTok{::}\KeywordTok{deleteConceptSetDefinition}\NormalTok{(}\DataTypeTok{conceptSetId =}\NormalTok{ exists}\OperatorTok{$}\NormalTok{id, }\DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
+\NormalTok{\}}
+\CommentTok{#> Successfully deleted conceptSet definition id 1865261. Request status code: Success: (204) No Content}
+\CommentTok{#> NULL}
+\end{Highlighting}
+\end{Shaded}
+
+Now we need to ensure the JSON expression above is converted to R-data
+object. Note: By design, ROhdsiWebAPi does not accept JSON. It needs to
+be converted to R (list) expression
+
+We can now post this R-object into WebApi as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{returnFromPostRequest <-}\StringTok{ }\NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{postConceptSetDefinition}\NormalTok{(}\DataTypeTok{baseUrl =}\NormalTok{ baseUrl, }
+                                                                \DataTypeTok{conceptSetDefinition =}\NormalTok{ rExpression, }
+                                                                \DataTypeTok{name =}\NormalTok{ conceptSetName)}
+\CommentTok{#> Post ConceptSet definition was successful}
+\end{Highlighting}
+\end{Shaded}
+
+If successful, we will get a return object as follows into R.
+
+\begin{verbatim}
+#> # A tibble: 1 x 6
+#>   createdBy modifiedBy createdDate         modifiedDate             id name                                                    
+#>   <lgl>     <lgl>      <dttm>              <dttm>                <int> <chr>                                                   
+#> 1 NA        NA         2020-09-07 09:05:00 2020-09-07 09:05:00 1865396 [ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set
+\end{verbatim}
+
+The id of the newly posted concept-set definition is 1865396. We can now
+use this concept-set for many concept set queries eg.,
+
+\hypertarget{if-want-to-print-ready-expression-of-the-concept-set-definition}{%
+\subsection{if want to print ready expression of the concept set
+definition}\label{if-want-to-print-ready-expression-of-the-concept-set-definition}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{conceptSetDefinition =}\StringTok{ }\KeywordTok{getConceptSetDefinition}\NormalTok{(}\DataTypeTok{conceptSetId =}\NormalTok{ returnFromPostRequest}\OperatorTok{$}\NormalTok{id, }
+                                               \DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
+\NormalTok{conceptTbl <-}
+\StringTok{  }\KeywordTok{convertConceptSetDefinitionToTable}\NormalTok{(conceptSetDefinition)}
+\KeywordTok{names}\NormalTok{(conceptTbl) <-}
+\StringTok{  }\NormalTok{SqlRender}\OperatorTok{::}\KeywordTok{camelCaseToTitleCase}\NormalTok{(}\KeywordTok{names}\NormalTok{(conceptTbl))}
+\NormalTok{conceptTbl}
+\CommentTok{#> # A tibble: 3 x 13}
+\CommentTok{#>   `Is Excluded` `Include Descen~ `Include Mapped` `Concept Id` `Concept Name` `Standard Conce~ `Standard Conce~ `Invalid Reason` `Invalid Reason~}
+\CommentTok{#>   <lgl>         <lgl>            <lgl>                   <int> <chr>          <chr>            <chr>            <chr>            <chr>           }
+\CommentTok{#> 1 TRUE          FALSE            FALSE                   81097 Felty's syndr~ S                Standard         V                Valid           }
+\CommentTok{#> 2 FALSE         TRUE             FALSE                   80809 Rheumatoid ar~ S                Standard         V                Valid           }
+\CommentTok{#> 3 FALSE         TRUE             FALSE                 4035611 Seropositive ~ S                Standard         V                Valid           }
+\CommentTok{#> # ... with 4 more variables: `Concept Code` <chr>, `Domain Id` <chr>, `Vocabulary Id` <chr>, `Concept Class Id` <chr>}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{createConceptSetWorkbook} maybe used to create an Excel workbook
+of the concept set.
+
+If we want a list of all conceptId's (including descendants) from the
+concept set expression
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{resolvedConcepts =}\StringTok{ }\KeywordTok{resolveConceptSet}\NormalTok{(}\DataTypeTok{conceptSetDefinition =}\NormalTok{ conceptSetDefinition, }\DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
+\KeywordTok{print}\NormalTok{(}\StringTok{"Note: Showing only the first 10 concept id's"}\NormalTok{)}
+\CommentTok{#> [1] "Note: Showing only the first 10 concept id's"}
+\NormalTok{resolvedConcepts[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{]}
+\CommentTok{#>  [1]   80809 4035427 4035611 4103516 4114439 4114440 4114441 4114442 4114444 4115050}
+\end{Highlighting}
+\end{Shaded}
+
+The concept set expression json expression can be recaptured from WebApi
+as follows
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{json <-}
+\StringTok{  }\KeywordTok{getConceptSetDefinition}\NormalTok{(}\DataTypeTok{baseUrl =}\NormalTok{ baseUrl, }
+                          \DataTypeTok{conceptSetId =}\NormalTok{ returnFromPostRequest}\OperatorTok{$}\NormalTok{id}
+\NormalTok{                          )}\OperatorTok{$}\NormalTok{expression }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\NormalTok{RJSONIO}\OperatorTok{::}\KeywordTok{toJSON}\NormalTok{(}\DataTypeTok{pretty =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Similar framework maybe used with other WebApi categories such as
+Cohorts/Characterization/Incidence Rate.
+
+\hypertarget{applications-of-rohdsiwebapi}{%
+\section{Applications of
+ROhdsiWebAPi}\label{applications-of-rohdsiwebapi}}
+
+A valuable feature of ROhdsiWebApi is that it is able to get full result
+set into R, as a data frame object. Results of Cohort, Characterization,
+Incidence Rate, Pathway maybe obtained. This data frame may then be
+converted to publication ready material by using packages like
+\href{https://davidgohel.github.io/officer/}{Officer},
+\href{https://davidgohel.github.io/flextable/}{flextable}. The functions
+in ROhdsiWebAPi maybe used to create dynamic R-shiny apps that allow
+user to interact with WebApi and select cohort definitions, concept sets
+for review or modifications. ROhdsiWebApi may be used to build `mini
+versions' of Atlas that is project specific - by directly interacting
+with WebApi using R.
+
+\hypertarget{cohortscharacterizationincidence-rate}{%
+\subsection{Cohorts/Characterization/Incidence
+rate}\label{cohortscharacterizationincidence-rate}}
+
+Please review
+\href{https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html\#what-is-a-cohort}{`What
+is a cohort - The Book of OHDSI'}.
+
+\begin{quote}
+We define a cohort as a set of persons who satisfy one or more inclusion
+criteria for a duration of time. The term cohort is often interchanged
+with the term phenotype. Cohorts are used throughout OHDSI analytical
+tools and network studies as the primary building blocks for executing a
+research question.
+\end{quote}
+
+\begin{quote}
+A cohort is defined as the set of persons satisfying one or more
+inclusion criteria for a duration of time. One person may qualify for
+one cohort multiple times during non-overlapping time intervals. Cohorts
+are constructed in ATLAS by specifying cohort entry criteria and cohort
+exit criteria. Cohort entry criteria involve selecting one or more
+initial events, which determine the start date for cohort entry, and
+optionally specifying additional inclusion criteria which filter to the
+qualifying events. Cohort exit criteria are applied to each cohort entry
+record to determine the end date when the person's episode no longer
+qualifies for the cohort.
+\end{quote}
+
+Cohorts/Characterization/Incidence Rate are WebApi categories, where
+WebApi manages the execution of generations.
+
+Example: We may want to know if a certain cohort specification has been
+generated by checking cohort generation status
+\texttt{getCohortGenerationInformation(baseUrl\ =\ baseUrl,\ cohortId=\ 4234)}.
+If a cohort is not previously generated, it may be generated using
+\texttt{invokeCohortSetGeneration(baseUrl\ =\ baseUrl,\ cohortId\ =\ 4234,\ sourceKey\ =\ \textquotesingle{}HCUP\textquotesingle{})}
+. If it is already generated, we can extract its output of cohort
+generation using \texttt{getCohortResults(baseUrl,\ cohortId\ =\ 4234)}.
+
+\hypertarget{characterization}{%
+\subsection{Characterization}\label{characterization}}
+
+Please review
+\href{https://ohdsi.github.io/TheBookOfOhdsi/Characterization.html}{`Characterization
+- The Book of OHDSI'}.
+
+\hypertarget{population-level-effect-estimation}{%
+\subsection{Population Level Effect
+Estimation}\label{population-level-effect-estimation}}
+
+Please review
+\href{https://ohdsi.github.io/TheBookOfOhdsi/PopulationLevelEstimation.html}{`Population
+Level Effect Estimation - The Book of OHDSI'}.
+
+\hypertarget{patient-level-prediction}{%
+\section{Patient Level Prediction}\label{patient-level-prediction}}
+
+Please review
+\href{https://ohdsi.github.io/TheBookOfOhdsi/PatientLevelPrediction.html}{`Patient
+Level Prediction - The Book of OHDSI'}.
+
+\end{document}
