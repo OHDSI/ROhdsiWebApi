@@ -24,7 +24,6 @@
 #' @keywords internal
 "_PACKAGE"
 
-#' @importFrom utils compareVersion read.csv write.csv
 #' @importFrom dplyr "%>%"
 #' @importFrom rlang .data
 NULL
