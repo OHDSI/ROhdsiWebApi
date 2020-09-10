@@ -128,7 +128,10 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   if (insertCohortCreationR && !grepl("inst", fileName))
     stop("When generating R code, the input CSV file must be in the inst folder.")
 
-  cohortsToCreate <- read.csv(fileName)
+  cohortsToCreate <- readr::read_csv(file = fileName,
+                                     col_types = readr::cols(),
+                                     guess_max = 1e+07,
+                                     locale = readr::locale(encoding = "UTF-8"))
 
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
@@ -154,7 +157,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
     rules <- merge(rules, data.frame(cohortId = cohortsToCreate$cohortId,
                                      cohortName = cohortsToCreate$name))
     csvFileName <- file.path(jsonFolder, "InclusionRules.csv")
-    write.csv(rules, csvFileName, row.names = FALSE)
+    readr::write_csv(x = rules, path = csvFileName)
     writeLines(paste("- Created CSV file:", csvFileName))
   }
 

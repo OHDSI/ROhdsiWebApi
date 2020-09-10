@@ -1,6 +1,13 @@
 News
 ================
 
+# ROhdsiWebApi 1.1.2
+
+### Changes:
+1.  Replace read.csv with readr::read_csv, write.csv with readr::write_csv to ensure type stability and use of tibble.
+
+### Bug fixes
+
 
 # ROhdsiWebApi 1.1.1
 
