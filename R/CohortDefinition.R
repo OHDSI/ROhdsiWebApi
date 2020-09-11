@@ -62,7 +62,7 @@ insertCohortDefinitionInPackage <- function(cohortId,
 
   object <- getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl)
   if (is.null(name)) {
-    name <- object$name
+    name <- object$name %>% as.character() %>% trimws()
   }
   if (!file.exists(jsonFolder)) {
     dir.create(jsonFolder, recursive = TRUE)
@@ -131,7 +131,8 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   cohortsToCreate <- readr::read_csv(file = fileName,
                                      col_types = readr::cols(),
                                      guess_max = 1e+07,
-                                     locale = readr::locale(encoding = "UTF-8"))
+                                     locale = readr::locale(encoding = "UTF-8")) %>% 
+    dplyr::mutate(name = .data$name %>% as.character() %>% trimws())
 
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
