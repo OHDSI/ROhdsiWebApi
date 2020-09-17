@@ -155,11 +155,14 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   if (generateStats) {
     writeLines("Storing information on inclusion rules")
     rules <- .getCohortInclusionRules(jsonFolder)
-    rules <- dplyr::inner_join(rules, tidyr::tibble(cohortId = cohortsToCreate$cohortId,
-                                                    cohortName = cohortsToCreate$name))
-    csvFileName <- file.path(jsonFolder, "InclusionRules.csv")
-    readr::write_csv(x = rules, path = csvFileName)
-    writeLines(paste("- Created CSV file:", csvFileName))
+    if (nrow(rules) > 0) {
+      rules <- dplyr::inner_join(rules, tidyr::tibble(cohortId = cohortsToCreate$cohortId,
+                                                      cohortName = cohortsToCreate$name))
+      csvFileName <- file.path(jsonFolder, "InclusionRules.csv")
+      readr::write_csv(x = rules, path = csvFileName)
+      writeLines(paste("- Created CSV file:", csvFileName))
+    }
+    writeLines(paste("- Inclusion rules not stored, as no rules found"))
   }
 
   # Generate R code to create cohorts
