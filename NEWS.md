@@ -7,6 +7,7 @@ News
 1. Replace read.csv with readr::read_csv, write.csv with readr::write_csv to ensure type stability and use of tibble.
 2. Replaced jsonlite with RJSONIO to address issue with special characters "Sjögren"
 3. Replaced used of data.frame(), tidyr::tibble()
+4. Fixed bugs due to join on data frame with no row records.
 
 ### Bug fixes
 
