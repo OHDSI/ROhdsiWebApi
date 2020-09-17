@@ -62,7 +62,7 @@ insertCohortDefinitionInPackage <- function(cohortId,
 
   object <- getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl)
   if (is.null(name)) {
-    name <- object$name
+    name <- object$name %>% as.character() %>% trimws()
   }
   if (!file.exists(jsonFolder)) {
     dir.create(jsonFolder, recursive = TRUE)
@@ -128,7 +128,11 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   if (insertCohortCreationR && !grepl("inst", fileName))
     stop("When generating R code, the input CSV file must be in the inst folder.")
 
-  cohortsToCreate <- read.csv(fileName)
+  cohortsToCreate <- readr::read_csv(file = fileName,
+                                     col_types = readr::cols(),
+                                     guess_max = 1e+07,
+                                     locale = readr::locale(encoding = "UTF-8")) %>% dplyr::mutate(name = .data$name %>% as.character() %>%
+    trimws())
 
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
@@ -151,11 +155,14 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   if (generateStats) {
     writeLines("Storing information on inclusion rules")
     rules <- .getCohortInclusionRules(jsonFolder)
-    rules <- merge(rules, data.frame(cohortId = cohortsToCreate$cohortId,
-                                     cohortName = cohortsToCreate$name))
-    csvFileName <- file.path(jsonFolder, "InclusionRules.csv")
-    write.csv(rules, csvFileName, row.names = FALSE)
-    writeLines(paste("- Created CSV file:", csvFileName))
+    if (nrow(rules) > 0) {
+      rules <- dplyr::inner_join(rules, tidyr::tibble(cohortId = cohortsToCreate$cohortId,
+                                                      cohortName = cohortsToCreate$name))
+      csvFileName <- file.path(jsonFolder, "InclusionRules.csv")
+      readr::write_csv(x = rules, path = csvFileName)
+      writeLines(paste("- Created CSV file:", csvFileName))
+    }
+    writeLines(paste("- Inclusion rules not stored, as no rules found"))
   }
 
   # Generate R code to create cohorts
@@ -182,18 +189,18 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 }
 
 .getCohortInclusionRules <- function(jsonFolder) {
-  rules <- data.frame()
+  rules <- tidyr::tibble()
   for (file in list.files(path = jsonFolder, pattern = ".*\\.json")) {
     writeLines(paste("Parsing", file, "for inclusion rules"))
-    definition <- jsonlite::read_json(file.path(jsonFolder, file))
+    definition <- RJSONIO::fromJSON(file.path(jsonFolder, file))
     if (!is.null(definition$InclusionRules)) {
       nrOfRules <- length(definition$InclusionRules)
       if (nrOfRules > 0) {
         cohortName <- sub(".json", "", file)
         for (i in 1:nrOfRules) {
-          rules <- rbind(rules, data.frame(cohortName = cohortName,
-                                           ruleSequence = i - 1,
-                                           ruleName = definition$InclusionRules[[i]]$name))
+          rules <- dplyr::bind_rows(rules, tidyr::tibble(cohortName = cohortName,
+                                                         ruleSequence = i - 1,
+                                                         ruleName = definition$InclusionRules[[i]]$name))
         }
       }
     }
