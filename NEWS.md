@@ -1,6 +1,13 @@
 News
 ================
 
+# ROhdsiWebApi 1.1.3
+
+### Changes: 
+1. Reorganized misplaced files. cohortTable.sql, inclusionStatsTable.R, CreateCohorts.R
+
+
+
 # ROhdsiWebApi 1.1.2
 
 ### Changes:
