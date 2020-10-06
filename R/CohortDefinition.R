@@ -131,7 +131,9 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   cohortsToCreate <- readr::read_csv(file = fileName,
                                      col_types = readr::cols(),
                                      guess_max = 1e+07,
-                                     locale = readr::locale(encoding = "UTF-8")) %>% dplyr::mutate(name = .data$name %>% as.character() %>%
+                                     locale = readr::locale(encoding = "UTF-8")) %>% 
+    dplyr::mutate(name = .data$name %>% 
+                    as.character() %>%
     trimws())
 
   # Inserting cohort JSON and SQL
@@ -159,7 +161,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
       rules <- dplyr::inner_join(rules, tidyr::tibble(cohortId = cohortsToCreate$cohortId,
                                                       cohortName = cohortsToCreate$name))
       csvFileName <- file.path(jsonFolder, "InclusionRules.csv")
-      readr::write_csv(x = rules, path = csvFileName)
+      readr::write_excel_csv(x = rules, path = csvFileName)
       writeLines(paste("- Created CSV file:", csvFileName))
     }
     writeLines(paste("- Inclusion rules not stored, as no rules found"))
