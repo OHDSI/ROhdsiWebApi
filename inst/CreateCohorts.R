@@ -34,6 +34,7 @@
   #stats_start#
   # Insert rule names in cohort_inclusion table:
   pathToCsv <- system.file("cohorts", "InclusionRules.csv", package = "#packageName#")
+  checkInputFileEncoding(pathToCsv)
   inclusionRules <- readr::read_csv(pathToCsv, col_types = readr::cols()) 
   inclusionRules <- data.frame(cohort_definition_id = inclusionRules$cohortId,
                                rule_sequence = inclusionRules$ruleSequence,
@@ -49,6 +50,7 @@
   
   # Instantiate cohorts:
   pathToCsv <- system.file("#fileName#", package = "#packageName#")
+  checkInputFileEncoding(pathToCsv)
   cohortsToCreate <- readr::read_csv(pathToCsv, col_types = readr::cols())
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Creating cohort:", cohortsToCreate$name[i]))
