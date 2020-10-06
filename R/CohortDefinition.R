@@ -159,7 +159,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
       rules <- dplyr::inner_join(rules, tidyr::tibble(cohortId = cohortsToCreate$cohortId,
                                                       cohortName = cohortsToCreate$name))
       csvFileName <- file.path(jsonFolder, "InclusionRules.csv")
-      readr::write_csv(x = rules, path = csvFileName)
+      readr::write_excel_csv(x = rules, path = csvFileName)
       writeLines(paste("- Created CSV file:", csvFileName))
     }
     writeLines(paste("- Inclusion rules not stored, as no rules found"))

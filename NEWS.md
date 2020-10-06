@@ -1,5 +1,7 @@
 News
 ================
+# ROhdsiWebApi 1.1.3
+1. Replace the use of readr::write_csv with readr::write_excel_csv for better support for encoding special characters.
 
 # ROhdsiWebApi 1.1.2
 

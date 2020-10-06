@@ -1,8 +1,8 @@
 Package: ROhdsiWebApi
 Type: Package
 Title: R package to allow interactivity with a WebApi instance
-Version: 1.1.2
-Date: 2020-09-15
+Version: 1.1.3
+Date: 2020-10-06
 Authors@R: c(
     person("Gowtham", "Rao", email = "gowthamrao@gmail.com", role = c("aut", "cre")),
     person("Martijn", "Schuemie", role = c("aut")),
