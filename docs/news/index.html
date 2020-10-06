@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
       </span>
     </div>
 
@@ -129,14 +129,74 @@
       <small>Source: <a href='https://github.com/OHDSI/ROhdsiWebApi/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rohdsiwebapi-113" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.3">
+<a href="#rohdsiwebapi-113" class="anchor"></a>ROhdsiWebApi 1.1.3</h1>
+<ol>
+<li>Replace the use of readr::write_csv with readr::write_excel_csv for better support for encoding special characters.</li>
+</ol>
+</div>
+    <div id="rohdsiwebapi-112" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.2">
+<a href="#rohdsiwebapi-112" class="anchor"></a>ROhdsiWebApi 1.1.2</h1>
+<div id="changes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changes" class="anchor"></a>Changes:</h3>
+<ol>
+<li>Replace read.csv with readr::read_csv, write.csv with readr::write_csv to ensure type stability and use of tibble.</li>
+<li>Replaced jsonlite with RJSONIO to address issue with special characters “Sjögren”</li>
+<li>Replaced used of data.frame(), tidyr::tibble()</li>
+<li>Fixed bugs due to join on data frame with no row records.</li>
+</ol>
+</div>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+</div>
+</div>
+    <div id="rohdsiwebapi-111" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.1">
+<a href="#rohdsiwebapi-111" class="anchor"></a>ROhdsiWebApi 1.1.1</h1>
+<div id="changes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changes-1" class="anchor"></a>Changes:</h3>
+<ol>
+<li>Use BIGINT for cohort_definition_id</li>
+</ol>
+</div>
+<div id="bug-fixes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
+</div>
+</div>
+    <div id="rohdsiwebapi-110" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.0">
+<a href="#rohdsiwebapi-110" class="anchor"></a>ROhdsiWebApi 1.1.0</h1>
+<div id="changes-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changes-2" class="anchor"></a>Changes:</h3>
+<ol>
+<li>New functions: getConceptSetsFromCohortDefinition</li>
+</ol>
+</div>
+<div id="bug-fixes-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
+<ol>
+<li>
+<a href="https://github.com/OHDSI/ROhdsiWebApi/pull/144" class="uri">https://github.com/OHDSI/ROhdsiWebApi/pull/144</a> was causing duplication of date matches.</li>
+<li>RJSONIO::toJSON loss of precision <a href='https://github.com/OHDSI/ROhdsiWebApi/issues/152'>#152</a></li>
+</ol>
+</div>
+</div>
     <div id="rohdsiwebapi-100" class="section level1">
 <h1 class="page-header" data-toc-text="1.0.0">
 <a href="#rohdsiwebapi-100" class="anchor"></a>ROhdsiWebApi 1.0.0</h1>
 <p>Note: This is a major release. This release is expected to break implementations that rely on prior iterations of ROhdsiWebApi.</p>
 <p>(last updated : 2020-06-12)</p>
-<div id="changes" class="section level3">
+<div id="changes-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#changes" class="anchor"></a>Changes:</h3>
+<a href="#changes-3" class="anchor"></a>Changes:</h3>
 <ol>
 <li>Generic design pattern: Starting with version 1.0.0, we have implemented a new generic design pattern.</li>
 </ol>
@@ -153,16 +213,16 @@
 </li>
 <li>Analysis categories in WebApi such as concept sets, cohorts have been standardized <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/86"><a href='https://github.com/OHDSI/ROhdsiWebApi/issues/86'>#86</a></a> These may now be used in string searches of objects returned by ROhdsiWebApi.</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co">## # A tibble: 7 x 1</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="co">##   ` Category`     </span></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="co">##   &lt;chr&gt;           </span></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="co">## 1 ConceptSet      </span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="co">## 2 Cohort          </span></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="co">## 3 IncidenceRate   </span></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="co">## 4 Estimation      </span></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="co">## 5 Prediction      </span></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="co">## 6 Characterization</span></a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="co">## 7 Pathway</span></a></code></pre></div>
+<!-- end list --><div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">## # A tibble: 7 x 1</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">##   ` Category`     </span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">##   &lt;chr&gt;           </span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">## 1 ConceptSet      </span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">## 2 Cohort          </span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">## 3 IncidenceRate   </span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">## 4 Estimation      </span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">## 5 Prediction      </span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">## 6 Characterization</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">## 7 Pathway</span></span></code></pre></div>
 <ul>
 <li>Enforcement of OHDSI R style guide. We have enforced the use of <a href="https://ohdsi.github.io/MethodsLibrary/codeStyle.html#ohdsi_code_style_for_r">OHDSI R style guide</a> such as use of <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/22">camel case</a>
 </li>
@@ -186,9 +246,9 @@
 <li>Names have been chosen so that they follow an easy to remember pattern and are intuitive.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes:</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes:</h2>
 <ul>
 <li>This is a major change to package with significant code rewrite.</li>
 <li>No specific bug fixes were targeted in this release.</li>
@@ -213,7 +273,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

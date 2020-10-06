@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Post a definition into WebApi <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a> — postDefinition • ROhdsiWebApi</title>
+<title>Post a definition into WebApi  — postDefinition • ROhdsiWebApi</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Post a definition into WebApi <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a> — postDefinition" />
+<meta property="og:title" content="Post a definition into WebApi  — postDefinition" />
 <meta property="og:description" content="Post a definition into WebApi " />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
       </span>
     </div>
 
@@ -135,7 +135,7 @@
     <p>Post a definition into WebApi <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>postDefinition</span>(<span class='no'>baseUrl</span>, <span class='no'>name</span>, <span class='no'>category</span>, <span class='no'>definition</span>)</pre>
+    <pre class="usage"><span class='fu'>postDefinition</span><span class='op'>(</span><span class='va'>baseUrl</span>, <span class='va'>name</span>, <span class='va'>category</span>, <span class='va'>definition</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,13 +174,14 @@ and its details. If unsuccessful a STOP message will be shown.</p>
     <p>Post a definition into WebAPI. Currently only cohort and concept-set are supported.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>definition</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getCohortDefinition.html'>getCohortDefinition</a></span>(<span class='kw'>baseUrl</span> <span class='kw'>=</span> <span class='no'>baseUrl</span>, <span class='kw'>cohortId</span> <span class='kw'>=</span> <span class='fl'>15873</span>)
-<span class='fu'>postDefinition</span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"new name for expression in sdaddaddd"</span>,
-               <span class='kw'>baseUrl</span> <span class='kw'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span>,
-               <span class='kw'>expression</span> <span class='kw'>=</span> <span class='no'>definition</span>,
-               <span class='kw'>category</span> <span class='kw'>=</span> <span class='st'>"cohort"</span>)
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>definition</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getCohortDefinition.html'>getCohortDefinition</a></span><span class='op'>(</span>baseUrl <span class='op'>=</span> <span class='va'>baseUrl</span>, cohortId <span class='op'>=</span> <span class='fl'>15873</span><span class='op'>)</span>
+<span class='fu'>postDefinition</span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"new name for expression in sdaddaddd"</span>,
+               baseUrl <span class='op'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span>,
+               expression <span class='op'>=</span> <span class='va'>definition</span>,
+               category <span class='op'>=</span> <span class='st'>"cohort"</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -196,7 +197,7 @@ and its details. If unsuccessful a STOP message will be shown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
