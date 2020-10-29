@@ -18,7 +18,6 @@
 #'                       passed on to authentication methods. 
 #'                       By default the user will be prompted for their password when needed.
 #'
-#' @return A WebApi connection object
 #' @export
 authorizeWebApi <- function(baseUrl, 
                             authMethod,
@@ -53,7 +52,7 @@ authorizeWebApi <- function(baseUrl,
   authUrl <- paste0(baseUrl, "/user/login/db")
   login <- list(login = webApiUsername, password = webApiPassword)
   r <- httr::POST(authUrl, body = login, encode = "form")
-  if (length(httr::headers(r)$bearer) < 1) stop("db authentication failed.")
+  if (length(httr::headers(r)$bearer) < 1) stop("Authentication failed.")
   authHeader <- paste0("Bearer ", httr::headers(r)$bearer)
   authHeader
 }
