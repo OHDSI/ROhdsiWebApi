@@ -54,25 +54,28 @@
   if(httr::status_code(response) == 401) {
     rlang::abort("http error 401: Unauthorized request.
        Try running `authorizeWebAPI()`", 
-       class = "http-unauthorized")
+       class = "webapi-unauthorized")
   }
   
   if(httr::status_code(response) == 403) {
     rlang::abort("http error 403: Forbidden request.
        You do not have permission to perform this action.",
-       class = "http-forbidden")
+       class = "webapi-forbidden")
   }
   
   if(httr::status_code(response) == 404) {
     rlang::abort("http error 404: Resource not found.
        The resource or action you requested was not found by WebAPI",
-       class = "http-notfound")
+       class = "webapi-notfound")
   }
   
   if(httr::status_code(response) == 500) {
     rlang::abort("http error 500: Internal server error.
        The server encountered a problem when trying to fulfill this request.",
-       class = "http-server")
+       class = "webapi-server")
   }
+  
+  httr::stop_for_status(response)
+  
   response
 }

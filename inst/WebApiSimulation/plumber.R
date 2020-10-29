@@ -66,3 +66,12 @@ function() {
 function() {
   cdmSourceData[[1]]
 }
+
+#* Echo an http status code
+#* @get /echoStatus
+#* @param status 
+#* @serializer unboxedJSON
+function(status, res) {
+  res$status <- as.integer(status)
+  return(paste("status is", status))
+}
