@@ -127,12 +127,11 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
     stop("When generating R code, the sqlFolder must be 'inst/sql/sql_server'")
   if (insertCohortCreationR && !grepl("inst", fileName))
     stop("When generating R code, the input CSV file must be in the inst folder.")
-
+  checkInputFileEncoding(fileName)
   cohortsToCreate <- readr::read_csv(file = fileName,
                                      col_types = readr::cols(),
-                                     guess_max = 1e+07,
-                                     locale = readr::locale(encoding = "UTF-8")) %>% dplyr::mutate(name = .data$name %>% as.character() %>%
-    trimws())
+                                     guess_max = min(1e+07)) %>%
+    dplyr::mutate(name = .data$name %>% as.character() %>% trimws())
 
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {

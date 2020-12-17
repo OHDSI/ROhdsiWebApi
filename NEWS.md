@@ -1,6 +1,13 @@
 News
 ================
 
+# ROhdsiWebApi 1.1.3
+
+### Changes:
+
+### Bug fixes:
+1. Fixed bug with returning results for incidence rate
+
 # ROhdsiWebApi 1.1.2
 
 ### Changes:
@@ -9,7 +16,8 @@ News
 3. Replaced used of data.frame(), tidyr::tibble()
 4. Fixed bugs due to join on data frame with no row records.
 
-### Bug fixes
+### Bug fixes:
+
 
 
 # ROhdsiWebApi 1.1.1
