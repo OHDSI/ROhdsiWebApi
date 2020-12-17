@@ -111,11 +111,7 @@
 
 \title{Using ROhdsiWebApi}
 \author{Gowtham Rao}
-<<<<<<< HEAD
-\date{2020-09-17}
-=======
-\date{2020-09-07}
->>>>>>> master
+\date{2020-11-25}
 
 \begin{document}
 \maketitle
@@ -183,24 +179,32 @@ output maybe included in your study results)
 \end{Shaded}
 
 The object \texttt{version} will show your webApi version. Example: This
-Vignette was created using WebApi version: 2.7.7 on baseUrl:
-\url{http://api.ohdsi.org:80/WebAPI}. The CDM had the following source
+Vignette was created using WebApi version: 2.8.0 on baseUrl:
+\url{https://epi.jnj.com:8443/WebAPI}. The CDM had the following source
 data configured: .
 
 \begin{Shaded}
 \begin{Highlighting}[]
 
 \NormalTok{cdmSources}
-\CommentTok{#> # A tibble: 3 x 7}
-\CommentTok{#>   sourceId sourceName            sourceKey  sourceDialect cdmDatabaseSchema vocabDatabaseSchema resultsDatabaseSchema}
-\CommentTok{#>      <int> <chr>                 <chr>      <chr>         <chr>             <chr>               <chr>                }
-\CommentTok{#> 1        4 Common Evidence Model CEM        postgresql    <NA>              unrestricted        <NA>                 }
-\CommentTok{#> 2        6 SYNPUF 1K             SYNPUF1K   postgresql    synpuf1k          unrestricted        synpuf1k_results     }
-\CommentTok{#> 3        5 SYNPUF 5%             SYNPUF5PCT postgresql    synpuf5pct        unrestricted        synpuf5pct_results}
+\CommentTok{#> # A tibble: 58 x 7}
+\CommentTok{#>    sourceId sourceName          sourceKey           sourceDialect cdmDatabaseSchema        vocabDatabaseSchema     resultsDatabaseSchema       }
+\CommentTok{#>       <int> <chr>               <chr>               <chr>         <chr>                    <chr>                   <chr>                       }
+\CommentTok{#>  1      254 CPRD ACE ARB (v121~ CDM_CPRD_ACE_ARB_v~ pdw           CDM_CPRD_ACE_ARB_v1213.~ CDM_CPRD_ACE_ARB_v1213~ CDM_CPRD_ACE_ARB_v1213.ohds~}
+\CommentTok{#>  2      228 CPRD (v1102)        CDM_CPRD_V1102      pdw           CDM_CPRD_V1102.dbo       CDM_CPRD_V1102.dbo      CDM_CPRD_V1102.ohdsi_results}
+\CommentTok{#>  3      237 CPRD (v1150)        CDM_CPRD_V1150      pdw           CDM_CPRD_V1150.dbo       CDM_CPRD_V1150.dbo      CDM_CPRD_V1150.ohdsi_results}
+\CommentTok{#>  4      172 HCUP (v869)         CDM_HCUP_V869       pdw           CDM_HCUP_V869.dbo        CDM_HCUP_V869.dbo       CDM_HCUP_V869.ohdsi_results }
+\CommentTok{#>  5      278 HEALTH VERITY COVI~ CDM_HEALTHVERITY_C~ pdw           CDM_HealthVerity_COVID_~ CDM_HealthVerity_COVID~ CDM_HealthVerity_COVID_V130~}
+\CommentTok{#>  6      238 IBM CCAE (v1151)    CDM_IBM_CCAE_V1151  pdw           CDM_IBM_CCAE_V1151.dbo   CDM_IBM_CCAE_V1151.dbo  CDM_IBM_CCAE_V1151.ohdsi_re~}
+\CommentTok{#>  7      248 IBM CCAE (v1191)    CDM_IBM_CCAE_V1191  pdw           CDM_IBM_CCAE_V1191.dbo   CDM_IBM_CCAE_V1191.dbo  CDM_IBM_CCAE_V1191.ohdsi_re~}
+\CommentTok{#>  8      271 IBM CCAE (v1247)    CDM_IBM_CCAE_V1247  pdw           CDM_IBM_CCAE_V1247.dbo   CDM_IBM_CCAE_V1247.dbo  CDM_IBM_CCAE_V1247.ohdsi_re~}
+\CommentTok{#>  9      231 IBM MDCD (v1105)    CDM_IBM_MDCD_V1105  pdw           CDM_IBM_MDCD_V1105.dbo   CDM_IBM_MDCD_V1105.dbo  CDM_IBM_MDCD_V1105.ohdsi_re~}
+\CommentTok{#> 10      240 IBM MDCD (v1153)    CDM_IBM_MDCD_V1153  pdw           CDM_IBM_MDCD_V1153.dbo   CDM_IBM_MDCD_V1153.dbo  CDM_IBM_MDCD_V1153.ohdsi_re~}
+\CommentTok{#> # ... with 48 more rows}
 \end{Highlighting}
 \end{Shaded}
 
-The priority vocabulary for the WebApi is SYNPUF5PCT.
+The priority vocabulary for the WebApi is VOCABULARY\_20200525.
 
 We can also perform checks on the WebApi, example - we may want to see
 if the `HCUP' \& `SYNPUF1K' is a valid SourceKey in the current webApi.
@@ -209,7 +213,7 @@ if the `HCUP' \& `SYNPUF1K' is a valid SourceKey in the current webApi.
 \begin{Highlighting}[]
 
 \NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{isValidSourceKey}\NormalTok{(}\DataTypeTok{sourceKeys =} \KeywordTok{c}\NormalTok{(}\StringTok{'HCUP'}\NormalTok{, }\StringTok{'SYNPUF1K'}\NormalTok{), }\DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
-\CommentTok{#> [1] FALSE  TRUE}
+\CommentTok{#> [1]  TRUE FALSE}
 \end{Highlighting}
 \end{Shaded}
 
@@ -323,6 +327,11 @@ Cancel Incidence Rate Generation\strut
 cancelPathwayGeneration\strut
 \end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
 Cancel Pathway Generation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.46\columnwidth}\raggedright
+checkInputFileEncoding\strut
+\end{minipage} & \begin{minipage}[t]{0.48\columnwidth}\raggedright
+Check Input File Encoding\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.46\columnwidth}\raggedright
 convertConceptSetDefinitionToTable\strut
@@ -778,6 +787,7 @@ Exists & 7\tabularnewline
 Cancel & 5\tabularnewline
 Invoke & 5\tabularnewline
 Insert & 2\tabularnewline
+Check & 1\tabularnewline
 Convert & 1\tabularnewline
 Create & 1\tabularnewline
 Resolve & 1\tabularnewline
@@ -796,26 +806,15 @@ for all specifications within a category.
 \StringTok{  }\KeywordTok{arrange}\NormalTok{(.data}\OperatorTok{$}\NormalTok{id) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\DataTypeTok{.funs =}\NormalTok{ SqlRender}\OperatorTok{::}\NormalTok{camelCaseToTitleCase) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{tail}\NormalTok{() }
-\CommentTok{#> # A tibble: 6 x 7}
-<<<<<<< HEAD
-\CommentTok{#>        Id Name                         `Created By` `Created Date`      `Modified By` Description `Modified Date`    }
-\CommentTok{#>     <int> <chr>                        <chr>        <dttm>              <chr>         <chr>       <dttm>             }
-\CommentTok{#> 1 1775307 "CDM Research Exercise 4"    ""           2015-03-06 20:49:00 ""             <NA>       NA                 }
-\CommentTok{#> 2 1775308 "Metformin user"             ""           2015-03-06 20:49:00 ""             <NA>       NA                 }
-\CommentTok{#> 3 1775309 "Sulfonylurea user"          ""           2015-03-06 20:49:00 ""             <NA>       NA                 }
-\CommentTok{#> 4 1775310 "COPY OF: Sulfonylurea user" ""           2015-03-06 20:49:00 ""             <NA>       NA                 }
-\CommentTok{#> 5 1775311 "Hypoglycemia "              ""           2015-03-06 20:49:00 ""             <NA>       NA                 }
-\CommentTok{#> 6 1775316 "AF (FA_17092020)"           ""           2015-03-06 20:49:00 ""            ""          NA}
-=======
-\CommentTok{#>        Id Name                                                             `Created By` `Created Date`      `Modified By` Description `Modified Date`    }
-\CommentTok{#>     <int> <chr>                                                            <chr>        <dttm>              <chr>         <chr>       <dttm>             }
-\CommentTok{#> 1 1775202 "[APAC HTN] Cohort #3:  ACEi/ARB (1st Drug) + Diuretic (2nd Dru~ ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
-\CommentTok{#> 2 1775203 "[APAC HTN] Cohort #5: ACEi/ARB (1st Drug) + B-blocker (2nd Dru~ ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
-\CommentTok{#> 3 1775204 "[APAC HTN] ACEi/ARB use after hypertension diagnosis "          ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
-\CommentTok{#> 4 1775205 "[APAC HTN] Diuretic use after hypertension diagnosis "          ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
-\CommentTok{#> 5 1775206 "[APAC HTN] CCB use after hypertension diagnosis "               ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
-\CommentTok{#> 6 1775207 "[APAC HTN] Beta-blocker use after hypertension diagnosis "      ""           2015-03-06 20:49:00 ""            <NA>        NA}
->>>>>>> master
+\CommentTok{#> # A tibble: 6 x 6}
+\CommentTok{#>      Id Name                Description                                                `Created Date`      `Modified Date`     `Has Write Acce~}
+\CommentTok{#>   <int> <chr>               <chr>                                                      <dttm>              <dttm>              <lgl>           }
+\CommentTok{#> 1 19665 [AM v1] Asthma tre~ "Patients with newly diagnosed asthma (with all descendan~ 2020-11-25 11:14:00 2020-11-25 13:42:00 FALSE           }
+\CommentTok{#> 2 19666 [AM v1] COPD treat~ "Patients with newly diagnosed asthma (with all descendan~ 2020-11-25 11:14:00 NA                  FALSE           }
+\CommentTok{#> 3 19667 [AM v1] Asthma COP~ "Patients with newly diagnosed asthma (with all descendan~ 2020-11-25 11:14:00 2020-11-25 12:17:00 FALSE           }
+\CommentTok{#> 4 19669 [460] Atrial Fibri~ "[460] Atrial Fibrillation xSpec Model"                    2020-11-25 11:59:00 2020-11-25 12:54:00 FALSE           }
+\CommentTok{#> 5 19673 [Epi 520] Major Bl~ "Major bleeding events using the Cunningham definition. T~ 2020-11-25 14:00:00 2020-11-25 14:08:00 FALSE           }
+\CommentTok{#> 6 19674 [460] Rituximab Pl~  <NA>                                                      2020-11-25 16:08:00 NA                  FALSE}
 \end{Highlighting}
 \end{Shaded}
 
@@ -828,26 +827,15 @@ The same output may be achieved using
 \StringTok{  }\KeywordTok{arrange}\NormalTok{(.data}\OperatorTok{$}\NormalTok{id) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\DataTypeTok{.funs =}\NormalTok{ SqlRender}\OperatorTok{::}\NormalTok{camelCaseToTitleCase) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{tail}\NormalTok{() }
-\CommentTok{#> # A tibble: 6 x 7}
-<<<<<<< HEAD
-\CommentTok{#>        Id Name                         `Created By` `Created Date`      `Modified By` Description `Modified Date`    }
-\CommentTok{#>     <int> <chr>                        <chr>        <dttm>              <chr>         <chr>       <dttm>             }
-\CommentTok{#> 1 1775307 "CDM Research Exercise 4"    ""           2015-03-06 20:49:00 ""             <NA>       NA                 }
-\CommentTok{#> 2 1775308 "Metformin user"             ""           2015-03-06 20:49:00 ""             <NA>       NA                 }
-\CommentTok{#> 3 1775309 "Sulfonylurea user"          ""           2015-03-06 20:49:00 ""             <NA>       NA                 }
-\CommentTok{#> 4 1775310 "COPY OF: Sulfonylurea user" ""           2015-03-06 20:49:00 ""             <NA>       NA                 }
-\CommentTok{#> 5 1775311 "Hypoglycemia "              ""           2015-03-06 20:49:00 ""             <NA>       NA                 }
-\CommentTok{#> 6 1775316 "AF (FA_17092020)"           ""           2015-03-06 20:49:00 ""            ""          NA}
-=======
-\CommentTok{#>        Id Name                                                             `Created By` `Created Date`      `Modified By` Description `Modified Date`    }
-\CommentTok{#>     <int> <chr>                                                            <chr>        <dttm>              <chr>         <chr>       <dttm>             }
-\CommentTok{#> 1 1775202 "[APAC HTN] Cohort #3:  ACEi/ARB (1st Drug) + Diuretic (2nd Dru~ ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
-\CommentTok{#> 2 1775203 "[APAC HTN] Cohort #5: ACEi/ARB (1st Drug) + B-blocker (2nd Dru~ ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
-\CommentTok{#> 3 1775204 "[APAC HTN] ACEi/ARB use after hypertension diagnosis "          ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
-\CommentTok{#> 4 1775205 "[APAC HTN] Diuretic use after hypertension diagnosis "          ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
-\CommentTok{#> 5 1775206 "[APAC HTN] CCB use after hypertension diagnosis "               ""           2015-03-06 20:49:00 ""            <NA>        NA                 }
-\CommentTok{#> 6 1775207 "[APAC HTN] Beta-blocker use after hypertension diagnosis "      ""           2015-03-06 20:49:00 ""            <NA>        NA}
->>>>>>> master
+\CommentTok{#> # A tibble: 6 x 6}
+\CommentTok{#>      Id Name                Description                                                `Created Date`      `Modified Date`     `Has Write Acce~}
+\CommentTok{#>   <int> <chr>               <chr>                                                      <dttm>              <dttm>              <lgl>           }
+\CommentTok{#> 1 19665 [AM v1] Asthma tre~ "Patients with newly diagnosed asthma (with all descendan~ 2020-11-25 11:14:00 2020-11-25 13:42:00 FALSE           }
+\CommentTok{#> 2 19666 [AM v1] COPD treat~ "Patients with newly diagnosed asthma (with all descendan~ 2020-11-25 11:14:00 NA                  FALSE           }
+\CommentTok{#> 3 19667 [AM v1] Asthma COP~ "Patients with newly diagnosed asthma (with all descendan~ 2020-11-25 11:14:00 2020-11-25 12:17:00 FALSE           }
+\CommentTok{#> 4 19669 [460] Atrial Fibri~ "[460] Atrial Fibrillation xSpec Model"                    2020-11-25 11:59:00 2020-11-25 12:54:00 FALSE           }
+\CommentTok{#> 5 19673 [Epi 520] Major Bl~ "Major bleeding events using the Cunningham definition. T~ 2020-11-25 14:00:00 2020-11-25 14:08:00 FALSE           }
+\CommentTok{#> 6 19674 [460] Rituximab Pl~  <NA>                                                      2020-11-25 16:08:00 NA                  FALSE}
 \end{Highlighting}
 \end{Shaded}
 
@@ -861,26 +849,15 @@ Similar approach may be used for all categories as follows:
 \StringTok{  }\KeywordTok{arrange}\NormalTok{(.data}\OperatorTok{$}\NormalTok{id) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\DataTypeTok{.funs =}\NormalTok{ SqlRender}\OperatorTok{::}\NormalTok{camelCaseToTitleCase) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{tail}\NormalTok{()}
-\CommentTok{#> # A tibble: 6 x 6}
-<<<<<<< HEAD
-\CommentTok{#>      Id Name                  `Created Date`      `Modified Date`     Type        Description                                      }
-\CommentTok{#>   <int> <chr>                 <dttm>              <dttm>              <chr>       <chr>                                            }
-\CommentTok{#> 1   394 "EXAMPLE : New Popul~ 2020-08-27 09:46:44 2020-08-27 10:36:56 Comparativ~  <NA>                                            }
-\CommentTok{#> 2   395 " [NA] 0828 AKI - pr~ 2020-08-27 22:21:09 NA                  Comparativ~  <NA>                                            }
-\CommentTok{#> 3   396 "jk_new"              2020-08-28 02:26:52 NA                  Comparativ~ "drug - osteo "                                  }
-\CommentTok{#> 4   397 "[1105] DOAC - subgr~ 2020-09-02 12:45:18 2020-09-02 12:45:44 Comparativ~  <NA>                                            }
-\CommentTok{#> 5   398 "metformin_combined ~ 2020-09-10 22:23:41 2020-09-10 22:38:04 Comparativ~ "groups with _itt represent intention-to-treat a~}
-\CommentTok{#> 6   399 "[PLE Tutorial] Grah~ 2020-09-14 11:49:02 2020-09-15 13:57:36 Comparativ~  <NA>}
-=======
-\CommentTok{#>      Id Name                                                 `Created Date`      `Modified Date`     Type                      Description    }
-\CommentTok{#>   <int> <chr>                                                <dttm>              <dttm>              <chr>                     <chr>          }
-\CommentTok{#> 1   392 "VC Index CUMC"                                      2020-08-24 09:47:21 2020-08-24 09:54:28 ComparativeCohortAnalysis  <NA>          }
-\CommentTok{#> 2   393 "metforminP4_intent_to_treat"                        2020-08-26 21:14:41 2020-08-26 21:31:11 ComparativeCohortAnalysis  <NA>          }
-\CommentTok{#> 3   394 "EXAMPLE : New Population Level Estimation Analysis" 2020-08-27 09:46:44 2020-08-27 10:36:56 ComparativeCohortAnalysis  <NA>          }
-\CommentTok{#> 4   395 " [NA] 0828 AKI - procedure"                         2020-08-27 22:21:09 NA                  ComparativeCohortAnalysis  <NA>          }
-\CommentTok{#> 5   396 "jk_new"                                             2020-08-28 02:26:52 NA                  ComparativeCohortAnalysis "drug - osteo "}
-\CommentTok{#> 6   397 "[1105] DOAC - subgroups (COT)"                      2020-09-02 12:45:18 2020-09-02 12:45:44 ComparativeCohortAnalysis  <NA>}
->>>>>>> master
+\CommentTok{#> # A tibble: 6 x 7}
+\CommentTok{#>   `Created Date`      `Modified Date`     `Has Write Acces~    Id Name                      Description                              Type      }
+\CommentTok{#>   <dttm>              <dttm>              <lgl>             <int> <chr>                     <chr>                                    <chr>     }
+\CommentTok{#> 1 2020-06-15 20:03:00 2020-06-17 02:20:00 FALSE               148 [Epi 786] comparative ef~ [EPI 786] Population-level effect estim~ Comparati~}
+\CommentTok{#> 2 2020-06-19 15:27:00 2020-06-19 15:28:00 FALSE               149 COPY OF: [Epi 786] compa~ [EPI 786] Population-level effect estim~ Comparati~}
+\CommentTok{#> 3 2020-08-03 18:42:00 2020-08-06 20:26:00 FALSE               153 [ONC] Blinatumomab compa~ <NA>                                     Comparati~}
+\CommentTok{#> 4 2020-09-08 18:12:00 2020-09-09 16:47:00 FALSE               154 [EHDEN Academy PLE Tutor~ <NA>                                     Comparati~}
+\CommentTok{#> 5 2020-09-28 17:20:00 2020-10-15 11:27:00 FALSE               155 [EPI 763] Tremfya Safety~ <NA>                                     Comparati~}
+\CommentTok{#> 6 2020-10-20 18:57:00 2020-10-22 17:01:00 FALSE               156 SF Methods - Certolizuma~ <NA>                                     Comparati~}
 \end{Highlighting}
 \end{Shaded}
 
@@ -891,26 +868,15 @@ Similar approach may be used for all categories as follows:
 \StringTok{  }\KeywordTok{arrange}\NormalTok{(.data}\OperatorTok{$}\NormalTok{id) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\DataTypeTok{.funs =}\NormalTok{ SqlRender}\OperatorTok{::}\NormalTok{camelCaseToTitleCase) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{tail}\NormalTok{()}
-\CommentTok{#> # A tibble: 6 x 6}
-<<<<<<< HEAD
-\CommentTok{#>      Id Name                  `Created Date`      `Modified Date`     Type        Description                                      }
-\CommentTok{#>   <int> <chr>                 <dttm>              <dttm>              <chr>       <chr>                                            }
-\CommentTok{#> 1   394 "EXAMPLE : New Popul~ 2020-08-27 09:46:44 2020-08-27 10:36:56 Comparativ~  <NA>                                            }
-\CommentTok{#> 2   395 " [NA] 0828 AKI - pr~ 2020-08-27 22:21:09 NA                  Comparativ~  <NA>                                            }
-\CommentTok{#> 3   396 "jk_new"              2020-08-28 02:26:52 NA                  Comparativ~ "drug - osteo "                                  }
-\CommentTok{#> 4   397 "[1105] DOAC - subgr~ 2020-09-02 12:45:18 2020-09-02 12:45:44 Comparativ~  <NA>                                            }
-\CommentTok{#> 5   398 "metformin_combined ~ 2020-09-10 22:23:41 2020-09-10 22:38:04 Comparativ~ "groups with _itt represent intention-to-treat a~}
-\CommentTok{#> 6   399 "[PLE Tutorial] Grah~ 2020-09-14 11:49:02 2020-09-15 13:57:36 Comparativ~  <NA>}
-=======
-\CommentTok{#>      Id Name                                                 `Created Date`      `Modified Date`     Type                      Description    }
-\CommentTok{#>   <int> <chr>                                                <dttm>              <dttm>              <chr>                     <chr>          }
-\CommentTok{#> 1   392 "VC Index CUMC"                                      2020-08-24 09:47:21 2020-08-24 09:54:28 ComparativeCohortAnalysis  <NA>          }
-\CommentTok{#> 2   393 "metforminP4_intent_to_treat"                        2020-08-26 21:14:41 2020-08-26 21:31:11 ComparativeCohortAnalysis  <NA>          }
-\CommentTok{#> 3   394 "EXAMPLE : New Population Level Estimation Analysis" 2020-08-27 09:46:44 2020-08-27 10:36:56 ComparativeCohortAnalysis  <NA>          }
-\CommentTok{#> 4   395 " [NA] 0828 AKI - procedure"                         2020-08-27 22:21:09 NA                  ComparativeCohortAnalysis  <NA>          }
-\CommentTok{#> 5   396 "jk_new"                                             2020-08-28 02:26:52 NA                  ComparativeCohortAnalysis "drug - osteo "}
-\CommentTok{#> 6   397 "[1105] DOAC - subgroups (COT)"                      2020-09-02 12:45:18 2020-09-02 12:45:44 ComparativeCohortAnalysis  <NA>}
->>>>>>> master
+\CommentTok{#> # A tibble: 6 x 7}
+\CommentTok{#>   `Created Date`      `Modified Date`     `Has Write Acces~    Id Name                      Description                              Type      }
+\CommentTok{#>   <dttm>              <dttm>              <lgl>             <int> <chr>                     <chr>                                    <chr>     }
+\CommentTok{#> 1 2020-06-15 20:03:00 2020-06-17 02:20:00 FALSE               148 [Epi 786] comparative ef~ [EPI 786] Population-level effect estim~ Comparati~}
+\CommentTok{#> 2 2020-06-19 15:27:00 2020-06-19 15:28:00 FALSE               149 COPY OF: [Epi 786] compa~ [EPI 786] Population-level effect estim~ Comparati~}
+\CommentTok{#> 3 2020-08-03 18:42:00 2020-08-06 20:26:00 FALSE               153 [ONC] Blinatumomab compa~ <NA>                                     Comparati~}
+\CommentTok{#> 4 2020-09-08 18:12:00 2020-09-09 16:47:00 FALSE               154 [EHDEN Academy PLE Tutor~ <NA>                                     Comparati~}
+\CommentTok{#> 5 2020-09-28 17:20:00 2020-10-15 11:27:00 FALSE               155 [EPI 763] Tremfya Safety~ <NA>                                     Comparati~}
+\CommentTok{#> 6 2020-10-20 18:57:00 2020-10-22 17:01:00 FALSE               156 SF Methods - Certolizuma~ <NA>                                     Comparati~}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1003,14 +969,10 @@ We will need to check if there is a concept set by this name.
 \CommentTok{# check if there is a concept set by this name, if yes, delete it}
 \NormalTok{exists <-}\StringTok{ }\NormalTok{ROhdsiWebApi}\OperatorTok{::}\KeywordTok{existsConceptSetName}\NormalTok{(}\DataTypeTok{conceptSetName =}\NormalTok{ conceptSetName, }\DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
 \NormalTok{exists}
-\CommentTok{#> # A tibble: 1 x 6}
-\CommentTok{#>   createdBy modifiedBy createdDate         modifiedDate             id name                                                    }
-\CommentTok{#>   <chr>     <chr>      <dttm>              <dttm>                <int> <chr>                                                   }
-<<<<<<< HEAD
-\CommentTok{#> 1 ""        ""         2020-09-17 13:38:25 2020-09-17 13:38:25 1865538 [ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set}
-=======
-\CommentTok{#> 1 ""        ""         2020-08-18 22:58:17 2020-08-18 22:58:17 1865261 [ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set}
->>>>>>> master
+\CommentTok{#> # A tibble: 1 x 5}
+\CommentTok{#>   hasWriteAccess    id name                                                     createdDate         modifiedDate       }
+\CommentTok{#>   <lgl>          <int> <chr>                                                    <dttm>              <dttm>             }
+\CommentTok{#> 1 FALSE          11928 [ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set 2020-10-06 11:14:00 2020-10-06 11:14:00}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1023,11 +985,7 @@ chosen to delete any matching concept set as follows:
 \ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{isFALSE}\NormalTok{(exists)) \{}
 \NormalTok{  ROhdsiWebApi}\OperatorTok{::}\KeywordTok{deleteConceptSetDefinition}\NormalTok{(}\DataTypeTok{conceptSetId =}\NormalTok{ exists}\OperatorTok{$}\NormalTok{id, }\DataTypeTok{baseUrl =}\NormalTok{ baseUrl)}
 \NormalTok{\}}
-<<<<<<< HEAD
-\CommentTok{#> Successfully deleted conceptSet definition id 1865538. Request status code: Success: (204) No Content}
-=======
-\CommentTok{#> Successfully deleted conceptSet definition id 1865261. Request status code: Success: (204) No Content}
->>>>>>> master
+\CommentTok{#> Successfully deleted conceptSet definition id 11928. Request status code: Success: (204) No Content}
 \CommentTok{#> NULL}
 \end{Highlighting}
 \end{Shaded}
@@ -1050,20 +1008,13 @@ We can now post this R-object into WebApi as follows:
 If successful, we will get a return object as follows into R.
 
 \begin{verbatim}
-#> # A tibble: 1 x 6
-#>   createdBy modifiedBy createdDate         modifiedDate             id name                                                    
-#>   <lgl>     <lgl>      <dttm>              <dttm>                <int> <chr>                                                   
-<<<<<<< HEAD
-#> 1 NA        NA         2020-09-17 13:40:52 2020-09-17 13:40:52 1865539 [ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set
+#> # A tibble: 1 x 5
+#>   createdDate         modifiedDate        hasWriteAccess    id name                                                    
+#>   <dttm>              <dttm>              <lgl>          <int> <chr>                                                   
+#> 1 2020-11-25 16:26:00 2020-11-25 16:26:00 FALSE          12294 [ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set
 \end{verbatim}
 
-The id of the newly posted concept-set definition is 1865539. We can now
-=======
-#> 1 NA        NA         2020-09-07 09:05:00 2020-09-07 09:05:00 1865396 [ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set
-\end{verbatim}
-
-The id of the newly posted concept-set definition is 1865396. We can now
->>>>>>> master
+The id of the newly posted concept-set definition is 12294. We can now
 use this concept-set for many concept set queries eg.,
 
 \hypertarget{if-want-to-print-ready-expression-of-the-concept-set-definition}{%
@@ -1080,22 +1031,13 @@ definition}\label{if-want-to-print-ready-expression-of-the-concept-set-definitio
 \StringTok{  }\NormalTok{SqlRender}\OperatorTok{::}\KeywordTok{camelCaseToTitleCase}\NormalTok{(}\KeywordTok{names}\NormalTok{(conceptTbl))}
 \NormalTok{conceptTbl}
 \CommentTok{#> # A tibble: 3 x 13}
-<<<<<<< HEAD
 \CommentTok{#>   `Is Excluded` `Include Descen~ `Include Mapped` `Concept Id` `Concept Name` `Standard Conce~ `Standard Conce~ `Invalid Reason`}
 \CommentTok{#>   <lgl>         <lgl>            <lgl>                   <int> <chr>          <chr>            <chr>            <chr>           }
 \CommentTok{#> 1 TRUE          FALSE            FALSE                   81097 Felty's syndr~ S                Standard         V               }
 \CommentTok{#> 2 FALSE         TRUE             FALSE                   80809 Rheumatoid ar~ S                Standard         V               }
 \CommentTok{#> 3 FALSE         TRUE             FALSE                 4035611 Seropositive ~ S                Standard         V               }
-\CommentTok{#> # ... with 5 more variables: `Invalid Reason Caption` <chr>, `Concept Code` <chr>, `Domain Id` <chr>, `Vocabulary Id` <chr>,}
-\CommentTok{#> #   `Concept Class Id` <chr>}
-=======
-\CommentTok{#>   `Is Excluded` `Include Descen~ `Include Mapped` `Concept Id` `Concept Name` `Standard Conce~ `Standard Conce~ `Invalid Reason` `Invalid Reason~}
-\CommentTok{#>   <lgl>         <lgl>            <lgl>                   <int> <chr>          <chr>            <chr>            <chr>            <chr>           }
-\CommentTok{#> 1 TRUE          FALSE            FALSE                   81097 Felty's syndr~ S                Standard         V                Valid           }
-\CommentTok{#> 2 FALSE         TRUE             FALSE                   80809 Rheumatoid ar~ S                Standard         V                Valid           }
-\CommentTok{#> 3 FALSE         TRUE             FALSE                 4035611 Seropositive ~ S                Standard         V                Valid           }
-\CommentTok{#> # ... with 4 more variables: `Concept Code` <chr>, `Domain Id` <chr>, `Vocabulary Id` <chr>, `Concept Class Id` <chr>}
->>>>>>> master
+\CommentTok{#> # ... with 5 more variables: `Invalid Reason Caption` <chr>, `Concept Code` <chr>, `Domain Id` <chr>, `Vocabulary Id` <chr>, `Concept Class}
+\CommentTok{#> #   Id` <chr>}
 \end{Highlighting}
 \end{Shaded}
 

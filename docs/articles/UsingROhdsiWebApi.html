@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
       </span>
     </div>
 
@@ -82,13 +82,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="UsingROhdsiWebApi_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using ROhdsiWebApi</h1>
                         <h4 class="author">Gowtham Rao</h4>
             
-            <h4 class="date">2020-06-12</h4>
+            <h4 class="date">2020-11-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/OHDSI/ROhdsiWebApi/blob/master/vignettes/UsingROhdsiWebApi.Rmd"><code>vignettes/UsingROhdsiWebApi.Rmd</code></a></small>
       <div class="hidden name"><code>UsingROhdsiWebApi.Rmd</code></div>
@@ -115,73 +115,80 @@
 <a href="#webapi-configurations-and-rohdsiwebapi" class="anchor"></a>WebApi configurations and ROhdsiWebApi</h1>
 <p>To successfully use ROhdsiWebApi, it is necessary to have an active <a href="https://github.com/ohdsi/webapi">‘WebApi’</a> endpoint with a known baseUrl such as “<a href="http://server.org:80/WebAPI" class="uri">http://server.org:80/WebAPI</a>”. <a href="https://github.com/ohdsi/webapi">‘WebApi’</a> has many functional categories.</p>
 <p>To ensure reproducibility of work it is best to know the version of the WebApi (i.e. Atlas backend) being used. An easy way to do that is (and output maybe included in your study results)</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r">
-<span class="no">version</span> <span class="kw">&lt;-</span> <span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">:::</span><span class="fu"><a href="../reference/getWebApiVersion.html">getWebApiVersion</a></span>(<span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>)
-<span class="no">message1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'This Vignette was created using WebApi version: '</span>,
-                   <span class="no">version</span>,
-                   <span class="st">' on baseUrl: '</span>,
-                   <span class="no">baseUrl</span>,
-                   <span class="st">". The CDM had the following source data configured: "</span>)
-<span class="no">cdmSources</span> <span class="kw">&lt;-</span> <span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span>(<span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>)
-<span class="no">priorityVocabulary</span> <span class="kw">&lt;-</span> <span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/getPriorityVocabularyKey.html">getPriorityVocabularyKey</a></span>(<span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+
+<span class="va">version</span> <span class="op">&lt;-</span> <span class="fu">ROhdsiWebApi</span><span class="fu">:::</span><span class="fu"><a href="../reference/getWebApiVersion.html">getWebApiVersion</a></span><span class="op">(</span>baseUrl <span class="op">=</span> <span class="va">baseUrl</span><span class="op">)</span>
+<span class="va">message1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">'This Vignette was created using WebApi version: '</span>, 
+                   <span class="va">version</span>, 
+                   <span class="st">' on baseUrl: '</span>, 
+                   <span class="va">baseUrl</span>, 
+                   <span class="st">". The CDM had the following source data configured: "</span><span class="op">)</span>
+<span class="va">cdmSources</span> <span class="op">&lt;-</span> <span class="fu">ROhdsiWebApi</span><span class="fu">::</span><span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span><span class="op">(</span>baseUrl <span class="op">=</span> <span class="va">baseUrl</span><span class="op">)</span>
+<span class="va">priorityVocabulary</span> <span class="op">&lt;-</span> <span class="fu">ROhdsiWebApi</span><span class="fu">::</span><span class="fu"><a href="../reference/getPriorityVocabularyKey.html">getPriorityVocabularyKey</a></span><span class="op">(</span>baseUrl <span class="op">=</span> <span class="va">baseUrl</span><span class="op">)</span></pre></div>
 <p>The object <code>version</code> will show your webApi version. Example: This Vignette was created using WebApi version: 2.8.0 on baseUrl: <a href="https://epi.jnj.com:8443/WebAPI" class="uri">https://epi.jnj.com:8443/WebAPI</a>. The CDM had the following source data configured: .</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r">
-<span class="no">cdmSources</span>
-<span class="co">#&gt; # A tibble: 40 x 7</span>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+
+<span class="va">cdmSources</span>
+<span class="co">#&gt; # A tibble: 58 x 7</span>
 <span class="co">#&gt;    sourceId sourceName sourceKey sourceDialect cdmDatabaseSche~ vocabDatabaseSc~</span>
 <span class="co">#&gt;       &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;           </span>
 <span class="co">#&gt;  1      254 CPRD ACE ~ CDM_CPRD~ pdw           CDM_CPRD_ACE_AR~ CDM_CPRD_ACE_AR~</span>
 <span class="co">#&gt;  2      228 CPRD (v11~ CDM_CPRD~ pdw           CDM_CPRD_V1102.~ CDM_CPRD_V1102.~</span>
-<span class="co">#&gt;  3      255 CPRD COVI~ CDM_CPRD~ pdw           CDM_CPRD_v1226.~ CDM_CPRD_v1226.~</span>
+<span class="co">#&gt;  3      237 CPRD (v11~ CDM_CPRD~ pdw           CDM_CPRD_V1150.~ CDM_CPRD_V1150.~</span>
 <span class="co">#&gt;  4      172 HCUP (v86~ CDM_HCUP~ pdw           CDM_HCUP_V869.d~ CDM_HCUP_V869.d~</span>
-<span class="co">#&gt;  5      229 IBM CCAE ~ CDM_IBM_~ pdw           CDM_IBM_CCAE_V1~ CDM_IBM_CCAE_V1~</span>
+<span class="co">#&gt;  5      278 HEALTH VE~ CDM_HEAL~ pdw           CDM_HealthVerit~ CDM_HealthVerit~</span>
 <span class="co">#&gt;  6      238 IBM CCAE ~ CDM_IBM_~ pdw           CDM_IBM_CCAE_V1~ CDM_IBM_CCAE_V1~</span>
-<span class="co">#&gt;  7      231 IBM MDCD ~ CDM_IBM_~ pdw           CDM_IBM_MDCD_V1~ CDM_IBM_MDCD_V1~</span>
-<span class="co">#&gt;  8      230 IBM MDCR ~ CDM_IBM_~ pdw           CDM_IBM_MDCR_V1~ CDM_IBM_MDCR_V1~</span>
-<span class="co">#&gt;  9      239 IBM MDCR ~ CDM_IBM_~ pdw           CDM_IBM_MDCR_V1~ CDM_IBM_MDCR_V1~</span>
-<span class="co">#&gt; 10      162 Iqvia Aus~ CDM_IQVI~ pdw           CDM_IQVIA_AUSTR~ CDM_IQVIA_AUSTR~</span>
-<span class="co">#&gt; # ... with 30 more rows, and 1 more variable: resultsDatabaseSchema &lt;chr&gt;</span></pre></body></html></div>
-<p>The priority vocabulary for the WebApi is VOCABULARY_20200320.</p>
+<span class="co">#&gt;  7      248 IBM CCAE ~ CDM_IBM_~ pdw           CDM_IBM_CCAE_V1~ CDM_IBM_CCAE_V1~</span>
+<span class="co">#&gt;  8      271 IBM CCAE ~ CDM_IBM_~ pdw           CDM_IBM_CCAE_V1~ CDM_IBM_CCAE_V1~</span>
+<span class="co">#&gt;  9      231 IBM MDCD ~ CDM_IBM_~ pdw           CDM_IBM_MDCD_V1~ CDM_IBM_MDCD_V1~</span>
+<span class="co">#&gt; 10      240 IBM MDCD ~ CDM_IBM_~ pdw           CDM_IBM_MDCD_V1~ CDM_IBM_MDCD_V1~</span>
+<span class="co">#&gt; # ... with 48 more rows, and 1 more variable: resultsDatabaseSchema &lt;chr&gt;</span></pre></div>
+<p>The priority vocabulary for the WebApi is VOCABULARY_20200525.</p>
 <p>We can also perform checks on the WebApi, example - we may want to see if the ‘HCUP’ &amp; ‘SYNPUF1K’ is a valid SourceKey in the current webApi.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r">
-<span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/isValidSourceKey.html">isValidSourceKey</a></span>(<span class="kw">sourceKeys</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'HCUP'</span>, <span class="st">'SYNPUF1K'</span>), <span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>)
-<span class="co">#&gt; [1]  TRUE FALSE</span></pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+
+<span class="fu">ROhdsiWebApi</span><span class="fu">::</span><span class="fu"><a href="../reference/isValidSourceKey.html">isValidSourceKey</a></span><span class="op">(</span>sourceKeys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'HCUP'</span>, <span class="st">'SYNPUF1K'</span><span class="op">)</span>, baseUrl <span class="op">=</span> <span class="va">baseUrl</span><span class="op">)</span>
+<span class="co">#&gt; [1]  TRUE FALSE</span></pre></div>
 <div id="webapi-analytical-categories-" class="section level2">
 <h2 class="hasAnchor">
 <a href="#webapi-analytical-categories-" class="anchor"></a>WebApi Analytical categories.</h2>
 <p>WebApi maybe considered to have certain modular analytic categories. ROhdsiWebApi supports the following categories:</p>
 <table class="table">
+<colgroup>
+<col width="22%">
+<col width="77%">
+</colgroup>
 <thead><tr class="header">
-<th align="center">Category</th>
+<th align="left">Category</th>
 <th align="left">Features</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="center">ConceptSet</td>
+<td align="left">ConceptSet</td>
 <td align="left">Functions for interfacing with ConceptSet in WebApi</td>
 </tr>
 <tr class="even">
-<td align="center">Cohort</td>
+<td align="left">Cohort</td>
 <td align="left">Functions for interfacing with Cohort in WebApi</td>
 </tr>
 <tr class="odd">
-<td align="center">IncidenceRate</td>
+<td align="left">IncidenceRate</td>
 <td align="left">Functions for interfacing with IncidenceRate in WebApi</td>
 </tr>
 <tr class="even">
-<td align="center">Estimation</td>
+<td align="left">Estimation</td>
 <td align="left">Functions for interfacing with Estimation in WebApi</td>
 </tr>
 <tr class="odd">
-<td align="center">Prediction</td>
+<td align="left">Prediction</td>
 <td align="left">Functions for interfacing with Prediction in WebApi</td>
 </tr>
 <tr class="even">
-<td align="center">Characterization</td>
+<td align="left">Characterization</td>
 <td align="left">Functions for interfacing with Characterization in WebApi</td>
 </tr>
 <tr class="odd">
-<td align="center">Pathway</td>
+<td align="left">Pathway</td>
 <td align="left">Functions for interfacing with Pathway in WebApi</td>
 </tr>
 </tbody>
@@ -198,6 +205,10 @@
 <a href="#naming-conventions-of-rohdsiwebapi" class="anchor"></a>Naming conventions of ROhdsiWebApi</h2>
 <p>Most functions in ROhdsiWebApi start with an action oriented ‘verb’ - such as</p>
 <table class="table">
+<colgroup>
+<col width="48%">
+<col width="51%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">Function Name</th>
 <th align="left">Description</th>
@@ -224,164 +235,172 @@
 <td align="left">Cancel Pathway Generation</td>
 </tr>
 <tr class="even">
+<td align="left">checkInputFileEncoding</td>
+<td align="left">Check Input File Encoding</td>
+</tr>
+<tr class="odd">
 <td align="left">convertConceptSetDefinitionToTable</td>
 <td align="left">Convert Concept Set Definition To Table</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">createConceptSetWorkbook</td>
 <td align="left">Create Concept Set Workbook</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">deleteCharacterizationDefinition</td>
 <td align="left">Delete Characterization Definition</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">deleteCohortDefinition</td>
 <td align="left">Delete Cohort Definition</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">deleteConceptSetDefinition</td>
 <td align="left">Delete Concept Set Definition</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">deleteDefinition</td>
 <td align="left">Delete Definition</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">deleteEstimationDefinition</td>
 <td align="left">Delete Estimation Definition</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">deleteIncidenceRateDefinition</td>
 <td align="left">Delete Incidence Rate Definition</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">deletePathwayDefinition</td>
 <td align="left">Delete Pathway Definition</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">deletePredictionDefinition</td>
 <td align="left">Delete Prediction Definition</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">detectCharacterizationsByName</td>
 <td align="left">Detect Characterizations By Name</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">detectCohortsByName</td>
 <td align="left">Detect Cohorts By Name</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">detectConceptSetsByName</td>
 <td align="left">Detect Concept Sets By Name</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">detectEstimationsByName</td>
 <td align="left">Detect Estimations By Name</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">detectIncidenceRatesByName</td>
 <td align="left">Detect Incidence Rates By Name</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">detectPathwaysByName</td>
 <td align="left">Detect Pathways By Name</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">detectPredictionsByName</td>
 <td align="left">Detect Predictions By Name</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">existsCharacterizationName</td>
 <td align="left">Exists Characterization Name</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">existsCohortName</td>
 <td align="left">Exists Cohort Name</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">existsConceptSetName</td>
 <td align="left">Exists Concept Set Name</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">existsEstimationName</td>
 <td align="left">Exists Estimation Name</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">existsIncidenceRateName</td>
 <td align="left">Exists Incidence Rate Name</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">existsPathwayName</td>
 <td align="left">Exists Pathway Name</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">existsPredictionName</td>
 <td align="left">Exists Prediction Name</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">getCdmsources</td>
 <td align="left">Get Cdmsources</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">getCharacterizationDefinition</td>
 <td align="left">Get Characterization Definition</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">getCharacterizationDefinitionsMetadata</td>
 <td align="left">Get Characterization Definitions Metadata</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">getCharacterizationGenerationinformation</td>
 <td align="left">Get Characterization Generationinformation</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">getCharacterizationResults</td>
 <td align="left">Get Characterization Results</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">getCohortDefinition</td>
 <td align="left">Get Cohort Definition</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">getCohortDefinitionExpression</td>
 <td align="left">Get Cohort Definition Expression</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">getCohortDefinitionName</td>
 <td align="left">Get Cohort Definition Name</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">getCohortDefinitionSql</td>
 <td align="left">Get Cohort Definition Sql</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">getCohortDefinitionsMetadata</td>
 <td align="left">Get Cohort Definitions Metadata</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">getCohortGenerationinformation</td>
 <td align="left">Get Cohort Generationinformation</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">getCohortInclusionrulesandcounts</td>
 <td align="left">Get Cohort Inclusionrulesandcounts</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">getCohortResults</td>
 <td align="left">Get Cohort Results</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">getCohortSql</td>
 <td align="left">Get Cohort Sql</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">getConceptSetDefinition</td>
 <td align="left">Get Concept Set Definition</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">getConceptSetDefinitionsMetadata</td>
 <td align="left">Get Concept Set Definitions Metadata</td>
+</tr>
+<tr class="odd">
+<td align="left">getConceptSetsFromCohortDefinition</td>
+<td align="left">Get Concept Sets From Cohort Definition</td>
 </tr>
 <tr class="even">
 <td align="left">getConcepts</td>
@@ -578,7 +597,7 @@
 <tbody>
 <tr class="odd">
 <td align="left">Get</td>
-<td align="right">37</td>
+<td align="right">38</td>
 </tr>
 <tr class="even">
 <td align="left">Isvalid</td>
@@ -613,82 +632,92 @@
 <td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="left">Convert</td>
+<td align="left">Check</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">Create</td>
+<td align="left">Convert</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
+<td align="left">Create</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
 <td align="left">Resolve</td>
 <td align="right">1</td>
 </tr>
 </tbody>
 </table>
 <p>A function to get <code>Definition</code> is <code>getDefinitionMetaData</code> function. This is a general function that is able to get the Metadata for all specifications within a category.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r">
-<span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/getDefinitionsMetadata.html">getDefinitionsMetadata</a></span>(<span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>,
-                                     <span class="kw">category</span> <span class="kw">=</span> <span class="st">'cohort'</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">arrange</span>(<span class="no">.data</span>$<span class="no">id</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">rename_all</span>(<span class="kw">.funs</span> <span class="kw">=</span> <span class="kw pkg">SqlRender</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/SqlRender/man/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>()
-<span class="co">#&gt; # A tibble: 6 x 7</span>
-<span class="co">#&gt;      Id Name  Description `Created By` `Created Date`      `Modified By`</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt;       &lt;lgl&gt;        &lt;dttm&gt;              &lt;lgl&gt;        </span>
-<span class="co">#&gt; 1 16696 [Phe~  &lt;NA&gt;       NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; 2 16697 [CDS~  &lt;NA&gt;       NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; 3 16698 [CDS~  &lt;NA&gt;       NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; 4 16699 [CDS~  &lt;NA&gt;       NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; 5 16702 [Phe~  &lt;NA&gt;       NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; 6 16703 [Phe~ "\n"        NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; # ... with 1 more variable: `Modified Date` &lt;dttm&gt;</span></pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+
+<span class="fu">ROhdsiWebApi</span><span class="fu">::</span><span class="fu"><a href="../reference/getDefinitionsMetadata.html">getDefinitionsMetadata</a></span><span class="op">(</span>baseUrl <span class="op">=</span> <span class="va">baseUrl</span>, 
+                                     category <span class="op">=</span> <span class="st">'cohort'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">arrange</span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">rename_all</span><span class="op">(</span>.funs <span class="op">=</span> <span class="fu">SqlRender</span><span class="fu">::</span><span class="va"><a href="https://ohdsi.github.io/SqlRender/reference/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="op">)</span> 
+<span class="co">#&gt; # A tibble: 6 x 6</span>
+<span class="co">#&gt;      Id Name  Description `Created Date`      `Modified Date`    </span>
+<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dttm&gt;              &lt;dttm&gt;             </span>
+<span class="co">#&gt; 1 19665 [AM ~ "Patients ~ 2020-11-25 11:14:00 2020-11-25 13:42:00</span>
+<span class="co">#&gt; 2 19666 [AM ~ "Patients ~ 2020-11-25 11:14:00 NA                 </span>
+<span class="co">#&gt; 3 19667 [AM ~ "Patients ~ 2020-11-25 11:14:00 2020-11-25 12:17:00</span>
+<span class="co">#&gt; 4 19669 [460~ "[460] Atr~ 2020-11-25 11:59:00 2020-11-25 12:54:00</span>
+<span class="co">#&gt; 5 19673 [Epi~ "Major ble~ 2020-11-25 14:00:00 2020-11-25 14:08:00</span>
+<span class="co">#&gt; 6 19674 [460~  &lt;NA&gt;       2020-11-25 16:08:00 NA                 </span>
+<span class="co">#&gt; # ... with 1 more variable: `Has Write Access` &lt;lgl&gt;</span></pre></div>
 <p>The same output may be achieved using</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r">
-<span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/getCohortDefinitionsMetaData.html">getCohortDefinitionsMetaData</a></span>(<span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">arrange</span>(<span class="no">.data</span>$<span class="no">id</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">rename_all</span>(<span class="kw">.funs</span> <span class="kw">=</span> <span class="kw pkg">SqlRender</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/SqlRender/man/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>()
-<span class="co">#&gt; # A tibble: 6 x 7</span>
-<span class="co">#&gt;      Id Name  Description `Created By` `Created Date`      `Modified By`</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt;       &lt;lgl&gt;        &lt;dttm&gt;              &lt;lgl&gt;        </span>
-<span class="co">#&gt; 1 16696 [Phe~  &lt;NA&gt;       NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; 2 16697 [CDS~  &lt;NA&gt;       NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; 3 16698 [CDS~  &lt;NA&gt;       NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; 4 16699 [CDS~  &lt;NA&gt;       NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; 5 16702 [Phe~  &lt;NA&gt;       NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; 6 16703 [Phe~ "\n"        NA           2015-05-26 15:42:00 NA           </span>
-<span class="co">#&gt; # ... with 1 more variable: `Modified Date` &lt;dttm&gt;</span></pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+
+<span class="fu">ROhdsiWebApi</span><span class="fu">::</span><span class="fu"><a href="../reference/getCohortDefinitionsMetaData.html">getCohortDefinitionsMetaData</a></span><span class="op">(</span>baseUrl <span class="op">=</span> <span class="va">baseUrl</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">arrange</span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">rename_all</span><span class="op">(</span>.funs <span class="op">=</span> <span class="fu">SqlRender</span><span class="fu">::</span><span class="va"><a href="https://ohdsi.github.io/SqlRender/reference/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="op">)</span> 
+<span class="co">#&gt; # A tibble: 6 x 6</span>
+<span class="co">#&gt;      Id Name  Description `Created Date`      `Modified Date`    </span>
+<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dttm&gt;              &lt;dttm&gt;             </span>
+<span class="co">#&gt; 1 19665 [AM ~ "Patients ~ 2020-11-25 11:14:00 2020-11-25 13:42:00</span>
+<span class="co">#&gt; 2 19666 [AM ~ "Patients ~ 2020-11-25 11:14:00 NA                 </span>
+<span class="co">#&gt; 3 19667 [AM ~ "Patients ~ 2020-11-25 11:14:00 2020-11-25 12:17:00</span>
+<span class="co">#&gt; 4 19669 [460~ "[460] Atr~ 2020-11-25 11:59:00 2020-11-25 12:54:00</span>
+<span class="co">#&gt; 5 19673 [Epi~ "Major ble~ 2020-11-25 14:00:00 2020-11-25 14:08:00</span>
+<span class="co">#&gt; 6 19674 [460~  &lt;NA&gt;       2020-11-25 16:08:00 NA                 </span>
+<span class="co">#&gt; # ... with 1 more variable: `Has Write Access` &lt;lgl&gt;</span></pre></div>
 <p>Similar approach may be used for all categories as follows:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r">
-<span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/getDefinitionsMetadata.html">getDefinitionsMetadata</a></span>(<span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>,
-                                     <span class="kw">category</span> <span class="kw">=</span> <span class="st">'estimation'</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">arrange</span>(<span class="no">.data</span>$<span class="no">id</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">rename_all</span>(<span class="kw">.funs</span> <span class="kw">=</span> <span class="kw pkg">SqlRender</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/SqlRender/man/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>()
-<span class="co">#&gt; # A tibble: 6 x 6</span>
-<span class="co">#&gt;      Id Name          `Created Date`      `Modified Date`     Type   Description</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;         &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt;      </span>
-<span class="co">#&gt; 1   134 [EPI_756] An~ 2020-05-13 10:04:55 2020-05-13 15:33:43 Compa~ &lt;NA&gt;       </span>
-<span class="co">#&gt; 2   135 [EPI_756] An~ 2020-05-14 13:34:33 2020-05-14 13:36:07 Compa~ &lt;NA&gt;       </span>
-<span class="co">#&gt; 3   136 [EPI_756] An~ 2020-05-15 15:53:34 2020-05-15 15:54:15 Compa~ &lt;NA&gt;       </span>
-<span class="co">#&gt; 4   137 [REWARDB] Es~ 2020-05-24 10:10:15 2020-05-25 13:15:57 Compa~ &lt;NA&gt;       </span>
-<span class="co">#&gt; 5   143 [ONC] Multip~ 2020-05-27 21:15:58 NA                  Compa~ &lt;NA&gt;       </span>
-<span class="co">#&gt; 6   146 HCQ-psych ou~ 2020-05-29 17:02:17 2020-05-29 17:13:53 Compa~ &lt;NA&gt;</span></pre></body></html></div>
-<div class="sourceCode" id="cb7"><html><body><pre class="r">
-<span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/getEstimationDefinitionsMetaData.html">getEstimationDefinitionsMetaData</a></span>(<span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">arrange</span>(<span class="no">.data</span>$<span class="no">id</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">rename_all</span>(<span class="kw">.funs</span> <span class="kw">=</span> <span class="kw pkg">SqlRender</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/SqlRender/man/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>()
-<span class="co">#&gt; # A tibble: 6 x 6</span>
-<span class="co">#&gt;      Id Name          `Created Date`      `Modified Date`     Type   Description</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;         &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt;      </span>
-<span class="co">#&gt; 1   134 [EPI_756] An~ 2020-05-13 10:04:55 2020-05-13 15:33:43 Compa~ &lt;NA&gt;       </span>
-<span class="co">#&gt; 2   135 [EPI_756] An~ 2020-05-14 13:34:33 2020-05-14 13:36:07 Compa~ &lt;NA&gt;       </span>
-<span class="co">#&gt; 3   136 [EPI_756] An~ 2020-05-15 15:53:34 2020-05-15 15:54:15 Compa~ &lt;NA&gt;       </span>
-<span class="co">#&gt; 4   137 [REWARDB] Es~ 2020-05-24 10:10:15 2020-05-25 13:15:57 Compa~ &lt;NA&gt;       </span>
-<span class="co">#&gt; 5   143 [ONC] Multip~ 2020-05-27 21:15:58 NA                  Compa~ &lt;NA&gt;       </span>
-<span class="co">#&gt; 6   146 HCQ-psych ou~ 2020-05-29 17:02:17 2020-05-29 17:13:53 Compa~ &lt;NA&gt;</span></pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+
+<span class="fu">ROhdsiWebApi</span><span class="fu">::</span><span class="fu"><a href="../reference/getDefinitionsMetadata.html">getDefinitionsMetadata</a></span><span class="op">(</span>baseUrl <span class="op">=</span> <span class="va">baseUrl</span>, 
+                                     category <span class="op">=</span> <span class="st">'estimation'</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">arrange</span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">rename_all</span><span class="op">(</span>.funs <span class="op">=</span> <span class="fu">SqlRender</span><span class="fu">::</span><span class="va"><a href="https://ohdsi.github.io/SqlRender/reference/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 6 x 7</span>
+<span class="co">#&gt;   `Created Date`      `Modified Date`     `Has Write Acce~    Id Name </span>
+<span class="co">#&gt;   &lt;dttm&gt;              &lt;dttm&gt;              &lt;lgl&gt;            &lt;int&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 2020-06-15 20:03:00 2020-06-17 02:20:00 FALSE              148 [Epi~</span>
+<span class="co">#&gt; 2 2020-06-19 15:27:00 2020-06-19 15:28:00 FALSE              149 COPY~</span>
+<span class="co">#&gt; 3 2020-08-03 18:42:00 2020-08-06 20:26:00 FALSE              153 [ONC~</span>
+<span class="co">#&gt; 4 2020-09-08 18:12:00 2020-09-09 16:47:00 FALSE              154 [EHD~</span>
+<span class="co">#&gt; 5 2020-09-28 17:20:00 2020-10-15 11:27:00 FALSE              155 [EPI~</span>
+<span class="co">#&gt; 6 2020-10-20 18:57:00 2020-10-22 17:01:00 FALSE              156 SF M~</span>
+<span class="co">#&gt; # ... with 2 more variables: Description &lt;chr&gt;, Type &lt;chr&gt;</span></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+
+<span class="fu">ROhdsiWebApi</span><span class="fu">::</span><span class="fu"><a href="../reference/getEstimationDefinitionsMetaData.html">getEstimationDefinitionsMetaData</a></span><span class="op">(</span>baseUrl <span class="op">=</span> <span class="va">baseUrl</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">arrange</span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">rename_all</span><span class="op">(</span>.funs <span class="op">=</span> <span class="fu">SqlRender</span><span class="fu">::</span><span class="va"><a href="https://ohdsi.github.io/SqlRender/reference/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 6 x 7</span>
+<span class="co">#&gt;   `Created Date`      `Modified Date`     `Has Write Acce~    Id Name </span>
+<span class="co">#&gt;   &lt;dttm&gt;              &lt;dttm&gt;              &lt;lgl&gt;            &lt;int&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 2020-06-15 20:03:00 2020-06-17 02:20:00 FALSE              148 [Epi~</span>
+<span class="co">#&gt; 2 2020-06-19 15:27:00 2020-06-19 15:28:00 FALSE              149 COPY~</span>
+<span class="co">#&gt; 3 2020-08-03 18:42:00 2020-08-06 20:26:00 FALSE              153 [ONC~</span>
+<span class="co">#&gt; 4 2020-09-08 18:12:00 2020-09-09 16:47:00 FALSE              154 [EHD~</span>
+<span class="co">#&gt; 5 2020-09-28 17:20:00 2020-10-15 11:27:00 FALSE              155 [EPI~</span>
+<span class="co">#&gt; 6 2020-10-20 18:57:00 2020-10-22 17:01:00 FALSE              156 SF M~</span>
+<span class="co">#&gt; # ... with 2 more variables: Description &lt;chr&gt;, Type &lt;chr&gt;</span></pre></div>
 <p>This is a generic framework that applies to most WebApi categories, and supports different types of CRUD functionalities like deleteConceptSetDefinition() vs deleteDefinition(category = ‘conceptSet’).</p>
 </div>
 </div>
@@ -698,45 +727,50 @@
 <p>Please review <a href="https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html#conceptSets">‘Concept sets - The Book of OHDSI’</a></p>
 <p>We commonly post concept set expression into WebApi/Atlas, or try get an expression from Atlas/WebApi based on a conceptSetDefinitionId.</p>
 <p>Example: lets say we have concept set expression as follows, that is being used for a Rheumatoid Arthritis study.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r">
-<span class="no">jsonExpression</span> <span class="kw">&lt;-</span> <span class="st">[1575 chars quoted with ''']</span></pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+
+<span class="va">jsonExpression</span> <span class="op">&lt;-</span> <span class="st">[1575 chars quoted with ''']</span></pre></div>
 <p>Lets call this concept set expression - ‘[ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set’.</p>
 <p>We will need to check if there is a concept set by this name.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="co"># check if there is a concept set by this name, if yes, delete it</span>
-<span class="no">exists</span> <span class="kw">&lt;-</span> <span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/existsConceptSetName.html">existsConceptSetName</a></span>(<span class="kw">conceptSetName</span> <span class="kw">=</span> <span class="no">conceptSetName</span>, <span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>)
-<span class="no">exists</span>
-<span class="co">#&gt; # A tibble: 1 x 6</span>
-<span class="co">#&gt;   createdBy modifiedBy    id name        modifiedDate        createdDate        </span>
-<span class="co">#&gt;   &lt;lgl&gt;     &lt;lgl&gt;      &lt;int&gt; &lt;chr&gt;       &lt;dttm&gt;              &lt;dttm&gt;             </span>
-<span class="co">#&gt; 1 NA        NA         11380 [ROhdsiWeb~ 2020-06-12 06:09:58 2020-06-12 06:09:58</span></pre></body></html></div>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="co"># check if there is a concept set by this name, if yes, delete it</span>
+<span class="va">exists</span> <span class="op">&lt;-</span> <span class="fu">ROhdsiWebApi</span><span class="fu">::</span><span class="fu"><a href="../reference/existsConceptSetName.html">existsConceptSetName</a></span><span class="op">(</span>conceptSetName <span class="op">=</span> <span class="va">conceptSetName</span>, baseUrl <span class="op">=</span> <span class="va">baseUrl</span><span class="op">)</span>
+<span class="va">exists</span>
+<span class="co">#&gt; # A tibble: 1 x 5</span>
+<span class="co">#&gt;   hasWriteAccess    id name              createdDate         modifiedDate       </span>
+<span class="co">#&gt;   &lt;lgl&gt;          &lt;int&gt; &lt;chr&gt;             &lt;dttm&gt;              &lt;dttm&gt;             </span>
+<span class="co">#&gt; 1 FALSE          12294 [ROhdsiWebApi Vi~ 2020-11-25 16:26:00 2020-11-25 16:26:00</span></pre></div>
 <p>If there is a concept set with this name, then we could either choose another name - or delete the old concept set. For this vignette we have chosen to delete any matching concept set as follows:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/Logic.html">isFALSE</a></span>(<span class="no">exists</span>)) {
-  <span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/deleteConceptSetDefinition.html">deleteConceptSetDefinition</a></span>(<span class="kw">conceptSetId</span> <span class="kw">=</span> <span class="no">exists</span>$<span class="no">id</span>, <span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>)
-}
-<span class="co">#&gt; Successfully deleted conceptSet definition id 11380. Request status code: Success: (204) No Content</span>
-<span class="co">#&gt; NULL</span></pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html">isFALSE</a></span><span class="op">(</span><span class="va">exists</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu">ROhdsiWebApi</span><span class="fu">::</span><span class="fu"><a href="../reference/deleteConceptSetDefinition.html">deleteConceptSetDefinition</a></span><span class="op">(</span>conceptSetId <span class="op">=</span> <span class="va">exists</span><span class="op">$</span><span class="va">id</span>, baseUrl <span class="op">=</span> <span class="va">baseUrl</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="co">#&gt; Successfully deleted conceptSet definition id 12294. Request status code: Success: (204) No Content</span>
+<span class="co">#&gt; NULL</span></pre></div>
 <p>Now we need to ensure the JSON expression above is converted to R-data object. Note: By design, ROhdsiWebAPi does not accept JSON. It needs to be converted to R (list) expression</p>
 <p>We can now post this R-object into WebApi as follows:</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">returnFromPostRequest</span> <span class="kw">&lt;-</span> <span class="kw pkg">ROhdsiWebApi</span><span class="kw ns">::</span><span class="fu"><a href="../reference/postConceptSetDefinition.html">postConceptSetDefinition</a></span>(<span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>,
-                                                                <span class="kw">conceptSetDefinition</span> <span class="kw">=</span> <span class="no">rExpression</span>,
-                                                                <span class="kw">name</span> <span class="kw">=</span> <span class="no">conceptSetName</span>)
-<span class="co">#&gt; Post ConceptSet definition was successful</span></pre></body></html></div>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="va">returnFromPostRequest</span> <span class="op">&lt;-</span> <span class="fu">ROhdsiWebApi</span><span class="fu">::</span><span class="fu"><a href="../reference/postConceptSetDefinition.html">postConceptSetDefinition</a></span><span class="op">(</span>baseUrl <span class="op">=</span> <span class="va">baseUrl</span>, 
+                                                                conceptSetDefinition <span class="op">=</span> <span class="va">rExpression</span>, 
+                                                                name <span class="op">=</span> <span class="va">conceptSetName</span><span class="op">)</span>
+<span class="co">#&gt; Post ConceptSet definition was successful</span></pre></div>
 <p>If successful, we will get a return object as follows into R.</p>
-<pre><code>#&gt; # A tibble: 1 x 6
-#&gt;   createdBy modifiedBy createdDate         modifiedDate           id name       
-#&gt;   &lt;lgl&gt;     &lt;lgl&gt;      &lt;dttm&gt;              &lt;dttm&gt;              &lt;int&gt; &lt;chr&gt;      
-#&gt; 1 NA        NA         2020-06-12 06:22:01 2020-06-12 06:22:01 11381 [ROhdsiWeb~</code></pre>
-<p>The id of the newly posted concept-set definition is 11381. We can now use this concept-set for many concept set queries eg.,</p>
+<pre><code>#&gt; # A tibble: 1 x 5
+#&gt;   createdDate         modifiedDate        hasWriteAccess    id name             
+#&gt;   &lt;dttm&gt;              &lt;dttm&gt;              &lt;lgl&gt;          &lt;int&gt; &lt;chr&gt;            
+#&gt; 1 2020-11-25 16:28:00 2020-11-25 16:28:00 FALSE          12295 [ROhdsiWebApi Vi~</code></pre>
+<p>The id of the newly posted concept-set definition is 12295. We can now use this concept-set for many concept set queries eg.,</p>
 <div id="if-want-to-print-ready-expression-of-the-concept-set-definition" class="section level2">
 <h2 class="hasAnchor">
 <a href="#if-want-to-print-ready-expression-of-the-concept-set-definition" class="anchor"></a>if want to print ready expression of the concept set definition</h2>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">conceptSetDefinition</span> <span class="kw">=</span> <span class="fu"><a href="../reference/getConceptSetDefinition.html">getConceptSetDefinition</a></span>(<span class="kw">conceptSetId</span> <span class="kw">=</span> <span class="no">returnFromPostRequest</span>$<span class="no">id</span>,
-                                               <span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>)
-<span class="no">conceptTbl</span> <span class="kw">&lt;-</span>
-  <span class="fu"><a href="../reference/convertConceptSetDefinitionToTable.html">convertConceptSetDefinitionToTable</a></span>(<span class="no">conceptSetDefinition</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">conceptTbl</span>) <span class="kw">&lt;-</span>
-  <span class="kw pkg">SqlRender</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/SqlRender/man/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">conceptTbl</span>))
-<span class="no">conceptTbl</span>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="va">conceptSetDefinition</span> <span class="op">=</span> <span class="fu"><a href="../reference/getConceptSetDefinition.html">getConceptSetDefinition</a></span><span class="op">(</span>conceptSetId <span class="op">=</span> <span class="va">returnFromPostRequest</span><span class="op">$</span><span class="va">id</span>, 
+                                               baseUrl <span class="op">=</span> <span class="va">baseUrl</span><span class="op">)</span>
+<span class="va">conceptTbl</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/convertConceptSetDefinitionToTable.html">convertConceptSetDefinitionToTable</a></span><span class="op">(</span><span class="va">conceptSetDefinition</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">conceptTbl</span><span class="op">)</span> <span class="op">&lt;-</span>
+  <span class="fu">SqlRender</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/SqlRender/reference/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">conceptTbl</span><span class="op">)</span><span class="op">)</span>
+<span class="va">conceptTbl</span>
 <span class="co">#&gt; # A tibble: 3 x 13</span>
 <span class="co">#&gt;   `Is Excluded` `Include Descen~ `Include Mapped` `Concept Id` `Concept Name`</span>
 <span class="co">#&gt;   &lt;lgl&gt;         &lt;lgl&gt;            &lt;lgl&gt;                   &lt;int&gt; &lt;chr&gt;         </span>
@@ -746,21 +780,23 @@
 <span class="co">#&gt; # ... with 8 more variables: `Standard Concept` &lt;chr&gt;, `Standard Concept</span>
 <span class="co">#&gt; #   Caption` &lt;chr&gt;, `Invalid Reason` &lt;chr&gt;, `Invalid Reason Caption` &lt;chr&gt;,</span>
 <span class="co">#&gt; #   `Concept Code` &lt;chr&gt;, `Domain Id` &lt;chr&gt;, `Vocabulary Id` &lt;chr&gt;, `Concept</span>
-<span class="co">#&gt; #   Class Id` &lt;chr&gt;</span></pre></body></html></div>
+<span class="co">#&gt; #   Class Id` &lt;chr&gt;</span></pre></div>
 <p><code>createConceptSetWorkbook</code> maybe used to create an Excel workbook of the concept set.</p>
 <p>If we want a list of all conceptId’s (including descendants) from the concept set expression</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">resolvedConcepts</span> <span class="kw">=</span> <span class="fu"><a href="../reference/resolveConceptSet.html">resolveConceptSet</a></span>(<span class="kw">conceptSetDefinition</span> <span class="kw">=</span> <span class="no">conceptSetDefinition</span>, <span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Note: Showing only the first 10 concept id's"</span>)
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="va">resolvedConcepts</span> <span class="op">=</span> <span class="fu"><a href="../reference/resolveConceptSet.html">resolveConceptSet</a></span><span class="op">(</span>conceptSetDefinition <span class="op">=</span> <span class="va">conceptSetDefinition</span>, baseUrl <span class="op">=</span> <span class="va">baseUrl</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"Note: Showing only the first 10 concept id's"</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Note: Showing only the first 10 concept id's"</span>
-<span class="no">resolvedConcepts</span>[<span class="fl">1</span>:<span class="fl">10</span>]
+<span class="va">resolvedConcepts</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
 <span class="co">#&gt;  [1]   80809 4035427 4035611 4103516 4114439 4114440 4114441 4114442 4114444</span>
-<span class="co">#&gt; [10] 4115050</span></pre></body></html></div>
+<span class="co">#&gt; [10] 4115050</span></pre></div>
 <p>The concept set expression json expression can be recaptured from WebApi as follows</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">json</span> <span class="kw">&lt;-</span>
-  <span class="fu"><a href="../reference/getConceptSetDefinition.html">getConceptSetDefinition</a></span>(<span class="kw">baseUrl</span> <span class="kw">=</span> <span class="no">baseUrl</span>,
-                          <span class="kw">conceptSetId</span> <span class="kw">=</span> <span class="no">returnFromPostRequest</span>$<span class="no">id</span>
-                          )$<span class="no">expression</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">RJSONIO</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/RJSONIO/man/toJSON.html">toJSON</a></span>(<span class="kw">pretty</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="va">json</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/getConceptSetDefinition.html">getConceptSetDefinition</a></span><span class="op">(</span>baseUrl <span class="op">=</span> <span class="va">baseUrl</span>, 
+                          conceptSetId <span class="op">=</span> <span class="va">returnFromPostRequest</span><span class="op">$</span><span class="va">id</span>
+                          <span class="op">)</span><span class="op">$</span><span class="va">expression</span> <span class="op">%&gt;%</span> 
+  <span class="fu">RJSONIO</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RJSONIO/man/toJSON.html">toJSON</a></span><span class="op">(</span>pretty <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
 <p>Similar framework maybe used with other WebApi categories such as Cohorts/Characterization/Incidence Rate.</p>
 </div>
 </div>
@@ -814,7 +850,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

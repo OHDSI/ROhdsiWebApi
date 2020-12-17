@@ -130,13 +130,7 @@ getGenerationInformation <- function(id, category, baseUrl) {
           .normalizeDateAndTimeTypes()
       }
       if (length(response$summaryList) > 0) {
-        summaryList[[i]] <- response$summaryList %>% purrr::map(function(x) {
-          purrr::map(x, function(y) {
-          ifelse(is.null(y), NA, y)
-          })
-        }) %>% unlist(recursive = TRUE,
-                      use.names = TRUE) %>% as.matrix() %>% t() %>% tidyr::as_tibble() %>%
-          .removeStringFromDataFrameName(string = "id.")
+        summaryList[[i]] <- dplyr::bind_rows(response$summaryList)
       }
     }
     response <- list(executionInfo = dplyr::bind_rows(executionInfo),

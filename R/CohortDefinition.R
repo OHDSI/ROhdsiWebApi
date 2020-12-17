@@ -130,9 +130,8 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   checkInputFileEncoding(fileName)
   cohortsToCreate <- readr::read_csv(file = fileName,
                                      col_types = readr::cols(),
-                                     guess_max = min(1e+07)) %>% 
-    dplyr::mutate(name = .data$name %>% as.character() %>%
-    trimws())
+                                     guess_max = min(1e+07)) %>%
+    dplyr::mutate(name = .data$name %>% as.character() %>% trimws())
 
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {

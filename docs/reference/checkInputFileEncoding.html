@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the WebAPI version number  — getWebApiVersion • ROhdsiWebApi</title>
+<title>Check character encoding of input file — checkInputFileEncoding • ROhdsiWebApi</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Get the WebAPI version number  — getWebApiVersion" />
-<meta property="og:description" content="Get the WebAPI version number " />
+<meta property="og:title" content="Check character encoding of input file — checkInputFileEncoding" />
+<meta property="og:description" content="For its input files, CohortDiagnostics only accepts UTF-8 or ASCII character encoding. This
+function can be used to check whether a file meets these criteria." />
 
 
 
@@ -126,34 +127,30 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the WebAPI version number <a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></h1>
-    <small class="dont-index">Source: <a href='https://github.com/OHDSI/ROhdsiWebApi/blob/master/R/WebApi.R'><code>R/WebApi.R</code></a></small>
-    <div class="hidden name"><code>getWebApiVersion.Rd</code></div>
+    <h1>Check character encoding of input file</h1>
+    <small class="dont-index">Source: <a href='https://github.com/OHDSI/ROhdsiWebApi/blob/master/R/Helper.R'><code>R/Helper.R</code></a></small>
+    <div class="hidden name"><code>checkInputFileEncoding.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get the WebAPI version number <a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
+    <p>For its input files, CohortDiagnostics only accepts UTF-8 or ASCII character encoding. This
+function can be used to check whether a file meets these criteria.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getWebApiVersion</span><span class='op'>(</span><span class='va'>baseUrl</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>checkInputFileEncoding</span><span class='op'>(</span><span class='va'>fileName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>baseUrl</th>
-      <td><p>The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.</p></td>
+      <th>fileName</th>
+      <td><p>The path to the file to check</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A string.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Obtains the WebAPI version number.</p>
+    <p>Throws an error if the input file does not have the correct encoding.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
