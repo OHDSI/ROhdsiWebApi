@@ -35,7 +35,7 @@ authorizeWebApi <- function(baseUrl,
   # run appropriate auth. Each auth method must return a header to be added to WebAPI calls.
   authHeader <- switch(authMethod,
                        "db" = .authDb(baseUrl, webApiUsername, webApiPassword),
-                       "ad" = .authDb(baseUrl, webApiUsername, webApiPassword)
+                       "ad" = .authAd(baseUrl, webApiUsername, webApiPassword)
   )
   
   # store token in package environment
@@ -44,12 +44,23 @@ authorizeWebApi <- function(baseUrl,
   invisible()
 }
 
-
 .authDb <- function(baseUrl, webApiUsername, webApiPassword) {
   checkmate::assertCharacter(webApiUsername, min.chars = 1, len = 1)
   checkmate::assertCharacter(webApiPassword, min.chars = 1, len = 1)
   
   authUrl <- paste0(baseUrl, "/user/login/db")
+  login <- list(login = webApiUsername, password = webApiPassword)
+  r <- httr::POST(authUrl, body = login, encode = "form")
+  if (length(httr::headers(r)$bearer) < 1) stop("Authentication failed.")
+  authHeader <- paste0("Bearer ", httr::headers(r)$bearer)
+  authHeader
+}
+
+.authAd <- function(baseUrl, webApiUsername, webApiPassword) {
+  checkmate::assertCharacter(webApiUsername, min.chars = 1, len = 1)
+  checkmate::assertCharacter(webApiPassword, min.chars = 1, len = 1)
+  
+  authUrl <- paste0(baseUrl, "/user/login/ad")
   login <- list(login = webApiUsername, password = webApiPassword)
   r <- httr::POST(authUrl, body = login, encode = "form")
   if (length(httr::headers(r)$bearer) < 1) stop("Authentication failed.")
