@@ -68,7 +68,8 @@ getPersonProfile <- function(baseUrl, sourceKey, personId, indexCohortId = NULL)
     data <- jsonlite::fromJSON(txt = json,
                                simplifyVector = TRUE,
                                simplifyDataFrame = TRUE,
-                               flatten = TRUE)
+                               flatten = TRUE, 
+                               digits = 23)
   }
 
   # records
