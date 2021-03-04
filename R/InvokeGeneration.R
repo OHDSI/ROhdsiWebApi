@@ -65,10 +65,10 @@ invokeGeneration <- function(id, baseUrl, sourceKey, category) {
   url <- paste0(urlRoot, "/", sourceKey)
 
   if (argument$categoryStandard %in% c("cohort", "incidenceRate")) {
-    response <- httr::GET(url)
+    response <- .GET(url)
   }
   if (argument$categoryStandard %in% c("characterization", "pathway")) {
-    response <- httr::POST(url)
+    response <- .POST(url)
   }
   if (!response$status_code == 200) {
     if (isValidId(ids = id, baseUrl = baseUrl, category = category)) {

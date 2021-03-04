@@ -59,10 +59,10 @@ cancelGeneration <- function(id, baseUrl, sourceKey, category) {
   url <- paste0(urlRoot, "/", sourceKey)
 
   if (argument$categoryStandard %in% c("cohort")) {
-    response <- httr::GET(url)
+    response <- .GET(url)
   }
   if (argument$categoryStandard %in% c("characterization", "pathway", "incidenceRate")) {
-    response <- httr::DELETE(url)
+    response <- .DELETE(url)
   }
   if (!response$status_code %in% c(200, 204)) {
     if (isValidId(ids = id, baseUrl = baseUrl, category = category)) {

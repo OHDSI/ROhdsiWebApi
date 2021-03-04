@@ -99,7 +99,7 @@ getResults <- function(id, baseUrl, category) {
                       generation$sourceKey,
                       "?mode=",
                       mode)
-        response <- httr::GET(url)
+        response <- .GET(url)
         if (response$status_code == "200") {
           response <- httr::content(response)
           if (is.null(response$summary$percentMatched)) {
@@ -186,7 +186,7 @@ getResults <- function(id, baseUrl, category) {
                               " id:",
                               generation$id)
       url <- paste0(baseUrl, "/", argument$categoryUrl, "/generation/", generation$id, "/result/")
-      response <- httr::GET(url)
+      response <- .GET(url)
       if (response$status_code == "200") {
         response <- httr::content(response)
         response <- response %>% tidyr::tibble(response = response) %>% tidyr::unnest_wider(.data$response) %>%
@@ -227,7 +227,7 @@ getResults <- function(id, baseUrl, category) {
                     generationLoop$targetId,
                     "&outcomeId=",
                     generationLoop$outcomeId)
-      response <- httr::GET(url)
+      response <- .GET(url)
       if (response$status_code == "200") {
         response <- httr::content(response)
         summary[[i]] <- response$summary %>% tidyr::as_tibble() %>% utils::type.convert(as.is = TRUE,
@@ -283,7 +283,7 @@ getResults <- function(id, baseUrl, category) {
                               " generation id:",
                               generation$id)
       url <- paste0(baseUrl, "/", argument$categoryUrl, "/generation/", generation$id, "/result/")
-      response <- httr::GET(url)
+      response <- .GET(url)
       if (response$status_code == "200") {
         response <- httr::content(response)
         eventCodesLoop <- response$eventCodes %>% purrr::map(function(x) {

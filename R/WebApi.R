@@ -29,14 +29,14 @@
 getPriorityVocabularyKey <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
   url <- gsub("@baseUrl", baseUrl, "@baseUrl/source/priorityVocabulary")
-  json <- httr::GET(url)
+  json <- .GET(url)
   json <- httr::content(json)
   json$sourceKey
 }
 
 #' Get the WebAPI version number \lifecycle{stable}
 #' @details
-#' Obtains the WebAPI version number.
+#' Obtains the WebAPI version number. 
 #'
 #' @template BaseUrl
 #'
@@ -52,7 +52,7 @@ getWebApiVersion <- function(baseUrl) {
                              " . Failed while retrieving WebApi information.")
     stop()
   }
-  response <- httr::GET(url)
+  response <- .GET(url)
   if (response$status %in% c(200)) {
     version <- (httr::content(response))$version
   } else {
@@ -80,7 +80,7 @@ getWebApiVersion <- function(baseUrl) {
 getCdmSources <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
   url <- sprintf("%s/source/sources", baseUrl)
-  request <- httr::GET(url)
+  request <- .GET(url)
   httr::stop_for_status(request)
   sources <- httr::content(request)
 

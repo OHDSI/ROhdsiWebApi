@@ -45,7 +45,7 @@ getDefinition <- function(id, category, baseUrl) {
   checkmate::reportAssertions(errorMessage)
 
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/", id)
-  response <- httr::GET(url)
+  response <- .GET(url)
 
   if (!response$status_code == 200) {
     definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
@@ -75,7 +75,7 @@ getDefinition <- function(id, category, baseUrl) {
                                 id,
                                 "/",
                                 argument$categoryUrlGetExpression)
-        expression <- httr::GET(urlExpression)
+        expression <- .GET(urlExpression)
         expression <- httr::content(expression)
         response$expression <- expression
       } else {

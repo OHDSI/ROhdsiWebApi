@@ -44,7 +44,7 @@ deleteDefinition <- function(id, baseUrl, category) {
   checkmate::reportAssertions(errorMessage)
 
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/", id)
-  request <- httr::DELETE(url)
+  request <- .DELETE(url)
 
   if (!request$status %in% c(200, 204)) {
     if (!isTRUE(isValidId(ids = id, baseUrl = baseUrl, category = category))) {

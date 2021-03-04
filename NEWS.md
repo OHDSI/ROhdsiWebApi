@@ -1,6 +1,25 @@
 News
 ================
 
+# ROhdsiWebApi 1.1.2
+
+### Changes:
+1. Replace read.csv with readr::read_csv, write.csv with readr::write_csv to ensure type stability and use of tibble.
+2. Replaced jsonlite with RJSONIO to address issue with special characters "Sjögren"
+3. Replaced used of data.frame(), tidyr::tibble()
+4. Fixed bugs due to join on data frame with no row records.
+
+### Bug fixes
+
+
+# ROhdsiWebApi 1.1.1
+
+### Changes:
+1.  Use BIGINT for cohort_definition_id
+
+### Bug fixes
+
+
 # ROhdsiWebApi 1.1.0
 
 ### Changes:
