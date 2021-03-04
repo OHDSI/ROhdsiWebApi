@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get person profile data <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a> — getPersonProfile • ROhdsiWebApi</title>
+<title>Get person profile data  — getPersonProfile • ROhdsiWebApi</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Get person profile data <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a> — getPersonProfile" />
+<meta property="og:title" content="Get person profile data  — getPersonProfile" />
 <meta property="og:description" content="Get person profile data " />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
       </span>
     </div>
 
@@ -135,7 +135,7 @@
     <p>Get person profile data <a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>getPersonProfile</span>(<span class='no'>baseUrl</span>, <span class='no'>sourceKey</span>, <span class='no'>personId</span>, <span class='kw'>indexCohortId</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>getPersonProfile</span><span class='op'>(</span><span class='va'>baseUrl</span>, <span class='va'>sourceKey</span>, <span class='va'>personId</span>, indexCohortId <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,11 +178,13 @@ person.</p>
 profile in tables or visualization.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>getPersonProfile</span>(<span class='kw'>baseUrl</span> <span class='kw'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span>,
-                 <span class='kw'>sourceKey</span> <span class='kw'>=</span> <span class='st'>"sourceKey"</span>,
-                 <span class='kw'>personId</span> <span class='kw'>=</span> <span class='fl'>342342</span>)
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>getPersonProfile</span><span class='op'>(</span>baseUrl <span class='op'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span>,
+                 sourceKey <span class='op'>=</span> <span class='st'>"sourceKey"</span>,
+                 personId <span class='op'>=</span> <span class='fl'>342342</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -198,7 +200,7 @@ profile in tables or visualization.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -35,8 +35,25 @@ getResults <- function(id, baseUrl, category) {
                                                                                         "characterization",
                                                                                         "pathway",
                                                                                         "incidenceRate"))
+  # create empty output that will be produced if results are not generated.
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
+  if (category == "cohort") {
+    response <- list(inclusionRuleStats = tidyr::tibble(),
+                     treemapData = tidyr::tibble(),
+                     summary = tidyr::tibble())
+  } else if (category == "characterization") {
+    response <- tidyr::tibble()
+  } else if (category == "pathway") {
+    response <- list(summary = tidyr::tibble(),
+                     stratifyStats = tidyr::tibble(),
+                     treemapData = tidyr::tibble())
+  } else if (category == "incidenceRate") {
+    response <- list(eventCodes = tidyr::tibble(), pathwayGroups = tidyr::tibble())
+  } else {
+    stop()
+  }
 
+  # check generation information
   generationInformation <- getGenerationInformation(id = id, category = category, baseUrl = baseUrl)
 
   if (category %in% c("cohort", "characterization", "pathway")) {
@@ -73,6 +90,7 @@ getResults <- function(id, baseUrl, category) {
                           " result generations) to have configured source key in WebApi. Results will be retrieved for this subset.")
 
 
+  # get results for cohort generation
   if (category == "cohort" & nrow(generatedSuccess) > 0) {
     inclusionRuleStats <- list()
     treemapData <- list()
@@ -135,7 +153,7 @@ getResults <- function(id, baseUrl, category) {
           }
 
 
-          tMapData <- jsonlite::fromJSON(response$treemapData, simplifyDataFrame = FALSE)
+          tMapData <- jsonlite::fromJSON(response$treemapData, simplifyDataFrame = FALSE, digits = 23)
           treeMapResult <- list(name = c(), size = c())
           treeMapResult <- .flattenTree(node = tMapData, accumulated = treeMapResult)
           if (is.null(treeMapResult$name) | is.null(treeMapResult$size)) {
@@ -168,15 +186,11 @@ getResults <- function(id, baseUrl, category) {
     response <- list(inclusionRuleStats = inclusionRuleStats,
                      treemapData = treemapData,
                      summary = summary)
-  } else {
-    response <- list(inclusionRuleStats = tidyr::tibble(),
-                     treemapData = tidyr::tibble(),
-                     summary = tidyr::tibble())
   }
 
 
 
-
+  # get results for characterization generation
   if (category == "characterization" & nrow(generatedSuccess) > 0) {
     responseAll <- list()
     for (i in (1:nrow(generatedSuccess))) {
@@ -200,13 +214,11 @@ getResults <- function(id, baseUrl, category) {
       responseAll[[i]] <- response
     }
     response <- dplyr::bind_rows(responseAll)
-  } else {
-    response <- tidyr::tibble()
   }
 
 
 
-
+  # get results for incidence rate generation
   if (category == "incidenceRate" & nrow(generatedSuccess) > 0) {
     stratifyStats <- list()
     treemapData <- list()
@@ -245,7 +257,7 @@ getResults <- function(id, baseUrl, category) {
         }
 
         if (length(response$treemapData) > 0) {
-          tMapData <- jsonlite::fromJSON(response$treemapData, simplifyDataFrame = FALSE)
+          tMapData <- jsonlite::fromJSON(response$treemapData, simplifyDataFrame = FALSE, digits = 23)
           treeMapResult <- list(name = c(), size = c())
           treeMapResult <- .flattenTree(node = tMapData,
                                         accumulated = treeMapResult) %>% tidyr::replace_na()
@@ -266,13 +278,10 @@ getResults <- function(id, baseUrl, category) {
     treemapData <- dplyr::bind_rows(treemapData)
     summary <- dplyr::bind_rows(summary)
     response <- list(summary = summary, stratifyStats = stratifyStats, treemapData = treemapData)
-  } else {
-    response <- list(summary = tidyr::tibble(),
-                     stratifyStats = tidyr::tibble(),
-                     treemapData = tidyr::tibble())
   }
 
 
+  # get results for pathway generation
   if (category == "pathway" & nrow(generatedSuccess) > 0) {
     eventCodes <- list()
     pathwayGroups <- list()
@@ -312,8 +321,7 @@ getResults <- function(id, baseUrl, category) {
     eventCodes <- dplyr::bind_rows(eventCodes)
     pathwayGroups <- dplyr::bind_rows(pathwayGroups)
     response <- list(eventCodes = eventCodes, pathwayGroups = pathwayGroups)
-  } else {
-    response <- list(eventCodes = tidyr::tibble(), pathwayGroups = tidyr::tibble())
   }
+
   return(response)
 }

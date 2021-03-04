@@ -103,7 +103,6 @@
                                                                                                        "y-m-d H:M:S",
                                                                                                        "ymdHMS",
                                                                                                        "ymd HMS"))[1])
-    x <- min(x)
   }
   return(x)
 }
