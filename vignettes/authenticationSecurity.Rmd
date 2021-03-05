@@ -67,11 +67,13 @@ authorizeWebApi(baseUrl,
 ```
 
 This function does not return a value but instead has a side effect of retrieving the 
-bearer token from WebAPI and saving it in the ROhdsiWebApi global package environment. If you are using Active Directory then set `authMethod = "ad"` and if you are using 
+bearer token from WebAPI and saving it in the ROhdsiWebApi global package environment. 
+If you are using Active Directory then set `authMethod = "ad"` and if you are using 
 database authentication then set `authMethod = "db"`. Make sure that your password
 is stored in an environment variable defined in the .Renviron file (easily
 accessed by calling `usethis::edit_r_environ()`) or stored and retrieved using
-the [keyring package](https://cran.r-project.org/web/packages/keyring/readme/README.html). Never store passwords in your R code.
+the [keyring package](https://cran.r-project.org/web/packages/keyring/readme/README.html). 
+Never store passwords in your R code.
 
 If authorization was successful then the bearer token will be stored in the 
 global package environment associated with its WebAPI base URL. If you are working
