@@ -10,7 +10,7 @@ Authors@R: c(
     person("Frank", "DeFalco", role = c("aut")),
     person("Observational Health Data Science and Informatics", role = c("cph"))
   )
-Maintainer: Gowtham Rao <gowthamrao@gmail.com>
+Maintainer: Gowtham Rao <rao@ohdsi.org>
 Description: Includes R wrappers for calling WebAPI web services.
 License: Apache License 2.0
 Depends:
