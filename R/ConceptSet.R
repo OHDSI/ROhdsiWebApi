@@ -1,4 +1,4 @@
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -51,9 +51,8 @@ resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey
   expression <- .toJSON(expression)
   response <- .postJson(url = url, json = expression)
   if (!response$status_code == 200) {
-    ParallelLogger::logError("The concept set definition was not accepted by the WebApi. Status code = ",
-                             httr::content(response)$status_code)
-    stop()
+    stop(paste0("The concept set definition was not accepted by the WebApi. Status code = ",
+                httr::content(response)$status_code))
   }
   response <- httr::content(response)
   response <- unlist(response) %>% unique() %>% sort()

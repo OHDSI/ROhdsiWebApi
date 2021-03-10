@@ -1,6 +1,6 @@
 # @file CohortDefinition
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -80,14 +80,13 @@ getResults <- function(id, baseUrl, category) {
     generatedSuccess <- tidyr::tibble()
   }
 
-  ParallelLogger::logInfo("Found ",
-                          scales::comma(nrow(generatedSuccess)),
-                          " (",
-                          scales::percent(x = nrow(generatedSuccess)/nrow(executionInfo),
-                                          accuracy = 0.1),
-                          " of ",
-                          scales::comma(nrow(executionInfo)),
-                          " result generations) to have configured source key in WebApi. Results will be retrieved for this subset.")
+  writeLines(paste0("Found ",
+                    scales::comma(nrow(generatedSuccess)),
+                    " (",
+                    scales::percent(x = nrow(generatedSuccess)/nrow(executionInfo), accuracy = 0.1),
+                    " of ",
+                    scales::comma(nrow(executionInfo)),
+                    " result generations) to have configured source key in WebApi. Results will be retrieved for this subset."))
 
 
   # get results for cohort generation
@@ -98,7 +97,7 @@ getResults <- function(id, baseUrl, category) {
 
     for (i in (1:nrow(generatedSuccess))) {
       generation <- generatedSuccess %>% dplyr::slice(i)
-      ParallelLogger::logInfo("   Retrieving results for ", generation$sourceName)
+      writeLines(paste0("   Retrieving results for ", generation$sourceName))
       inclusionRuleStatsMode <- list()
       treemapDataMode <- list()
       summaryMode <- list()
@@ -153,7 +152,9 @@ getResults <- function(id, baseUrl, category) {
           }
 
 
-          tMapData <- jsonlite::fromJSON(response$treemapData, simplifyDataFrame = FALSE, digits = 23)
+          tMapData <- jsonlite::fromJSON(response$treemapData,
+                                         simplifyDataFrame = FALSE,
+                                         digits = 23)
           treeMapResult <- list(name = c(), size = c())
           treeMapResult <- .flattenTree(node = tMapData, accumulated = treeMapResult)
           if (is.null(treeMapResult$name) | is.null(treeMapResult$size)) {
@@ -195,10 +196,10 @@ getResults <- function(id, baseUrl, category) {
     responseAll <- list()
     for (i in (1:nrow(generatedSuccess))) {
       generation <- generatedSuccess %>% dplyr::slice(i)
-      ParallelLogger::logInfo("   Retrieving results for ",
-                              argument$categoryFirstUpper,
-                              " id:",
-                              generation$id)
+      writeLines(paste0("   Retrieving results for ",
+                        argument$categoryFirstUpper,
+                        " id:",
+                        generation$id))
       url <- paste0(baseUrl, "/", argument$categoryUrl, "/generation/", generation$id, "/result/")
       response <- .GET(url)
       if (response$status_code == "200") {
@@ -257,7 +258,9 @@ getResults <- function(id, baseUrl, category) {
         }
 
         if (length(response$treemapData) > 0) {
-          tMapData <- jsonlite::fromJSON(response$treemapData, simplifyDataFrame = FALSE, digits = 23)
+          tMapData <- jsonlite::fromJSON(response$treemapData,
+                                         simplifyDataFrame = FALSE,
+                                         digits = 23)
           treeMapResult <- list(name = c(), size = c())
           treeMapResult <- .flattenTree(node = tMapData,
                                         accumulated = treeMapResult) %>% tidyr::replace_na()
@@ -287,10 +290,10 @@ getResults <- function(id, baseUrl, category) {
     pathwayGroups <- list()
     for (i in (1:nrow(generatedSuccess))) {
       generation <- generatedSuccess %>% dplyr::slice(i)
-      ParallelLogger::logInfo("   Retrieving results for ",
-                              argument$categoryFirstUpper,
-                              " generation id:",
-                              generation$id)
+      writeLines(paste0("   Retrieving results for ",
+                        argument$categoryFirstUpper,
+                        " generation id:",
+                        generation$id))
       url <- paste0(baseUrl, "/", argument$categoryUrl, "/generation/", generation$id, "/result/")
       response <- .GET(url)
       if (response$status_code == "200") {

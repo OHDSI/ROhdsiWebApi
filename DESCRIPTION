@@ -1,10 +1,10 @@
 Package: ROhdsiWebApi
 Type: Package
 Title: R package to allow interactivity with a WebApi instance
-Version: 1.1.3
-Date: 2020-11-25
+Version: 1.1.4
+Date: 2020-03-10
 Authors@R: c(
-    person("Gowtham", "Rao", email = "gowthamrao@gmail.com", role = c("aut", "cre")),
+    person("Gowtham", "Rao", email = "rao@ohdsi.org", role = c("aut", "cre")),
     person("Martijn", "Schuemie", role = c("aut")),
     person("Ajit", "Londhe", email = "alondhe@amgen.com", role = c("aut")),
     person("Frank", "DeFalco", role = c("aut")),
@@ -23,7 +23,6 @@ Imports:
     lifecycle,
     lubridate,
     openxlsx (>= 4.0.17),
-    ParallelLogger,
     purrr,
     readr,
     RJSONIO,

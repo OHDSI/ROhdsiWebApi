@@ -1,6 +1,6 @@
 # @file CohortDefinition
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 # 
@@ -256,10 +256,7 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == "cohort")
 
   if (!"cohort" %in% c("cohort")) {
-    ParallelLogger::logError("Retrieving SQL for ",
-                             argument$categoryFirstUpper,
-                             " is not supported")
-    stop()
+    stop(paste0("Retrieving SQL for ", argument$categoryFirstUpper, " is not supported"))
   }
 
   errorMessage <- checkmate::makeAssertCollection()
@@ -283,7 +280,6 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
     sql <- response$templateSql
     return(sql)
   } else {
-    ParallelLogger::logError("Error: No Sql returned for cohort definition id: ", cohortDefinition)
-    stop()
+    stop(paste0("Error: No Sql returned for cohort definition id: ", cohortDefinition))
   }
 }

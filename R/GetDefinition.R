@@ -1,6 +1,6 @@
 # @file GetDefinition
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -54,8 +54,7 @@ getDefinition <- function(id, category, baseUrl) {
     } else {
       error <- ""
     }
-    ParallelLogger::logError(error, "Status code = ", httr::content(response)$status_code)
-    stop()
+    stop(paste0(error, "Status code = ", httr::content(response)$status_code))
   }
   response <- httr::content(response)
 

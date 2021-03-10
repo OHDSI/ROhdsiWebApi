@@ -1,6 +1,6 @@
 # @file postDefinition
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -53,8 +53,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
   checkmate::reportAssertions(errorMessage)
 
   if (!category %in% c("cohort", "conceptSet")) {
-    ParallelLogger::logError("Posting definitions of ", category, " is not supported.")
-    stop()
+    stop(paste0("Posting definitions of ", category, " is not supported."))
   }
 
   if ("expression" %in% names(definition)) {
@@ -82,8 +81,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
     } else {
       error <- ""
     }
-    ParallelLogger::logError(error, "Status code = ", httr::status_code(response))
-    stop()
+    stop(paste0(error, "Status code = ", httr::status_code(response)))
   }
   response <- httr::content(response)
   structureCreated <- response
@@ -112,11 +110,10 @@ postDefinition <- function(baseUrl, name, category, definition) {
                                          "/",
                                          argument$categoryUrlPut), json = expression)
     if (!responsePut$status_code == 200) {
-      ParallelLogger::logError("Failed to post ",
-                               argument$categoryFirstUpper,
-                               " definition. Status code = ",
-                               httr::content(responsePut)$status_code)
-      stop()
+      stop(paste0("Failed to post ",
+                  argument$categoryFirstUpper,
+                  " definition. Status code = ",
+                  httr::content(responsePut)$status_code))
     }
   }
 
@@ -157,7 +154,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
                                       "/",
                                       argument$categoryUrlPut), json = expressionCharacterization)
   }
-  ParallelLogger::logInfo("Post ", argument$categoryFirstUpper, " definition was successful")
+  writeLines(paste0("Post ", argument$categoryFirstUpper, " definition was successful"))
   output <- response %>% list() %>% purrr::map_df(.f = purrr::flatten) %>% utils::type.convert(as.is = TRUE,
                                                                                                dec = ".") %>% .normalizeDateAndTimeTypes()
   return(output)

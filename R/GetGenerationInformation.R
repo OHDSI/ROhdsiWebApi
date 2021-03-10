@@ -1,6 +1,6 @@
 # @file GetGenerationInformation
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -74,8 +74,7 @@ getGenerationInformation <- function(id, category, baseUrl) {
       } else {
         error <- ""
       }
-      ParallelLogger::logError(error, "Status code = ", httr::content(response)$status_code)
-      stop()
+      stop(paste0(error, "Status code = ", httr::content(response)$status_code))
     }
     response <- httr::content(response)
     if (!length(response) == 0) {
@@ -115,8 +114,7 @@ getGenerationInformation <- function(id, category, baseUrl) {
         } else {
           error <- ""
         }
-        ParallelLogger::logError(error, "Status code = ", httr::content(response)$status_code)
-        stop()
+        stop(paste0(error, "Status code = ", httr::content(response)$status_code))
       }
       response <- httr::content(response)
       if (length(response$executionInfo) > 0) {
@@ -139,12 +137,12 @@ getGenerationInformation <- function(id, category, baseUrl) {
     numerator <- nrow(response$executionInfo %>% dplyr::filter(.data$status %in% c("COMPLETE",
                                                                                    "COMPLETED")))
   }
-  ParallelLogger::logInfo("Found ",
-                          numerator,
-                          " generations for ",
-                          argument$categoryFirstUpper,
-                          " of which ",
-                          scales::percent(x = numerator/denominator, accuracy = 0.1),
-                          " had a status = 'COMPLETED'")
+  writeLines(paste0("Found ",
+                    numerator,
+                    " generations for ",
+                    argument$categoryFirstUpper,
+                    " of which ",
+                    scales::percent(x = numerator/denominator, accuracy = 0.1),
+                    " had a status = 'COMPLETED'"))
   return(response)
 }

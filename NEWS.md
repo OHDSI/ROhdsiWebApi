@@ -1,5 +1,13 @@
 News
 ================
+# ROhdsiWebApi 1.1.4
+
+### Changes:
+1. Removed dependency on ParallelLogger
+2. Implemented support for security
+
+### Bug fixes:
+
 
 # ROhdsiWebApi 1.1.3
 

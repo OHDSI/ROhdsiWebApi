@@ -1,6 +1,6 @@
 # @file WebApi
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -36,7 +36,7 @@ getPriorityVocabularyKey <- function(baseUrl) {
 
 #' Get the WebAPI version number \lifecycle{stable}
 #' @details
-#' Obtains the WebAPI version number. 
+#' Obtains the WebAPI version number.
 #'
 #' @template BaseUrl
 #'
@@ -47,22 +47,20 @@ getPriorityVocabularyKey <- function(baseUrl) {
 getWebApiVersion <- function(baseUrl) {
   url <- paste0(baseUrl, "/info")
   if (!.isValidUrl(url)) {
-    ParallelLogger::logError("Please check if the url is valid. ",
-                             baseUrl,
-                             " . Failed while retrieving WebApi information.")
-    stop()
+    stop(paste0("Please check if the url is valid. ",
+                baseUrl,
+                " . Failed while retrieving WebApi information."))
   }
   response <- .GET(url)
   if (response$status %in% c(200)) {
     version <- (httr::content(response))$version
   } else {
-    ParallelLogger::logError("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
-                             "Please verify\n",
-                             "- is it in the form http://server.org:80/WebAPI,\n",
-                             "- are you are connected to the network",
-                             "Status code: ",
-                             response$status)
-    stop()
+    stop(paste0("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
+                "Please verify\n",
+                "- is it in the form http://server.org:80/WebAPI,\n",
+                "- are you are connected to the network",
+                "Status code: ",
+                response$status))
   }
   return(version)
 }

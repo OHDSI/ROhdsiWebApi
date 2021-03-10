@@ -1,6 +1,6 @@
 # @file InvokeGeneration
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -51,8 +51,7 @@ invokeGeneration <- function(id, baseUrl, sourceKey, category) {
   checkmate::reportAssertions(errorMessage)
 
   if (!all(isValidSourceKey(sourceKeys = sourceKey, baseUrl = baseUrl))) {
-    ParallelLogger::logError(sourceKey, " is not present in WebApi.")
-    stop()
+    stop(paste0(sourceKey, " is not present in WebApi."))
   }
 
   urlRoot <- paste0(baseUrl,
@@ -76,8 +75,7 @@ invokeGeneration <- function(id, baseUrl, sourceKey, category) {
     } else {
       error <- ""
     }
-    ParallelLogger::logError(error, response$status_code)
-    stop()
+    stop(paste0(error, response$status_code))
   }
   response <- httr::content(response)
   response <- response %>% purrr::map(function(x) {
@@ -92,12 +90,12 @@ invokeGeneration <- function(id, baseUrl, sourceKey, category) {
     utils::type.convert(as.is = TRUE, dec = ".") %>% .addSourceKeyToSourceId(baseUrl = baseUrl) %>%
     .addSourceNameToSourceKey(baseUrl = baseUrl) %>% .normalizeDateAndTimeTypes()
 
-  ParallelLogger::logInfo("Generation of ",
-                          argument$categoryFirstUpper,
-                          " definition id: ",
-                          id,
-                          " for sourceKey: ",
-                          sourceKey,
-                          " invoked.")
+  writeLines(paste0("Generation of ",
+                    argument$categoryFirstUpper,
+                    " definition id: ",
+                    id,
+                    " for sourceKey: ",
+                    sourceKey,
+                    " invoked."))
   return(response)
 }

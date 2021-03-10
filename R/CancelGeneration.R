@@ -1,6 +1,6 @@
 # @file CancelGeneration
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -51,8 +51,7 @@ cancelGeneration <- function(id, baseUrl, sourceKey, category) {
   checkmate::reportAssertions(errorMessage)
 
   if (!all(isValidSourceKey(sourceKeys = sourceKey, baseUrl = baseUrl))) {
-    ParallelLogger::logError(sourceKey, " is not present in WebApi.")
-    stop()
+    stop(paste0(sourceKey, " is not present in WebApi."))
   }
 
   urlRoot <- paste0(baseUrl, "/", argument$categoryUrl, "/", id, "/", argument$categoryUrlCancel)
@@ -70,15 +69,14 @@ cancelGeneration <- function(id, baseUrl, sourceKey, category) {
     } else {
       error <- ""
     }
-    ParallelLogger::logError(error, response$status_code)
-    stop()
+    stop(error, response$status_code)
   }
-  ParallelLogger::logInfo("Generation of ",
-                          argument$categoryFirstUpper,
-                          " definition id: ",
-                          id,
-                          " for sourceKey: ",
-                          sourceKey,
-                          " requested to be stopped.")
+  warning(paste0("Generation of ",
+                 argument$categoryFirstUpper,
+                 " definition id: ",
+                 id,
+                 " for sourceKey: ",
+                 sourceKey,
+                 " requested to be stopped."))
   # nothing to return.
 }

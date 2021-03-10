@@ -1,6 +1,6 @@
 # @file ROhdsiWebApi
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -68,7 +68,7 @@ getPersonProfile <- function(baseUrl, sourceKey, personId, indexCohortId = NULL)
     data <- jsonlite::fromJSON(txt = json,
                                simplifyVector = TRUE,
                                simplifyDataFrame = TRUE,
-                               flatten = TRUE, 
+                               flatten = TRUE,
                                digits = 23)
   }
 
