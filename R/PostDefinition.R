@@ -101,7 +101,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
                     .data$isExcluded,
                     .data$includeMapped,
                     .data$includeDescendants)
-    expression <- jsonlite::toJSON(x = items)
+    expression <- RJSONIO::toJSON(x = items, digits = 23, pretty = TRUE)
     responsePut <- .putJson(url = paste0(baseUrl,
                                          "/",
                                          argument$categoryUrl,
@@ -144,7 +144,8 @@ postDefinition <- function(baseUrl, name, category, definition) {
     expressionCharacterization$stratifiedBy <- characterizationPostObject$stratifiedBy
 
     expressionCharacterization <- jsonlite::toJSON(x = expressionCharacterization,
-                                                   auto_unbox = TRUE)
+                                                   auto_unbox = TRUE,
+                                                   digits = 23)
 
     response <- .putJson(url = paste0(baseUrl,
                                       "/",

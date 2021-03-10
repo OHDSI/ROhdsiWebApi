@@ -151,10 +151,9 @@ getResults <- function(id, baseUrl, category) {
                                 dec = ".") %>% dplyr::mutate(mode = mode, modeLong = modeLong)
           }
 
-
-          tMapData <- jsonlite::fromJSON(response$treemapData,
-                                         simplifyDataFrame = FALSE,
-                                         digits = 23)
+          tMapData <- RJSONIO::fromJSON(response$treemapData,
+                                        simplifyDataFrame = FALSE,
+                                        digits = 23)
           treeMapResult <- list(name = c(), size = c())
           treeMapResult <- .flattenTree(node = tMapData, accumulated = treeMapResult)
           if (is.null(treeMapResult$name) | is.null(treeMapResult$size)) {
@@ -259,8 +258,7 @@ getResults <- function(id, baseUrl, category) {
 
         if (length(response$treemapData) > 0) {
           tMapData <- jsonlite::fromJSON(response$treemapData,
-                                         simplifyDataFrame = FALSE,
-                                         digits = 23)
+                                         simplifyDataFrame = FALSE)
           treeMapResult <- list(name = c(), size = c())
           treeMapResult <- .flattenTree(node = tMapData,
                                         accumulated = treeMapResult) %>% tidyr::replace_na()

@@ -52,9 +52,8 @@ getDefinitionsMetadata <- function(baseUrl, category) {
   request <- .GET(url)
 
   if (!request$status == 200) {
-    ParallelLogger::logError(argument$categoryFirstUpper,
-                             " definitions not found. Unable to retrieve meta data. Please try later.")
-    stop()
+    stop(paste0(argument$categoryFirstUpper,
+                " definitions not found. Unable to retrieve meta data. Please try later."))
   }
 
   # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis' the

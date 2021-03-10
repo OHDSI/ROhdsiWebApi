@@ -2,10 +2,10 @@
 % Please edit documentation in R/Auth.R
 \name{authorizeWebApi}
 \alias{authorizeWebApi}
-\title{Authorize ROhdsiWebApi to access a protected instance of WebAPI
-Authorize the ROhdsiWebApi package to access WebApi on behalf of the user. This can be done with
-any of the auth methods described below. authorizeWebApi will use attempt to retrive, cache, and
-update a token which will grant access to webAPI by all subsequent requests made by the package.}
+\title{Authorize ROhdsiWebApi to access a protected instance of WebAPI Authorize the ROhdsiWebApi package
+to access WebApi on behalf of the user. This can be done with any of the auth methods described
+below. authorizeWebApi will use attempt to retrive, cache, and update a token which will grant
+access to webAPI by all subsequent requests made by the package.}
 \usage{
 authorizeWebApi(
   baseUrl,
@@ -35,8 +35,8 @@ methods. By default the user will be prompted for their password when
 needed.}
 }
 \description{
-Authorize ROhdsiWebApi to access a protected instance of WebAPI
-Authorize the ROhdsiWebApi package to access WebApi on behalf of the user. This can be done with
-any of the auth methods described below. authorizeWebApi will use attempt to retrive, cache, and
-update a token which will grant access to webAPI by all subsequent requests made by the package.
+Authorize ROhdsiWebApi to access a protected instance of WebAPI Authorize the ROhdsiWebApi package
+to access WebApi on behalf of the user. This can be done with any of the auth methods described
+below. authorizeWebApi will use attempt to retrive, cache, and update a token which will grant
+access to webAPI by all subsequent requests made by the package.
 }
