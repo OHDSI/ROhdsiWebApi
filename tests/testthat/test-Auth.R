@@ -62,4 +62,3 @@ test_that("http error codes are handled", {
   expect_error(stop_for_status(.GET(baseUrl, path = "echoStatus", query = list(status = 404))), "404")
   expect_error(stop_for_status(.GET(baseUrl, path = "echoStatus", query = list(status = 500))), "500")
 })
-
