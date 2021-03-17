@@ -8,6 +8,7 @@
 #'                         \itemize{
 #'                           \item {"db"}{Database authentication using Atlas/WebAPI built in auth}
 #'                           \item {"ad"}{Active Directory}
+#'                           \item {"windows"}{Windows NT authentication}
 #'                         }
 #'                         The auth method must be enabled in the instance of WebAPI pointed to by
 #'                         baseUrl.
