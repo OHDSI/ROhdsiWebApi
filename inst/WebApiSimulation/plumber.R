@@ -53,6 +53,21 @@ function(login, password, res) {
   }
 }
 
+#* Generate a Bearer token to use with WebAPI using db security
+#* @param login
+#* @param password
+#* @post /user/login/windows
+#* @serializer unboxedJSON
+function(login, password, res) {
+  if(login == ":" && password == ":"){
+    res$headers <- list(bearer = "0000")
+    return("success")
+  } else {
+    res$status <- 401 # unauthorized
+    return("fail")
+  }
+}
+
 #* Get info about CDM sources
 #* @get /source/sources
 #* @serializer unboxedJSON
