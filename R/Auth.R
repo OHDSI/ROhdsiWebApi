@@ -20,10 +20,21 @@
 #'
 #' @export
 authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPassword = NULL) {
+
   # check input
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(baseUrl, len = 1, min.chars = 1, add = errorMessage)
   checkmate::assertChoice(authMethod, choices = c("db", "ad", "windows"), add = errorMessage)
+
+  # With windows type we can try NT user authentication
+  if (authMethod == "windows" &
+    is.null(webApiUsername) &
+    is.null(webApiPassword) &
+    .Platform$OS.type == "windows") {
+    webApiUsername <- ":"
+    webApiPassword <- ":"
+  }
+
   checkmate::assert(checkmate::checkCharacter(webApiUsername),
                     checkmate::checkNull(webApiUsername),
                     add = errorMessage)
