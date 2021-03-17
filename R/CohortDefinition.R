@@ -280,6 +280,6 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
     sql <- response$templateSql
     return(sql)
   } else {
-    stop(paste0("Error: No Sql returned for cohort definition id: ", cohortDefinition))
+    stop(paste0("Error: No Sql returned for cohort definition"))
   }
 }
