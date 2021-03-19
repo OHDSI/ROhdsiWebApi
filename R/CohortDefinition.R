@@ -130,13 +130,40 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   checkInputFileEncoding(fileName)
   cohortsToCreate <- readr::read_csv(file = fileName,
                                      col_types = readr::cols(),
-                                     guess_max = min(1e+07)) %>%
-    dplyr::mutate(name = .data$name %>% as.character() %>% trimws())
-
+                                     guess_max = min(1e+07)) 
+  colnamesInCohortsToCreate <- colnames(cohortsToCreate)
+  
+  if (!'webApiCohortId' %in% colnamesInCohortsToCreate) {
+    if (!'atlasId' %in% colnamesInCohortsToCreate) {
+      stop("Cannot find either webApiCohortId or atlasId in Cohorts to create file.")
+    } else {
+      cohortsToCreate <- cohortsToCreate %>% 
+        dplyr::mutate(webApiCohortId = .data$atlasId)
+    }
+  }
+  if (!'atlasId' %in% colnamesInCohortsToCreate) {
+    cohortsToCreate <- cohortsToCreate %>% 
+        dplyr::mutate(atlasId = .data$webApiCohortId)
+  }
+  
+  checkIfWebApiCohortIdAndAtlasIDAreSame <- cohortsToCreate %>% 
+    dplyr::filter(.data$webApiCohortId != .data$atlasId)
+  if (nrow(checkIfWebApiCohortIdAndAtlasIDAreSame) > 0) {
+    stop("In CohortsToCreate file webApiCohortId and atlasId do not match. Please provide either webApiCohortId or atlasId.")
+  }
+  
+  if (!'name' %in% colnamesInCohortsToCreate) {
+    cohortsToCreate <- cohortsToCreate %>% 
+      dplyr::mutate(name = as.character(.data$webApiCohortId))
+  } else {
+    cohortsToCreate <- cohortsToCreate  %>%
+      dplyr::mutate(name = .data$name %>% as.character() %>% trimws())
+  }
+  
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Inserting cohort:", cohortsToCreate$name[i]))
-    insertCohortDefinitionInPackage(cohortId = cohortsToCreate$atlasId[i],
+    insertCohortDefinitionInPackage(cohortId = cohortsToCreate$webApiCohortId[i],
                                     name = cohortsToCreate$name[i],
                                     baseUrl = baseUrl,
                                     jsonFolder = jsonFolder,
