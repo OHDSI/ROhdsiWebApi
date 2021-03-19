@@ -36,7 +36,8 @@ Commonly used options are
 
 1. Active Directory
 2. Database: An internal WebAPI database table stores usernames and passwords
-3. Google (OAuth2)
+3. Windows
+4. Google (OAuth2)
 
 
 If you attempt to use ROhdsiWebApi on a security-enabled WebAPI instance without
@@ -51,7 +52,11 @@ getCdmSources(baseUrl)
 stop("Error: http error 401: Unauthorized request. Try running `authorizeWebAPI()`")
 ```
 
-# Active Directory and database authentication
+Supported login types will be visible on the ATLAS platform sign in page:
+
+![](atlas-login-options.PNG)
+
+# Active Directory, Windows and database authentication
 
 If you typically log in to Atlas using a username and password then WebAPI is likely
 using either Active Directory or database authentication. In this case it is 
@@ -74,6 +79,16 @@ is stored in an environment variable defined in the .Renviron file (easily
 accessed by calling `usethis::edit_r_environ()`) or stored and retrieved using
 the [keyring package](https://cran.r-project.org/web/packages/keyring/readme/README.html). 
 Never store passwords in your R code.
+
+If your client platform is windows, on a domain with NT authentication enabled, you
+may not need to enter a username and password.
+
+```{r, eval=FALSE}
+authorizeWebApi(baseUrl, authMethod = "windows")
+```
+
+If your client is linux, OSX or not logged in to an NT domain you will need to enter
+a username and password as for the above methods of authentication.
 
 If authorization was successful then the bearer token will be stored in the 
 global package environment associated with its WebAPI base URL. If you are working

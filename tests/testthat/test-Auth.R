@@ -7,6 +7,11 @@ plumberPath <- system.file("WebApiSimulation", "plumber.R", package = "ROhdsiWeb
 
 webApiSimulation <- callr::r_bg(function(file, port) { plumber::plumb(file)$run(port = port) }, args = list(file = plumberPath, port = 8000))
 
+# end the WebApi simulation at teardown, regardless of test status
+withr::defer({
+  webApiSimulation$kill()
+}, testthat::teardown_env())
+
 baseUrl <- "http://localhost:8000"
 
 test_that("Test getWebApiVersion", {
@@ -25,6 +30,15 @@ test_that("Test authorizeWebApi", {
   expect_equal(ROhdsiWebApi:::ROWebApiEnv[[baseUrl]]$authHeader, "Bearer 0000")
   
   expect_error(authorizeWebApi(baseUrl, "db", "testUser", "wrongPassword"), "failed")
+
+  # Should be supported by github actions
+  if (.Platfor$OS == "windows") {
+    authorizeWebApi(baseUrl, "windows")
+  } else {
+    authorizeWebApi(baseUrl, "windows", ":", ":")
+  }
+
+  expect_equal(ROhdsiWebApi:::ROWebApiEnv[[baseUrl]]$authHeader, "Bearer 0000")
 })
 
 test_that("Test getCdmSources", {
@@ -48,8 +62,3 @@ test_that("http error codes are handled", {
   expect_error(stop_for_status(.GET(baseUrl, path = "echoStatus", query = list(status = 404))), "404")
   expect_error(stop_for_status(.GET(baseUrl, path = "echoStatus", query = list(status = 500))), "500")
 })
-
-
-# end the WebApi simulation
-webApiSimulation$kill()
-
