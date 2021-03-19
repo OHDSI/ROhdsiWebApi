@@ -1,13 +1,12 @@
 Package: ROhdsiWebApi
 Type: Package
 Title: R package to allow interactivity with a WebApi instance
-Version: 1.1.4
-Date: 2020-03-10
+Version: 1.2
+Date: 2020-03-19
 Authors@R: c(
     person("Gowtham", "Rao", email = "rao@ohdsi.org", role = c("aut", "cre")),
     person("Martijn", "Schuemie", role = c("aut")),
-    person("Ajit", "Londhe", email = "alondhe@amgen.com", role = c("aut")),
-    person("Frank", "DeFalco", role = c("aut")),
+    person("Jamie", "Gilbert", email = "JGilber2@its.jnj.com", role = c("aut")),
     person("Observational Health Data Science and Informatics", role = c("cph"))
   )
 Maintainer: Gowtham Rao <rao@ohdsi.org>

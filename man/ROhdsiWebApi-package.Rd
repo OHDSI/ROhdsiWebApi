@@ -22,8 +22,7 @@ Useful links:
 Authors:
 \itemize{
   \item Martijn Schuemie
-  \item Ajit Londhe \email{alondhe@amgen.com}
-  \item Frank DeFalco
+  \item Jamie Gilbert \email{JGilber2@its.jnj.com}
 }
 
 Other contributors:
