@@ -6,7 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get SQL query for Cohort definition. — getCohortSql • ROhdsiWebApi</title>
+<title>Manually set the authorization http header for a WebAPI baseUrl In some cases the user may want to
+manually set the authorization header. An authHeader is associated with a particular baseUrl and
+added to to the header of all http requests sent to that url by ROhdsiWebApi. — setAuthHeader • ROhdsiWebApi</title>
 
 
 <!-- jquery -->
@@ -39,8 +41,12 @@
 
 
 
-<meta property="og:title" content="Get SQL query for Cohort definition. — getCohortSql" />
-<meta property="og:description" content="Get SQL query for Cohort definition." />
+<meta property="og:title" content="Manually set the authorization http header for a WebAPI baseUrl In some cases the user may want to
+manually set the authorization header. An authHeader is associated with a particular baseUrl and
+added to to the header of all http requests sent to that url by ROhdsiWebApi. — setAuthHeader" />
+<meta property="og:description" content="Manually set the authorization http header for a WebAPI baseUrl In some cases the user may want to
+manually set the authorization header. An authHeader is associated with a particular baseUrl and
+added to to the header of all http requests sent to that url by ROhdsiWebApi." />
 
 
 
@@ -129,25 +135,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get SQL query for Cohort definition.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/OHDSI/ROhdsiWebApi/blob/master/R/CohortDefinition.R'><code>R/CohortDefinition.R</code></a></small>
-    <div class="hidden name"><code>getCohortSql.Rd</code></div>
+    <h1>Manually set the authorization http header for a WebAPI baseUrl In some cases the user may want to
+manually set the authorization header. An authHeader is associated with a particular baseUrl and
+added to to the header of all http requests sent to that url by ROhdsiWebApi.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/OHDSI/ROhdsiWebApi/blob/master/R/Auth.R'><code>R/Auth.R</code></a></small>
+    <div class="hidden name"><code>setAuthHeader.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get SQL query for Cohort definition.</p>
+    <p>Manually set the authorization http header for a WebAPI baseUrl In some cases the user may want to
+manually set the authorization header. An authHeader is associated with a particular baseUrl and
+added to to the header of all http requests sent to that url by ROhdsiWebApi.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getCohortSql</span><span class='op'>(</span><span class='va'>cohortDefinition</span>, <span class='va'>baseUrl</span>, generateStats <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>setAuthHeader</span><span class='op'>(</span><span class='va'>baseUrl</span>, <span class='va'>authHeader</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>cohortDefinition</th>
-      <td><p>An R list object (not JSON) representing the Cohort definition. It is the
-output R expression object of list object from <code>CohortDefinition</code></p></td>
-    </tr>
     <tr>
       <th>baseUrl</th>
       <td><p>The base URL for the WebApi instance, for example:
@@ -155,28 +160,14 @@ output R expression object of list object from <code>CohortDefinition</code></p>
 If trailing '/' is used, you may receive an error.</p></td>
     </tr>
     <tr>
-      <th>generateStats</th>
-      <td><p>Should the SQL include the code for generating inclusion rule statistics?
-Note that if TRUE, several additional tables are expected to exists as
-described in the details. By default this is TRUE.</p></td>
+      <th>authHeader</th>
+      <td><p>A character string containing a Bearer token that will be added to the header of
+all http requests sent to baseUrl. (e.g. "Bearer
+lxd9n2nsdsd2329km23mexjop02m23m23mmmsioxiis0")</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An R object containing the SQL for Cohort definition.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Given a valid Cohort definition R-object (not JSON) this function will return the parameterized SQL
-in OHDSI SQL dialect. This SQL may be used along with OHDSI R-package 'SQLRender' to
-render/translate to target SQL dialect and parameters rendered.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>getCohortSql</span><span class='op'>(</span>CohortDefinition <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='getCohortDefinition.html'>getCohortDefinition</a></span><span class='op'>(</span>cohortId <span class='op'>=</span> <span class='fl'>13242</span>, baseUrl <span class='op'>=</span> <span class='va'>baseUrl</span><span class='op'>)</span><span class='op'>)</span>,
-             baseUrl <span class='op'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
