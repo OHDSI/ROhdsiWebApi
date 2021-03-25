@@ -26,7 +26,7 @@ if (is.null(testBaseUrl) | is.null(testOhdsiUser) | is.null(testOhdsiPassword)) 
 # start the api simulation in a background R process
 plumberPath <- system.file("WebApiSimulation", "plumber.R", package = "ROhdsiWebApi", mustWork = T)
 # plumberPath <- pkgload:::shim_system.file("WebApiSimulation", "plumber.R", package = "ROhdsiWebApi", mustWork = T)
-port <- 8000
+port <- 64374
 .webserverFunc <- function(file, port) {
   plumber::plumb(file)$run(port = port)
 }
