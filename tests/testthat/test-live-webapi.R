@@ -1,8 +1,6 @@
-library(dplyr)
-
 test_that("Auth with real URL works", {
 
-  if (is.null(testBaseUrl) | is.null(testOhdsiUser) | is.null(testOhdsiPassword)) {
+  if (!authSet) {
     skip("Test user settings are not defined")
   }
 
