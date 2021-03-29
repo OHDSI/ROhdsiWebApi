@@ -28,8 +28,12 @@ cdmSourceData <- list(
   )
 )
 
-
-
+#* Get Webapi version info
+#* @get /
+#* @serializer unboxedJSON
+function() {
+  list(status = 'alive')
+}
 
 #* Get Webapi version info
 #* @get /info

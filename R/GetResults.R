@@ -257,8 +257,7 @@ getResults <- function(id, baseUrl, category) {
         }
 
         if (length(response$treemapData) > 0) {
-          tMapData <- jsonlite::fromJSON(response$treemapData,
-                                         simplifyDataFrame = FALSE)
+          tMapData <- jsonlite::fromJSON(response$treemapData, simplifyDataFrame = FALSE)
           treeMapResult <- list(name = c(), size = c())
           treeMapResult <- .flattenTree(node = tMapData,
                                         accumulated = treeMapResult) %>% tidyr::replace_na()
