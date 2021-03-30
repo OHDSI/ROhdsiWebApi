@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,6 +97,12 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
+    </li>
+    <li>
+      <a href="../articles/InsertCohortDefinitionsIntoPackage.html">Insert Cohort Definitions Into Package</a>
+    </li>
+    <li>
       <a href="../articles/UsingROhdsiWebApi.html">Using ROhdsiWebApi</a>
     </li>
   </ul>
@@ -108,7 +114,7 @@
 </li>
 <li>
   <a href="https://github.com/OHDSI/ROhdsiWebApi/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,16 +135,35 @@
       <small>Source: <a href='https://github.com/OHDSI/ROhdsiWebApi/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rohdsiwebapi-113" class="section level1">
-<h1 class="page-header" data-toc-text="1.1.3">
-<a href="#rohdsiwebapi-113" class="anchor"></a>ROhdsiWebApi 1.1.3</h1>
+    <div id="rohdsiwebapi-12" class="section level1">
+<h1 class="page-header" data-toc-text="1.2">
+<a href="#rohdsiwebapi-12" class="anchor"></a>ROhdsiWebApi 1.2</h1>
 <div id="changes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#changes" class="anchor"></a>Changes:</h3>
+<ol>
+<li>Removed dependency on ParallelLogger</li>
+<li>Implemented support for security. Thank you <a href='https://github.com/ablack3'>@ablack3</a> <a href='https://github.com/azimov'>@azimov</a> and <a href='https://github.com/anthonysena'>@anthonysena</a></li>
+<li>Removed function getConceptSetsFromCohortDefinition because out of scope of this package.</li>
+<li>Added vignette.</li>
+<li>Added additional tests.</li>
+</ol>
 </div>
 <div id="bug-fixes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes:</h3>
+</div>
+</div>
+    <div id="rohdsiwebapi-113" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.3">
+<a href="#rohdsiwebapi-113" class="anchor"></a>ROhdsiWebApi 1.1.3</h1>
+<div id="changes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changes-1" class="anchor"></a>Changes:</h3>
+</div>
+<div id="bug-fixes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes:</h3>
 <ol>
 <li>Fixed bug with returning results for incidence rate</li>
 </ol>
@@ -147,9 +172,9 @@
     <div id="rohdsiwebapi-112" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.2">
 <a href="#rohdsiwebapi-112" class="anchor"></a>ROhdsiWebApi 1.1.2</h1>
-<div id="changes-1" class="section level3">
+<div id="changes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#changes-1" class="anchor"></a>Changes:</h3>
+<a href="#changes-2" class="anchor"></a>Changes:</h3>
 <ol>
 <li>Replace read.csv with readr::read_csv, write.csv with readr::write_csv to ensure type stability and use of tibble.</li>
 <li>Replaced jsonlite with RJSONIO to address issue with special characters “Sjögren”</li>
@@ -157,39 +182,39 @@
 <li>Fixed bugs due to join on data frame with no row records.</li>
 </ol>
 </div>
-<div id="bug-fixes-1" class="section level3">
+<div id="bug-fixes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes:</h3>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes:</h3>
 </div>
 </div>
     <div id="rohdsiwebapi-111" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.1">
 <a href="#rohdsiwebapi-111" class="anchor"></a>ROhdsiWebApi 1.1.1</h1>
-<div id="changes-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#changes-2" class="anchor"></a>Changes:</h3>
-<ol>
-<li>Use BIGINT for cohort_definition_id</li>
-</ol>
-</div>
-<div id="bug-fixes-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
-</div>
-</div>
-    <div id="rohdsiwebapi-110" class="section level1">
-<h1 class="page-header" data-toc-text="1.1.0">
-<a href="#rohdsiwebapi-110" class="anchor"></a>ROhdsiWebApi 1.1.0</h1>
 <div id="changes-3" class="section level3">
 <h3 class="hasAnchor">
 <a href="#changes-3" class="anchor"></a>Changes:</h3>
 <ol>
-<li>New functions: getConceptSetsFromCohortDefinition</li>
+<li>Use BIGINT for cohort_definition_id</li>
 </ol>
 </div>
 <div id="bug-fixes-3" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h3>
+</div>
+</div>
+    <div id="rohdsiwebapi-110" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.0">
+<a href="#rohdsiwebapi-110" class="anchor"></a>ROhdsiWebApi 1.1.0</h1>
+<div id="changes-4" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changes-4" class="anchor"></a>Changes:</h3>
+<ol>
+<li>New functions: getConceptSetsFromCohortDefinition</li>
+</ol>
+</div>
+<div id="bug-fixes-4" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h3>
 <ol>
 <li>
 <a href="https://github.com/OHDSI/ROhdsiWebApi/pull/144" class="uri">https://github.com/OHDSI/ROhdsiWebApi/pull/144</a> was causing duplication of date matches.</li>
@@ -202,9 +227,9 @@
 <a href="#rohdsiwebapi-100" class="anchor"></a>ROhdsiWebApi 1.0.0</h1>
 <p>Note: This is a major release. This release is expected to break implementations that rely on prior iterations of ROhdsiWebApi.</p>
 <p>(last updated : 2020-06-12)</p>
-<div id="changes-4" class="section level3">
+<div id="changes-5" class="section level3">
 <h3 class="hasAnchor">
-<a href="#changes-4" class="anchor"></a>Changes:</h3>
+<a href="#changes-5" class="anchor"></a>Changes:</h3>
 <ol>
 <li>Generic design pattern: Starting with version 1.0.0, we have implemented a new generic design pattern.</li>
 </ol>
@@ -221,16 +246,16 @@
 </li>
 <li>Analysis categories in WebApi such as concept sets, cohorts have been standardized <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/86"><a href='https://github.com/OHDSI/ROhdsiWebApi/issues/86'>#86</a></a> These may now be used in string searches of objects returned by ROhdsiWebApi.</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">## # A tibble: 7 x 1</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="co">##   ` Category`     </span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co">##   &lt;chr&gt;           </span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co">## 1 ConceptSet      </span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co">## 2 Cohort          </span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">## 3 IncidenceRate   </span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">## 4 Estimation      </span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co">## 5 Prediction      </span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">## 6 Characterization</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co">## 7 Pathway</span></span></code></pre></div>
+<!-- end list --><div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 7 x 1</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">##   ` Category`     </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;chr&gt;           </span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ConceptSet      </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 Cohort          </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 IncidenceRate   </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 Estimation      </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 Prediction      </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 Characterization</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 Pathway</span></span></code></pre></div>
 <ul>
 <li>Enforcement of OHDSI R style guide. We have enforced the use of <a href="https://ohdsi.github.io/MethodsLibrary/codeStyle.html#ohdsi_code_style_for_r">OHDSI R style guide</a> such as use of <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/22">camel case</a>
 </li>
@@ -254,9 +279,9 @@
 <li>Names have been chosen so that they follow an easy to remember pattern and are intuitive.</li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes:</h2>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes:</h2>
 <ul>
 <li>This is a major change to package with significant code rewrite.</li>
 <li>No specific bug fixes were targeted in this release.</li>
@@ -277,7 +302,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Gowtham Rao, Martijn Schuemie, Ajit Londhe, Frank DeFalco.</p>
+  <p>Developed by Gowtham Rao, Martijn Schuemie, Jamie Gilbert.</p>
 </div>
 
 <div class="pkgdown">

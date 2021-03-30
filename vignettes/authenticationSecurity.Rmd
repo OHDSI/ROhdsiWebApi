@@ -45,7 +45,7 @@ first authenticating you will see an http 401 error.
 
 ```{r, eval=FALSE}
 library(ROhdsiWebApi)
-baseUrl <- "https://atlas.odysseusinc.com/WebAPI"
+baseUrl <- "https://yourSecureAtlas.ohdsi.org/"
 getCdmSources(baseUrl)
 ```
 ```{r, error=TRUE, echo=FALSE}
@@ -101,11 +101,11 @@ ls(ROhdsiWebApi:::ROWebApiEnv)
 ```
 
 ```{r, echo=FALSE}
-print("https://atlas.odysseusinc.com/WebAPI")
+print("https://yourSecureAtlas.ohdsi.org/")
 ```
 
 ```{r, eval=FALSE}
-ROhdsiWebApi:::ROWebApiEnv[["https://atlas.odysseusinc.com/WebAPI"]]
+ROhdsiWebApi:::ROWebApiEnv[["https://yourSecureAtlas.ohdsi.org/"]]
 ```
 
 ```{r, echo=FALSE}

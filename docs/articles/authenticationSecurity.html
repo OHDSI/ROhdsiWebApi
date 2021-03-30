@@ -60,6 +60,9 @@
       <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
     </li>
     <li>
+      <a href="../articles/InsertCohortDefinitionsIntoPackage.html">Insert Cohort Definitions Into Package</a>
+    </li>
+    <li>
       <a href="../articles/UsingROhdsiWebApi.html">Using ROhdsiWebApi</a>
     </li>
   </ul>
@@ -115,7 +118,7 @@ h1  {
 <p>If you attempt to use ROhdsiWebApi on a security-enabled WebAPI instance without first authenticating you will see an http 401 error.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OHDSI/ROhdsiWebApi">ROhdsiWebApi</a></span><span class="op">)</span>
-<span class="va">baseUrl</span> <span class="op">&lt;-</span> <span class="st">"https://atlas.odysseusinc.com/WebAPI"</span>
+<span class="va">baseUrl</span> <span class="op">&lt;-</span> <span class="st">"https://yourSecureAtlas.ohdsi.org/"</span>
 <span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span><span class="op">(</span><span class="va">baseUrl</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Error in eval(expr, envir, enclos): Error: http error 401: Unauthorized request. Try running `authorizeWebAPI()`</code></pre>
 <p>Supported login types will be visible on the ATLAS platform sign in page:</p>
@@ -137,9 +140,9 @@ h1  {
 <p>If authorization was successful then the bearer token will be stored in the global package environment associated with its WebAPI base URL. If you are working with multiple WebAPI instances at the same time the correct token will be used with each instance since the base URL uniquely identifies the instance. Your username password are not saved or cached by the ROhdsiWebApi package.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="fu">ROhdsiWebApi</span><span class="fu">:::</span><span class="va">ROWebApiEnv</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; [1] "https://atlas.odysseusinc.com/WebAPI"</code></pre>
+<pre><code>#&gt; [1] "https://yourSecureAtlas.ohdsi.org/"</code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">ROhdsiWebApi</span><span class="fu">:::</span><span class="va">ROWebApiEnv</span><span class="op">[[</span><span class="st">"https://atlas.odysseusinc.com/WebAPI"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">ROhdsiWebApi</span><span class="fu">:::</span><span class="va">ROWebApiEnv</span><span class="op">[[</span><span class="st">"https://yourSecureAtlas.ohdsi.org/"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
 <pre><code>#&gt; $authHeader
 #&gt; [1] "Bearer gSyJhbzciOiJI0ZUxMiJ9.eyJzdWIiOIJhZGFtLx57wgSyJhb..."</code></pre>
 <p>This bearer token will then be added to the header all future requests sent by ROhdsiWebApi and all of the package API call functions should work.</p>

@@ -3,6 +3,7 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   authenticationSecurity: authenticationSecurity.html
+  InsertCohortDefinitionsIntoPackage: InsertCohortDefinitionsIntoPackage.html
   UsingROhdsiWebApi: UsingROhdsiWebApi.html
-last_built: 2021-03-21T13:36Z
+last_built: 2021-03-30T20:46Z
 
