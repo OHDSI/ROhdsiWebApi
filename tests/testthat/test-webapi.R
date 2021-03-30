@@ -1,7 +1,6 @@
-
 # Copyright 2021 Observational Health Data Sciences and Informatics
 #
-# This file is part of FeatureExtraction
+# This file is part of ROhdsiWebApi
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -210,9 +209,9 @@ testthat::test_that("Test postCohortInvokeStop (positive test)", {
   
   invoke <- ROhdsiWebApi::invokeCohortGeneration(cohortId = postDefinition2$id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
   testthat::expect_s3_class(object = invoke, class = 'tbl')
-  testthat::expect_equal(object = invoke$status, expected = c('STARTING') )
+  testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
   stopGeneration <- ROhdsiWebApi::cancelCohortGeneration(cohortId = postDefinition2$id, baseUrl = baseUrl, sourceKey = sourceKeyVariable )
-  testthat::expect_null(object = stopGeneration)
+  testthat::expect_match(object = stopGeneration, regexp = 'Generation of Cohort definition')
   deleteP2 <- ROhdsiWebApi::deleteDefinition(id = postDefinition2$id, baseUrl = baseUrl, category = 'cohort')
   testthat::expect_null(object = deleteP2)
 })
@@ -245,9 +244,9 @@ testthat::test_that("Test CharacterizationGetInvokeStop (positive test)", {
   
   invoke <- ROhdsiWebApi::invokeCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
   testthat::expect_s3_class(object = invoke, class = 'tbl')
-  testthat::expect_equal(object = invoke$status, expected = c('STARTING') )
+  testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
   stopGeneration <- ROhdsiWebApi::cancelCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-  testthat::expect_null(object = stopGeneration)
+  testthat::expect_match(object = stopGeneration, regexp = "Generation of Characterization definition")
 })
 
 testthat::test_that("Test PathwayGetInvokeStop (positive test)", {
@@ -259,9 +258,9 @@ testthat::test_that("Test PathwayGetInvokeStop (positive test)", {
   
   invoke <- ROhdsiWebApi::invokePathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
   testthat::expect_s3_class(object = invoke, class = 'tbl')
-  testthat::expect_equal(object = invoke$status, expected = c('STARTING') )
+  testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
   stopGeneration <- ROhdsiWebApi::cancelPathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-  testthat::expect_null(object = stopGeneration)
+  testthat::expect_match(object = stopGeneration, regexp = 'Generation of Pathway definition')
 })
 
 testthat::test_that("Test IncidenceRateGetInvokeStop (positive test)", {
@@ -273,9 +272,9 @@ testthat::test_that("Test IncidenceRateGetInvokeStop (positive test)", {
   
   invoke <- ROhdsiWebApi::invokeIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
   testthat::expect_s3_class(object = invoke, class = 'tbl')
-  testthat::expect_equal(object = invoke$status, expected = c('STARTING') )
+  testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
   stopGeneration <- ROhdsiWebApi::cancelIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-  testthat::expect_null(object = stopGeneration)
+  testthat::expect_match(object = stopGeneration, regexp = 'Generation of IncidenceRate definition')
 })
 
 

@@ -3,10 +3,10 @@ title: "Using ROhdsiWebApi"
 author: "Gowtham Rao"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: 
+  html_document:
     number_sections: yes
     toc: yes
-  html_document:
+  pdf_document: 
     number_sections: yes
     toc: yes
 vignette: >
@@ -35,7 +35,7 @@ if (Sys.getenv("baseUrl") == '') {
 baseUrl <- Sys.getenv(server)
 
 if (baseUrl == '') {
-  baseUrl <- 'http://api.ohdsi.org:80/WebAPI'
+  baseUrl <- 'http://api.ohdsi.org:8080/WebAPI'
 }
 ```
 
@@ -309,20 +309,20 @@ rExpression <- RJSONIO::fromJSON(jsonExpression)
 ```
 
 We can now post this R-object into WebApi as follows:
-```{r eval=TRUE, echo = TRUE}
+```{r eval=FALSE}
 returnFromPostRequest <- ROhdsiWebApi::postConceptSetDefinition(baseUrl = baseUrl, 
                                                                 conceptSetDefinition = rExpression, 
                                                                 name = conceptSetName)
 ```
 
 If successful, we will get a return object as follows into R.
-```{r eval=TRUE, echo = FALSE} 
+```{r eval=FALSE, echo = FALSE} 
 returnFromPostRequest
 ```
-The id of the newly posted concept-set definition is `r returnFromPostRequest$id`. We can now use this concept-set for many concept set queries eg., 
+The id of the newly posted concept-set definition is `returnFromPostRequest$id`. We can now use this concept-set for many concept set queries eg., 
 
 ## if want to print ready expression of the concept set definition
-```{r eval=TRUE, echo = TRUE} 
+```{r eval=FALSE, echo = FALSE} 
 conceptSetDefinition = getConceptSetDefinition(conceptSetId = returnFromPostRequest$id, 
                                                baseUrl = baseUrl)
 conceptTbl <-
@@ -337,14 +337,14 @@ conceptTbl
 If we want a list of all conceptId's (including descendants) from the concept set expression
 
 
-```{r eval=TRUE, echo = TRUE} 
+```{r eval=FALSE, echo = FALSE} 
 resolvedConcepts = resolveConceptSet(conceptSetDefinition = conceptSetDefinition, baseUrl = baseUrl)
 print("Note: Showing only the first 10 concept id's")
 resolvedConcepts[1:10]
 ```
 
 The concept set expression json expression can be recaptured from WebApi as follows
-```{r eval=FALSE, echo = TRUE} 
+```{r eval=FALSE, echo = FALSE} 
 json <-
   getConceptSetDefinition(baseUrl = baseUrl, 
                           conceptSetId = returnFromPostRequest$id

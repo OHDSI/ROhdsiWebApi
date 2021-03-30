@@ -17,8 +17,4 @@ if (authType == "db") {
   testOhdsiPassword <- Sys.getenv("TEST_OHDSI_DB_WEB_API_PASSWORD")
 }
 
-if (is.null(testBaseUrl) | is.null(testOhdsiUser) | is.null(testOhdsiPassword)) {
-  authSet <- FALSE
-} else {
-  authSet <- TRUE
-}
+authSet <- !(testBaseUrl == "" | testOhdsiUser == "" | testOhdsiPassword == "")

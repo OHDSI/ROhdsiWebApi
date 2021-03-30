@@ -28,10 +28,8 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
   checkmate::assertChoice(authMethod, choices = c("db", "ad", "windows"), add = errorMessage)
 
   # With windows type we can try NT user authentication
-  if (authMethod == "windows" &
-    is.null(webApiUsername) &
-    is.null(webApiPassword) &
-    .Platform$OS.type == "windows") {
+  if (authMethod == "windows" & is.null(webApiUsername) & is.null(webApiPassword) & .Platform$OS.type ==
+    "windows") {
     webApiUsername <- ":"
     webApiPassword <- ":"
   }
@@ -88,7 +86,7 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
   checkmate::assertCharacter(webApiPassword, min.chars = 1, len = 1)
 
   authUrl <- paste0(baseUrl, "/user/login/windows")
-  r <- httr::GET(authUrl, httr::authenticate(webApiUsername, webApiPassword, type="ntlm"))
+  r <- httr::GET(authUrl, httr::authenticate(webApiUsername, webApiPassword, type = "ntlm"))
   if (length(httr::headers(r)$bearer) < 1)
     stop("Authentication failed.")
   authHeader <- paste0("Bearer ", httr::headers(r)$bearer)

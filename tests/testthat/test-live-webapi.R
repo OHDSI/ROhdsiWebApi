@@ -1,11 +1,5 @@
-library(dplyr)
-
 test_that("Auth with real URL works", {
-
-  if (is.null(testBaseUrl) | is.null(testOhdsiUser) | is.null(testOhdsiPassword)) {
-    skip("Test user settings are not defined")
-  }
-
+  skip_if(!authSet)
   authorizeWebApi(testBaseUrl, authType, testOhdsiUser, testOhdsiPassword)
 
   # Won't know what this token is but we expect there to be one and for it to be long
@@ -14,9 +8,7 @@ test_that("Auth with real URL works", {
 })
 
 test_that("get configuration information on WebApi", {
-  if (!authSet) {
-    skip("Test user settings are not defined")
-  }
+  skip_if(!authSet)
   cdmSources <- getCdmSources(baseUrl = testBaseUrl)
   expect_is(cdmSources, "data.frame")
   webApiVersion <- getWebApiVersion(baseUrl = testBaseUrl)

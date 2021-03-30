@@ -28,8 +28,12 @@ cdmSourceData <- list(
   )
 )
 
-
-
+#* Get Webapi version info
+#* @get /
+#* @serializer unboxedJSON
+function() {
+  list(status = 'alive')
+}
 
 #* Get Webapi version info
 #* @get /info
@@ -45,21 +49,6 @@ function() {
 #* @serializer unboxedJSON
 function(login, password, res) {
   if(login == "testUser" && password == "testPassword"){
-    res$headers <- list(bearer = "0000")
-    return("success")
-  } else {
-    res$status <- 401 # unauthorized
-    return("fail")
-  }
-}
-
-#* Generate a Bearer token to use with WebAPI using db security
-#* @param login
-#* @param password
-#* @post /user/login/windows
-#* @serializer unboxedJSON
-function(login, password, res) {
-  if(login == ":" && password == ":"){
     res$headers <- list(bearer = "0000")
     return("success")
   } else {
