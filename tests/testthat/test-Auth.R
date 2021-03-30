@@ -12,10 +12,6 @@ serverStart <- function(file, port) {
 }
 webApiSimulation <- callr::r_bg(serverStart, args = list(file = plumberPath, port = port))
 
-Sys.sleep(1)
-
-print(webApiSimulation$get_status())
-
 simulationBaseUrl <- paste0("http://localhost:", port)
 
 test_that("Test getWebApiVersion", {
