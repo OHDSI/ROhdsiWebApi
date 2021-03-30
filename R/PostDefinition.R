@@ -101,7 +101,12 @@ postDefinition <- function(baseUrl, name, category, definition) {
                     .data$isExcluded,
                     .data$includeMapped,
                     .data$includeDescendants)
-    expression <- RJSONIO::toJSON(x = items, digits = 23, pretty = TRUE)
+
+    itemsTranspose <- apply(items, 1, function(item) {
+      list(item)
+    })
+
+    expression <- .toJSON(x = itemsTranspose, pretty = TRUE)
     responsePut <- .putJson(url = paste0(baseUrl,
                                          "/",
                                          argument$categoryUrl,
