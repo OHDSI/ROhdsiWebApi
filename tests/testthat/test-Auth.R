@@ -12,6 +12,8 @@ serverStart <- function(file, port) {
 }
 webApiSimulation <- callr::r_bg(serverStart, args = list(file = plumberPath, port = port))
 
+Sys.sleep(1)
+
 print(webApiSimulation$get_status())
 
 simulationBaseUrl <- paste0("http://localhost:", port)
@@ -32,13 +34,6 @@ test_that("Test authorizeWebApi", {
   expect_equal(ROhdsiWebApi:::ROWebApiEnv[[simulationBaseUrl]]$authHeader, "Bearer 0000")
   
   expect_error(authorizeWebApi(simulationBaseUrl, "db", "testUser", "wrongPassword"), "failed")
-
-  # Should be supported by github actions
-  if (.Platform$OS == "windows") {
-    authorizeWebApi(simulationBaseUrl, "windows")
-  } else {
-    authorizeWebApi(simulationBaseUrl, "windows", ":", ":")
-  }
 
   expect_equal(ROhdsiWebApi:::ROWebApiEnv[[simulationBaseUrl]]$authHeader, "Bearer 0000")
 })
