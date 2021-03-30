@@ -43,7 +43,6 @@ jobs:
       CDM5_SQL_SERVER_PASSWORD: ${{ secrets.CDM5_SQL_SERVER_PASSWORD }}
       CDM5_SQL_SERVER_SERVER: ${{ secrets.CDM5_SQL_SERVER_SERVER }}
       CDM5_SQL_SERVER_USER: ${{ secrets.CDM5_SQL_SERVER_USER }}
-      ohdsiBaseUrl: 'http://api.ohdsi.org:8080/WebAPI'
 
     steps:
       - uses: actions/checkout@v2
@@ -59,7 +58,6 @@ jobs:
       - name: Query dependencies
         run: |
           install.packages('remotes')
-          install.packages(c('plumber', 'httpuv', 'callr'))
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
