@@ -1,12 +1,13 @@
 News
 ================
-# ROhdsiWebApi 1.1.4
+# ROhdsiWebApi 1.2
 
 ### Changes:
 1. Removed dependency on ParallelLogger
-2. Implemented support for security. Added vignette. Thank you @ablack3 @azimov and @anthonysena
-3. Ported to use RJSONIO instead of jsonline where possible for consistency.
-4. Removed function getConceptSetsFromCohortDefinition because out of scope of this package.
+2. Implemented support for security. Thank you @ablack3 @azimov and @anthonysena
+3. Removed function getConceptSetsFromCohortDefinition because out of scope of this package.
+4. Added vignette.
+5. Added additional tests.
 
 ### Bug fixes:
 
