@@ -34,7 +34,10 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    httpuv
+    httpuv,
+    jsonlite,
+    plumbr,
+    callr
 URL: https://github.com/OHDSI/ROhdsiWebApi
 BugReports: https://github.com/OHDSI/ROhdsiWebApi/issues
 NeedsCompilation: no
