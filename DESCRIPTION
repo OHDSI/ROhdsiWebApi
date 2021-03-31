@@ -1,8 +1,8 @@
 Package: ROhdsiWebApi
 Type: Package
-Title: R package to allow interactivity with a WebApi instance
-Version: 1.2
-Date: 2020-03-19
+Title: Interacting With an OHDSI WebApi Instance
+Version: 1.2.0
+Date: 2021-03-31
 Authors@R: c(
     person("Gowtham", "Rao", email = "rao@ohdsi.org", role = c("aut", "cre")),
     person("Martijn", "Schuemie", role = c("aut")),
@@ -10,7 +10,9 @@ Authors@R: c(
     person("Observational Health Data Science and Informatics", role = c("cph"))
   )
 Maintainer: Gowtham Rao <rao@ohdsi.org>
-Description: Includes R wrappers for calling WebAPI web services.
+Description: ROhdsiWebApi is an R based interface to OHDSI WebAPI services, and performs GET/PULL/POST/DELETE calls via the WebApi. 
+  All objects starting from R or output to R - are analysis ready R-objects like list and data.frame. 
+  The package handles the intermediary steps by converting R-objects to JSON and vice versa.
 License: Apache License 2.0
 Depends:
     R (>= 3.1.0),
@@ -38,7 +40,7 @@ Suggests:
     jsonlite,
     plumber,
     callr
-URL: https://github.com/OHDSI/ROhdsiWebApi
+URL: https://ohdsi.github.io/ROhdsiWebApi/, https://github.com/OHDSI/ROhdsiWebApi
 BugReports: https://github.com/OHDSI/ROhdsiWebApi/issues
 NeedsCompilation: no
 RoxygenNote: 7.1.1
