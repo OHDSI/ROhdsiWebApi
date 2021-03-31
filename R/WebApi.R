@@ -1,6 +1,6 @@
 # @file WebApi
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -29,7 +29,7 @@
 getPriorityVocabularyKey <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
   url <- gsub("@baseUrl", baseUrl, "@baseUrl/source/priorityVocabulary")
-  json <- httr::GET(url)
+  json <- .GET(url)
   json <- httr::content(json)
   json$sourceKey
 }
@@ -47,22 +47,20 @@ getPriorityVocabularyKey <- function(baseUrl) {
 getWebApiVersion <- function(baseUrl) {
   url <- paste0(baseUrl, "/info")
   if (!.isValidUrl(url)) {
-    ParallelLogger::logError("Please check if the url is valid. ",
-                             baseUrl,
-                             " . Failed while retrieving WebApi information.")
-    stop()
+    stop(paste0("Please check if the url is valid. ",
+                baseUrl,
+                " . Failed while retrieving WebApi information."))
   }
-  response <- httr::GET(url)
+  response <- .GET(url)
   if (response$status %in% c(200)) {
     version <- (httr::content(response))$version
   } else {
-    ParallelLogger::logError("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
-                             "Please verify\n",
-                             "- is it in the form http://server.org:80/WebAPI,\n",
-                             "- are you are connected to the network",
-                             "Status code: ",
-                             response$status)
-    stop()
+    stop(paste0("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
+                "Please verify\n",
+                "- is it in the form http://server.org:80/WebAPI,\n",
+                "- are you are connected to the network",
+                "Status code: ",
+                response$status))
   }
   return(version)
 }
@@ -80,7 +78,7 @@ getWebApiVersion <- function(baseUrl) {
 getCdmSources <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
   url <- sprintf("%s/source/sources", baseUrl)
-  request <- httr::GET(url)
+  request <- .GET(url)
   httr::stop_for_status(request)
   sources <- httr::content(request)
 

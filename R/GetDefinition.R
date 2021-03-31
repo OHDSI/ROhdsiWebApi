@@ -1,6 +1,6 @@
 # @file GetDefinition
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -45,7 +45,7 @@ getDefinition <- function(id, category, baseUrl) {
   checkmate::reportAssertions(errorMessage)
 
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/", id)
-  response <- httr::GET(url)
+  response <- .GET(url)
 
   if (!response$status_code == 200) {
     definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
@@ -54,8 +54,7 @@ getDefinition <- function(id, category, baseUrl) {
     } else {
       error <- ""
     }
-    ParallelLogger::logError(error, "Status code = ", httr::content(response)$status_code)
-    stop()
+    stop(paste0(error, "Status code = ", httr::content(response)$status_code))
   }
   response <- httr::content(response)
 
@@ -75,7 +74,7 @@ getDefinition <- function(id, category, baseUrl) {
                                 id,
                                 "/",
                                 argument$categoryUrlGetExpression)
-        expression <- httr::GET(urlExpression)
+        expression <- .GET(urlExpression)
         expression <- httr::content(expression)
         response$expression <- expression
       } else {
@@ -86,7 +85,7 @@ getDefinition <- function(id, category, baseUrl) {
   }
   if (is.character(response$expression)) {
     if (jsonlite::validate(response$expression)) {
-      response$expression <- RJSONIO::fromJSON(response$expression, nullValue = NA)
+      response$expression <- RJSONIO::fromJSON(response$expression, nullValue = NA, digits = 23)
     }
   }
   return(response)

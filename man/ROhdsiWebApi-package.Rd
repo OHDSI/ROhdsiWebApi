@@ -4,26 +4,28 @@
 \name{ROhdsiWebApi-package}
 \alias{ROhdsiWebApi}
 \alias{ROhdsiWebApi-package}
-\title{ROhdsiWebApi: R package to allow interactivity with a WebApi instance}
+\title{ROhdsiWebApi: Interacting With an OHDSI WebApi Instance}
 \description{
-Includes R wrappers for calling WebAPI web services.
+ROhdsiWebApi is an R based interface to OHDSI WebAPI services, and performs GET/PULL/POST/DELETE calls via the WebApi. 
+  All objects starting from R or output to R - are analysis ready R-objects like list and data.frame. 
+  The package handles the intermediary steps by converting R-objects to JSON and vice versa.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://ohdsi.github.io/ROhdsiWebApi/}
   \item \url{https://github.com/OHDSI/ROhdsiWebApi}
   \item Report bugs at \url{https://github.com/OHDSI/ROhdsiWebApi/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Gowtham Rao \email{gowthamrao@gmail.com}
+\strong{Maintainer}: Gowtham Rao \email{rao@ohdsi.org}
 
 Authors:
 \itemize{
   \item Martijn Schuemie
-  \item Ajit Londhe \email{alondhe@amgen.com}
-  \item Frank DeFalco
+  \item Jamie Gilbert \email{JGilber2@its.jnj.com}
 }
 
 Other contributors:

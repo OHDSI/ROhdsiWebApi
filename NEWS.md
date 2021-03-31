@@ -1,50 +1,63 @@
-News
-================
+ROhdsiWebApi 1.2.0
+==================
 
-# ROhdsiWebApi 1.1.3
+Changes:
 
-### Changes:
+1. Removed dependency on ParallelLogger.
+2. Implemented support for security. Thank you @ablack3 @azimov and @anthonysena.
+3. Removed function getConceptSetsFromCohortDefinition because out of scope of this package.
+4. Added vignette.
+5. Added additional tests.
 
-### Bug fixes:
-1. Fixed bug with returning results for incidence rate
 
-# ROhdsiWebApi 1.1.2
+ROhdsiWebApi 1.1.3
+==================
 
-### Changes:
+Bug fixes:
+
+1. Fixed bug with returning results for incidence rate.
+
+
+ROhdsiWebApi 1.1.2
+==================
+
+Changes:
+
 1. Replace read.csv with readr::read_csv, write.csv with readr::write_csv to ensure type stability and use of tibble.
-2. Replaced jsonlite with RJSONIO to address issue with special characters "Sjögren"
-3. Replaced used of data.frame(), tidyr::tibble()
+2. Replaced jsonlite with RJSONIO to address issue with special characters "Sjögren".
+3. Replaced used of data.frame(), tidyr::tibble().
 4. Fixed bugs due to join on data frame with no row records.
 
-### Bug fixes:
+
+ROhdsiWebApi 1.1.1
+==================
+
+Changes:
+
+1.  Use BIGINT for cohort_definition_id.
 
 
+ROhdsiWebApi 1.1.0
+==================
 
-# ROhdsiWebApi 1.1.1
+Changes:
 
-### Changes:
-1.  Use BIGINT for cohort_definition_id
+1.  New functions: getConceptSetsFromCohortDefinition.
 
-### Bug fixes
+Bug fixes:
 
-
-# ROhdsiWebApi 1.1.0
-
-### Changes:
-1.  New functions: getConceptSetsFromCohortDefinition
-
-### Bug fixes
 1. https://github.com/OHDSI/ROhdsiWebApi/pull/144 was causing duplication of date matches.
-2. RJSONIO::toJSON loss of precision #152
+2. RJSONIO::toJSON loss of precision #152.
 
-# ROhdsiWebApi 1.0.0
 
-Note: This is a major release. This release is expected to break
-implementations that rely on prior iterations of ROhdsiWebApi.
+ROhdsiWebApi 1.0.0
+==================
+
+Note: This is a major release. This release is expected to break implementations that rely on prior iterations of ROhdsiWebApi.
 
 (last updated : 2020-06-12)
 
-### Changes:
+Changes:
 
 1.  Generic design pattern: Starting with version 1.0.0, we have
     implemented a new generic design pattern.  
@@ -133,8 +146,6 @@ implementations that rely on prior iterations of ROhdsiWebApi.
   - Names have been chosen so that they follow an easy to remember
     pattern and are intuitive.
 
-## Bug fixes:
+Bug fixes:
 
-  - This is a major change to package with significant code rewrite.
-  - No specific bug fixes were targeted in this release.
-  - Future releases will target bug fixes.
+  - This is a major change to package with significant code rewrite. No specific bug fixes were targeted in this release.

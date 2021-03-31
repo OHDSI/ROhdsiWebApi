@@ -1,17 +1,18 @@
 Package: ROhdsiWebApi
 Type: Package
-Title: R package to allow interactivity with a WebApi instance
-Version: 1.1.3
-Date: 2020-11-25
+Title: Interacting With an OHDSI WebApi Instance
+Version: 1.2.0
+Date: 2021-03-31
 Authors@R: c(
-    person("Gowtham", "Rao", email = "gowthamrao@gmail.com", role = c("aut", "cre")),
+    person("Gowtham", "Rao", email = "rao@ohdsi.org", role = c("aut", "cre")),
     person("Martijn", "Schuemie", role = c("aut")),
-    person("Ajit", "Londhe", email = "alondhe@amgen.com", role = c("aut")),
-    person("Frank", "DeFalco", role = c("aut")),
+    person("Jamie", "Gilbert", email = "JGilber2@its.jnj.com", role = c("aut")),
     person("Observational Health Data Science and Informatics", role = c("cph"))
   )
-Maintainer: Gowtham Rao <gowthamrao@gmail.com>
-Description: Includes R wrappers for calling WebAPI web services.
+Maintainer: Gowtham Rao <rao@ohdsi.org>
+Description: ROhdsiWebApi is an R based interface to OHDSI WebAPI services, and performs GET/PULL/POST/DELETE calls via the WebApi. 
+  All objects starting from R or output to R - are analysis ready R-objects like list and data.frame. 
+  The package handles the intermediary steps by converting R-objects to JSON and vice versa.
 License: Apache License 2.0
 Depends:
     R (>= 3.1.0),
@@ -19,11 +20,9 @@ Imports:
     checkmate,
     dplyr,
     httr (>= 1.3.1),
-    jsonlite,
     lifecycle,
     lubridate,
     openxlsx (>= 4.0.17),
-    ParallelLogger,
     purrr,
     readr,
     RJSONIO,
@@ -36,9 +35,13 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    rmarkdown
-URL: https://github.com/OHDSI/ROhdsiWebApi
-BugReports: https://github.com/OHDSI/ROhdsiWebApi/issues    
+    rmarkdown,
+    httpuv,
+    jsonlite,
+    plumber,
+    callr
+URL: https://ohdsi.github.io/ROhdsiWebApi/, https://github.com/OHDSI/ROhdsiWebApi
+BugReports: https://github.com/OHDSI/ROhdsiWebApi/issues
 NeedsCompilation: no
 RoxygenNote: 7.1.1
 Encoding: UTF-8

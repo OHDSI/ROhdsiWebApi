@@ -1,6 +1,6 @@
 # @file GetDefinitionsMetadata
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -49,12 +49,11 @@ getDefinitionsMetadata <- function(baseUrl, category) {
 
   categoryUrl <- argument %>% dplyr::pull(.data$categoryUrl)
   url <- paste(baseUrl, categoryUrl, "?size=100000000", sep = "/")
-  request <- httr::GET(url)
+  request <- .GET(url)
 
   if (!request$status == 200) {
-    ParallelLogger::logError(argument$categoryFirstUpper,
-                             " definitions not found. Unable to retrieve meta data. Please try later.")
-    stop()
+    stop(paste0(argument$categoryFirstUpper,
+                " definitions not found. Unable to retrieve meta data. Please try later."))
   }
 
   # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis' the

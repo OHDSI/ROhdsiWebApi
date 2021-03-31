@@ -1,6 +1,6 @@
 # @file ROhdsiWebApi
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 # 
@@ -26,4 +26,4 @@
 
 #' @importFrom dplyr "%>%"
 #' @importFrom rlang .data
-NULL
+ROWebApiEnv <- rlang::new_environment()

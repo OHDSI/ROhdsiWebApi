@@ -1,6 +1,6 @@
 # @file Private
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -35,11 +35,10 @@
 .checkBaseUrl <- function(baseUrl) {
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   if (is.null(webApiVersion) | length(webApiVersion) == 0) {
-    ParallelLogger::logError("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
-                             "Please verify\n",
-                             "- is it in the form http://server.org:80/WebAPI,\n",
-                             "- are you are connected to the network")
-    stop()
+    stop(paste0("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
+                "Please verify\n",
+                "- is it in the form http://server.org:80/WebAPI,\n",
+                "- are you are connected to the network"))
   }
 }
 
@@ -158,17 +157,17 @@
 }
 .postJson <- function(url, json) {
   # POST the JSON
-  httr::POST(url = url,
-             body = json,
-             encode = "json",
-             config = httr::add_headers(.headers = c(`Content-Type` = "application/json")))
+  .POST(url = url,
+        body = json,
+        encode = "json",
+        config = httr::add_headers(.headers = c(`Content-Type` = "application/json")))
 }
 .putJson <- function(url, json) {
   # PUT the JSON
-  httr::PUT(url = url,
-            body = json,
-            encode = "json",
-            config = httr::add_headers(.headers = c(`Content-Type` = "application/json")))
+  .PUT(url = url,
+       body = json,
+       encode = "json",
+       config = httr::add_headers(.headers = c(`Content-Type` = "application/json")))
 }
 
 # This function is used in places where RJSONIO::toJSON was previously used to centralize

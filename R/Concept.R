@@ -1,4 +1,4 @@
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -49,7 +49,7 @@ getConcepts <- function(conceptIds,
   url <- sprintf("%s/vocabulary/%s/lookup/identifiers", baseUrl, vocabularySourceKey)
   body <- .toJSON(conceptIds)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
+  req <- .POST(url, body = body, config = httr::add_headers(httpheader))
   req <- httr::content(req)
 
   lists <- lapply(req, function(x) {
@@ -103,7 +103,7 @@ getSourceConcepts <- function(conceptIds,
   url <- sprintf("%s/vocabulary/%s/lookup/mapped", baseUrl, vocabularySourceKey)
   body <- .toJSON(conceptIds)
   httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-  req <- httr::POST(url, body = body, config = httr::add_headers(httpheader))
+  req <- .POST(url, body = body, config = httr::add_headers(httpheader))
   req <- httr::content(req)
 
   lists <- lapply(req, function(x) {

@@ -1,6 +1,6 @@
 # @file deleteDefinition
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -44,7 +44,7 @@ deleteDefinition <- function(id, baseUrl, category) {
   checkmate::reportAssertions(errorMessage)
 
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/", id)
-  request <- httr::DELETE(url)
+  request <- .DELETE(url)
 
   if (!request$status %in% c(200, 204)) {
     if (!isTRUE(isValidId(ids = id, baseUrl = baseUrl, category = category))) {
@@ -52,14 +52,13 @@ deleteDefinition <- function(id, baseUrl, category) {
     } else {
       error <- ""
     }
-    ParallelLogger::logError(error, "Request status code: ", httr::http_status(request)$message)
-    stop()
+    stop(paste0(error, "Request status code: ", httr::http_status(request)$message))
   } else {
-    ParallelLogger::logInfo("Successfully deleted ",
-                            category,
-                            " definition id ",
-                            id,
-                            ". Request status code: ",
-                            httr::http_status(request)$message)
+    writeLines(paste0("Successfully deleted ",
+                      category,
+                      " definition id ",
+                      id,
+                      ". Request status code: ",
+                      httr::http_status(request)$message))
   }
 }

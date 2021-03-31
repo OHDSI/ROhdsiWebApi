@@ -1,6 +1,6 @@
 # @file CohortDefinition
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 # 
@@ -130,13 +130,37 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   checkInputFileEncoding(fileName)
   cohortsToCreate <- readr::read_csv(file = fileName,
                                      col_types = readr::cols(),
-                                     guess_max = min(1e+07)) %>%
-    dplyr::mutate(name = .data$name %>% as.character() %>% trimws())
+                                     guess_max = min(1e+07))
+  colnamesInCohortsToCreate <- colnames(cohortsToCreate)
+
+  if (!"webApiCohortId" %in% colnamesInCohortsToCreate) {
+    if (!"atlasId" %in% colnamesInCohortsToCreate) {
+      stop("Cannot find either webApiCohortId or atlasId in Cohorts to create file.")
+    } else {
+      cohortsToCreate <- cohortsToCreate %>% dplyr::mutate(webApiCohortId = .data$atlasId)
+    }
+  }
+  if (!"atlasId" %in% colnamesInCohortsToCreate) {
+    cohortsToCreate <- cohortsToCreate %>% dplyr::mutate(atlasId = .data$webApiCohortId)
+  }
+
+  checkIfWebApiCohortIdAndAtlasIDAreSame <- cohortsToCreate %>% dplyr::filter(.data$webApiCohortId !=
+    .data$atlasId)
+  if (nrow(checkIfWebApiCohortIdAndAtlasIDAreSame) > 0) {
+    stop("In CohortsToCreate file webApiCohortId and atlasId do not match. Please provide either webApiCohortId or atlasId.")
+  }
+
+  if (!"name" %in% colnamesInCohortsToCreate) {
+    cohortsToCreate <- cohortsToCreate %>% dplyr::mutate(name = as.character(.data$webApiCohortId))
+  } else {
+    cohortsToCreate <- cohortsToCreate %>% dplyr::mutate(name = .data$name %>% as.character() %>%
+      trimws())
+  }
 
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Inserting cohort:", cohortsToCreate$name[i]))
-    insertCohortDefinitionInPackage(cohortId = cohortsToCreate$atlasId[i],
+    insertCohortDefinitionInPackage(cohortId = cohortsToCreate$webApiCohortId[i],
                                     name = cohortsToCreate$name[i],
                                     baseUrl = baseUrl,
                                     jsonFolder = jsonFolder,
@@ -256,10 +280,7 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == "cohort")
 
   if (!"cohort" %in% c("cohort")) {
-    ParallelLogger::logError("Retrieving SQL for ",
-                             argument$categoryFirstUpper,
-                             " is not supported")
-    stop()
+    stop(paste0("Retrieving SQL for ", argument$categoryFirstUpper, " is not supported"))
   }
 
   errorMessage <- checkmate::makeAssertCollection()
@@ -277,13 +298,12 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   listGenerateStats <- list(expression = expression, options = list(generateStats = generateStats))
 
   validJsonExpression <- .toJSON(listGenerateStats)
-  response <- httr::POST(url, body = validJsonExpression, config = httr::add_headers(httpheader))
+  response <- .POST(url, body = validJsonExpression, config = httr::add_headers(httpheader))
   if (response$status == 200) {
     response <- httr::content(response)
     sql <- response$templateSql
     return(sql)
   } else {
-    ParallelLogger::logError("Error: No Sql returned for cohort definition id: ", cohortDefinition)
-    stop()
+    stop(paste0("Error: No Sql returned for cohort definition"))
   }
 }

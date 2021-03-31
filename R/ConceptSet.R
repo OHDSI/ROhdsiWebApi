@@ -1,4 +1,4 @@
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -51,9 +51,8 @@ resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey
   expression <- .toJSON(expression)
   response <- .postJson(url = url, json = expression)
   if (!response$status_code == 200) {
-    ParallelLogger::logError("The concept set definition was not accepted by the WebApi. Status code = ",
-                             httr::content(response)$status_code)
-    stop()
+    stop(paste0("The concept set definition was not accepted by the WebApi. Status code = ",
+                httr::content(response)$status_code))
   }
   response <- httr::content(response)
   response <- unlist(response) %>% unique() %>% sort()
@@ -166,34 +165,5 @@ createConceptSetWorkbook <- function(conceptSetIds,
                            rowNames = FALSE,
                            withFilter = FALSE)
   openxlsx::setColWidths(wb = wb, sheet = label, cols = 1:ncol(contents), widths = "auto")
-}
-
-
-#' Get concept set expressions from cohort definition \lifecycle{maturing}
-#'
-#' @description
-#' Get all concept set expressions from a cohort definition object as a signel dataframe
-#'
-#' @param cohortDefinition   An R-object (not JSON) representing the cohort definition
-#'
-#' @return
-#' A tibble data frame with all the concept sets in the cohort definition R-object
-#'
-#' @export
-getConceptSetsFromCohortDefinition <- function(cohortDefinition) {
-  if ("expression" %in% names(cohortDefinition)) {
-    expression <- cohortDefinition$expression
-  } else {
-    expression <- cohortDefinition
-  }
-
-  conceptSets <- expression$ConceptSets %>% purrr::map_df(.f = purrr::flatten) %>% dplyr::bind_rows() %>%
-    dplyr::mutate(items = purrr::map_df(.x = .data$items,
-                                        .f = purrr::flatten)) %>% dplyr::bind_rows() %>%
-    jsonlite::flatten(x = .) %>% dplyr::rename_with(.fn = ~stringr::str_replace(string = .,
-                                                                                pattern = "items.",
-                                                                                replacement = "")) %>% dplyr::rename_with(.fn = ~dplyr::case_when(stringr::str_detect(string = ., pattern = "_") ~ SqlRender::snakeCaseToCamelCase(string = .), TRUE ~ .)) %>% tidyr::tibble()
-
-  return(conceptSets)
 }
 
