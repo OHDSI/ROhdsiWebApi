@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
       <h1 data-toc-skip>Using ROhdsiWebApi</h1>
                         <h4 class="author">Gowtham Rao</h4>
             
-            <h4 class="date">2021-03-30</h4>
+            <h4 class="date">2021-03-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/OHDSI/ROhdsiWebApi/blob/master/vignettes/UsingROhdsiWebApi.Rmd"><code>vignettes/UsingROhdsiWebApi.Rmd</code></a></small>
       <div class="hidden name"><code>UsingROhdsiWebApi.Rmd</code></div>
@@ -676,14 +676,14 @@
   <span class="fu">rename_all</span><span class="op">(</span>.funs <span class="op">=</span> <span class="fu">SqlRender</span><span class="fu">::</span><span class="va"><a href="https://ohdsi.github.io/SqlRender/reference/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="op">)</span> 
 <span class="co">#&gt; # A tibble: 6 x 6</span>
-<span class="co">#&gt;      Id Name                 Description `Created Date`      `Modified Date`    </span>
-<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;                &lt;chr&gt;       &lt;dttm&gt;              &lt;dttm&gt;             </span>
-<span class="co">#&gt; 1 21567 [Lung Cancer Predic~  &lt;NA&gt;       2021-03-29 12:52:10 2021-03-29 12:54:25</span>
-<span class="co">#&gt; 2 21568 [Lung Cancer Predic~  &lt;NA&gt;       2021-03-29 12:52:34 2021-03-29 12:53:24</span>
-<span class="co">#&gt; 3 21569 Amyloid light chain~  &lt;NA&gt;       2021-03-30 02:59:01 2021-03-30 06:09:18</span>
-<span class="co">#&gt; 4 21570 FIAT_HSPF_AMD         &lt;NA&gt;       2021-03-30 03:34:25 2021-03-30 13:29:56</span>
-<span class="co">#&gt; 5 21571 [AESI] Cerebral ven~ ""          2021-03-30 07:02:45 2021-03-30 07:04:22</span>
-<span class="co">#&gt; 6 21572 [AESI] Cerebral ven~  &lt;NA&gt;       2021-03-30 07:03:35 2021-03-30 07:04:07</span>
+<span class="co">#&gt;      Id Name            Description      `Created Date`      `Modified Date`    </span>
+<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;           &lt;chr&gt;            &lt;dttm&gt;              &lt;dttm&gt;             </span>
+<span class="co">#&gt; 1 21569 Amyloid light ~  &lt;NA&gt;            2021-03-30 02:59:01 2021-03-30 06:09:18</span>
+<span class="co">#&gt; 2 21570 FIAT_HSPF_AMD    &lt;NA&gt;            2021-03-30 03:34:25 2021-03-31 03:39:36</span>
+<span class="co">#&gt; 3 21571 [AESI] Cerebra~ ""               2021-03-30 07:02:45 2021-03-30 07:04:22</span>
+<span class="co">#&gt; 4 21572 [AESI] Cerebra~  &lt;NA&gt;            2021-03-30 07:03:35 2021-03-30 07:04:07</span>
+<span class="co">#&gt; 5 21575 [ONC] AL Amylo~ "THIS PHENOTYPE~ 2021-03-30 16:42:53 2021-03-30 16:51:25</span>
+<span class="co">#&gt; 6 21576 [ONC] Amyloid ~ "The ICD-10 cod~ 2021-03-30 16:55:06 2021-03-30 16:55:44</span>
 <span class="co">#&gt; # ... with 1 more variable: Has Write Access &lt;lgl&gt;</span></code></pre></div>
 <p>The same output may be achieved using</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -693,14 +693,14 @@
   <span class="fu">rename_all</span><span class="op">(</span>.funs <span class="op">=</span> <span class="fu">SqlRender</span><span class="fu">::</span><span class="va"><a href="https://ohdsi.github.io/SqlRender/reference/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="op">)</span> 
 <span class="co">#&gt; # A tibble: 6 x 6</span>
-<span class="co">#&gt;      Id Name                 Description `Created Date`      `Modified Date`    </span>
-<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;                &lt;chr&gt;       &lt;dttm&gt;              &lt;dttm&gt;             </span>
-<span class="co">#&gt; 1 21567 [Lung Cancer Predic~  &lt;NA&gt;       2021-03-29 12:52:10 2021-03-29 12:54:25</span>
-<span class="co">#&gt; 2 21568 [Lung Cancer Predic~  &lt;NA&gt;       2021-03-29 12:52:34 2021-03-29 12:53:24</span>
-<span class="co">#&gt; 3 21569 Amyloid light chain~  &lt;NA&gt;       2021-03-30 02:59:01 2021-03-30 06:09:18</span>
-<span class="co">#&gt; 4 21570 FIAT_HSPF_AMD         &lt;NA&gt;       2021-03-30 03:34:25 2021-03-30 13:29:56</span>
-<span class="co">#&gt; 5 21571 [AESI] Cerebral ven~ ""          2021-03-30 07:02:45 2021-03-30 07:04:22</span>
-<span class="co">#&gt; 6 21572 [AESI] Cerebral ven~  &lt;NA&gt;       2021-03-30 07:03:35 2021-03-30 07:04:07</span>
+<span class="co">#&gt;      Id Name            Description      `Created Date`      `Modified Date`    </span>
+<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;           &lt;chr&gt;            &lt;dttm&gt;              &lt;dttm&gt;             </span>
+<span class="co">#&gt; 1 21569 Amyloid light ~  &lt;NA&gt;            2021-03-30 02:59:01 2021-03-30 06:09:18</span>
+<span class="co">#&gt; 2 21570 FIAT_HSPF_AMD    &lt;NA&gt;            2021-03-30 03:34:25 2021-03-31 03:39:36</span>
+<span class="co">#&gt; 3 21571 [AESI] Cerebra~ ""               2021-03-30 07:02:45 2021-03-30 07:04:22</span>
+<span class="co">#&gt; 4 21572 [AESI] Cerebra~  &lt;NA&gt;            2021-03-30 07:03:35 2021-03-30 07:04:07</span>
+<span class="co">#&gt; 5 21575 [ONC] AL Amylo~ "THIS PHENOTYPE~ 2021-03-30 16:42:53 2021-03-30 16:51:25</span>
+<span class="co">#&gt; 6 21576 [ONC] Amyloid ~ "The ICD-10 cod~ 2021-03-30 16:55:06 2021-03-30 16:55:44</span>
 <span class="co">#&gt; # ... with 1 more variable: Has Write Access &lt;lgl&gt;</span></code></pre></div>
 <p>Similar approach may be used for all categories as follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">

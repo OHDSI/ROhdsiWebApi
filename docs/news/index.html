@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -135,101 +135,65 @@
       <small>Source: <a href='https://github.com/OHDSI/ROhdsiWebApi/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rohdsiwebapi-12" class="section level1">
-<h1 class="page-header" data-toc-text="1.2">
-<a href="#rohdsiwebapi-12" class="anchor"></a>ROhdsiWebApi 1.2</h1>
-<div id="changes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#changes" class="anchor"></a>Changes:</h3>
+    <div id="rohdsiwebapi-120" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.0">
+<a href="#rohdsiwebapi-120" class="anchor"></a>ROhdsiWebApi 1.2.0</h1>
+<p>Changes:</p>
 <ol>
-<li>Removed dependency on ParallelLogger</li>
-<li>Implemented support for security. Thank you <a href='https://github.com/ablack3'>@ablack3</a> <a href='https://github.com/azimov'>@azimov</a> and <a href='https://github.com/anthonysena'>@anthonysena</a></li>
+<li>Removed dependency on ParallelLogger.</li>
+<li>Implemented support for security. Thank you <a href='https://github.com/ablack3'>@ablack3</a> <a href='https://github.com/azimov'>@azimov</a> and <a href='https://github.com/anthonysena'>@anthonysena</a>.</li>
 <li>Removed function getConceptSetsFromCohortDefinition because out of scope of this package.</li>
 <li>Added vignette.</li>
 <li>Added additional tests.</li>
 </ol>
 </div>
-<div id="bug-fixes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes:</h3>
-</div>
-</div>
     <div id="rohdsiwebapi-113" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.3">
 <a href="#rohdsiwebapi-113" class="anchor"></a>ROhdsiWebApi 1.1.3</h1>
-<div id="changes-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#changes-1" class="anchor"></a>Changes:</h3>
-</div>
-<div id="bug-fixes-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes:</h3>
+<p>Bug fixes:</p>
 <ol>
-<li>Fixed bug with returning results for incidence rate</li>
+<li>Fixed bug with returning results for incidence rate.</li>
 </ol>
-</div>
 </div>
     <div id="rohdsiwebapi-112" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.2">
 <a href="#rohdsiwebapi-112" class="anchor"></a>ROhdsiWebApi 1.1.2</h1>
-<div id="changes-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#changes-2" class="anchor"></a>Changes:</h3>
+<p>Changes:</p>
 <ol>
 <li>Replace read.csv with readr::read_csv, write.csv with readr::write_csv to ensure type stability and use of tibble.</li>
-<li>Replaced jsonlite with RJSONIO to address issue with special characters “Sjögren”</li>
-<li>Replaced used of data.frame(), tidyr::tibble()</li>
+<li>Replaced jsonlite with RJSONIO to address issue with special characters “Sjögren”.</li>
+<li>Replaced used of data.frame(), tidyr::tibble().</li>
 <li>Fixed bugs due to join on data frame with no row records.</li>
 </ol>
-</div>
-<div id="bug-fixes-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes:</h3>
-</div>
 </div>
     <div id="rohdsiwebapi-111" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.1">
 <a href="#rohdsiwebapi-111" class="anchor"></a>ROhdsiWebApi 1.1.1</h1>
-<div id="changes-3" class="section level3">
-<h3 class="hasAnchor">
-<a href="#changes-3" class="anchor"></a>Changes:</h3>
+<p>Changes:</p>
 <ol>
-<li>Use BIGINT for cohort_definition_id</li>
+<li>Use BIGINT for cohort_definition_id.</li>
 </ol>
-</div>
-<div id="bug-fixes-3" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h3>
-</div>
 </div>
     <div id="rohdsiwebapi-110" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.0">
 <a href="#rohdsiwebapi-110" class="anchor"></a>ROhdsiWebApi 1.1.0</h1>
-<div id="changes-4" class="section level3">
-<h3 class="hasAnchor">
-<a href="#changes-4" class="anchor"></a>Changes:</h3>
+<p>Changes:</p>
 <ol>
-<li>New functions: getConceptSetsFromCohortDefinition</li>
+<li>New functions: getConceptSetsFromCohortDefinition.</li>
 </ol>
-</div>
-<div id="bug-fixes-4" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h3>
+<p>Bug fixes:</p>
 <ol>
 <li>
 <a href="https://github.com/OHDSI/ROhdsiWebApi/pull/144" class="uri">https://github.com/OHDSI/ROhdsiWebApi/pull/144</a> was causing duplication of date matches.</li>
-<li>RJSONIO::toJSON loss of precision <a href='https://github.com/OHDSI/ROhdsiWebApi/issues/152'>#152</a></li>
+<li>RJSONIO::toJSON loss of precision <a href='https://github.com/OHDSI/ROhdsiWebApi/issues/152'>#152</a>.</li>
 </ol>
-</div>
 </div>
     <div id="rohdsiwebapi-100" class="section level1">
 <h1 class="page-header" data-toc-text="1.0.0">
 <a href="#rohdsiwebapi-100" class="anchor"></a>ROhdsiWebApi 1.0.0</h1>
 <p>Note: This is a major release. This release is expected to break implementations that rely on prior iterations of ROhdsiWebApi.</p>
 <p>(last updated : 2020-06-12)</p>
-<div id="changes-5" class="section level3">
-<h3 class="hasAnchor">
-<a href="#changes-5" class="anchor"></a>Changes:</h3>
+<p>Changes:</p>
 <ol>
 <li>Generic design pattern: Starting with version 1.0.0, we have implemented a new generic design pattern.</li>
 </ol>
@@ -278,16 +242,10 @@
 <li>Job management: execute/invoke, cancel, generation status information.</li>
 <li>Names have been chosen so that they follow an easy to remember pattern and are intuitive.</li>
 </ul>
-</div>
-<div id="bug-fixes-5" class="section level2">
-<h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>Bug fixes:</h2>
+<p>Bug fixes:</p>
 <ul>
-<li>This is a major change to package with significant code rewrite.</li>
-<li>No specific bug fixes were targeted in this release.</li>
-<li>Future releases will target bug fixes.</li>
+<li>This is a major change to package with significant code rewrite. No specific bug fixes were targeted in this release.</li>
 </ul>
-</div>
 </div>
   </div>
 
