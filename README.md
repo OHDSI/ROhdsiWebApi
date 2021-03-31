@@ -7,8 +7,6 @@ Status](https://travis-ci.org/OHDSI/ROhdsiWebApi.svg?branch=master)](https://tra
 
 ROhdsiWebApi is part of [HADES](https://ohdsi.github.io/Hades).
 
-(last updated : 2020-08-14)
-
 ## Introduction
 
 ROhdsiWebApi is a R based interface to
