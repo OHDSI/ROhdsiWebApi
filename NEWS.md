@@ -1,3 +1,13 @@
+
+ROhdsiWebApi 1.2.0
+==================
+
+Changes:
+
+1. CreatedDate in getDefinition now returns in proper date time format.
+
+
+
 ROhdsiWebApi 1.2.0
 ==================
 

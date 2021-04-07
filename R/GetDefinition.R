@@ -90,7 +90,7 @@ getDefinition <- function(id, category, baseUrl) {
       for (i in (1:length(namesResponse))) {
         if (stringr::str_detect(string = tolower(namesResponse[[i]]), pattern = "date")) {
           if (length(namesResponse[[i]]) == 1) {
-            namesResponse[[i]] <- .convertToDateTime(response[[namesResponse[[i]]]])
+            response[[namesResponse[[i]]]] <- .convertToDateTime(response[[namesResponse[[i]]]])
           }
         }
       }
