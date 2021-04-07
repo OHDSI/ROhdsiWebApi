@@ -86,6 +86,14 @@ getDefinition <- function(id, category, baseUrl) {
   if (is.character(response$expression)) {
     if (jsonlite::validate(response$expression)) {
       response$expression <- RJSONIO::fromJSON(response$expression, nullValue = NA, digits = 23)
+      namesResponse <- names(response)
+      for (i in (1:length(namesResponse))) {
+        if (stringr::str_detect(string = tolower(namesResponse[[i]]), pattern = "date")) {
+          if (length(namesResponse[[i]]) == 1) {
+            namesResponse[[i]] <- .convertToDateTime(response[[namesResponse[[i]]]])
+          }
+        }
+      }
     }
   }
   return(response)
