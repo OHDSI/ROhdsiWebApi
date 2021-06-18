@@ -106,7 +106,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
       list(item)
     })
 
-    expression <- .toJSON(x = itemsTranspose[[1]], pretty = TRUE)
+    expression <- .toJSON(x = purrr::flatten(itemsTranspose), pretty = TRUE)
     responsePut <- .putJson(url = paste0(baseUrl,
                                          "/",
                                          argument$categoryUrl,
