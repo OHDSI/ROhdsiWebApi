@@ -36,6 +36,7 @@ getConcepts <- function(conceptIds,
                         baseUrl,
                         vocabularySourceKey = NULL,
                         snakeCaseToCamelCase = TRUE) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(conceptIds, add = errorMessage)
@@ -90,6 +91,7 @@ getSourceConcepts <- function(conceptIds,
                               baseUrl,
                               vocabularySourceKey = NULL,
                               snakeCaseToCamelCase = TRUE) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(conceptIds, add = errorMessage)

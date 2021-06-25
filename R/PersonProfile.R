@@ -44,7 +44,7 @@
 #'
 #' @export
 getPersonProfile <- function(baseUrl, sourceKey, personId, indexCohortId = NULL) {
-
+  baseUrl <- gsub("/$", "", baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertScalar(sourceKey, add = errorMessage)
   checkmate::assertCharacter(sourceKey, add = errorMessage)

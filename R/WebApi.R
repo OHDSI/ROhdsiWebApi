@@ -27,6 +27,7 @@
 #'
 #' @export
 getPriorityVocabularyKey <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   url <- gsub("@baseUrl", baseUrl, "@baseUrl/source/priorityVocabulary")
   json <- .GET(url)
@@ -45,6 +46,7 @@ getPriorityVocabularyKey <- function(baseUrl) {
 #'
 #' @export
 getWebApiVersion <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   url <- paste0(baseUrl, "/info")
   if (!.isValidUrl(url)) {
     stop(paste0("Please check if the url is valid. ",
@@ -76,6 +78,7 @@ getWebApiVersion <- function(baseUrl) {
 #'
 #' @export
 getCdmSources <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   url <- sprintf("%s/source/sources", baseUrl)
   request <- .GET(url)
@@ -131,6 +134,7 @@ getCdmSources <- function(baseUrl) {
 #' }
 #' @export
 isValidId <- function(ids, baseUrl, category) {
+  baseUrl <- gsub("/$", "", baseUrl)
   arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == !!category)
 
@@ -165,6 +169,7 @@ isValidId <- function(ids, baseUrl, category) {
 #' }
 #' @export
 isValidSourceKey <- function(sourceKeys, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   cdmSources <- getCdmSources(baseUrl)
   validSourceKeys <- cdmSources %>% dplyr::select(.data$sourceKey) %>% dplyr::distinct() %>% dplyr::pull(.data$sourceKey)
   return(sourceKeys %in% validSourceKeys)

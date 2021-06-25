@@ -54,6 +54,7 @@ insertCohortDefinitionInPackage <- function(cohortId,
                                             sqlFolder = "inst/sql/sql_server",
                                             baseUrl,
                                             generateStats = FALSE) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertLogical(generateStats, add = errorMessage)
@@ -117,6 +118,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
                                                insertCohortCreationR = TRUE,
                                                generateStats = FALSE,
                                                packageName) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
 
   if (insertCohortCreationR && !insertTableSql)
@@ -274,6 +276,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 #' }
 #' @export
 getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
 
   arguments <- .getStandardCategories()

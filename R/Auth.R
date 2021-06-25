@@ -21,7 +21,7 @@
 #'
 #' @export
 authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPassword = NULL) {
-
+  baseUrl <- gsub("/$", "", baseUrl)
   # check input
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(baseUrl, len = 1, min.chars = 1, add = errorMessage)

@@ -35,6 +35,7 @@
 #'
 #' @export
 resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey = NULL) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
 
   if (missing(vocabularySourceKey) || is.null(vocabularySourceKey)) {

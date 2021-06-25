@@ -40,6 +40,7 @@
 #'
 #' @export
 getCohortDefinitionExpression <- function(cohortId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .Deprecated(new = "getCohortDefinition",
               package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use the following
@@ -70,6 +71,7 @@ getCohortDefinitionExpression <- function(cohortId, baseUrl) {
 #'
 #' @export
 getCohortDefinitionName <- function(baseUrl, cohortId, formatName = FALSE) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .Deprecated(new = "getCohortDefinition",
               package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use getCohortDefinition",
@@ -93,6 +95,7 @@ getCohortDefinitionName <- function(baseUrl, cohortId, formatName = FALSE) {
 #'
 #' @export
 getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .Deprecated(new = "getCohortGenerationReport",
               package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use getCohortResults",
@@ -124,6 +127,7 @@ getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
 #'
 #' @export
 getCohortDefinitionSql <- function(cohortId, baseUrl, generateStats = TRUE) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .Deprecated(new = "getCohortDefinitionSql",
               package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use getCohortSql",

@@ -31,6 +31,7 @@
 #' }
 #' @export
 getResults <- function(id, baseUrl, category) {
+  baseUrl <- gsub("/$", "", baseUrl)
   arguments <- .getStandardCategories() %>% dplyr::filter(.data$categoryStandard %in% c("cohort",
                                                                                         "characterization",
                                                                                         "pathway",
