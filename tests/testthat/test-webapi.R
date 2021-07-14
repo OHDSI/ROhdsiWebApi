@@ -38,7 +38,7 @@ if (server == 'ohdsiBaseUrl') {
   idPathway <- 104
 }
 
-baseUrl <- Sys.getenv(server)
+baseUrl <- Sys.getenv('WEBAPI_TEST_WEBAPI_URL')
 library(dplyr)
 
 
