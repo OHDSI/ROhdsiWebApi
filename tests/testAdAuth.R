@@ -1,4 +1,4 @@
-library(testthat)
-library(ROhdsiWebApi)
-options(ohdsiWebApiAuthType = "ad")
-test_check("ROhdsiWebApi")
+# library(testthat)
+# library(ROhdsiWebApi)
+# options(ohdsiWebApiAuthType = "ad")
+# test_check("ROhdsiWebApi")
