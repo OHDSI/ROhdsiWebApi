@@ -33,14 +33,6 @@ library(dplyr)
 
 ### Testing functions in WebApi.R
 
-testthat::test_that(desc = "Test .isValidUrl", code = {
-  blackhole <- ROhdsiWebApi:::.isValidUrl(urlToCheck = "http://black_hole.net")
-  ohdsi <- ROhdsiWebApi:::.isValidUrl(urlToCheck = "https://ohdsi.org/")
-  testthat::expect_type(object = blackhole, type = 'logical')
-  testthat::expect_type(object = ohdsi, type = 'logical')
-  testthat::expect_setequal(object = c(blackhole, ohdsi), expected = c(FALSE, TRUE))
-})
-
 testthat::test_that(desc = "Test .checkBaseUrl", code = {
   testthat::skip_if(baseUrl == "")
   value <- ROhdsiWebApi:::.checkBaseUrl(baseUrl = baseUrl)
