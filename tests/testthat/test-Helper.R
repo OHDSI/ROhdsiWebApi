@@ -1,9 +1,9 @@
 test_that("Test checkInputFileEncoding expected pass", {
-  testdata <- data.frame(id=c(1), name=c("test"))
-  testfile <- tempfile("test_data.csv")
-  readr::write_csv(x = testdata, file = testfile)
-  expect_invisible(ROhdsiWebApi::checkInputFileEncoding(testfile))
-  on.exit(unlink(testfile))
+  testData <- data.frame(id=c(1), name=c("test"))
+  testFile <- tempfile("test_data.csv")
+  readr::write_csv(x = testData, file = testFile)
+  expect_invisible(ROhdsiWebApi::checkInputFileEncoding(testFile))
+  on.exit(unlink(testFile))
 })
 
 test_that("Test checkInputFileEncoding expected fail", {
