@@ -51,9 +51,9 @@ getPersonProfile <- function(baseUrl, sourceKey, personId, indexCohortId = NULL)
   checkmate::reportAssertions(errorMessage)
 
   if (is.null(indexCohortId)) {
-    url <- sprintf("%1s/%2s/person/%3s", baseUrl, sourceKey, personId)
+    url <- sprintf("%s/%s/person/%s", baseUrl, sourceKey, personId)
   } else {
-    url <- sprintf("%1s/%2s/person/%3s?cohort=%4s", baseUrl, sourceKey, personId, indexCohortId)
+    url <- sprintf("%s/%s/person/%s?cohort=%s", baseUrl, sourceKey, personId, indexCohortId)
   }
 
   getUrl <- .GET(url)
@@ -68,8 +68,7 @@ getPersonProfile <- function(baseUrl, sourceKey, personId, indexCohortId = NULL)
     data <- jsonlite::fromJSON(txt = json,
                                simplifyVector = TRUE,
                                simplifyDataFrame = TRUE,
-                               flatten = TRUE,
-                               digits = 23)
+                               flatten = TRUE)
   }
 
   # records
