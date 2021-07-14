@@ -53,7 +53,7 @@ getPriorityVocabularyKey <- function(baseUrl) {
 getWebApiVersion <- function(baseUrl) {
   
   # TODO convert to checkmate
-  stopifnot(!is.character(baseUrl), nchar(baseUrl) > 0)
+  stopifnot(is.character(baseUrl), nchar(baseUrl) > 0)
   
   if (grepl("/$", baseUrl)) {
     rlang::abort(paste0("baseUrl '", baseUrl, "' should not end with a /"))
