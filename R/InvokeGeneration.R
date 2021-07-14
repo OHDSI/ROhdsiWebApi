@@ -26,7 +26,7 @@
 #' @template Category
 #' @template SourceKey
 #' @return
-#' Error message if invoke failed.
+#' A dataframe with generation information such as status, jobName, and time.
 #'
 #'
 #' @examples
