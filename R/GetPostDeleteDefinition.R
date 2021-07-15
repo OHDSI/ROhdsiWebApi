@@ -1,4 +1,4 @@
-# @file postDefinition
+# @file GetDefinition
 #
 # Copyright 2021 Observational Health Data Sciences and Informatics
 #
@@ -15,6 +15,91 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+#' Get the definition for an id of chosen category in WebApi. \lifecycle{stable}
+#' @details
+#' Get the definition for an id of chosen category in WebApi. The return object will be a R
+#' representation of the definition, that may be reconverted to JSON.
+#'
+#' @template Id
+#' @template BaseUrl
+#' @template Category
+#' @return
+#' An R object representing the definition
+#'
+#' @examples
+#' \dontrun{
+#' getDefinition(id = 13242, category = "cohort", baseUrl = "http://server.org:80/WebAPI")
+#' }
+#' @export
+getDefinition <- function(id, baseUrl, category) {
+  baseUrl <- gsub("/$", "", baseUrl)
+  .checkBaseUrl(baseUrl)
+  
+  arguments <- .getStandardCategories()
+  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
+  
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(id, add = errorMessage)
+  checkmate::assertChoice(x = category, choices = arguments$categoryStandard)
+  checkmate::reportAssertions(errorMessage)
+  
+  url <- paste0(baseUrl, "/", argument$categoryUrl, "/", id)
+  response <- .GET(url)
+  
+  if (!response$status_code == 200) {
+    definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
+    if (!id %in% definitionsMetaData$id) {
+      error <- paste0(argument$categoryFirstUpper, ": ", id, " not found.")
+    } else {
+      error <- ""
+    }
+    stop(paste0(error, "Status code = ", httr::content(response)$status_code))
+  }
+  response <- httr::content(response)
+  
+  if (is.null(response$expression)) {
+    if (!is.null(response$specification)) {
+      response$expression <- response$specification
+      response$specification <- NULL
+    } else if (!is.null(response$design)) {
+      response$expression <- response$design
+      response$design <- NULL
+    } else {
+      if (argument$categoryUrlGetExpression != "") {
+        urlExpression <- paste0(baseUrl,
+                                "/",
+                                argument$categoryUrl,
+                                "/",
+                                id,
+                                "/",
+                                argument$categoryUrlGetExpression)
+        expression <- .GET(urlExpression)
+        expression <- httr::content(expression)
+        response$expression <- expression
+      } else {
+        response$expression <- response
+        response$expression$name <- NULL
+      }
+    }
+  }
+  if (is.character(response$expression)) {
+    if (jsonlite::validate(response$expression)) {
+      response$expression <- RJSONIO::fromJSON(response$expression, nullValue = NA, digits = 23)
+      namesResponse <- names(response)
+      for (i in (1:length(namesResponse))) {
+        if (stringr::str_detect(string = tolower(namesResponse[[i]]), pattern = "date")) {
+          if (length(namesResponse[[i]]) == 1) {
+            response[[namesResponse[[i]]]] <- .convertToDateTime(response[[namesResponse[[i]]]])
+          }
+        }
+      }
+    }
+  }
+  return(response)
+}
+
 
 #' Post a definition into WebApi \lifecycle{maturing}
 #' @details
@@ -46,17 +131,17 @@ postDefinition <- function(baseUrl, name, category, definition) {
   .checkBaseUrl(baseUrl)
   arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
-
+  
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(name, add = errorMessage)
   checkmate::assertCharacter(category, add = errorMessage)
   checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
-
+  
   if (!category %in% c("cohort", "conceptSet")) {
     stop(paste0("Posting definitions of ", category, " is not supported."))
   }
-
+  
   if ("expression" %in% names(definition)) {
     expression <- definition$expression
   } else {
@@ -74,7 +159,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
     url <- paste0(url, argument$categoryUrlPostExpression, "/")
   }
   response <- .postJson(url = url, json = json)
-
+  
   if (!response$status_code == 200) {
     definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
     if (name %in% definitionsMetaData$name) {
@@ -87,7 +172,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
   response <- httr::content(response)
   structureCreated <- response
   response$expression <- NULL
-
+  
   # create expression in the structure required to POST or PUT
   if (category %in% c("conceptSet")) {
     items <- convertConceptSetDefinitionToTable(conceptSetDefinition = definition) %>% dplyr::mutate(id = dplyr::row_number(),
@@ -102,11 +187,11 @@ postDefinition <- function(baseUrl, name, category, definition) {
                     .data$isExcluded,
                     .data$includeMapped,
                     .data$includeDescendants)
-
+    
     itemsTranspose <- apply(items, 1, function(item) {
       list(item)
     })
-
+    
     expression <- .toJSON(x = purrr::flatten(itemsTranspose), pretty = TRUE)
     responsePut <- .putJson(url = paste0(baseUrl,
                                          "/",
@@ -122,7 +207,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
                   httr::content(responsePut)$status_code))
     }
   }
-
+  
   if (category %in% c("characterization")) {
     characterizationPostObject <- structureCreated
     characterizationPostObject$cohorts <- definition$expression$cohorts
@@ -132,7 +217,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
     characterizationPostObject$strataOnly <- definition$expression$strataOnly
     characterizationPostObject$strataConceptSets <- definition$expression$strataConceptSets
     characterizationPostObject$stratifiedBy <- definition$expression$stratifiedBy
-
+    
     expressionCharacterization <- list()
     expressionCharacterization$name <- characterizationPostObject$name
     expressionCharacterization$cohorts <- characterizationPostObject$cohorts
@@ -148,11 +233,11 @@ postDefinition <- function(baseUrl, name, category, definition) {
     expressionCharacterization$packageName <- characterizationPostObject$packageName
     expressionCharacterization$organizationName <- characterizationPostObject$organizationName
     expressionCharacterization$stratifiedBy <- characterizationPostObject$stratifiedBy
-
+    
     expressionCharacterization <- jsonlite::toJSON(x = expressionCharacterization,
                                                    auto_unbox = TRUE,
                                                    digits = 23)
-
+    
     response <- .putJson(url = paste0(baseUrl,
                                       "/",
                                       argument$categoryUrl,
@@ -166,3 +251,52 @@ postDefinition <- function(baseUrl, name, category, definition) {
                                                                                                dec = ".") %>% .normalizeDateAndTimeTypes()
   return(output)
 }
+
+
+#' Delete a definition id of a chosen category. \lifecycle{stable}
+#' @details
+#' Delete the definition for an id of chosen category in WebApi.
+#'
+#' @template BaseUrl
+#' @template category
+#' @template id
+#' @return
+#' None, unless error.
+#'
+#' @examples
+#' \dontrun{
+#' deleteDefinition(id = 13242, baseUrl = "http://server.org:80/WebAPI", category = "cohort")
+#' }
+#' @export
+deleteDefinition <- function(id, baseUrl, category) {
+  baseUrl <- gsub("/$", "", baseUrl)
+  .checkBaseUrl(baseUrl)
+  
+  arguments <- .getStandardCategories()
+  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
+  
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertInt(id, add = errorMessage)
+  checkmate::assertChoice(x = category, choices = arguments$categoryStandard)
+  checkmate::reportAssertions(errorMessage)
+  
+  url <- paste0(baseUrl, "/", argument$categoryUrl, "/", id)
+  request <- .DELETE(url)
+  
+  if (!request$status %in% c(200, 204)) {
+    if (!isTRUE(isValidId(ids = id, baseUrl = baseUrl, category = category))) {
+      error <- paste0(argument$categoryFirstUpper, " definition id: ", id, " not found. ")
+    } else {
+      error <- ""
+    }
+    stop(paste0(error, "Request status code: ", httr::http_status(request)$message))
+  } else {
+    writeLines(paste0("Successfully deleted ",
+                      category,
+                      " definition id ",
+                      id,
+                      ". Request status code: ",
+                      httr::http_status(request)$message))
+  }
+}
+
