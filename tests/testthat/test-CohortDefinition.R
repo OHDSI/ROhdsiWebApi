@@ -31,3 +31,8 @@ test_that("Test insertCohortDefinitionInPackage", {
   #unlink(scratch, recursive = TRUE, force = TRUE)
 })
 
+
+test_that("test insertCohortDefinitionSetInPackage",{
+  expect_error(insertCohortDefinitionSetInPackage(baseUrl = baseUrl,
+                                     packageName = "fakePackage"))
+})

@@ -1,25 +1,24 @@
 test_that("Test cancelGeneration pathway (expect error)", {
   id <- 999999 #fake id
   category <- "pathway"
-  err <- testthat::expect_error(
+  expect_error(
     ROhdsiWebApi::cancelGeneration(id = id, baseUrl = baseUrl, 
                                    sourceKey = sourceKeyVariable,
                                    category = category)
   )
-  
-  expect_true(grepl("http error 500", err$message))
 })
 
 
+#fix this to test the cancel cohort generation call
+#returns a warning instead of an error
+testthat::test_that("Test cancelGeneration cohort (expect error)", {
+  id <- 999999
+  category <- "cohort"
+  wrn <- testthat::expect_warning(
+    ROhdsiWebApi::cancelGeneration(id = id, baseUrl = baseUrl,
+                                   sourceKey = sourceKeyVariable,
+                                   category = category)
+  )
 
-# testthat::test_that("Test cancelGeneration cohort (expect error)", {
-#   id <- 999999
-#   category <- "cohort"
-#   err <- testthat::expect_error(
-#     ROhdsiWebApi::cancelGeneration(id = id, baseUrl = baseUrl, 
-#                                    sourceKey = sourceKeyVariable,
-#                                    category = category)
-#   )
-#   
-#   expect_true(grepl("http error 500", err$message))
-# })
+  expect_true(grepl(id, wrn))
+})
