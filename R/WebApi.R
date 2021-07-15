@@ -45,7 +45,7 @@ getPriorityVocabularyKey <- function(baseUrl) {
 #' @return
 #' The WebApi verions as a string.
 #' 
-#' @example 
+#' @examples 
 #' \dontrun{
 #' getWebApiVersion("http://server.org:80/WebAPI")
 #' }
