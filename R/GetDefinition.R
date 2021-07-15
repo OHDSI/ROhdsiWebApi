@@ -34,6 +34,7 @@
 #' }
 #' @export
 getDefinition <- function(id, category, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
 
   arguments <- .getStandardCategories()
