@@ -1,5 +1,5 @@
 
-baseUrl <- Sys.getenv('WEBAPI_TEST_WEBAPI_URL')
+# baseUrl <- Sys.getenv('WEBAPI_TEST_WEBAPI_URL')
 
 # "cohort",
 # "characterization",
@@ -19,7 +19,7 @@ test_that("invokeGeneration works for cohorts", {
                                      category = "cohort")
   
   expect_s3_class(generationInfo, "data.frame")
-  expect_equal(generationInfo$status, "STARTING")
+  expect_equal(nrow(generationInfo), 1)
   
 })
 
@@ -35,7 +35,7 @@ test_that("invokeGeneration works for cohorts", {
                                      category = "characterization")
   
   expect_s3_class(generationInfo, "data.frame")
-  expect_equal(generationInfo$status, "STARTING")
+  expect_equal(nrow(generationInfo), 1)
   
 })
 

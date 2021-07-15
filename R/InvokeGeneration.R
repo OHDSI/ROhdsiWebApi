@@ -35,6 +35,7 @@
 #' }
 #' @export
 invokeGeneration <- function(id, baseUrl, sourceKey, category) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
 
   arguments <- .getStandardCategories() %>% dplyr::filter(.data$categoryStandard %in% c("cohort",

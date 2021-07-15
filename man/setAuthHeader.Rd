@@ -10,8 +10,7 @@ setAuthHeader(baseUrl, authHeader)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 
 \item{authHeader}{A character string containing a Bearer token that will be added to the header of
 all http requests sent to baseUrl. (e.g. "Bearer

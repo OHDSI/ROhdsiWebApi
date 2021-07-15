@@ -8,8 +8,7 @@ postDefinition(baseUrl, name, category, definition)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 
 \item{name}{A valid name for the definition. WebApi will use this name (if valid) as the
 name of the definition. WebApi checks for validity, such as uniqueness, absence

@@ -39,7 +39,8 @@ Suggests:
     httpuv,
     jsonlite,
     plumber,
-    callr
+    callr,
+    withr
 URL: https://ohdsi.github.io/ROhdsiWebApi/, https://github.com/OHDSI/ROhdsiWebApi
 BugReports: https://github.com/OHDSI/ROhdsiWebApi/issues
 NeedsCompilation: no

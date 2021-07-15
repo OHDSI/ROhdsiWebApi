@@ -8,15 +8,16 @@ getWebApiVersion(baseUrl)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 }
 \value{
-A string.
+The WebApi verions as a string.
 }
 \description{
 Get the WebAPI version number \lifecycle{stable}
 }
 \details{
-Obtains the WebAPI version number.
+Obtains the WebAPI version number. This function is used to check that 
+WebAPI baseUrl can be accessed and is a good first check to make sure 
+you can access a WebAPI endpoint.
 }
