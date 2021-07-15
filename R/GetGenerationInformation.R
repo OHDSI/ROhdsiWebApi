@@ -37,6 +37,7 @@
 #' }
 #' @export
 getGenerationInformation <- function(id, category, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
 
   arguments <- .getStandardCategories() %>% dplyr::filter(.data$categoryStandard %in% c("cohort",

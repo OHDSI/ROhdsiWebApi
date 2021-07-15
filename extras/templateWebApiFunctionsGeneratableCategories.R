@@ -17,6 +17,7 @@
 #' }
 #' @export
 get%categoryFirstUpper%GenerationInformation <- function(%category%Id, baseUrl){
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   response <- getGenerationInformation(id = %category%Id, baseUrl = baseUrl, category = '%category%')
  return(response)
@@ -42,6 +43,7 @@ get%categoryFirstUpper%GenerationInformation <- function(%category%Id, baseUrl){
 #' }
 #' @export
 invoke%categoryFirstUpper%Generation <- function(%category%Id, baseUrl, sourceKey){
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   response <-
     invokeGeneration(
@@ -101,6 +103,7 @@ cancel%categoryFirstUpper%Generation <- function(%category%Id, baseUrl, sourceKe
 #' @export
 # Check name
 get%categoryFirstUpper%Results <- function(%category%Id, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getResults(baseUrl = baseUrl, id = %category%Id, category = '%category%')
   return(result)
 }

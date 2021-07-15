@@ -7,12 +7,11 @@
 getPathwayGenerationInformation(pathwayId, baseUrl)
 }
 \arguments{
-\item{pathwayId}{An integer id representing the id that uniquely identifies a Pathway definition
-in a WebApi instance.}
+\item{pathwayId}{An integer id representing the id that uniquely identifies a 
+Pathway definition in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 }
 \value{
 An R object representing the Pathway definition
@@ -25,6 +24,7 @@ Get generation (execution) information about Pathway for a pathwayId.
 }
 \examples{
 \dontrun{
-getPathwayGenerationInformation(pathwayId = 13242, baseUrl = "http://server.org:80/WebAPI")
+getPathwayGenerationInformation(pathwayId = 13242, 
+                                             baseUrl = "http://server.org:80/WebAPI")
 }
 }
