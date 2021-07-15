@@ -2,7 +2,7 @@ ROhdsiWebApi
 ================
 
 [![Build Status](https://github.com/OHDSI/ROhdsiWebApi/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/ROhdsiWebApi/actions?query=workflow%3AR-CMD-check)
-[![codecov.io](https://codecov.io/github/OHDSI/ROhdsiWebApi/coverage.svg?branch=master)](https://codecov.io/github/OHDSI/ROhdsiWebApi?branch=master)
+[![codecov.io](https://codecov.io/github/OHDSI/ROhdsiWebApi/coverage.svg?branch=testathon)](https://codecov.io/github/OHDSI/ROhdsiWebApi?branch=testathon)
 
 ROhdsiWebApi is part of [HADES](https://ohdsi.github.io/Hades).
 
