@@ -94,11 +94,6 @@ jobs:
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
         
-      - name: Debug environment variables
-        run: |
-          print(Sys.getenv("STUPID_SECRET"))
-        shell: Rscript {0}
-
       - name: Install covr
         if: runner.os == 'macOS'
         run: |
