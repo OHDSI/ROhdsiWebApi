@@ -1,5 +1,5 @@
 
-baseUrl <- Sys.getenv('WEBAPI_TEST_WEBAPI_URL')
+# baseUrl <- Sys.getenv('WEBAPI_TEST_WEBAPI_URL')
 
 # "cohort",
 # "characterization",
