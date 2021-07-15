@@ -14,6 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+checkForInputFileEncoding <- function(fileName) {
+  encoding <- readr::guess_encoding(file = fileName, n_max = min(1e+07))
+  
+  if (!encoding$encoding[1] %in% c("UTF-8", "ASCII")) {
+    stop("Illegal encoding found in file ",
+         basename(fileName),
+         ". Should be 'ASCII' or 'UTF-8', found:",
+         paste(paste0(encoding$encoding, " (", encoding$confidence, ")"), collapse = ", "))
+  }
+  invisible(TRUE)
+}
+
 .createCohorts <- function(connection,
                            cdmDatabaseSchema,
                            vocabularyDatabaseSchema = cdmDatabaseSchema,
@@ -39,7 +51,7 @@
   #stats_start#
   # Insert rule names in cohort_inclusion table:
   pathToCsv <- system.file("cohorts", "InclusionRules.csv", package = "#packageName#")
-  checkInputFileEncoding(pathToCsv)
+  checkForInputFileEncoding(pathToCsv)
   inclusionRules <- readr::read_csv(pathToCsv, col_types = readr::cols()) 
   inclusionRules <- data.frame(cohort_definition_id = inclusionRules$cohortId,
                                rule_sequence = inclusionRules$ruleSequence,
@@ -55,7 +67,7 @@
   
   # Instantiate cohorts:
   pathToCsv <- system.file("#fileName#", package = "#packageName#")
-  checkInputFileEncoding(pathToCsv)
+  checkForInputFileEncoding(pathToCsv)
   cohortsToCreate <- readr::read_csv(pathToCsv, col_types = readr::cols())
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Creating cohort:", cohortsToCreate$name[i]))
