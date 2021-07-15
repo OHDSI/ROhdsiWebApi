@@ -7,12 +7,11 @@
 getCohortGenerationInformation(cohortId, baseUrl)
 }
 \arguments{
-\item{cohortId}{An integer id representing the id that uniquely identifies a Cohort definition in
-a WebApi instance.}
+\item{cohortId}{An integer id representing the id that uniquely identifies a 
+Cohort definition in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 }
 \value{
 An R object representing the Cohort definition
@@ -25,6 +24,7 @@ Get generation (execution) information about Cohort for a cohortId.
 }
 \examples{
 \dontrun{
-getCohortGenerationInformation(cohortId = 13242, baseUrl = "http://server.org:80/WebAPI")
+getCohortGenerationInformation(cohortId = 13242, 
+                                             baseUrl = "http://server.org:80/WebAPI")
 }
 }
