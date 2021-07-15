@@ -87,7 +87,7 @@
   names(counts) <- SqlRender::snakeCaseToCamelCase(names(counts))
   counts <- merge(counts, data.frame(cohortDefinitionId = cohortsToCreate$cohortId,
                                      cohortName  = cohortsToCreate$name))
-  readr::write_csv(x = counts, path = file.path(outputFolder, "CohortCounts.csv"))
+  readr::write_excel_csv(x = counts, file = file.path(outputFolder, "CohortCounts.csv"), na = "")
   
   #stats_start#
   # Fetch inclusion rule stats and drop tables:
