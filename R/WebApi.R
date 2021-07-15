@@ -141,6 +141,7 @@ getCdmSources <- function(baseUrl) {
 #' }
 #' @export
 isValidId <- function(ids, baseUrl, category) {
+  baseUrl <- gsub("/$", "", baseUrl)
   arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == !!category)
 
