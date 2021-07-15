@@ -100,14 +100,14 @@ testthat::test_that("Test getCohortGenerationInformation", {
 
 testthat::test_that("Test getCohortResults", {
   testthat::skip_if(baseUrl == "")
-  results <- getCohortResults(idCohort, baseUrl = baseUrl)
+  results <- ROhdsiWebApi::getCohortResults(idCohort, baseUrl = baseUrl)
   testthat::expect_type(results, "list")
   testthat::expect_gt(length(results), 0)
 })
 
 testthat::test_that("Test getCohortSql", {
   testthat::skip_if(baseUrl == "")
-  cohortDefinition <- getCohortDefinition(cohortId = idCohort, baseUrl = baseUrl)
+  cohortDefinition <- ROhdsiWebApi::getCohortDefinition(cohortId = idCohort, baseUrl = baseUrl)
   sql1 <- ROhdsiWebApi::getCohortSql(cohortDefinition = cohortDefinition, baseUrl = baseUrl)
   # sql2 <- ROhdsiWebApi::getCohortDefinitionSql(cohortId = idCohort, baseUrl = baseUrl)
   testthat::expect_type(sql1, "character")
@@ -133,6 +133,7 @@ testthat::test_that("Test isValid1...", {
   arguments <- list(ids = -1, baseUrl = baseUrl)
   for (category in categories) {
     writeLines(sprintf("Testing category '%s'", category))
+    library(ROhdsiWebApi)
     functionName <- paste0("isValid", toupper(substr(category, 1, 1)), substr(category, 2, nchar(category)), "Id")
     names(arguments)[1] <- sprintf("%sIds", category)
     value <- do.call(functionName, arguments)
@@ -227,8 +228,8 @@ testthat::test_that("Test CharacterizationGetInvokeStop (positive test)", {
   invoke <- ROhdsiWebApi::invokeCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
   testthat::expect_s3_class(object = invoke, class = 'tbl')
   testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
-  stopGeneration <- ROhdsiWebApi::cancelCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-  testthat::expect_match(object = stopGeneration, regexp = "Generation of Characterization definition")
+  # stopGeneration <- ROhdsiWebApi::cancelCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
+  # testthat::expect_match(object = stopGeneration, regexp = "Generation of Characterization definition")
 })
 
 
@@ -242,8 +243,8 @@ testthat::test_that("Test PathwayGetInvokeStop (positive test)", {
   invoke <- ROhdsiWebApi::invokePathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
   testthat::expect_s3_class(object = invoke, class = 'tbl')
   testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
-  stopGeneration <- ROhdsiWebApi::cancelPathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-  testthat::expect_match(object = stopGeneration, regexp = 'Generation of Pathway definition')
+  # stopGeneration <- ROhdsiWebApi::cancelPathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
+  # testthat::expect_match(object = stopGeneration, regexp = 'Generation of Pathway definition')
 })
 
 testthat::test_that("Test IncidenceRateGetInvokeStop (positive test)", {
@@ -256,8 +257,8 @@ testthat::test_that("Test IncidenceRateGetInvokeStop (positive test)", {
   invoke <- ROhdsiWebApi::invokeIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
   testthat::expect_s3_class(object = invoke, class = 'tbl')
   testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
-  stopGeneration <- ROhdsiWebApi::cancelIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-  testthat::expect_match(object = stopGeneration, regexp = 'Generation of IncidenceRate definition')
+  # stopGeneration <- ROhdsiWebApi::cancelIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
+  # testthat::expect_match(object = stopGeneration, regexp = 'Generation of IncidenceRate definition')
 })
 
 
