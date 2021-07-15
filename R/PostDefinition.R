@@ -42,6 +42,7 @@
 #' }
 #' @export
 postDefinition <- function(baseUrl, name, category, definition) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)

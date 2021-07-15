@@ -33,6 +33,7 @@
 #' }
 #' @export
 deleteDefinition <- function(id, baseUrl, category) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
 
   arguments <- .getStandardCategories()

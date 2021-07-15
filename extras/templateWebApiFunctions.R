@@ -16,6 +16,7 @@
 #' }
 #' @export
 get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl){
+  baseUrl <- gsub("/$", "", baseUrl)
   metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("%category%"))
   return(metaData)
 }
@@ -37,6 +38,7 @@ get%categoryFirstUpper%DefinitionsMetaData <- function(baseUrl){
 #' }
 #' @export
 isValid%categoryFirstUpper%Id <- function(%category%Ids, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- isValidId(baseUrl = baseUrl, category = '%category%', ids = %category%Ids)
   return(result)
 }
@@ -59,6 +61,7 @@ isValid%categoryFirstUpper%Id <- function(%category%Ids, baseUrl) {
 #' }
 #' @export
 get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getDefinition(id = %category%Id, baseUrl = baseUrl, category = '%category%')
   return(result)
 }
@@ -80,6 +83,7 @@ get%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 #' }
 #' @export
 delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- deleteDefinition(baseUrl = baseUrl, id = %category%Id, category = '%category%')
   return(result)
 }
@@ -103,6 +107,7 @@ delete%categoryFirstUpper%Definition <- function(%category%Id, baseUrl){
 #' @export
 # Check name
 exists%categoryFirstUpper%Name <- function(%category%Name, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- get%categoryFirstUpper%DefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% 
     dplyr::filter(.data$name == %category%Name)
@@ -133,6 +138,7 @@ exists%categoryFirstUpper%Name <- function(%category%Name, baseUrl) {
 #' @export
 # Check name
 detect%categoryFirstUpper%sByName <- function(pattern, negate = FALSE, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- get%categoryFirstUpper%DefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% 
     dplyr::filter(stringr::str_detect(string = .data$name, pattern = pattern, negate = negate))
@@ -171,6 +177,7 @@ detect%categoryFirstUpper%sByName <- function(pattern, negate = FALSE, baseUrl) 
 #' }
 #' @export
 post%categoryFirstUpper%Definition <- function(name, %category%Definition, baseUrl){
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- postDefinition(name = name, baseUrl = baseUrl, category = '%category%', definition = %category%Definition)
   return(result)
 }
