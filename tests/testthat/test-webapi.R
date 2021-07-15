@@ -171,7 +171,7 @@ testthat::test_that("Test evaluate conceptSetExpression (positive test)", {
   testthat::expect_null(object = deleteP2)
 })
 
-# 
+
 # testthat::test_that("Test postCohortInvokeStop (positive test)", {
 #   testthat::skip_if(baseUrl == "")
 #   name = paste0("this is a test and may be deleted-", paste0(sample(letters, size = 10, replace = TRUE), collapse = ""))
@@ -181,13 +181,13 @@ testthat::test_that("Test evaluate conceptSetExpression (positive test)", {
 #   testthat::expect_s3_class(object = postDefinition1, class = 'tbl')
 #   delete <- ROhdsiWebApi::deleteCohortDefinition(cohortId = postDefinition1$id, baseUrl = baseUrl)
 #   testthat::expect_null(object = delete)
-#   postDefinition2 <- ROhdsiWebApi::postCohortDefinition(name = name, 
+#   postDefinition2 <- ROhdsiWebApi::postCohortDefinition(name = name,
 #                                                         baseUrl = baseUrl, cohortDefinition = expression)
 #   testthat::expect_s3_class(object = postDefinition2, class = 'tbl')
 #   expressionFromWebApi <- ROhdsiWebApi::getCohortDefinition(cohortId = postDefinition2$id, baseUrl = baseUrl)$expression
 #   testthat::expect_type(object = expressionFromWebApi,type = 'list' )
 #   testthat::expect_gt(object = length(expressionFromWebApi), expected = 0)
-#   
+# 
 #   invoke <- ROhdsiWebApi::invokeCohortGeneration(cohortId = postDefinition2$id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
 #   testthat::expect_s3_class(object = invoke, class = 'tbl')
 #   testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
@@ -196,69 +196,71 @@ testthat::test_that("Test evaluate conceptSetExpression (positive test)", {
 #   deleteP2 <- ROhdsiWebApi::deleteDefinition(id = postDefinition2$id, baseUrl = baseUrl, category = 'cohort')
 #   testthat::expect_null(object = deleteP2)
 # })
-# 
-# testthat::test_that(desc = "Test getConcepts function (positive test)", {
-#   testthat::skip_if(baseUrl == "")
-#   getConc <- ROhdsiWebApi::getConcepts(conceptIds = c(21604686) 
-#                                        , baseUrl = baseUrl)
-#   testthat::expect_s3_class(object = getConc, class = 'tbl')
-#   testthat::expect_equal(object = nrow(getConc), expected = 1)
-#   testthat::expect_equal(object = getConc$standardConcept, expected = 'C')
-# })
-# 
-# 
-# 
-# testthat::test_that(desc = "Test getSourceConcepts function (positive test)", {
-#   testthat::skip_if(baseUrl == "")
-#   sourceConcept <- ROhdsiWebApi::getSourceConcepts(conceptIds = 21604686, baseUrl = baseUrl)
-#   testthat::expect_s3_class(object = sourceConcept, class = 'tbl')
-#   testthat::expect_equal(object = nrow(sourceConcept), expected = 1)
-#   testthat::expect_equal(object = sourceConcept$standardConcept, expected = 'C')
-# })
 
-# 
-# testthat::test_that("Test CharacterizationGetInvokeStop (positive test)", {
-#   testthat::skip_if(baseUrl == "")
-#   metadata <- ROhdsiWebApi::getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
-#   testthat::expect_s3_class(object = metadata, class = 'tbl')
-#   id <- metadata %>% dplyr::sample_n(1) %>% dplyr::pull(id)
-#   
-#   invoke <- ROhdsiWebApi::invokeCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-#   testthat::expect_s3_class(object = invoke, class = 'tbl')
-#   testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
-#   stopGeneration <- ROhdsiWebApi::cancelCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-#   testthat::expect_match(object = stopGeneration, regexp = "Generation of Characterization definition")
-# })
-# 
-# testthat::test_that("Test PathwayGetInvokeStop (positive test)", {
-#   # id = 78
-#   testthat::skip_if(baseUrl == "")
-#   metadata <- ROhdsiWebApi::getPathwayDefinitionsMetaData(baseUrl = baseUrl)
-#   testthat::expect_s3_class(object = metadata, class = 'tbl')
-#   id <- metadata %>% dplyr::sample_n(1) %>% dplyr::pull(id)
-#   
-#   invoke <- ROhdsiWebApi::invokePathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-#   testthat::expect_s3_class(object = invoke, class = 'tbl')
-#   testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
-#   stopGeneration <- ROhdsiWebApi::cancelPathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-#   testthat::expect_match(object = stopGeneration, regexp = 'Generation of Pathway definition')
-# })
-# 
-# testthat::test_that("Test IncidenceRateGetInvokeStop (positive test)", {
-#   # id = 1747233
-#   testthat::skip_if(baseUrl == "")
-#   metadata <- ROhdsiWebApi::getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
-#   testthat::expect_s3_class(object = metadata, class = 'tbl')
-#   id <- metadata %>% dplyr::sample_n(1) %>% dplyr::pull(id)
-#   
-#   invoke <- ROhdsiWebApi::invokeIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-#   testthat::expect_s3_class(object = invoke, class = 'tbl')
-#   testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
-#   stopGeneration <- ROhdsiWebApi::cancelIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
-#   testthat::expect_match(object = stopGeneration, regexp = 'Generation of IncidenceRate definition')
-# })
-# 
-# 
+testthat::test_that(desc = "Test getConcepts function (positive test)", {
+  testthat::skip_if(baseUrl == "")
+  getConc <- ROhdsiWebApi::getConcepts(conceptIds = c(idConceptSet)
+                                       , baseUrl = baseUrl)
+  testthat::expect_s3_class(object = getConc, class = 'tbl')
+  testthat::expect_equal(object = nrow(getConc), expected = 1)
+  testthat::expect_equal(object = getConc$standardConcept, expected = 'N')
+})
+
+
+
+
+testthat::test_that(desc = "Test getSourceConcepts function (positive test)", {
+  testthat::skip_if(baseUrl == "")
+  sourceConcept <- ROhdsiWebApi::getSourceConcepts(conceptIds = idConceptSet, baseUrl = baseUrl)
+  testthat::expect_s3_class(object = sourceConcept, class = 'tbl')
+  testthat::expect_equal(object = nrow(sourceConcept), expected = 1)
+  testthat::expect_equal(object = sourceConcept$standardConcept, expected = 'N')
+})
+
+
+testthat::test_that("Test CharacterizationGetInvokeStop (positive test)", {
+  testthat::skip_if(baseUrl == "")
+  metadata <- ROhdsiWebApi::getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
+  testthat::expect_s3_class(object = metadata, class = 'tbl')
+  id <- metadata %>% dplyr::sample_n(1) %>% dplyr::pull(id)
+
+  invoke <- ROhdsiWebApi::invokeCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
+  testthat::expect_s3_class(object = invoke, class = 'tbl')
+  testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
+  stopGeneration <- ROhdsiWebApi::cancelCharacterizationGeneration(characterizationId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
+  testthat::expect_match(object = stopGeneration, regexp = "Generation of Characterization definition")
+})
+
+
+testthat::test_that("Test PathwayGetInvokeStop (positive test)", {
+  # id = 78
+  testthat::skip_if(baseUrl == "")
+  metadata <- ROhdsiWebApi::getPathwayDefinitionsMetaData(baseUrl = baseUrl)
+  testthat::expect_s3_class(object = metadata, class = 'tbl')
+  id <- metadata %>% dplyr::sample_n(1) %>% dplyr::pull(id)
+
+  invoke <- ROhdsiWebApi::invokePathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
+  testthat::expect_s3_class(object = invoke, class = 'tbl')
+  testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
+  stopGeneration <- ROhdsiWebApi::cancelPathwayGeneration(pathwayId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
+  testthat::expect_match(object = stopGeneration, regexp = 'Generation of Pathway definition')
+})
+
+testthat::test_that("Test IncidenceRateGetInvokeStop (positive test)", {
+  # id = 1747233
+  testthat::skip_if(baseUrl == "")
+  metadata <- ROhdsiWebApi::getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
+  testthat::expect_s3_class(object = metadata, class = 'tbl')
+  id <- metadata %>% dplyr::sample_n(1) %>% dplyr::pull(id)
+
+  invoke <- ROhdsiWebApi::invokeIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
+  testthat::expect_s3_class(object = invoke, class = 'tbl')
+  testthat::expect_true(invoke$status %in% c('STARTING', 'STARTED'))
+  stopGeneration <- ROhdsiWebApi::cancelIncidenceRateGeneration(incidenceRateId = id, baseUrl = baseUrl, sourceKey = sourceKeyVariable)
+  testthat::expect_match(object = stopGeneration, regexp = 'Generation of IncidenceRate definition')
+})
+
+
 
 
 
