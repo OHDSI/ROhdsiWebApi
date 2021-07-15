@@ -51,6 +51,6 @@ idPathway <- 1
 Sys.setenv("ROhdsiWebApi_scratch" = tempdir("ROhdsiWebApi_sratch"))
 
 withr::defer({
-  #remove temp dir for Capr Save space used for testing
+  #remove temp dir for ROhdsiWebApi Save space used for testing
   unlink(Sys.getenv("ROhdsiWebApi_scratch"), recursive = TRUE, force = TRUE)
 }, testthat::teardown_env())
