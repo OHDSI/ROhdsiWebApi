@@ -140,3 +140,44 @@ getCohortDefinitionSql <- function(cohortId, baseUrl, generateStats = TRUE) {
 .formatName <- function(name) {
   gsub("_", " ", gsub("\\[(.*?)\\]_", "", gsub(" ", "_", name)))
 }
+
+#' Insert a set of cohort definitions into package
+#'
+#' @param fileName                Name of a CSV file specifying the cohorts to insert. See details for
+#'                                the expected file format.
+#' @param baseUrl                 The base URL for the WebApi instance, for example:
+#'                                "http://server.org:80/WebAPI".
+#' @param jsonFolder              Path to the folder where the JSON representations will be saved.
+#' @param sqlFolder               Path to the folder where the SQL representations will be saved.
+#' @param rFileName               Name of R file to generate when \code{insertCohortCreationR = TRUE}.
+#' @param insertTableSql          Should the SQL for creating the cohort table be inserted into the
+#'                                package as well? This file will be called CreateCohortTable.sql.
+#' @param insertCohortCreationR   Insert R code that will create the cohort table and instantiate the
+#'                                cohorts? This will create a file called R/CreateCohorts.R containing
+#'                                a function called \code{.createCohorts}.
+#' @param generateStats           Should cohort inclusion rule statistics be created?
+#' @param packageName             The name of the package (only needed when inserting the R code as
+#'                                well).
+#'
+#' @details
+#' The CSV file should have at least the following fields: \describe{ \item{atlasId}{The cohort ID in
+#' ATLAS.} \item{cohortId}{The cohort ID that will be used when instantiating the cohort (can be
+#' different from atlasId).} \item{name}{The name to be used for the cohort. This name will be used to
+#' generate file names, so please use letters and numbers only (no spaces).} }
+#'
+#' @export
+insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/CohortsToCreate.csv",
+                                               baseUrl,
+                                               jsonFolder = "inst/cohorts",
+                                               sqlFolder = "inst/sql/sql_server",
+                                               rFileName = "R/CreateCohorts.R",
+                                               insertTableSql = TRUE,
+                                               insertCohortCreationR = TRUE,
+                                               generateStats = FALSE,
+                                               packageName) {
+  .Deprecated(new = "insertCohortDefinitionSetInPackage",
+              package = "OhdsiRTools",
+              msg = "This function has been deprecated.",
+              old = as.character(sys.call(sys.parent()))[1L])
+  
+}
