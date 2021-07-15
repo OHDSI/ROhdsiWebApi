@@ -38,8 +38,6 @@ Suggests:
     rmarkdown,
     httpuv,
     jsonlite,
-    plumber,
-    callr,
     withr,
     httptest
 URL: https://ohdsi.github.io/ROhdsiWebApi/, https://github.com/OHDSI/ROhdsiWebApi
