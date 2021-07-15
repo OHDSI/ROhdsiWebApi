@@ -47,10 +47,11 @@ idPathway <- 1
 ## Set scratch directory to test writes ----------------------
 #tear it down after test complete
 
-#set up save space for capr
-Sys.setenv("ROhdsiWebApi_scratch" = tempdir("ROhdsiWebApi_sratch"))
+#set up scratch space for ROhdsiWebApi
+Sys.setenv("scratch_package" = tempdir("scratch_package"))
+
 
 withr::defer({
-  #remove temp dir for ROhdsiWebApi Save space used for testing
-  unlink(Sys.getenv("ROhdsiWebApi_scratch"), recursive = TRUE, force = TRUE)
+  #remove temp dir for Capr Save space used for testing
+  unlink(Sys.getenv("scratch_package"), recursive = TRUE, force = TRUE)
 }, testthat::teardown_env())
