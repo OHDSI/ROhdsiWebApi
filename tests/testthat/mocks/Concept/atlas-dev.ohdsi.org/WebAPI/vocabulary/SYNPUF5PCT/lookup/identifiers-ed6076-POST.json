@@ -1,0 +1,14 @@
+[
+    {
+        "CONCEPT_ID": 2,
+        "CONCEPT_NAME": "Gender",
+        "STANDARD_CONCEPT": "N",
+        "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+        "INVALID_REASON": "V",
+        "INVALID_REASON_CAPTION": "Valid",
+        "CONCEPT_CODE": "OMOP generated",
+        "DOMAIN_ID": "Metadata",
+        "VOCABULARY_ID": "Domain",
+        "CONCEPT_CLASS_ID": "Domain"
+    }
+]
