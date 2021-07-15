@@ -11,8 +11,7 @@ getCharacterizationResults(characterizationId, baseUrl)
 characterization analysis definition in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 }
 \value{
 An R object with results.
@@ -25,6 +24,7 @@ Get the results for Characterization id.
 }
 \examples{
 \dontrun{
-getCharacterizationResults(characterizationId = 342, baseUrl = "http://server.org:80/WebAPI")
+getCharacterizationResults(characterizationId = 342, 
+baseUrl = "http://server.org:80/WebAPI")
 }
 }

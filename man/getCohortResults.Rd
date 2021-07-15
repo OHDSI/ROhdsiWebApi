@@ -11,8 +11,7 @@ getCohortResults(cohortId, baseUrl)
 in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 }
 \value{
 An R object with results.
@@ -25,6 +24,7 @@ Get the results for Cohort id.
 }
 \examples{
 \dontrun{
-getCohortResults(cohortId = 342, baseUrl = "http://server.org:80/WebAPI")
+getCohortResults(cohortId = 342, 
+baseUrl = "http://server.org:80/WebAPI")
 }
 }
