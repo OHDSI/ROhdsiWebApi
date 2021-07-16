@@ -1,0 +1,21 @@
+[
+    {
+        "id": {
+            "cohortDefinitionId": 3,
+            "sourceId": 1
+        },
+        "startTime": 1626455917689,
+        "executionDuration": 2144,
+        "status": "COMPLETE",
+        "isValid": false,
+        "isCanceled": false,
+        "failMessage": "Job interrupted status detected.",
+        "personCount": null,
+        "recordCount": null,
+        "createdBy": {
+            "id": 2500,
+            "name": "testadminuser",
+            "login": "testadminuser"
+        }
+    }
+]

@@ -21,3 +21,8 @@ Obtains the WebAPI version number. This function is used to check that
 WebAPI baseUrl can be accessed and is a good first check to make sure 
 you can access a WebAPI endpoint.
 }
+\examples{
+\dontrun{
+getWebApiVersion("http://server.org:80/WebAPI")
+}
+}

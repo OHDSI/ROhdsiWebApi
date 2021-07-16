@@ -1,0 +1,33 @@
+[
+    {
+        "covariateId": 1002,
+        "covariateName": "age in years",
+        "aggregateId": 0,
+        "aggregateName": null,
+        "conceptId": 0,
+        "count": 24584,
+        "avg": 73.27017572404816,
+        "stdDev": 12.742879359315177,
+        "min": 25.0,
+        "p10": 57.0,
+        "p25": 68.0,
+        "median": 74.0,
+        "p75": 82.0,
+        "p90": 88.0,
+        "max": 101.0,
+        "id": null,
+        "faType": "PRESET",
+        "sourceKey": "SYNPUF5PCT",
+        "cohortId": 2,
+        "analysisId": 2,
+        "analysisName": "DemographicsAge",
+        "resultType": "DISTRIBUTION",
+        "strataId": 0,
+        "strataName": "",
+        "timeWindow": "None",
+        "conceptName": "No matching concept",
+        "distance": 0,
+        "proportion": null,
+        "missingMeansZero": false
+    }
+]
