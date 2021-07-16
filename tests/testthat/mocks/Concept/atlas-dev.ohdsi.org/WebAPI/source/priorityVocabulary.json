@@ -1,0 +1,26 @@
+{
+    "sourceId": 1,
+    "sourceName": "SYNPUF 5%",
+    "sourceDialect": "postgresql",
+    "sourceKey": "SYNPUF5PCT",
+    "daimons": [
+        {
+            "sourceDaimonId": 1,
+            "daimonType": "CDM",
+            "tableQualifier": "synpuf5pct",
+            "priority": 10
+        },
+        {
+            "sourceDaimonId": 2,
+            "daimonType": "Vocabulary",
+            "tableQualifier": "unrestricted_vocabs",
+            "priority": 10
+        },
+        {
+            "sourceDaimonId": 3,
+            "daimonType": "Results",
+            "tableQualifier": "synpuf5pct_results",
+            "priority": 10
+        }
+    ]
+}

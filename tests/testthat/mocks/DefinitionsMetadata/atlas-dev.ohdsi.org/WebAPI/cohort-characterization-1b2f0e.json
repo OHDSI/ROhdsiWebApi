@@ -1,0 +1,27 @@
+{
+    "content": [
+        {
+            "createdDate": 1559535424870,
+            "hasWriteAccess": false,
+            "id": 1,
+            "hashCode": 70317281,
+            "name": "type 1 diabetes"
+        },
+        {
+            "createdDate": 1626454671731,
+            "modifiedDate": 1626454710796,
+            "hasWriteAccess": false,
+            "id": 2,
+            "hashCode": -1278925558,
+            "name": "type 1 diabetes for tests - do not delete"
+        }
+    ],
+    "last": true,
+    "totalPages": 1,
+    "totalElements": 2,
+    "sort": null,
+    "numberOfElements": 2,
+    "first": true,
+    "size": 100000000,
+    "number": 0
+}

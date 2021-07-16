@@ -1,0 +1,64 @@
+[
+    {
+        "id": 2,
+        "name": "type 1 diabetes",
+        "description": "type 1 diabetes description",
+        "createdDate": 1559533510824,
+        "modifiedDate": 1614655049458,
+        "hasWriteAccess": false
+    },
+    {
+        "id": 4,
+        "name": "this is a test and may be deleted-oznmzeyute",
+        "createdDate": 1626276161045,
+        "hasWriteAccess": false
+    },
+    {
+        "id": 6,
+        "name": "this is a test and may be deleted-rzbbyfnctg",
+        "createdDate": 1626276191964,
+        "hasWriteAccess": false
+    },
+    {
+        "id": 8,
+        "name": "this is a test and may be deleted-lbnihpvzyk",
+        "createdDate": 1626276219363,
+        "hasWriteAccess": false
+    },
+    {
+        "id": 12,
+        "name": "this is a test and may be deleted-cgwxxsnbxj",
+        "createdDate": 1626276516839,
+        "hasWriteAccess": false
+    },
+    {
+        "id": 14,
+        "name": "this is a test and may be deleted-aruxpixulv",
+        "createdDate": 1626276558213,
+        "hasWriteAccess": false
+    },
+    {
+        "id": 16,
+        "name": "this is a test and may be deleted-knfseewgdh",
+        "createdDate": 1626276599731,
+        "hasWriteAccess": false
+    },
+    {
+        "id": 22,
+        "name": "this is a test and may be deleted-tekspabkxg",
+        "createdDate": 1626277160058,
+        "hasWriteAccess": false
+    },
+    {
+        "id": 32,
+        "name": "this is a test and may be deleted-ytqhneyhvu",
+        "createdDate": 1626277566781,
+        "hasWriteAccess": false
+    },
+    {
+        "id": 36,
+        "name": "this is a test and may be deleted-mardoofbft",
+        "createdDate": 1626314444327,
+        "hasWriteAccess": false
+    }
+]
