@@ -1,0 +1,22 @@
+{
+    "status": "STARTING",
+    "startDate": null,
+    "endDate": null,
+    "exitStatus": "UNKNOWN",
+    "executionId": 508,
+    "jobInstance": {
+        "instanceId": 508,
+        "name": "generateCohort"
+    },
+    "jobParameters": {
+        "jobName": "Generating cohort 3 : SYNPUF 5% (SYNPUF5PCT)",
+        "generate_stats": "true",
+        "jobAuthor": "testadminuser",
+        "sessionId": "c7e8jwq7",
+        "cohort_definition_id": "3",
+        "source_id": "1",
+        "time": 1626408905691,
+        "target_database_schema": "synpuf5pct_results"
+    },
+    "ownerType": null
+}

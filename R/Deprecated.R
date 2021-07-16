@@ -140,3 +140,88 @@ getCohortDefinitionSql <- function(cohortId, baseUrl, generateStats = TRUE) {
 .formatName <- function(name) {
   gsub("_", " ", gsub("\\[(.*?)\\]_", "", gsub(" ", "_", name)))
 }
+
+#' Insert a set of cohort definitions into package
+#'
+#' @param fileName                Name of a CSV file specifying the cohorts to insert. See details for
+#'                                the expected file format.
+#' @param baseUrl                 The base URL for the WebApi instance, for example:
+#'                                "http://server.org:80/WebAPI".
+#' @param jsonFolder              Path to the folder where the JSON representations will be saved.
+#' @param sqlFolder               Path to the folder where the SQL representations will be saved.
+#' @param rFileName               Name of R file to generate when \code{insertCohortCreationR = TRUE}.
+#' @param insertTableSql          Should the SQL for creating the cohort table be inserted into the
+#'                                package as well? This file will be called CreateCohortTable.sql.
+#' @param insertCohortCreationR   Insert R code that will create the cohort table and instantiate the
+#'                                cohorts? This will create a file called R/CreateCohorts.R containing
+#'                                a function called \code{.createCohorts}.
+#' @param generateStats           Should cohort inclusion rule statistics be created?
+#' @param packageName             The name of the package (only needed when inserting the R code as
+#'                                well).
+#'
+#' @details
+#' The CSV file should have at least the following fields: \describe{ \item{atlasId}{The cohort ID in
+#' ATLAS.} \item{cohortId}{The cohort ID that will be used when instantiating the cohort (can be
+#' different from atlasId).} \item{name}{The name to be used for the cohort. This name will be used to
+#' generate file names, so please use letters and numbers only (no spaces).} }
+#'
+#' @export
+insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/CohortsToCreate.csv",
+                                               baseUrl,
+                                               jsonFolder = "inst/cohorts",
+                                               sqlFolder = "inst/sql/sql_server",
+                                               rFileName = "R/CreateCohorts.R",
+                                               insertTableSql = TRUE,
+                                               insertCohortCreationR = TRUE,
+                                               generateStats = FALSE,
+                                               packageName) {
+  .Deprecated(new = "insertCohortDefinitionSetInPackage",
+              package = "OhdsiRTools",
+              msg = "This function has been deprecated.",
+              old = as.character(sys.call(sys.parent()))[1L])
+  
+}
+
+#' Load a cohort definition and insert it into this package \lifecycle{maturing}
+#' @details
+#' Load a cohort definition from a WebApi instance and insert it into this package. This will fetch
+#' the JSON object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the
+#' template SQL and store it in another folder (defaults to the 'inst/sql/sql_server' folder). Both
+#' folders will be created if they don't exist. When using generateStats = TRUE, the following tables
+#' are required to exist when executing the SQL: cohort_inclusion, cohort_inclusion_result,
+#' cohort_inclusion_stats, and cohort_summary_stats. Also note that the cohort_inclusion table should
+#' be populated with the names of the rules prior to executing the cohort definition SQL. Note:
+#' generate inclusion statistics are created for all by default.
+#'
+#' @template BaseUrl
+#' @template CohortId
+#' @param name            The name that will be used for the JSON and SQL files. If not provided, the
+#'                        name in cohort will be used, but this may not lead to valid file names.
+#' @param jsonFolder      Path to the folder where the JSON representation will be saved.
+#' @param sqlFolder       Path to the folder where the SQL representation will be saved.
+#' @param generateStats   Should the SQL include the code for generating inclusion rule statistics?
+#'                        Note that if TRUE, several additional tables are expected to exists as
+#'                        described in the details.
+#'
+#' @examples
+#' \dontrun{
+#' # This will create 'inst/cohorts/Angioedema.json' and 'inst/sql/sql_server/Angioedema.sql':
+#'
+#' insertCohortDefinitionInPackage(cohortId = 282,
+#'                                 name = "Angioedema",
+#'                                 baseUrl = "http://server.org:80/WebAPI")
+#' }
+#'
+#' @export
+insertCohortDefinitionInPackage <- function(cohortId,
+                                            name = NULL,
+                                            jsonFolder = "inst/cohorts",
+                                            sqlFolder = "inst/sql/sql_server",
+                                            baseUrl,
+                                            generateStats = FALSE) {
+  .Deprecated(new = "insertCohortDefinitionInPackage",
+              package = "OhdsiRTools",
+              msg = "This function has been deprecated.",
+              old = as.character(sys.call(sys.parent()))[1L])
+}
+  
