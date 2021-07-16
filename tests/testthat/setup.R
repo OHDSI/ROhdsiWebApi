@@ -9,6 +9,7 @@ sourceKeyVariable <- 'SYNPUF5PCT' #source db
 # testOhdsiPassword <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_PASSWORD") # db test password
 
 # preload ids for tests (careful this is fragile) --------------------
+# these are the ids for test artifacts in the unsecured webapi instance
 idCohort <- 2
 idConceptSet <- 2
 idCharacterization <- 1
@@ -16,15 +17,4 @@ idIncidenceRate <- 2
 idPathway <- 1
 
 
-## Set scratch directory to test writes ----------------------
-#tear it down after test complete
-# removing this because these functions are leaving the package
 
-#set up scratch space for ROhdsiWebApi
-# Sys.setenv("scratch_package" = tempdir("scratch_package"))
-
-
-# withr::defer({
-#   #remove temp dir for Capr Save space used for testing
-#   unlink(Sys.getenv("scratch_package"), recursive = TRUE, force = TRUE)
-# }, testthat::teardown_env())
