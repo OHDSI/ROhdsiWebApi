@@ -1,0 +1,21 @@
+{
+    "status": "STARTING",
+    "startDate": null,
+    "endDate": null,
+    "exitStatus": "UNKNOWN",
+    "executionId": 509,
+    "jobInstance": {
+        "instanceId": 509,
+        "name": "irAnalysis"
+    },
+    "jobParameters": {
+        "jobName": "IR Analysis: 2: SYNPUF 5% (SYNPUF5PCT)",
+        "jobAuthor": "testadminuser",
+        "target_table": "temp_cohort_wv5esu3o",
+        "source_id": "1",
+        "sessionId": "wv5esu3o",
+        "time": 1626408915846,
+        "analysis_id": "2"
+    },
+    "ownerType": null
+}

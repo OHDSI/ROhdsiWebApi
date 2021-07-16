@@ -1,0 +1,21 @@
+[
+    {
+        "id": {
+            "cohortDefinitionId": 3,
+            "sourceId": 1
+        },
+        "startTime": 1626408905740,
+        "executionDuration": 691,
+        "status": "COMPLETE",
+        "isValid": false,
+        "isCanceled": false,
+        "failMessage": "Invalidated by system",
+        "personCount": null,
+        "recordCount": null,
+        "createdBy": {
+            "id": 2500,
+            "name": "testadminuser",
+            "login": "testadminuser"
+        }
+    }
+]
