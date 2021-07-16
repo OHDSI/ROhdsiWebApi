@@ -4,12 +4,12 @@
             "cohortDefinitionId": 3,
             "sourceId": 1
         },
-        "startTime": 1626408905740,
-        "executionDuration": 691,
+        "startTime": 1626455917689,
+        "executionDuration": 2144,
         "status": "COMPLETE",
         "isValid": false,
         "isCanceled": false,
-        "failMessage": "Invalidated by system",
+        "failMessage": "Job interrupted status detected.",
         "personCount": null,
         "recordCount": null,
         "createdBy": {

@@ -1,0 +1,54 @@
+[
+    {
+        "sourceId": 2,
+        "sourceName": "Common Evidence Model",
+        "sourceDialect": "postgresql",
+        "sourceKey": "CEM",
+        "daimons": [
+            {
+                "sourceDaimonId": 4,
+                "daimonType": "Vocabulary",
+                "tableQualifier": "unrestricted_vocabs",
+                "priority": 0
+            },
+            {
+                "sourceDaimonId": 5,
+                "daimonType": "CEM",
+                "tableQualifier": "synpuf5pct_results",
+                "priority": 0
+            },
+            {
+                "sourceDaimonId": 6,
+                "daimonType": "CEMResults",
+                "tableQualifier": "synpuf5pct_results",
+                "priority": 0
+            }
+        ]
+    },
+    {
+        "sourceId": 1,
+        "sourceName": "SYNPUF 5%",
+        "sourceDialect": "postgresql",
+        "sourceKey": "SYNPUF5PCT",
+        "daimons": [
+            {
+                "sourceDaimonId": 1,
+                "daimonType": "CDM",
+                "tableQualifier": "synpuf5pct",
+                "priority": 10
+            },
+            {
+                "sourceDaimonId": 2,
+                "daimonType": "Vocabulary",
+                "tableQualifier": "unrestricted_vocabs",
+                "priority": 10
+            },
+            {
+                "sourceDaimonId": 3,
+                "daimonType": "Results",
+                "tableQualifier": "synpuf5pct_results",
+                "priority": 10
+            }
+        ]
+    }
+]
