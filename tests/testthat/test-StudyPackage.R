@@ -1,57 +1,61 @@
 # Tests for StudyPackage.R 
 
-# TODO fix these failing tests
+with_mock_dir("mocks/StudyPackage", {
 
-## Set scratch directory to test writes ----------------------
-# tear it down after test complete
-# Sys.setenv("scratch_package" = tempdir("scratch_package"))
-# 
-# withr::defer({
-#   #remove temp dir for Save space used for testing Study Package functions
-#   unlink(Sys.getenv("scratch_package"), recursive = TRUE, force = TRUE)
-# }, testthat::teardown_env())
-# 
-# 
-# with_mock_dir("mocks/StudyPackage", {
-#   
-#   ## Run tests ------------------------
-#   test_that("Test insertCohortDefinitionInPackage", {
-#     testthat::skip_if(baseUrl == "")
-#     
-#     #pull scratch directory
-#     scratch <- Sys.getenv("scratch_package")
-#     
-#     
-#     #create inst on scratch and new sub directories
-#     dir.create(file.path(scratch, "inst/cohorts"), recursive = TRUE)
-#     dir.create(file.path(scratch, "inst/sql/sql_server"), recursive = TRUE)
-#     jsonFolder <- file.path(scratch, "inst/cohorts")
-#     sqlFolder <- file.path(scratch, "inst/sql/sql_server")
-#     
-#     #run function 
-#     insertCohortDefinitionInPackage(cohortId = idCohort,
-#                                           baseUrl = baseUrl,
-#                                           jsonFolder = jsonFolder,
-#                                           sqlFolder = sqlFolder)
-#     
-#   
-#     pathsForTestScenario <- purrr::map(c(jsonFolder, sqlFolder), 
-#                                        ~list.files(.x, full.names = TRUE))
-#     contentsOfTestScenario <- purrr::map(pathsForTestScenario, 
-#                                          ~readr::read_file(.x))
-#     
-#     #test that function writes files to directory
-#     expect_true(nchar(contentsOfTestScenario[[1]]) > 4) # test for json
-#     expect_true(nchar(contentsOfTestScenario[[2]]) > 4) # test for sql
-#     
-#     #exit test and destroy temp environment
-#     #unlink(scratch, recursive = TRUE, force = TRUE)
-#   })
-#   
-#   
-#   test_that("test insertCohortDefinitionSetInPackage",{
-#     expect_error(insertCohortDefinitionSetInPackage(baseUrl = baseUrl,
-#                                        packageName = "fakePackage"))
-#   })
-# 
-# })
+  test_that("Test insertCohortDefinitionInPackage", {
+    
+    scratch <- tempdir()
+    jsonFolder <- file.path(scratch, "inst/cohorts")
+    sqlFolder <- file.path(scratch, "inst/sql/sql_server")
+    
+    expect_output(
+      insertCohortDefinitionInPackage(cohortId = idCohort, 
+                                      baseUrl = baseUrl, 
+                                      jsonFolder = jsonFolder,
+                                      sqlFolder = sqlFolder), 
+      "Created JSON file:"
+    )
+
+    jsonFile <- readr::read_file(list.files(jsonFolder, full.names = TRUE)[[1]])
+    expect_true(nchar(jsonFile) > 4) 
+    
+    sqlFile <- readr::read_file(list.files(sqlFolder, full.names = TRUE)[[1]])
+    expect_true(nchar(jsonFile) > 4) 
+    
+    unlink(scratch, recursive = TRUE, force = TRUE)
+  })
+
+  test_that("test insertCohortDefinitionSetInPackage", {
+    
+    # create the temp package structure
+    scratch <- tempdir()
+    dir.create(file.path(scratch, "inst", "settings"), recursive = TRUE)
+    jsonFolder <- file.path(scratch, "inst", "cohorts")
+    dir.create(jsonFolder, recursive = TRUE)
+    sqlFolder <- file.path(scratch, "inst", "sql", "sql_server")
+    dir.create(sqlFolder, recursive = TRUE)
+    
+    # insert CohortsToCreate.csv file
+    df <- data.frame(atlasId = idCohort, cohortId = idCohort, name = "blah")
+    settingsPath <- file.path(scratch, "inst", "settings", "CohortsToCreate.csv")
+    write.csv(df, settingsPath, row.names = FALSE)
+
+    expect_output(
+      insertCohortDefinitionSetInPackage(fileName = settingsPath,
+                                         baseUrl = baseUrl,
+                                         jsonFolder = jsonFolder,
+                                         sqlFolder = sqlFolder,
+                                         insertCohortCreationR = FALSE,
+                                         packageName = "fakePackage"),
+      "Inserting cohort")
+    
+    jsonFile <- readr::read_file(list.files(jsonFolder, full.names = TRUE)[[1]])
+    expect_true(nchar(jsonFile) > 4) 
+    
+    sqlFile <- readr::read_file(list.files(sqlFolder, full.names = TRUE)[[1]])
+    expect_true(nchar(jsonFile) > 4) 
+    
+    unlink(scratch, recursive = TRUE, force = TRUE)
+  })
+
+})
