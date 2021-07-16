@@ -1,4 +1,4 @@
-with_mock_dir("mocks/DefinitionsMeta", {
+with_mock_dir("mocks/DefinitionsMetadata", {
   test_that("getDefinitionsMetaData works",{
     df <- getDefinitionsMetadata(baseUrl = baseUrl,
                                  category = "cohort")
@@ -12,4 +12,12 @@ with_mock_dir("mocks/DefinitionsMeta", {
     expect_error(getDefinition(baseUrl = misspelledBaseUrl,
                                category = 'cohort'))
   })
+
+  test_that("getDefinitionsMetadata group2", {
+    df <- getDefinitionsMetadata(baseUrl = baseUrl,
+                                 category = "characterization")
+    expect_s3_class(df, "data.frame")
+    expect_equal(nrow(df), 2)
+  })
+  
 })
