@@ -21,13 +21,15 @@ with_mock_dir("mocks/CohortDefinition", {
     def2 <- def
     def2$expression <- NULL
     expect_error(getCohortSql(def2, baseUrl, generateStats = FALSE))
-  })
+    
+    #error in cohort sql when using other object type
+    def3 <- getDefinition(id = idPathway, 
+                          baseUrl = baseUrl, 
+                          category = 'pathway')
+    expect_error(getCohortSql(def3, baseUrl))
+  });
   
-  #error in cohort sql when using other object type
-  def3 <- getDefinition(id = idPathway, 
-                        baseUrl = baseUrl, 
-                        category = 'pathway')
-  expect_error(getCohortSql(def3, baseUrl))
+
 })
 
 
