@@ -7,20 +7,20 @@ with_mock_dir("mocks/GetResults", {
     expect_type(result, "list")
   })
   
-  # TODO fix this test. Seems that function is not working.
+  # # TODO fix this test. Seems that function is not working.
   # test_that("getResults work for incidenceRate", {
   #   result <- getResults(idIncidenceRate, baseUrl, "incidenceRate")
   #   expect_type(result, "list")
-  # })  
+  # })
   
-  # TODO: why do these download so many different ids? Are they different executions?
+  # TODO: allow for downloading only the latest successful execution
   test_that("getResults work for pathway", {
-    result <- getResults(idPathway, baseUrl, "pathway")
+    result <- getResults(2, baseUrl, "pathway")
     expect_type(result, "list")
   })
   
   test_that("getResults work for characterization", {
-    result <- getResults(idCharacterization, baseUrl, "characterization")
+    result <- getResults(2, baseUrl, "characterization")
     expect_type(result, "list")
   })
 

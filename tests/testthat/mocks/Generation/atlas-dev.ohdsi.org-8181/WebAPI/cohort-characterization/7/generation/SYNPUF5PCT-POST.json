@@ -1,0 +1,21 @@
+{
+    "status": "STARTING",
+    "startDate": null,
+    "endDate": null,
+    "exitStatus": "UNKNOWN",
+    "executionId": 517,
+    "jobInstance": {
+        "instanceId": 517,
+        "name": "generateCohortCharacterization"
+    },
+    "jobParameters": {
+        "jobName": "Generating cohort characterization 7 : SYNPUF 5% (SYNPUF5PCT)",
+        "cohort_characterization_id": "7",
+        "jobAuthor": "testadminuser",
+        "target_table": "temp_cohort_lguhevhq",
+        "source_id": "1",
+        "sessionId": "lguhevhq",
+        "time": 1626455924315
+    },
+    "ownerType": null
+}

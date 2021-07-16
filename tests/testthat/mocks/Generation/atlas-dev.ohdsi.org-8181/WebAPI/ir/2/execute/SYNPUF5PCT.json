@@ -3,18 +3,18 @@
     "startDate": null,
     "endDate": null,
     "exitStatus": "UNKNOWN",
-    "executionId": 509,
+    "executionId": 516,
     "jobInstance": {
-        "instanceId": 509,
+        "instanceId": 516,
         "name": "irAnalysis"
     },
     "jobParameters": {
         "jobName": "IR Analysis: 2: SYNPUF 5% (SYNPUF5PCT)",
         "jobAuthor": "testadminuser",
-        "target_table": "temp_cohort_wv5esu3o",
+        "target_table": "temp_cohort_ecmc783o",
         "source_id": "1",
-        "sessionId": "wv5esu3o",
-        "time": 1626408915846,
+        "sessionId": "ecmc783o",
+        "time": 1626455920927,
         "analysis_id": "2"
     },
     "ownerType": null

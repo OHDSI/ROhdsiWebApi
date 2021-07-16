@@ -1,0 +1,18 @@
+{
+    "summary": {
+        "baseCount": 24584,
+        "finalCount": 24584,
+        "lostCount": 0,
+        "percentMatched": "100.00%"
+    },
+    "inclusionRuleStats": [
+        {
+            "id": 0,
+            "name": "age",
+            "percentExcluded": "0.00%",
+            "percentSatisfying": "100.00%",
+            "countSatisfying": 24584
+        }
+    ],
+    "treemapData": "{\"name\" : \"Everyone\", \"children\" : [{\"name\" : \"Group 1\", \"children\" : [{\"name\": \"1\", \"size\": 24584}]}]}"
+}
