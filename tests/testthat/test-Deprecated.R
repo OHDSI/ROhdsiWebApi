@@ -21,12 +21,9 @@ with_mock_dir("mocks/Deprecated", {
     expect_equal(.formatName("blah_blah"), "blah blah")
   })
   
-  test_that("insertCohortDefinitionSetInPackage warns", {
-    expect_warning(insertCohortDefinitionSetInPackage())
-  })
-  
-  test_that("insertCohortDefinitionInPackage warns", {
-    expect_warning(insertCohortDefinitionInPackage())
+  test_that("getCohortInclusionRulesAndCounts works and warns", {
+    expect_warning(df <- getCohortInclusionRulesAndCounts(baseUrl, idCohort, sourceKeyVariable))
+    expect_s3_class(df, "data.frame")
   })
 
 })
