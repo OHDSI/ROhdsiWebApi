@@ -181,7 +181,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
       rules <- dplyr::inner_join(rules, tidyr::tibble(cohortId = cohortsToCreate$cohortId,
                                                       cohortName = cohortsToCreate$name))
       csvFileName <- file.path(jsonFolder, "InclusionRules.csv")
-      readr::write_csv(x = rules, path = csvFileName)
+      readr::write_csv(x = rules, file = csvFileName)
       writeLines(paste("- Created CSV file:", csvFileName))
     }
     writeLines(paste("- Inclusion rules not stored, as no rules found"))
@@ -190,8 +190,9 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
   # Generate R code to create cohorts
   if (insertCohortCreationR) {
     writeLines("Generating R code to create cohorts")
-    templateFileName <- system.file("CreateCohorts.R", package = "ROhdsiWebApi")
-    rCode <- readChar(templateFileName, file.info(templateFileName)$size)
+    templateFileName <- system.file("CreateCohorts.R", package = "ROhdsiWebApi", mustWork = TRUE)
+    rCode <- readr::read_file(templateFileName)
+    # rCode <- readChar(templateFileName, file.info(templateFileName)$size)
     rCode <- gsub("#CopyrightYear#", format(Sys.Date(), "%Y"), rCode)
     rCode <- gsub("#packageName#", packageName, rCode)
     libPath <- gsub(".*inst[/\\]", "", fileName)
