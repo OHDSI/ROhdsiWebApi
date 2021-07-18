@@ -204,9 +204,10 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
     } else {
       rCode <- gsub("#stats_start#.*?#stats_end#", "", rCode)
     }
-    fileConn <- file(rFileName)
-    writeChar(rCode, fileConn, eos = NULL)
-    close(fileConn)
+    readr::write_file(rCode, rFileName)
+    # fileConn <- file(rFileName)
+    # writeChar(rCode, fileConn, eos = NULL)
+    # close(fileConn)
     writeLines(paste("- Created R file:", rFileName))
   }
 }
