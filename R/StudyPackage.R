@@ -234,12 +234,10 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
 
 .insertSqlForCohortTableInPackage <- function(statsTables = FALSE, sqlFolder) {
   fileName <- system.file("CohortTable.sql", package = "ROhdsiWebApi")
-  # sql <- readChar(fileName, file.info(fileName)$size)
-  sql <- readr::read_file(fileName)
+  sql <- readChar(fileName, file.info(fileName)$size)
   if (statsTables) {
     fileName <- system.file("InclusionStatsTables.sql", package = "ROhdsiWebApi")
-    # sql <- paste(sql, readChar(fileName, file.info(fileName)$size), sep = "\n")
-    sql <- paste(sql, readr::read_file(fileName), sep = "\n")
+    sql <- paste(sql, readChar(fileName, file.info(fileName)$size), sep = "\n")
   }
   if (!file.exists(sqlFolder)) {
     dir.create(sqlFolder, recursive = TRUE)

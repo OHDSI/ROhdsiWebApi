@@ -49,6 +49,7 @@ with_mock_dir("mocks/StudyPackage", {
                                            jsonFolder = jsonFolder,
                                            sqlFolder = sqlFolder,
                                            rFileName = rFileName,
+                                           insertTableSql = FALSE,
                                            generateStats = TRUE,
                                            packageName = "fakePackage"),
     "Inserting cohort")
