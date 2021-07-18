@@ -1,73 +1,65 @@
 # Tests for the Generation.R file
 
+# Generatable categories are: cohort, incidenceRate, pathway, and characterization
+
 with_mock_dir("mocks/Generation", {
 
-  # temporarily use the secured version. Unsecured version is backed up.
-  baseUrl <- Sys.getenv("WEBAPI_TEST_SECURE_WEBAPI_URL") 
-  testOhdsiUser <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_NAME") 
-  testOhdsiPassword <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_PASSWORD")
-  # For the testathon we need to use auth to manually refresh the cache but not when using the cache.
-  # authorizeWebApi(baseUrl, "db", testOhdsiUser, testOhdsiPassword)
-  
-  idCohort <- 3
-  idIncidenceRate <- 2
-  
-
-  test_that("Generation functions work for cohorts", {
-    # df <- invokeGeneration(idCohort, baseUrl, sourceKeyVariable, "cohort")
+  test_that("Cohort generation functions", {
     df <- invokeCohortGeneration(idCohort, baseUrl, sourceKeyVariable)
     expect_s3_class(df, "data.frame")
-    expect_equal(nrow(df), 1)
 
     # df2 <- getGenerationInformation(idCohort, "cohort", baseUrl) #TODO argument order should be consistent.
     df2 <- getCohortGenerationInformation(idCohort, baseUrl)
     expect_s3_class(df2, "data.frame")
-    expect_equal(nrow(df2), 1)
 
-    # Why does cancel generation produce a warning?
+    # TODO Why does cancel generation produce a warning?
     # expect_warning(cancelGeneration(idCohort, baseUrl, sourceKeyVariable, "cohort"), "requested to be stopped")
     expect_warning(cancelCohortGeneration(idCohort, baseUrl, sourceKeyVariable), "requested to be stopped")
 
-    # check generation information again after cancelation
+    # check generation information again after cancellation
     df3 <- getGenerationInformation(idCohort, "cohort", baseUrl)
     expect_s3_class(df3, "data.frame")
-    expect_equal(nrow(df3), 1)
   })
   
-  test_that("Generation functions work for incidence rates", {
-    # df <- invokeGeneration(idIncidenceRate, baseUrl, sourceKeyVariable, "incidenceRate")
+  test_that("incidenceRate generation functions", {
     df <- invokeIncidenceRateGeneration(idIncidenceRate, baseUrl, sourceKeyVariable)
     expect_s3_class(df, "data.frame")
     expect_equal(nrow(df), 1)
     
-    #TODO argument order should be consistent.
-    # df2 <- getGenerationInformation(idIncidenceRate, "incidenceRate", baseUrl) 
     df2 <- getIncidenceRateGenerationInformation(idIncidenceRate, baseUrl) 
     expect_s3_class(df2$executionInfo, "data.frame")
     
-    # Why does cancel generation produce a warning?
     expect_warning(cancelIncidenceRateGeneration(idIncidenceRate, baseUrl, sourceKeyVariable), "requested to be stopped")
     
-    # check generation information again after cancelation
     df3 <- getGenerationInformation(idIncidenceRate, "incidenceRate", baseUrl)
     expect_s3_class(df3$executionInfo, "data.frame")
+  })  
+  
+  # TODO get pathway generation functions working.
+  # test_that("pathway generation functions", {
+    # df <- invokePathwayGeneration(idPathway, baseUrl, sourceKeyVariable)
+    # expect_s3_class(df, "data.frame")
+    
+    # df2 <- getPathwayGenerationInformation(idPathway, baseUrl) 
+    # expect_s3_class(df2$executionInfo, "data.frame")
+    
+    # expect_warning(cancelGeneration(idPathway, baseUrl, sourceKeyVariable), "requested to be stopped")
+    
+  # })
+  
+  test_that("characterization generation functions", {
+    df <- invokeCharacterizationGeneration(idCharacterization, baseUrl, sourceKeyVariable)
+    expect_s3_class(df, "data.frame")
+    
+    df2 <- getCharacterizationGenerationInformation(idCharacterization, baseUrl)
+    expect_s3_class(df2, "data.frame")
+    
+    expect_warning(cancelCharacterizationGeneration(idCharacterization, baseUrl, sourceKeyVariable), "requested to be stopped")
+    
+    df3 <- getGenerationInformation(idCharacterization, "characterization", baseUrl)
+    expect_s3_class(df3, "data.frame")
   })
   
-  #TODO create a similar pattern for testing all characterization generation functions
-  test_that("invokeGeneration works for characterizations", {
-    # Make sure that characterization #7 exists
-    characterizations <- getCharacterizationDefinitionsMetaData(baseUrl)
-    expect_equal(nrow(dplyr::filter(characterizations, .data$id == 7)), 1)
-
-    generationInfo <- invokeGeneration(id = 7,
-                                       baseUrl = baseUrl,
-                                       sourceKey = "SYNPUF5PCT",
-                                       category = "characterization")
-
-    expect_s3_class(generationInfo, "data.frame")
-    expect_equal(nrow(generationInfo), 1)
-
-  })
 
   
   ## Negative tests ------------------------------------------------
