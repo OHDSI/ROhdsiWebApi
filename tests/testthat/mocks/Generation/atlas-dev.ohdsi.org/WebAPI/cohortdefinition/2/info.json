@@ -1,0 +1,17 @@
+[
+    {
+        "id": {
+            "cohortDefinitionId": 2,
+            "sourceId": 1
+        },
+        "startTime": 1626643165281,
+        "executionDuration": 1901,
+        "status": "COMPLETE",
+        "isValid": false,
+        "isCanceled": false,
+        "failMessage": "Job interrupted by step execution",
+        "personCount": null,
+        "recordCount": null,
+        "createdBy": null
+    }
+]

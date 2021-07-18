@@ -1,0 +1,18 @@
+{
+    "executionInfo": {
+        "id": {
+            "analysisId": 2,
+            "sourceId": 1
+        },
+        "startTime": 1626643168359,
+        "executionDuration": 2132,
+        "status": "COMPLETE",
+        "isValid": false,
+        "isCanceled": true,
+        "message": "org.springframework.batch.core.JobInterruptedException",
+        "canceled": true
+    },
+    "summaryList": [
+
+    ]
+}
