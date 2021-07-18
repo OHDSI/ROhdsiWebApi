@@ -1,0 +1,21 @@
+{
+    "status": "STARTING",
+    "startDate": null,
+    "endDate": null,
+    "exitStatus": "UNKNOWN",
+    "executionId": 796,
+    "jobInstance": {
+        "instanceId": 796,
+        "name": "generateCohortCharacterization"
+    },
+    "jobParameters": {
+        "jobName": "Generating cohort characterization 2 : SYNPUF 5% (SYNPUF5PCT)",
+        "cohort_characterization_id": "2",
+        "jobAuthor": "anonymous",
+        "target_table": "temp_cohort_zl3j0o78",
+        "source_id": "1",
+        "sessionId": "zl3j0o78",
+        "time": 1626643184193
+    },
+    "ownerType": null
+}
