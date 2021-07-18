@@ -50,6 +50,7 @@ with_mock_dir("mocks/StudyPackage", {
                                            sqlFolder = sqlFolder,
                                            rFileName = rFileName,
                                            insertTableSql = FALSE,
+                                           insertCohortCreationR = FALSE,
                                            generateStats = TRUE,
                                            packageName = "fakePackage"),
     "Inserting cohort")
@@ -61,8 +62,8 @@ with_mock_dir("mocks/StudyPackage", {
     sqlFile <- readr::read_file(list.files(sqlFolder, full.names = TRUE)[[1]])
     expect_gt(nchar(sqlFile), 4) 
     
-    rFile <- readr::read_file(rFileName)
-    expect_gt(nchar(rFile), 4)
+    # rFile <- readr::read_file(rFileName)
+    # expect_gt(nchar(rFile), 4)
     
     unlink(scratch, recursive = TRUE, force = TRUE)
   })
