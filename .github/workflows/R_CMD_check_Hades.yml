@@ -20,10 +20,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-         #- {os: windows-latest, r: 'release'}  # Does not appear to have Java 32-bit, hence the --no-multiarch
-         #- {os: macOS-latest, r: 'release'}
+         - {os: windows-latest, r: 'release'}  # Does not appear to have Java 32-bit, hence the --no-multiarch
+         - {os: macOS-latest, r: 'release'}
          - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-         #- {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+         - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -105,39 +105,6 @@ jobs:
         run: unlink("check", recursive = TRUE)
         shell: Rscript {0}
         
-      - name: Debug file read-write
-        run: |
-          scratch <- tempdir(TRUE)
-          print(scratch)
-          dir.create(file.path(scratch, "inst", "settings"), recursive = TRUE)
-          jsonFolder <- file.path(scratch, "inst", "cohorts")
-          dir.create(jsonFolder, recursive = TRUE)
-          sqlFolder <- file.path(scratch, "inst", "sql", "sql_server")
-          dir.create(sqlFolder, recursive = TRUE)
-          
-          # insert CohortsToCreate.csv file
-          df <- data.frame(atlasId = idCohort, cohortId = idCohort, name = "blah")
-          settingsPath <- file.path(scratch, "inst", "settings", "CohortsToCreate.csv")
-          write.csv(df, settingsPath, row.names = FALSE)
-          print(list.files(settingsPath))
-      
-          insertCohortDefinitionSetInPackage(fileName = settingsPath,
-                                             baseUrl = baseUrl,
-                                             jsonFolder = jsonFolder,
-                                             sqlFolder = sqlFolder,
-                                             insertCohortCreationR = FALSE,
-                                             packageName = "fakePackage")
-          
-          print(list.files(jsonFolder)) 
-          jsonFile <- readr::read_file(list.files(jsonFolder, full.names = TRUE)[[1]])
-          expect_true(nchar(jsonFile) > 4) 
-          
-          sqlFile <- readr::read_file(list.files(sqlFolder, full.names = TRUE)[[1]])
-          expect_true(nchar(sqlFile) > 4) 
-          print(jsonFile[1:30])
-          print(sqlFile[1:30])
-        shell: Rscript {0}
-
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
