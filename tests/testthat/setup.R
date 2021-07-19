@@ -10,11 +10,16 @@ sourceKeyVariable <- 'SYNPUF5PCT' #source db
 
 # preload ids for tests (careful this is fragile) --------------------
 # these are the ids for test artifacts in the unsecured webapi instance
+
+# Generatable categories
 idCohort <- 2
-idConceptSet <- 2
-idCharacterization <- 1
 idIncidenceRate <- 2
 idPathway <- 1
+idCharacterization <- 2
 
+# Non-generatable categories
+idConceptSet <- 2
+# estimation
+# prediction
 
 
