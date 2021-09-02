@@ -85,6 +85,7 @@ getDefinition <- function(id, baseUrl, category) {
     }
   }
   if (is.character(response$expression)) {
+    response$expression <- .removeNonAsciiCharacters(response$expression)
     if (jsonlite::validate(response$expression)) {
       response$expression <- RJSONIO::fromJSON(response$expression, nullValue = NA, digits = 23)
       namesResponse <- names(response)

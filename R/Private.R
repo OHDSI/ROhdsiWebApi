@@ -161,3 +161,7 @@
 .toJSON <- function(x, pretty = FALSE) {
   return(RJSONIO::toJSON(x = x, digits = 23, pretty = pretty))
 }
+
+.removeNonAsciiCharacters <- function(expression) {
+  return(stringi::stri_trans_general(expression, "latin-ascii"))
+}
