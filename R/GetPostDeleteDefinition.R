@@ -159,7 +159,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
     url <- paste0(url, argument$categoryUrlPostExpression, "/")
   }
   response <- .postJson(url = url, json = json)
-  
+
   if (!response$status_code == 200) {
     definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
     if (name %in% definitionsMetaData$name) {
@@ -172,7 +172,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
   response <- httr::content(response)
   structureCreated <- response
   response$expression <- NULL
-  
+
   # create expression in the structure required to POST or PUT
   if (category %in% c("conceptSet")) {
     items <- convertConceptSetDefinitionToTable(conceptSetDefinition = definition) %>% dplyr::mutate(id = dplyr::row_number(),
@@ -187,11 +187,11 @@ postDefinition <- function(baseUrl, name, category, definition) {
                     .data$isExcluded,
                     .data$includeMapped,
                     .data$includeDescendants)
-    
+
     itemsTranspose <- apply(items, 1, function(item) {
       list(item)
     })
-    
+
     expression <- .toJSON(x = purrr::flatten(itemsTranspose), pretty = TRUE)
     responsePut <- .putJson(url = paste0(baseUrl,
                                          "/",
@@ -207,7 +207,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
                   httr::content(responsePut)$status_code))
     }
   }
-  
+
   # TODO implement posting of characterization
   # if (category %in% c("characterization")) {
   #   characterizationPostObject <- structureCreated
@@ -253,6 +253,90 @@ postDefinition <- function(baseUrl, name, category, definition) {
   return(output)
 }
 
+#' Update definition \lifecycle{maturing}
+#' @details
+#' Update a definition in WebAPI. Currently only cohorts are supported.
+#' Takes the definition as a parameter and converts it to json. This is the full definition
+#' (i.e. including name and id fields)
+#' @template BaseUrl
+#' @template Category
+#' @param definition        An R list object containing the expression for the specification. This will be
+#'                          converted to JSON expression by function and posted into the WebApi.
+#' @param displayWarnings   Display warnings returned by WebApi check
+#' @examples
+#' \dontrun{
+#' definition <- getDefinition(id = 13242, baseUrl = "http://server.org:80/WebAPI", category = "cohort")
+#' definition$name <- "My new name for this"
+#' updateDefinition(definition, baseUrl, category = "cohort")
+#' }
+#' @export
+updateDefintion <- function(definition, baseUrl, category, displayWarnings = TRUE) {
+  baseUrl <- gsub("/$", "", baseUrl)
+  .checkBaseUrl(baseUrl)
+  arguments <- .getStandardCategories()
+  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
+
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertCharacter(definition$name, add = errorMessage)
+  checkmate::assertCharacter(category, add = errorMessage)
+  checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
+  checkmate::assertInteger(definition$id)
+  checkmate::reportAssertions(errorMessage)
+
+  # Check entity exists - this will throw a meaningful error if it doesn't
+  tryCatch(
+    {
+      getDefinition(definition$id, baseUrl, category)
+    },
+    error = function(err) {
+      stop(paste("Could not find", category, "definition with this id"))
+    }
+  )
+  entryUrl <- paste(baseUrl, argument$categoryUrl, definition$id, sep = "/")
+  # Check that name does not collide with other entities
+  namesCheckUrl <- paste0(entryUrl, "/exists?name=", definition$name)
+  response <- .GET(namesCheckUrl)
+
+  if (response$status_code != 200) {
+    stop("Error checking name, potential problem with WebAPI instance")
+  }
+
+  content <- httr::content(response)
+  if (content == 1) {
+    stop(paste(definition$name, "Is not a valid cohort name."))
+  }
+
+  # Check definition is ok
+  jsonExpression <- .toJSON(definition$expression)
+  checkUrl <- paste(baseUrl, argument$categoryUrl, "check", sep = "/")
+
+  tryCatch(
+    {
+    response <- .postJson(checkUrl, jsonExpression)
+    },
+    error = function (error) {
+      stop(paste("Error with", category, "definition:", error))
+    }
+  )
+
+  content <- httr::content(response)
+  if ("warnings" %in% names(content) & displayWarnings) {
+    for(warning in content$warnings) {
+      warn <- paste(warning$type, "of severity", warning$severity, ":\n", warning$message)
+      warning(warn)
+    }
+  }
+
+  jsonExpression <- .toJSON(definition)
+  response <- .putJson(entryUrl, jsonExpression)
+
+  if (!response$status_code == 200) {
+    stop(paste("Error updating definition",
+               "Status code =", httr::status_code(response)))
+  }
+
+  writeLines(paste("Update to", argument$categoryFirstUpper, definition$id, definition$name, " was successful"))
+}
 
 #' Delete a definition id of a chosen category. \lifecycle{stable}
 #' @details
