@@ -13,7 +13,14 @@ with_mock_dir("mocks/GetPostDeleteDefinition", {
     expect_s3_class(response, "data.frame")
     expect_equal(nrow(response), 1)
     expect_equal(response$name, "temporary test cohort")
-    
+
+
+    updef <- getDefinition(response$id, baseUrl, "cohort")
+    updef$name <- "A new test name"
+    expect_output(updateDefintion(updef, baseUrl, "cohort", displayWarnings = FALSE), "Success")
+
+    def <- getDefinition(response$id, baseUrl, "cohort")
+    expect_equal(def$name, updef$name)
     # Delete the cohort
     expect_output(deleteDefinition(response$id, baseUrl, "cohort"), "Success")
     
