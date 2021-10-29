@@ -1,7 +1,8 @@
 {
     "id": 50,
-    "name": "temporary test cohort",
+    "name": "A new test name",
     "createdDate": 1635531709380,
+    "modifiedDate": 1635531710852,
     "hasWriteAccess": false,
     "expressionType": "SIMPLE_EXPRESSION",
     "expression": {

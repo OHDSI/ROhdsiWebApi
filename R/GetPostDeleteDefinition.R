@@ -335,7 +335,7 @@ updateDefintion <- function(definition, baseUrl, category, displayWarnings = TRU
                "Status code =", httr::status_code(response)))
   }
 
-  writeLines(paste("Update to", argument$categoryFirstUpper, definition$id, definition$name, " was successful"))
+  writeLines(paste("Success: updated", argument$categoryFirstUpper, definition$id, definition$name))
 }
 
 #' Delete a definition id of a chosen category. \lifecycle{stable}
