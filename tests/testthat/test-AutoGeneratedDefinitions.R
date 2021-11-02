@@ -94,7 +94,7 @@ test_that("Update definitions works", {
       definition$name <- stringi::stri_rand_strings(1, 10)
       # update definition with random string name
       updateFun <- sprintf("update%sDefinition", categoryFirstUpper)
-      expect_output(do.call(updateFun, list(definition, baseUrl, FALSE)), "Success")
+      expect_output(do.call(updateFun, list(definition, baseUrl)), "Success")
     }
   }
 })

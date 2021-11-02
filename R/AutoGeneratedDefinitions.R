@@ -227,7 +227,8 @@ postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
 updateConceptSetDefinition <- function(conceptSetDefinition, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl,
-                             definition = conceptSetDefinition)
+                             definition = conceptSetDefinition,
+                             category = "conceptSet")
   return(result)
 }
 

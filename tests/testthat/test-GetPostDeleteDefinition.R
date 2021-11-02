@@ -13,7 +13,7 @@ with_mock_dir("mocks/GetPostDeleteDefinition", {
     expect_s3_class(response, "data.frame")
     expect_equal(nrow(response), 1)
     expect_equal(response$name, "temporary test cohort")
-    # Delete the cohort
+    # Delete the cohortran
     expect_output(deleteDefinition(response$id, baseUrl, "cohort"), "Success")
     
   })
@@ -22,10 +22,10 @@ with_mock_dir("mocks/GetPostDeleteDefinition", {
 # Mock tests appear to fail for updates
 test_that("Update definition", {
   def <- getDefinition(idCohort, baseUrl, "cohort")
-  response <- postDefinition(baseUrl, "Original name", "cohort", def)
+  response <- postDefinition(baseUrl, stringi::stri_rand_strings(1, 10), "cohort", def)
 
   updef <- getDefinition(response$id, baseUrl, "cohort")
-  updef$name <- "A new test name"
+  updef$name <- stringi::stri_rand_strings(1, 10)
   expect_output(updateDefinition(updef, baseUrl, "cohort"), "Success")
 
   def <- getDefinition(response$id, baseUrl, "cohort")
