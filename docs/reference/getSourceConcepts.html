@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,24 +98,24 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
-    </li>
-    <li>
       <a href="../articles/InsertCohortDefinitionsIntoPackage.html">Insert Cohort Definitions Into Package</a>
     </li>
     <li>
       <a href="../articles/UsingROhdsiWebApi.html">Using ROhdsiWebApi</a>
+    </li>
+    <li>
+      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+  <a href="https://ohdsi.github.io/Hades">hadesLogo</a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/ROhdsiWebApi/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -141,12 +141,12 @@
     <p>Get source concepts that map to standard concepts <a href='https://lifecycle.r-lib.org/articles/stages.html#stable'><img src='figures/lifecycle-stable.svg' alt='[Stable]' /></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>getSourceConcepts</span><span class='op'>(</span>
-  <span class='va'>conceptIds</span>,
-  <span class='va'>baseUrl</span>,
-  vocabularySourceKey <span class='op'>=</span> <span class='cn'>NULL</span>,
-  snakeCaseToCamelCase <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>getSourceConcepts</span>(
+  <span class='kw'>conceptIds</span>,
+  <span class='kw'>baseUrl</span>,
+  vocabularySourceKey = <span class='kw'>NULL</span>,
+  snakeCaseToCamelCase = <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,8 +158,7 @@
     <tr>
       <th>baseUrl</th>
       <td><p>The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.</p></td>
+"http://server.org:80/WebAPI".</p></td>
     </tr>
     <tr>
       <th>vocabularySourceKey</th>
@@ -177,13 +176,13 @@ used.</p></td>
     <p>A tibble containing information on the source concepts.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>conceptSet</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getConceptSetDefinition.html'>getConceptSetDefinition</a></span><span class='op'>(</span>conceptSetId <span class='op'>=</span> <span class='fl'>282</span>,
-                                      baseUrl <span class='op'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span><span class='op'>)</span>
-<span class='va'>conceptIds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='resolveConceptSet.html'>resolveConceptSet</a></span><span class='op'>(</span>conceptSet <span class='op'>=</span> <span class='va'>conceptSet</span>, baseUrl <span class='op'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span><span class='op'>)</span>
-<span class='va'>sourceConcepts</span> <span class='op'>&lt;-</span> <span class='fu'>getSourceConcepts</span><span class='op'>(</span>conceptIds <span class='op'>=</span> <span class='va'>conceptIds</span>,
-                                    baseUrl <span class='op'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span><span class='op'>)</span>
-<span class='op'>}</span>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>conceptSet</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getConceptSetDefinition.html'>getConceptSetDefinition</a></span>(conceptSetId = <span class='fl'>282</span>,
+                                      baseUrl = <span class='st'>"http://server.org:80/WebAPI"</span>)
+<span class='kw'>conceptIds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='resolveConceptSet.html'>resolveConceptSet</a></span>(conceptSet = <span class='kw'>conceptSet</span>, baseUrl = <span class='st'>"http://server.org:80/WebAPI"</span>)
+<span class='kw'>sourceConcepts</span> <span class='op'>&lt;-</span> <span class='fu'>getSourceConcepts</span>(conceptIds = <span class='kw'>conceptIds</span>,
+                                    baseUrl = <span class='st'>"http://server.org:80/WebAPI"</span>)
+}
 
 </div></pre>
   </div>

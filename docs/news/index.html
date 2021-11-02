@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,24 +97,24 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
-    </li>
-    <li>
       <a href="../articles/InsertCohortDefinitionsIntoPackage.html">Insert Cohort Definitions Into Package</a>
     </li>
     <li>
       <a href="../articles/UsingROhdsiWebApi.html">Using ROhdsiWebApi</a>
+    </li>
+    <li>
+      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+  <a href="https://ohdsi.github.io/Hades">hadesLogo</a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/ROhdsiWebApi/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -135,6 +135,15 @@
       <small>Source: <a href='https://github.com/OHDSI/ROhdsiWebApi/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rohdsiwebapi-121" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.1">
+<a href="#rohdsiwebapi-121" class="anchor"></a>ROhdsiWebApi 1.2.1</h1>
+<p>Changes:</p>
+<ol>
+<li>CreatedDate in getDefinition now returns in proper date time format.</li>
+<li>Update Definitions added</li>
+</ol>
+</div>
     <div id="rohdsiwebapi-120" class="section level1">
 <h1 class="page-header" data-toc-text="1.2.0">
 <a href="#rohdsiwebapi-120" class="anchor"></a>ROhdsiWebApi 1.2.0</h1>
@@ -210,16 +219,16 @@
 </li>
 <li>Analysis categories in WebApi such as concept sets, cohorts have been standardized <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/86"><a href='https://github.com/OHDSI/ROhdsiWebApi/issues/86'>#86</a></a> These may now be used in string searches of objects returned by ROhdsiWebApi.</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 7 x 1</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">##   ` Category`     </span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;chr&gt;           </span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ConceptSet      </span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 Cohort          </span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 IncidenceRate   </span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 Estimation      </span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 Prediction      </span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 Characterization</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 Pathway</span></span></code></pre></div>
+<!-- end list --><div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">## # A tibble: 7 x 1</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">##   ` Category`     </span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">##   &lt;chr&gt;           </span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">## 1 ConceptSet      </span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">## 2 Cohort          </span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">## 3 IncidenceRate   </span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">## 4 Estimation      </span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">## 5 Prediction      </span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">## 6 Characterization</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">## 7 Pathway</span></span></code></pre></div>
 <ul>
 <li>Enforcement of OHDSI R style guide. We have enforced the use of <a href="https://ohdsi.github.io/MethodsLibrary/codeStyle.html#ohdsi_code_style_for_r">OHDSI R style guide</a> such as use of <a href="https://github.com/OHDSI/ROhdsiWebApi/issues/22">camel case</a>
 </li>
