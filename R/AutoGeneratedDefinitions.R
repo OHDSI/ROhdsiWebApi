@@ -741,41 +741,6 @@ postIncidenceRateDefinition <- function(name, incidenceRateDefinition, baseUrl) 
   return(result)
 }
 
-
-#' Update a IncidenceRate definition. \lifecycle{maturing}
-#' @details
-#' Update a IncidenceRate definition.
-#'
-#' @template BaseUrl
-#' @param incidenceRateDefinition   An R list object containing the expression for the specification.
-#'                                  Must include id, name and expression. This will be converted to
-#'                                  JSON expression by function and posted into the WebApi. The
-#'                                  definition will be checked against the WebApi instance for errors
-#'
-#' @param displayWarnings           Display warnings returned by WebApi check
-#'
-#' @examples
-#' \dontrun{
-#' definition <- getIncidenceRateDefinition(id = 13242,
-#'                                          baseUrl = "http://server.org:80/WebAPI",
-#'                                          category = incidenceRate)
-#' definition$name <- "My new name for this"
-#' updateIncidenceRate(incidenceRateDefinition, baseUrl, category = "cohort")
-#' }
-#' @export
-# Check name
-updateIncidenceRateDefinition <- function(incidenceRateDefinition,
-                                          baseUrl,
-                                          displayWarnings = TRUE) {
-  baseUrl <- gsub("/$", "", baseUrl)
-  result <- updateDefinition(baseUrl = baseUrl,
-                             definition = incidenceRateDefinition,
-                             category = "incidenceRate",
-                             displayWarnings = displayWarnings)
-  return(result)
-}
-
-
 #' Get generation information for IncidenceRate id.
 #'
 #' @details
@@ -1068,37 +1033,6 @@ postEstimationDefinition <- function(name, estimationDefinition, baseUrl) {
 }
 
 
-#' Update a Estimation definition. \lifecycle{maturing}
-#' @details
-#' Update a Estimation definition.
-#'
-#' @template BaseUrl
-#' @param estimationDefinition   An R list object containing the expression for the specification. Must
-#'                               include id, name and expression. This will be converted to JSON
-#'                               expression by function and posted into the WebApi. The definition will
-#'                               be checked against the WebApi instance for errors
-#'
-#' @param displayWarnings        Display warnings returned by WebApi check
-#'
-#' @examples
-#' \dontrun{
-#' definition <- getEstimationDefinition(id = 13242,
-#'                                       baseUrl = "http://server.org:80/WebAPI",
-#'                                       category = estimation)
-#' definition$name <- "My new name for this"
-#' updateEstimation(estimationDefinition, baseUrl, category = "cohort")
-#' }
-#' @export
-# Check name
-updateEstimationDefinition <- function(estimationDefinition, baseUrl, displayWarnings = TRUE) {
-  baseUrl <- gsub("/$", "", baseUrl)
-  result <- updateDefinition(baseUrl = baseUrl,
-                             definition = estimationDefinition,
-                             category = "estimation",
-                             displayWarnings = displayWarnings)
-  return(result)
-}
-
 #' Get the meta data for Prediction definitions. \lifecycle{stable}
 #' @details
 #' Get the meta data of WebApi specifications such as id, name, created/modified details, hash object,
@@ -1281,38 +1215,6 @@ postPredictionDefinition <- function(name, predictionDefinition, baseUrl) {
                            baseUrl = baseUrl,
                            category = "prediction",
                            definition = predictionDefinition)
-  return(result)
-}
-
-
-#' Update a Prediction definition. \lifecycle{maturing}
-#' @details
-#' Update a Prediction definition.
-#'
-#' @template BaseUrl
-#' @param predictionDefinition   An R list object containing the expression for the specification. Must
-#'                               include id, name and expression. This will be converted to JSON
-#'                               expression by function and posted into the WebApi. The definition will
-#'                               be checked against the WebApi instance for errors
-#'
-#' @param displayWarnings        Display warnings returned by WebApi check
-#'
-#' @examples
-#' \dontrun{
-#' definition <- getPredictionDefinition(id = 13242,
-#'                                       baseUrl = "http://server.org:80/WebAPI",
-#'                                       category = prediction)
-#' definition$name <- "My new name for this"
-#' updatePrediction(predictionDefinition, baseUrl, category = "cohort")
-#' }
-#' @export
-# Check name
-updatePredictionDefinition <- function(predictionDefinition, baseUrl, displayWarnings = TRUE) {
-  baseUrl <- gsub("/$", "", baseUrl)
-  result <- updateDefinition(baseUrl = baseUrl,
-                             definition = predictionDefinition,
-                             category = "prediction",
-                             displayWarnings = displayWarnings)
   return(result)
 }
 
@@ -1507,42 +1409,6 @@ postCharacterizationDefinition <- function(name, characterizationDefinition, bas
                            definition = characterizationDefinition)
   return(result)
 }
-
-
-#' Update a Characterization definition. \lifecycle{maturing}
-#' @details
-#' Update a Characterization definition.
-#'
-#' @template BaseUrl
-#' @param characterizationDefinition   An R list object containing the expression for the
-#'                                     specification. Must include id, name and expression. This will
-#'                                     be converted to JSON expression by function and posted into the
-#'                                     WebApi. The definition will be checked against the WebApi
-#'                                     instance for errors
-#'
-#' @param displayWarnings              Display warnings returned by WebApi check
-#'
-#' @examples
-#' \dontrun{
-#' definition <- getCharacterizationDefinition(id = 13242,
-#'                                             baseUrl = "http://server.org:80/WebAPI",
-#'                                             category = characterization)
-#' definition$name <- "My new name for this"
-#' updateCharacterization(characterizationDefinition, baseUrl, category = "cohort")
-#' }
-#' @export
-# Check name
-updateCharacterizationDefinition <- function(characterizationDefinition,
-                                             baseUrl,
-                                             displayWarnings = TRUE) {
-  baseUrl <- gsub("/$", "", baseUrl)
-  result <- updateDefinition(baseUrl = baseUrl,
-                             definition = characterizationDefinition,
-                             category = "characterization",
-                             displayWarnings = displayWarnings)
-  return(result)
-}
-
 
 #' Get generation information for Characterization id.
 #'
@@ -1833,39 +1699,6 @@ postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
                            definition = pathwayDefinition)
   return(result)
 }
-
-
-#' Update a Pathway definition. \lifecycle{maturing}
-#' @details
-#' Update a Pathway definition.
-#'
-#' @template BaseUrl
-#' @param pathwayDefinition   An R list object containing the expression for the specification. Must
-#'                            include id, name and expression. This will be converted to JSON
-#'                            expression by function and posted into the WebApi. The definition will be
-#'                            checked against the WebApi instance for errors
-#'
-#' @param displayWarnings     Display warnings returned by WebApi check
-#'
-#' @examples
-#' \dontrun{
-#' definition <- getPathwayDefinition(id = 13242,
-#'                                    baseUrl = "http://server.org:80/WebAPI",
-#'                                    category = pathway)
-#' definition$name <- "My new name for this"
-#' updatePathway(pathwayDefinition, baseUrl, category = "cohort")
-#' }
-#' @export
-# Check name
-updatePathwayDefinition <- function(pathwayDefinition, baseUrl, displayWarnings = TRUE) {
-  baseUrl <- gsub("/$", "", baseUrl)
-  result <- updateDefinition(baseUrl = baseUrl,
-                             definition = pathwayDefinition,
-                             category = "pathway",
-                             displayWarnings = displayWarnings)
-  return(result)
-}
-
 
 #' Get generation information for Pathway id.
 #'
