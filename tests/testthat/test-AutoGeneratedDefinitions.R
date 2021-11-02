@@ -75,3 +75,26 @@ for(i in seq_along(StandardCategories[[1]])) {
 }
 
 }) # close with_mock_dir
+
+test_that("Update definitions works", {
+  for (i in seq_along(StandardCategories[[1]])) {
+    category <- StandardCategories$categoryStandard[[i]]
+    categoryFirstUpper <- StandardCategories$categoryFirstUpper[[i]]
+
+    if (category %in% c("cohort", "conceptSet")) {
+
+      getMetaDataFun <- sprintf("get%sDefinitionsMetaData", categoryFirstUpper)
+      metadata <- do.call(getMetaDataFun, list(baseUrl))[1,]
+
+      # get the definition
+      getFun <- sprintf("get%sDefinition", categoryFirstUpper)
+      definition <- do.call(getFun, list(metadata$id, baseUrl))
+
+      # Set a new name
+      definition$name <- stringi::stri_rand_strings(1, 10)
+      # update definition with random string name
+      updateFun <- sprintf("update%sDefinition", categoryFirstUpper)
+      expect_output(do.call(updateFun, list(definition, baseUrl, FALSE)), "Success")
+    }
+  }
+})
