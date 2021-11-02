@@ -226,7 +226,7 @@ postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
 #' }
 #' @export
 # Check name
-updateConceptSet <- function(conceptSetDefinition, baseUrl, displayWarnings = TRUE) {
+updateConceptSetDefinition <- function(conceptSetDefinition, baseUrl, displayWarnings = TRUE) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl,
                              definition = conceptSetDefinition,
@@ -441,7 +441,7 @@ postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
 #' }
 #' @export
 # Check name
-updateCohort <- function(cohortDefinition, baseUrl, displayWarnings = TRUE) {
+updateCohortDefinition <- function(cohortDefinition, baseUrl, displayWarnings = TRUE) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl,
                              definition = cohortDefinition,
@@ -764,7 +764,9 @@ postIncidenceRateDefinition <- function(name, incidenceRateDefinition, baseUrl) 
 #' }
 #' @export
 # Check name
-updateIncidenceRate <- function(incidenceRateDefinition, baseUrl, displayWarnings = TRUE) {
+updateIncidenceRateDefinition <- function(incidenceRateDefinition,
+                                          baseUrl,
+                                          displayWarnings = TRUE) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl,
                              definition = incidenceRateDefinition,
@@ -1088,7 +1090,7 @@ postEstimationDefinition <- function(name, estimationDefinition, baseUrl) {
 #' }
 #' @export
 # Check name
-updateEstimation <- function(estimationDefinition, baseUrl, displayWarnings = TRUE) {
+updateEstimationDefinition <- function(estimationDefinition, baseUrl, displayWarnings = TRUE) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl,
                              definition = estimationDefinition,
@@ -1305,7 +1307,7 @@ postPredictionDefinition <- function(name, predictionDefinition, baseUrl) {
 #' }
 #' @export
 # Check name
-updatePrediction <- function(predictionDefinition, baseUrl, displayWarnings = TRUE) {
+updatePredictionDefinition <- function(predictionDefinition, baseUrl, displayWarnings = TRUE) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl,
                              definition = predictionDefinition,
@@ -1530,7 +1532,9 @@ postCharacterizationDefinition <- function(name, characterizationDefinition, bas
 #' }
 #' @export
 # Check name
-updateCharacterization <- function(characterizationDefinition, baseUrl, displayWarnings = TRUE) {
+updateCharacterizationDefinition <- function(characterizationDefinition,
+                                             baseUrl,
+                                             displayWarnings = TRUE) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl,
                              definition = characterizationDefinition,
@@ -1853,7 +1857,7 @@ postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
 #' }
 #' @export
 # Check name
-updatePathway <- function(pathwayDefinition, baseUrl, displayWarnings = TRUE) {
+updatePathwayDefinition <- function(pathwayDefinition, baseUrl, displayWarnings = TRUE) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl,
                              definition = pathwayDefinition,

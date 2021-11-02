@@ -7,7 +7,7 @@
 invokeCharacterizationGeneration(characterizationId, baseUrl, sourceKey)
 }
 \arguments{
-\item{characterizationId}{An integer id representing the id that uniquely identifies a 
+\item{characterizationId}{An integer id representing the id that uniquely identifies a
 Characterization definition in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
@@ -27,8 +27,8 @@ Invoke the generation of Characterization id in the WebApi.
 }
 \examples{
 \dontrun{
-invokeCharacterizationGeneration(characterizationId = 13242, 
-baseUrl = "http://server.org:80/WebAPI",
-sourceKey = 'HCUP')
+invokeCharacterizationGeneration(characterizationId = 13242,
+                                 baseUrl = "http://server.org:80/WebAPI",
+                                 sourceKey = "HCUP")
 }
 }

@@ -270,7 +270,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
 #' updateDefinition(definition, baseUrl, category = "cohort")
 #' }
 #' @export
-updateDefintion <- function(definition, baseUrl, category, displayWarnings = TRUE) {
+updateDefinition <- function(definition, baseUrl, category, displayWarnings = TRUE) {
   baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   arguments <- .getStandardCategories()
@@ -307,18 +307,19 @@ updateDefintion <- function(definition, baseUrl, category, displayWarnings = TRU
   }
 
   # Check definition is ok
-  jsonExpression <- .toJSON(definition$expression)
-  checkUrl <- paste(baseUrl, argument$categoryUrl, "check", sep = "/")
-
-  tryCatch(
-    {
-    response <- .postJson(checkUrl, jsonExpression)
-    },
-    error = function (error) {
-      stop(paste("Error with", category, "definition:", error))
-    }
-  )
-
+  if (category == "cohort") {
+    jsonExpression <- .toJSON(definition$expression)
+    checkUrl <- paste(baseUrl, argument$categoryUrl, "check", sep = "/")
+  
+    tryCatch(
+      {
+      response <- .postJson(checkUrl, jsonExpression)
+      },
+      error = function (error) {
+        stop(paste("Error with", category, "definition:", error))
+      }
+    )
+  }
   content <- httr::content(response)
   if ("warnings" %in% names(content) & displayWarnings) {
     for(warning in content$warnings) {

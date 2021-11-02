@@ -204,7 +204,7 @@ post%categoryFirstUpper%Definition <- function(name, %category%Definition, baseU
 #' }
 #' @export
 # Check name
-update%categoryFirstUpper% <- function(%category%Definition, baseUrl, displayWarnings = TRUE) {
+update%categoryFirstUpper%Definition <- function(%category%Definition, baseUrl, displayWarnings = TRUE) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl, definition = %category%Definition, category = '%category%', displayWarnings = displayWarnings)
   return(result)

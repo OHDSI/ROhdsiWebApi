@@ -7,7 +7,7 @@
 cancelCharacterizationGeneration(characterizationId, baseUrl, sourceKey)
 }
 \arguments{
-\item{characterizationId}{An integer id representing the id that uniquely identifies a 
+\item{characterizationId}{An integer id representing the id that uniquely identifies a
 Characterization definition in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
@@ -27,8 +27,8 @@ Cancel the generation of Characterization id in the WebApi.
 }
 \examples{
 \dontrun{
-cancelCharacterizationGeneration(characterizationId = 13242, 
-baseUrl = "http://server.org:80/WebAPI",
-sourceKey = 'HCUP')
+cancelCharacterizationGeneration(characterizationId = 13242,
+                                 baseUrl = "http://server.org:80/WebAPI",
+                                 sourceKey = "HCUP")
 }
 }

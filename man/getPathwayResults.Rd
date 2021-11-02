@@ -24,7 +24,6 @@ Get the results for Pathway id.
 }
 \examples{
 \dontrun{
-getPathwayResults(pathwayId = 342, 
-baseUrl = "http://server.org:80/WebAPI")
+getPathwayResults(pathwayId = 342, baseUrl = "http://server.org:80/WebAPI")
 }
 }

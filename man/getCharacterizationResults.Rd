@@ -24,7 +24,6 @@ Get the results for Characterization id.
 }
 \examples{
 \dontrun{
-getCharacterizationResults(characterizationId = 342, 
-baseUrl = "http://server.org:80/WebAPI")
+getCharacterizationResults(characterizationId = 342, baseUrl = "http://server.org:80/WebAPI")
 }
 }

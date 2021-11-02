@@ -26,7 +26,7 @@ test_that("Update definition", {
 
   updef <- getDefinition(response$id, baseUrl, "cohort")
   updef$name <- "A new test name"
-  expect_output(updateDefintion(updef, baseUrl, "cohort", displayWarnings = FALSE), "Success")
+  expect_output(updateDefinition(updef, baseUrl, "cohort", displayWarnings = FALSE), "Success")
 
   def <- getDefinition(response$id, baseUrl, "cohort")
   expect_equal(def$name, updef$name)
