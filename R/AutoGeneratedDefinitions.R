@@ -214,8 +214,6 @@ postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
 #'                               expression by function and posted into the WebApi. The definition will
 #'                               be checked against the WebApi instance for errors
 #'
-#' @param displayWarnings        Display warnings returned by WebApi check
-#'
 #' @examples
 #' \dontrun{
 #' definition <- getConceptSetDefinition(id = 13242,
@@ -226,12 +224,10 @@ postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
 #' }
 #' @export
 # Check name
-updateConceptSetDefinition <- function(conceptSetDefinition, baseUrl, displayWarnings = TRUE) {
+updateConceptSetDefinition <- function(conceptSetDefinition, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl,
-                             definition = conceptSetDefinition,
-                             category = "conceptSet",
-                             displayWarnings = displayWarnings)
+                             definition = conceptSetDefinition)
   return(result)
 }
 
@@ -429,8 +425,6 @@ postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
 #'                           by function and posted into the WebApi. The definition will be checked
 #'                           against the WebApi instance for errors
 #'
-#' @param displayWarnings    Display warnings returned by WebApi check
-#'
 #' @examples
 #' \dontrun{
 #' definition <- getCohortDefinition(id = 13242,
@@ -441,12 +435,11 @@ postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
 #' }
 #' @export
 # Check name
-updateCohortDefinition <- function(cohortDefinition, baseUrl, displayWarnings = TRUE) {
+updateCohortDefinition <- function(cohortDefinition, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   result <- updateDefinition(baseUrl = baseUrl,
                              definition = cohortDefinition,
-                             category = "cohort",
-                             displayWarnings = displayWarnings)
+                             category = "cohort")
   return(result)
 }
 

@@ -194,8 +194,6 @@ post%categoryFirstUpper%Definition <- function(name, %category%Definition, baseU
 #'                                This will be converted to JSON expression by function and posted into the WebApi.
 #'                                The definition will be checked against the WebApi instance for errors
 #'
-#' @param displayWarnings         Display warnings returned by WebApi check
-#'
 #' @examples
 #' \dontrun{
 #' definition <- get%categoryFirstUpper%Definition(id = 13242, baseUrl = "http://server.org:80/WebAPI", category = %category%)
@@ -204,9 +202,9 @@ post%categoryFirstUpper%Definition <- function(name, %category%Definition, baseU
 #' }
 #' @export
 # Check name
-update%categoryFirstUpper%Definition <- function(%category%Definition, baseUrl, displayWarnings = TRUE) {
+update%categoryFirstUpper%Definition <- function(%category%Definition, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
-  result <- updateDefinition(baseUrl = baseUrl, definition = %category%Definition, category = '%category%', displayWarnings = displayWarnings)
+  result <- updateDefinition(baseUrl = baseUrl, definition = %category%Definition, category = '%category%')
   return(result)
 }
 

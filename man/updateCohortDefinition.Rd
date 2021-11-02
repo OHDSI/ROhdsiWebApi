@@ -4,7 +4,7 @@
 \alias{updateCohortDefinition}
 \title{Update a Cohort definition. \lifecycle{maturing}}
 \usage{
-updateCohortDefinition(cohortDefinition, baseUrl, displayWarnings = TRUE)
+updateCohortDefinition(cohortDefinition, baseUrl)
 }
 \arguments{
 \item{cohortDefinition}{An R list object containing the expression for the specification. Must
@@ -14,8 +14,6 @@ against the WebApi instance for errors}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
-
-\item{displayWarnings}{Display warnings returned by WebApi check}
 }
 \description{
 Update a Cohort definition. \lifecycle{maturing}

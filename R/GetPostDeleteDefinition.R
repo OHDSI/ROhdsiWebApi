@@ -262,7 +262,6 @@ postDefinition <- function(baseUrl, name, category, definition) {
 #' @template Category
 #' @param definition        An R list object containing the expression for the specification. This will be
 #'                          converted to JSON expression by function and posted into the WebApi.
-#' @param displayWarnings   Display warnings returned by WebApi check
 #' @examples
 #' \dontrun{
 #' definition <- getDefinition(id = 13242, baseUrl = "http://server.org:80/WebAPI", category = "cohort")
@@ -270,7 +269,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
 #' updateDefinition(definition, baseUrl, category = "cohort")
 #' }
 #' @export
-updateDefinition <- function(definition, baseUrl, category, displayWarnings = TRUE) {
+updateDefinition <- function(definition, baseUrl, category) {
   baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   arguments <- .getStandardCategories()
@@ -321,12 +320,6 @@ updateDefinition <- function(definition, baseUrl, category, displayWarnings = TR
     )
   }
   content <- httr::content(response)
-  if ("warnings" %in% names(content) & displayWarnings) {
-    for(warning in content$warnings) {
-      warn <- paste(warning$type, "of severity", warning$severity, ":\n", warning$message)
-      warning(warn)
-    }
-  }
 
   jsonExpression <- .toJSON(definition)
   response <- .putJson(entryUrl, jsonExpression)

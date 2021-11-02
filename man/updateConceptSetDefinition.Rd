@@ -4,11 +4,7 @@
 \alias{updateConceptSetDefinition}
 \title{Update a ConceptSet definition. \lifecycle{maturing}}
 \usage{
-updateConceptSetDefinition(
-  conceptSetDefinition,
-  baseUrl,
-  displayWarnings = TRUE
-)
+updateConceptSetDefinition(conceptSetDefinition, baseUrl)
 }
 \arguments{
 \item{conceptSetDefinition}{An R list object containing the expression for the specification. Must
@@ -18,8 +14,6 @@ be checked against the WebApi instance for errors}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
-
-\item{displayWarnings}{Display warnings returned by WebApi check}
 }
 \description{
 Update a ConceptSet definition. \lifecycle{maturing}

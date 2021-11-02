@@ -4,7 +4,7 @@
 \alias{updateDefinition}
 \title{Update definition \lifecycle{maturing}}
 \usage{
-updateDefinition(definition, baseUrl, category, displayWarnings = TRUE)
+updateDefinition(definition, baseUrl, category)
 }
 \arguments{
 \item{definition}{An R list object containing the expression for the specification. This will be
@@ -15,8 +15,6 @@ converted to JSON expression by function and posted into the WebApi.}
 
 \item{category}{These are the categories in WebApi. The valid string options are 'conceptSet', 
 'cohort', 'characterization', 'pathway, 'incidenceRate', 'estimation', 'prediction'.}
-
-\item{displayWarnings}{Display warnings returned by WebApi check}
 }
 \description{
 Update definition \lifecycle{maturing}
