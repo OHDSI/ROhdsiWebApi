@@ -283,14 +283,11 @@ updateDefinition <- function(definition, baseUrl, category) {
   checkmate::reportAssertions(errorMessage)
 
   # Check entity exists - this will throw a meaningful error if it doesn't
-  tryCatch(
-    {
+  tryCatch({
       getDefinition(definition$id, baseUrl, category)
-    },
-    error = function(err) {
+  }, error = function(err) {
       stop(paste("Could not find", category, "definition with this id"))
-    }
-  )
+  })
   entryUrl <- paste(baseUrl, argument$categoryUrl, definition$id, sep = "/")
   # Check that name does not collide with other entities
   namesCheckUrl <- paste0(entryUrl, "/exists?name=", definition$name)
@@ -310,16 +307,13 @@ updateDefinition <- function(definition, baseUrl, category) {
     jsonExpression <- .toJSON(definition$expression)
     checkUrl <- paste(baseUrl, argument$categoryUrl, "check", sep = "/")
   
-    tryCatch(
-      {
+    tryCatch({
       response <- .postJson(checkUrl, jsonExpression)
-      },
-      error = function (error) {
+      content <- httr::content(response)
+    }, error = function (error) {
         stop(paste("Error with", category, "definition:", error))
-      }
-    )
+    })
   }
-  content <- httr::content(response)
 
   jsonExpression <- .toJSON(definition)
   response <- .putJson(entryUrl, jsonExpression)
@@ -330,6 +324,7 @@ updateDefinition <- function(definition, baseUrl, category) {
   }
 
   writeLines(paste("Success: updated", argument$categoryFirstUpper, definition$id, definition$name))
+  invisible()
 }
 
 #' Delete a definition id of a chosen category. \lifecycle{stable}
