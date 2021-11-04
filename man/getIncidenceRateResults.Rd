@@ -24,7 +24,6 @@ Get the results for IncidenceRate id.
 }
 \examples{
 \dontrun{
-getIncidenceRateResults(incidenceRateId = 342, 
-baseUrl = "http://server.org:80/WebAPI")
+getIncidenceRateResults(incidenceRateId = 342, baseUrl = "http://server.org:80/WebAPI")
 }
 }

@@ -7,7 +7,7 @@
 getCharacterizationGenerationInformation(characterizationId, baseUrl)
 }
 \arguments{
-\item{characterizationId}{An integer id representing the id that uniquely identifies a 
+\item{characterizationId}{An integer id representing the id that uniquely identifies a
 Characterization definition in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
@@ -24,7 +24,7 @@ Get generation (execution) information about Characterization for a characteriza
 }
 \examples{
 \dontrun{
-getCharacterizationGenerationInformation(characterizationId = 13242, 
-                                             baseUrl = "http://server.org:80/WebAPI")
+getCharacterizationGenerationInformation(characterizationId = 13242,
+                                         baseUrl = "http://server.org:80/WebAPI")
 }
 }

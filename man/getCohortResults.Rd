@@ -24,7 +24,6 @@ Get the results for Cohort id.
 }
 \examples{
 \dontrun{
-getCohortResults(cohortId = 342, 
-baseUrl = "http://server.org:80/WebAPI")
+getCohortResults(cohortId = 342, baseUrl = "http://server.org:80/WebAPI")
 }
 }

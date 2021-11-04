@@ -181,3 +181,30 @@ post%categoryFirstUpper%Definition <- function(name, %category%Definition, baseU
   result <- postDefinition(name = name, baseUrl = baseUrl, category = '%category%', definition = %category%Definition)
   return(result)
 }
+
+
+#' Update a %categoryFirstUpper% definition.
+#' \lifecycle{maturing}
+#' @details
+#' Update a %categoryFirstUpper% definition.
+#'
+#' @template BaseUrl
+#' @param %category%Definition    An R list object containing the expression for the specification.
+#'                                Must include id, name and expression.
+#'                                This will be converted to JSON expression by function and posted into the WebApi.
+#'                                The definition will be checked against the WebApi instance for errors
+#'
+#' @examples
+#' \dontrun{
+#' definition <- get%categoryFirstUpper%Definition(id = 13242, baseUrl = "http://server.org:80/WebAPI", category = %category%)
+#' definition$name <- "My new name for this"
+#' update%categoryFirstUpper%(%category%Definition, baseUrl, category = "cohort")
+#' }
+#' @export
+# Check name
+update%categoryFirstUpper%Definition <- function(%category%Definition, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
+  result <- updateDefinition(baseUrl = baseUrl, definition = %category%Definition, category = '%category%')
+  return(result)
+}
+

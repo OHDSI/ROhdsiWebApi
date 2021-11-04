@@ -7,8 +7,8 @@
 invokePathwayGeneration(pathwayId, baseUrl, sourceKey)
 }
 \arguments{
-\item{pathwayId}{An integer id representing the id that uniquely identifies a 
-Pathway definition in a WebApi instance.}
+\item{pathwayId}{An integer id representing the id that uniquely identifies a Pathway definition
+in a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
@@ -27,8 +27,8 @@ Invoke the generation of Pathway id in the WebApi.
 }
 \examples{
 \dontrun{
-invokePathwayGeneration(pathwayId = 13242, 
-baseUrl = "http://server.org:80/WebAPI",
-sourceKey = 'HCUP')
+invokePathwayGeneration(pathwayId = 13242,
+                        baseUrl = "http://server.org:80/WebAPI",
+                        sourceKey = "HCUP")
 }
 }

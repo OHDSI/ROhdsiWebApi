@@ -7,8 +7,8 @@
 invokeCohortGeneration(cohortId, baseUrl, sourceKey)
 }
 \arguments{
-\item{cohortId}{An integer id representing the id that uniquely identifies a 
-Cohort definition in a WebApi instance.}
+\item{cohortId}{An integer id representing the id that uniquely identifies a Cohort definition in
+a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".}
@@ -27,8 +27,8 @@ Invoke the generation of Cohort id in the WebApi.
 }
 \examples{
 \dontrun{
-invokeCohortGeneration(cohortId = 13242, 
-baseUrl = "http://server.org:80/WebAPI",
-sourceKey = 'HCUP')
+invokeCohortGeneration(cohortId = 13242,
+                       baseUrl = "http://server.org:80/WebAPI",
+                       sourceKey = "HCUP")
 }
 }
