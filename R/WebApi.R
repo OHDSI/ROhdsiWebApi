@@ -36,31 +36,41 @@ getPriorityVocabularyKey <- function(baseUrl) {
 
 #' Get the WebAPI version number \lifecycle{stable}
 #' @details
-#' Obtains the WebAPI version number.
+#' Obtains the WebAPI version number. This function is used to check that 
+#' WebAPI baseUrl can be accessed and is a good first check to make sure 
+#' you can access a WebAPI endpoint.
 #'
 #' @template BaseUrl
 #'
 #' @return
-#' A string.
-#'
+#' The WebApi verions as a string.
+#' 
+#' @examples 
+#' \dontrun{
+#' getWebApiVersion("http://server.org:80/WebAPI")
+#' }
 #' @export
 getWebApiVersion <- function(baseUrl) {
-  url <- paste0(baseUrl, "/info")
-  if (!.isValidUrl(url)) {
-    stop(paste0("Please check if the url is valid. ",
-                baseUrl,
-                " . Failed while retrieving WebApi information."))
+  
+  # TODO convert to checkmate
+  stopifnot(is.character(baseUrl), nchar(baseUrl) > 0)
+  
+  if (grepl("/$", baseUrl)) {
+    rlang::abort(paste0("baseUrl '", baseUrl, "' should not end with a /"))
   }
-  response <- .GET(url)
+  
+  url <- paste0(baseUrl, "/info")
+  
+  response <- httr::GET(url)
   if (response$status %in% c(200)) {
     version <- (httr::content(response))$version
   } else {
-    stop(paste0("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
-                "Please verify\n",
-                "- is it in the form http://server.org:80/WebAPI,\n",
-                "- are you are connected to the network",
-                "Status code: ",
-                response$status))
+    rlang::abort(paste0("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
+                        "Please verify\n",
+                        "- is it in the form http://server.org:80/WebAPI,\n",
+                        "- are you are connected to the network",
+                        "Status code: ",
+                        response$status))
   }
   return(version)
 }
@@ -131,6 +141,7 @@ getCdmSources <- function(baseUrl) {
 #' }
 #' @export
 isValidId <- function(ids, baseUrl, category) {
+  baseUrl <- gsub("/$", "", baseUrl)
   arguments <- .getStandardCategories()
   argument <- arguments %>% dplyr::filter(.data$categoryStandard == !!category)
 

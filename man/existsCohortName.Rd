@@ -10,8 +10,7 @@ existsCohortName(cohortName, baseUrl)
 \item{cohortName}{A string name for the Cohort to be checked.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 }
 \value{
 If found, the function will return a tibble with details of the specification. If not found, FALSE

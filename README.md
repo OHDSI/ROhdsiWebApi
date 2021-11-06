@@ -1,13 +1,10 @@
 ROhdsiWebApi
 ================
 
-[![Build
-Status](https://travis-ci.org/OHDSI/ROhdsiWebApi.svg?branch=master)](https://travis-ci.org/OHDSI/ROhdsiWebApi)
+[![Build Status](https://github.com/OHDSI/ROhdsiWebApi/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/ROhdsiWebApi/actions?query=workflow%3AR-CMD-check)
 [![codecov.io](https://codecov.io/github/OHDSI/ROhdsiWebApi/coverage.svg?branch=master)](https://codecov.io/github/OHDSI/ROhdsiWebApi?branch=master)
 
 ROhdsiWebApi is part of [HADES](https://ohdsi.github.io/Hades).
-
-(last updated : 2020-08-14)
 
 ## Introduction
 

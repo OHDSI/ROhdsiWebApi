@@ -10,8 +10,7 @@ isValidId(ids, baseUrl, category)
 \item{ids}{A list of integer id(s) of the category to be tested for validity.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 
 \item{category}{These are the categories in WebApi. The valid string options are 'conceptSet', 
 'cohort', 'characterization', 'pathway, 'incidenceRate', 'estimation', 'prediction'.}

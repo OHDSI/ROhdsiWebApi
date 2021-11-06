@@ -12,8 +12,7 @@ detectConceptSetsByName(pattern, negate = FALSE, baseUrl)
 \item{negate}{If TRUE, return non-matching elements. See \link[stringr]{str_detect} for details.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 }
 \value{
 FALSE if no matches. If matched - output from \link[ROhdsiWebApi]{getConceptSetDefinitionsMetaData}

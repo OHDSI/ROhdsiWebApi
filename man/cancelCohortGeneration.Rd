@@ -11,8 +11,7 @@ cancelCohortGeneration(cohortId, baseUrl, sourceKey)
 a WebApi instance.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 
 \item{sourceKey}{The source key for a CDM instance in WebAPI, as defined in the
 Configuration page}

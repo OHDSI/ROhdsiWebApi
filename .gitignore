@@ -2,6 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
+.Renviron
 dev
 dev/
 output/
+/tests/testthat/check/ROhdsiWebApi.Rcheck/
+.idea/
+renv/

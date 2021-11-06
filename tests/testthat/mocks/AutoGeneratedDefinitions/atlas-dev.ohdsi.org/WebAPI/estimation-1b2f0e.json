@@ -1,0 +1,10 @@
+[
+    {
+        "createdDate": 1585199033824,
+        "modifiedDate": 1614655838445,
+        "hasWriteAccess": false,
+        "id": 1,
+        "name": "test ple",
+        "type": "ComparativeCohortAnalysis"
+    }
+]

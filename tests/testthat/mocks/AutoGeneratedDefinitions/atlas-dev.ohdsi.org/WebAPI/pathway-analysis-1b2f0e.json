@@ -1,0 +1,42 @@
+{
+    "content": [
+        {
+            "createdDate": 1585198960719,
+            "modifiedDate": 1608712997948,
+            "hasWriteAccess": false,
+            "id": 1,
+            "name": "test pathway",
+            "targetCohorts": [
+                {
+                    "id": 2,
+                    "name": "type 1 diabetes",
+                    "description": "type 1 diabetes description",
+                    "hasWriteAccess": false,
+                    "pathwayCohortId": 2
+                }
+            ],
+            "eventCohorts": [
+                {
+                    "id": 2,
+                    "name": "type 1 diabetes",
+                    "description": "type 1 diabetes description",
+                    "hasWriteAccess": false,
+                    "pathwayCohortId": 1
+                }
+            ],
+            "combinationWindow": 0,
+            "minCellCount": 0,
+            "maxDepth": 5,
+            "allowRepeats": false,
+            "hashCode": 303350607
+        }
+    ],
+    "last": true,
+    "totalPages": 1,
+    "totalElements": 1,
+    "sort": null,
+    "numberOfElements": 1,
+    "first": true,
+    "size": 100000000,
+    "number": 0
+}

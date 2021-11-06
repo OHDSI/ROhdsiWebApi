@@ -1,0 +1,21 @@
+{
+    "status": "STARTING",
+    "startDate": null,
+    "endDate": null,
+    "exitStatus": "UNKNOWN",
+    "executionId": 795,
+    "jobInstance": {
+        "instanceId": 795,
+        "name": "generatePathwayAnalysis"
+    },
+    "jobParameters": {
+        "jobName": "Generating Pathway Analysis 1 using SYNPUF 5% (SYNPUF5PCT)",
+        "jobAuthor": "anonymous",
+        "pathway_analysis_id": "1",
+        "target_table": "temp_cohort_fxokbpxs",
+        "source_id": "1",
+        "sessionId": "fxokbpxs",
+        "time": 1626643171511
+    },
+    "ownerType": null
+}

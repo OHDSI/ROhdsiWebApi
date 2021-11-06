@@ -8,8 +8,7 @@ getConceptSetDefinitionsMetaData(baseUrl)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 }
 \value{
 A tibble of specification metadata for ConceptSet. Note: modifiedDate and createdDate are returned

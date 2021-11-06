@@ -35,6 +35,7 @@
 #' }
 #' @export
 getConceptSetDefinitionsMetaData <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("conceptSet"))
   return(metaData)
 }
@@ -56,6 +57,7 @@ getConceptSetDefinitionsMetaData <- function(baseUrl) {
 #' }
 #' @export
 isValidConceptSetId <- function(conceptSetIds, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- isValidId(baseUrl = baseUrl, category = "conceptSet", ids = conceptSetIds)
   return(result)
 }
@@ -77,6 +79,7 @@ isValidConceptSetId <- function(conceptSetIds, baseUrl) {
 #' }
 #' @export
 getConceptSetDefinition <- function(conceptSetId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getDefinition(id = conceptSetId, baseUrl = baseUrl, category = "conceptSet")
   return(result)
 }
@@ -98,6 +101,7 @@ getConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #' }
 #' @export
 deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- deleteDefinition(baseUrl = baseUrl, id = conceptSetId, category = "conceptSet")
   return(result)
 }
@@ -121,6 +125,7 @@ deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
 #' @export
 # Check name
 existsConceptSetName <- function(conceptSetName, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getConceptSetDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == conceptSetName)
   if (nrow(matched) > 0) {
@@ -150,6 +155,7 @@ existsConceptSetName <- function(conceptSetName, baseUrl) {
 #' @export
 # Check name
 detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getConceptSetDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
@@ -189,12 +195,43 @@ detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' }
 #' @export
 postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "conceptSet",
                            definition = conceptSetDefinition)
   return(result)
 }
+
+
+#' Update a ConceptSet definition. \lifecycle{maturing}
+#' @details
+#' Update a ConceptSet definition.
+#'
+#' @template BaseUrl
+#' @param conceptSetDefinition   An R list object containing the expression for the specification. Must
+#'                               include id, name and expression. This will be converted to JSON
+#'                               expression by function and posted into the WebApi. The definition will
+#'                               be checked against the WebApi instance for errors
+#'
+#' @examples
+#' \dontrun{
+#' definition <- getConceptSetDefinition(id = 13242,
+#'                                       baseUrl = "http://server.org:80/WebAPI",
+#'                                       category = conceptSet)
+#' definition$name <- "My new name for this"
+#' updateConceptSet(conceptSetDefinition, baseUrl, category = "cohort")
+#' }
+#' @export
+# Check name
+updateConceptSetDefinition <- function(conceptSetDefinition, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
+  result <- updateDefinition(baseUrl = baseUrl,
+                             definition = conceptSetDefinition,
+                             category = "conceptSet")
+  return(result)
+}
+
 #' Get the meta data for Cohort definitions. \lifecycle{stable}
 #' @details
 #' Get the meta data of WebApi specifications such as id, name, created/modified details, hash object,
@@ -211,6 +248,7 @@ postConceptSetDefinition <- function(name, conceptSetDefinition, baseUrl) {
 #' }
 #' @export
 getCohortDefinitionsMetaData <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("cohort"))
   return(metaData)
 }
@@ -232,6 +270,7 @@ getCohortDefinitionsMetaData <- function(baseUrl) {
 #' }
 #' @export
 isValidCohortId <- function(cohortIds, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- isValidId(baseUrl = baseUrl, category = "cohort", ids = cohortIds)
   return(result)
 }
@@ -253,6 +292,7 @@ isValidCohortId <- function(cohortIds, baseUrl) {
 #' }
 #' @export
 getCohortDefinition <- function(cohortId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getDefinition(id = cohortId, baseUrl = baseUrl, category = "cohort")
   return(result)
 }
@@ -274,6 +314,7 @@ getCohortDefinition <- function(cohortId, baseUrl) {
 #' }
 #' @export
 deleteCohortDefinition <- function(cohortId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- deleteDefinition(baseUrl = baseUrl, id = cohortId, category = "cohort")
   return(result)
 }
@@ -297,6 +338,7 @@ deleteCohortDefinition <- function(cohortId, baseUrl) {
 #' @export
 # Check name
 existsCohortName <- function(cohortName, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getCohortDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == cohortName)
   if (nrow(matched) > 0) {
@@ -325,6 +367,7 @@ existsCohortName <- function(cohortName, baseUrl) {
 #' @export
 # Check name
 detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getCohortDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
@@ -364,12 +407,43 @@ detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' }
 #' @export
 postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "cohort",
                            definition = cohortDefinition)
   return(result)
 }
+
+
+#' Update a Cohort definition. \lifecycle{maturing}
+#' @details
+#' Update a Cohort definition.
+#'
+#' @template BaseUrl
+#' @param cohortDefinition   An R list object containing the expression for the specification. Must
+#'                           include id, name and expression. This will be converted to JSON expression
+#'                           by function and posted into the WebApi. The definition will be checked
+#'                           against the WebApi instance for errors
+#'
+#' @examples
+#' \dontrun{
+#' definition <- getCohortDefinition(id = 13242,
+#'                                   baseUrl = "http://server.org:80/WebAPI",
+#'                                   category = cohort)
+#' definition$name <- "My new name for this"
+#' updateCohort(cohortDefinition, baseUrl, category = "cohort")
+#' }
+#' @export
+# Check name
+updateCohortDefinition <- function(cohortDefinition, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
+  result <- updateDefinition(baseUrl = baseUrl,
+                             definition = cohortDefinition,
+                             category = "cohort")
+  return(result)
+}
+
 
 #' Get generation information for Cohort id.
 #'
@@ -388,6 +462,7 @@ postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
 #' }
 #' @export
 getCohortGenerationInformation <- function(cohortId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   response <- getGenerationInformation(id = cohortId, baseUrl = baseUrl, category = "cohort")
   return(response)
@@ -414,6 +489,7 @@ getCohortGenerationInformation <- function(cohortId, baseUrl) {
 #' }
 #' @export
 invokeCohortGeneration <- function(cohortId, baseUrl, sourceKey) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   response <- invokeGeneration(id = cohortId,
                                baseUrl = baseUrl,
@@ -468,6 +544,7 @@ cancelCohortGeneration <- function(cohortId, baseUrl, sourceKey) {
 #' @export
 # Check name
 getCohortResults <- function(cohortId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getResults(baseUrl = baseUrl, id = cohortId, category = "cohort")
   return(result)
 }
@@ -488,6 +565,7 @@ getCohortResults <- function(cohortId, baseUrl) {
 #' }
 #' @export
 getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("incidenceRate"))
   return(metaData)
 }
@@ -510,6 +588,7 @@ getIncidenceRateDefinitionsMetaData <- function(baseUrl) {
 #' }
 #' @export
 isValidIncidenceRateId <- function(incidenceRateIds, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- isValidId(baseUrl = baseUrl, category = "incidenceRate", ids = incidenceRateIds)
   return(result)
 }
@@ -531,6 +610,7 @@ isValidIncidenceRateId <- function(incidenceRateIds, baseUrl) {
 #' }
 #' @export
 getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getDefinition(id = incidenceRateId, baseUrl = baseUrl, category = "incidenceRate")
   return(result)
 }
@@ -552,6 +632,7 @@ getIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 #' }
 #' @export
 deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- deleteDefinition(baseUrl = baseUrl, id = incidenceRateId, category = "incidenceRate")
   return(result)
 }
@@ -575,6 +656,7 @@ deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 #' @export
 # Check name
 existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == incidenceRateName)
   if (nrow(matched) > 0) {
@@ -605,6 +687,7 @@ existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
 #' @export
 # Check name
 detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
@@ -644,6 +727,7 @@ detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
 #' }
 #' @export
 postIncidenceRateDefinition <- function(name, incidenceRateDefinition, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "incidenceRate",
@@ -669,6 +753,7 @@ postIncidenceRateDefinition <- function(name, incidenceRateDefinition, baseUrl) 
 #' }
 #' @export
 getIncidenceRateGenerationInformation <- function(incidenceRateId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   response <- getGenerationInformation(id = incidenceRateId,
                                        baseUrl = baseUrl,
@@ -697,6 +782,7 @@ getIncidenceRateGenerationInformation <- function(incidenceRateId, baseUrl) {
 #' }
 #' @export
 invokeIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   response <- invokeGeneration(id = incidenceRateId,
                                baseUrl = baseUrl,
@@ -751,6 +837,7 @@ cancelIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
 #' @export
 # Check name
 getIncidenceRateResults <- function(incidenceRateId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getResults(baseUrl = baseUrl, id = incidenceRateId, category = "incidenceRate")
   return(result)
 }
@@ -771,6 +858,7 @@ getIncidenceRateResults <- function(incidenceRateId, baseUrl) {
 #' }
 #' @export
 getEstimationDefinitionsMetaData <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("estimation"))
   return(metaData)
 }
@@ -792,6 +880,7 @@ getEstimationDefinitionsMetaData <- function(baseUrl) {
 #' }
 #' @export
 isValidEstimationId <- function(estimationIds, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- isValidId(baseUrl = baseUrl, category = "estimation", ids = estimationIds)
   return(result)
 }
@@ -813,6 +902,7 @@ isValidEstimationId <- function(estimationIds, baseUrl) {
 #' }
 #' @export
 getEstimationDefinition <- function(estimationId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getDefinition(id = estimationId, baseUrl = baseUrl, category = "estimation")
   return(result)
 }
@@ -834,6 +924,7 @@ getEstimationDefinition <- function(estimationId, baseUrl) {
 #' }
 #' @export
 deleteEstimationDefinition <- function(estimationId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- deleteDefinition(baseUrl = baseUrl, id = estimationId, category = "estimation")
   return(result)
 }
@@ -857,6 +948,7 @@ deleteEstimationDefinition <- function(estimationId, baseUrl) {
 #' @export
 # Check name
 existsEstimationName <- function(estimationName, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getEstimationDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == estimationName)
   if (nrow(matched) > 0) {
@@ -886,6 +978,7 @@ existsEstimationName <- function(estimationName, baseUrl) {
 #' @export
 # Check name
 detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getEstimationDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
@@ -925,12 +1018,15 @@ detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' }
 #' @export
 postEstimationDefinition <- function(name, estimationDefinition, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "estimation",
                            definition = estimationDefinition)
   return(result)
 }
+
+
 #' Get the meta data for Prediction definitions. \lifecycle{stable}
 #' @details
 #' Get the meta data of WebApi specifications such as id, name, created/modified details, hash object,
@@ -948,6 +1044,7 @@ postEstimationDefinition <- function(name, estimationDefinition, baseUrl) {
 #' }
 #' @export
 getPredictionDefinitionsMetaData <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("prediction"))
   return(metaData)
 }
@@ -969,6 +1066,7 @@ getPredictionDefinitionsMetaData <- function(baseUrl) {
 #' }
 #' @export
 isValidPredictionId <- function(predictionIds, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- isValidId(baseUrl = baseUrl, category = "prediction", ids = predictionIds)
   return(result)
 }
@@ -990,6 +1088,7 @@ isValidPredictionId <- function(predictionIds, baseUrl) {
 #' }
 #' @export
 getPredictionDefinition <- function(predictionId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getDefinition(id = predictionId, baseUrl = baseUrl, category = "prediction")
   return(result)
 }
@@ -1011,6 +1110,7 @@ getPredictionDefinition <- function(predictionId, baseUrl) {
 #' }
 #' @export
 deletePredictionDefinition <- function(predictionId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- deleteDefinition(baseUrl = baseUrl, id = predictionId, category = "prediction")
   return(result)
 }
@@ -1034,6 +1134,7 @@ deletePredictionDefinition <- function(predictionId, baseUrl) {
 #' @export
 # Check name
 existsPredictionName <- function(predictionName, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getPredictionDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == predictionName)
   if (nrow(matched) > 0) {
@@ -1063,6 +1164,7 @@ existsPredictionName <- function(predictionName, baseUrl) {
 #' @export
 # Check name
 detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getPredictionDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
@@ -1102,12 +1204,14 @@ detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' }
 #' @export
 postPredictionDefinition <- function(name, predictionDefinition, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "prediction",
                            definition = predictionDefinition)
   return(result)
 }
+
 #' Get the meta data for Characterization definitions. \lifecycle{stable}
 #' @details
 #' Get the meta data of WebApi specifications such as id, name, created/modified details, hash object,
@@ -1125,6 +1229,7 @@ postPredictionDefinition <- function(name, predictionDefinition, baseUrl) {
 #' }
 #' @export
 getCharacterizationDefinitionsMetaData <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("characterization"))
   return(metaData)
 }
@@ -1148,6 +1253,7 @@ getCharacterizationDefinitionsMetaData <- function(baseUrl) {
 #' }
 #' @export
 isValidCharacterizationId <- function(characterizationIds, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- isValidId(baseUrl = baseUrl, category = "characterization", ids = characterizationIds)
   return(result)
 }
@@ -1170,6 +1276,7 @@ isValidCharacterizationId <- function(characterizationIds, baseUrl) {
 #' }
 #' @export
 getCharacterizationDefinition <- function(characterizationId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getDefinition(id = characterizationId, baseUrl = baseUrl, category = "characterization")
   return(result)
 }
@@ -1192,6 +1299,7 @@ getCharacterizationDefinition <- function(characterizationId, baseUrl) {
 #' }
 #' @export
 deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- deleteDefinition(baseUrl = baseUrl,
                              id = characterizationId,
                              category = "characterization")
@@ -1217,6 +1325,7 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
 #' @export
 # Check name
 existsCharacterizationName <- function(characterizationName, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == characterizationName)
   if (nrow(matched) > 0) {
@@ -1247,6 +1356,7 @@ existsCharacterizationName <- function(characterizationName, baseUrl) {
 #' @export
 # Check name
 detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
@@ -1286,6 +1396,7 @@ detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
 #' }
 #' @export
 postCharacterizationDefinition <- function(name, characterizationDefinition, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "characterization",
@@ -1311,6 +1422,7 @@ postCharacterizationDefinition <- function(name, characterizationDefinition, bas
 #' }
 #' @export
 getCharacterizationGenerationInformation <- function(characterizationId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   response <- getGenerationInformation(id = characterizationId,
                                        baseUrl = baseUrl,
@@ -1339,6 +1451,7 @@ getCharacterizationGenerationInformation <- function(characterizationId, baseUrl
 #' }
 #' @export
 invokeCharacterizationGeneration <- function(characterizationId, baseUrl, sourceKey) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   response <- invokeGeneration(id = characterizationId,
                                baseUrl = baseUrl,
@@ -1393,6 +1506,7 @@ cancelCharacterizationGeneration <- function(characterizationId, baseUrl, source
 #' @export
 # Check name
 getCharacterizationResults <- function(characterizationId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getResults(baseUrl = baseUrl, id = characterizationId, category = "characterization")
   return(result)
 }
@@ -1413,6 +1527,7 @@ getCharacterizationResults <- function(characterizationId, baseUrl) {
 #' }
 #' @export
 getPathwayDefinitionsMetaData <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   metaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = c("pathway"))
   return(metaData)
 }
@@ -1434,6 +1549,7 @@ getPathwayDefinitionsMetaData <- function(baseUrl) {
 #' }
 #' @export
 isValidPathwayId <- function(pathwayIds, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- isValidId(baseUrl = baseUrl, category = "pathway", ids = pathwayIds)
   return(result)
 }
@@ -1455,6 +1571,7 @@ isValidPathwayId <- function(pathwayIds, baseUrl) {
 #' }
 #' @export
 getPathwayDefinition <- function(pathwayId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getDefinition(id = pathwayId, baseUrl = baseUrl, category = "pathway")
   return(result)
 }
@@ -1476,6 +1593,7 @@ getPathwayDefinition <- function(pathwayId, baseUrl) {
 #' }
 #' @export
 deletePathwayDefinition <- function(pathwayId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- deleteDefinition(baseUrl = baseUrl, id = pathwayId, category = "pathway")
   return(result)
 }
@@ -1499,6 +1617,7 @@ deletePathwayDefinition <- function(pathwayId, baseUrl) {
 #' @export
 # Check name
 existsPathwayName <- function(pathwayName, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getPathwayDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(.data$name == pathwayName)
   if (nrow(matched) > 0) {
@@ -1527,6 +1646,7 @@ existsPathwayName <- function(pathwayName, baseUrl) {
 #' @export
 # Check name
 detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getPathwayDefinitionsMetaData(baseUrl = baseUrl)
   matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
                                                                        pattern = pattern,
@@ -1566,6 +1686,7 @@ detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
 #' }
 #' @export
 postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- postDefinition(name = name,
                            baseUrl = baseUrl,
                            category = "pathway",
@@ -1590,6 +1711,7 @@ postPathwayDefinition <- function(name, pathwayDefinition, baseUrl) {
 #' }
 #' @export
 getPathwayGenerationInformation <- function(pathwayId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   response <- getGenerationInformation(id = pathwayId, baseUrl = baseUrl, category = "pathway")
   return(response)
@@ -1616,6 +1738,7 @@ getPathwayGenerationInformation <- function(pathwayId, baseUrl) {
 #' }
 #' @export
 invokePathwayGeneration <- function(pathwayId, baseUrl, sourceKey) {
+  baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   response <- invokeGeneration(id = pathwayId,
                                baseUrl = baseUrl,
@@ -1670,6 +1793,7 @@ cancelPathwayGeneration <- function(pathwayId, baseUrl, sourceKey) {
 #' @export
 # Check name
 getPathwayResults <- function(pathwayId, baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   result <- getResults(baseUrl = baseUrl, id = pathwayId, category = "pathway")
   return(result)
 }

@@ -11,8 +11,7 @@ isValidCharacterizationId(characterizationIds, baseUrl)
 validity.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 }
 \value{
 A logical vector indicating if an ID is valid.

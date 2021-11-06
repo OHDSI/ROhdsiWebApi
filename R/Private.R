@@ -16,23 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-.isValidUrl <- function(urlToCheck) {
-  connection <- base::url(urlToCheck)
-  # try to open connection
-  openConnection <- suppressWarnings(try(expr = open.connection(connection,
-                                                                open = "r",
-                                                                timeout = 3), silent = TRUE))
-  # close connection
-  suppressWarnings(try(close.connection(connection), silent = TRUE))
-  response <- if (is.null(openConnection)) {
-    TRUE
-  } else {
-    FALSE
-  }
-  return(response)
-}
-
 .checkBaseUrl <- function(baseUrl) {
+  baseUrl <- gsub("/$", "", baseUrl)
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   if (is.null(webApiVersion) | length(webApiVersion) == 0) {
     stop(paste0("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",

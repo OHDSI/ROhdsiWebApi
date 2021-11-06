@@ -18,8 +18,7 @@ into the WebApi. Note: only limited checks are performed in R to
 check the validity of this expression.}
 
 \item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Note, there is no trailing '/'.
-If trailing '/' is used, you may receive an error.}
+"http://server.org:80/WebAPI".}
 }
 \value{
 This function will return a dataframe object with one row describing the posted WebApi expression
