@@ -159,46 +159,46 @@ for (i in (1:nrow(arguments))) { #i = 1
 }
 
 ## Create ROhdsiWebApi's internal package data ---------------------
-library(dplyr)
-
-StandardCategories <- tibble(categoryStandard = c("conceptSet", "cohort", "incidenceRate", "estimation", "prediction", "characterization", "pathway")) %>% 
-  mutate(categoryFirstUpper = paste0(toupper(substr(.data$categoryStandard, 1, 1)), 
-                                     substr(.data$categoryStandard, 2, nchar(.data$categoryStandard)))) %>% 
-  mutate(categoryUrl = case_when(categoryStandard == "conceptSet" ~ "conceptset", 
-                                               categoryStandard == "cohort" ~ "cohortdefinition", 
-                                               categoryStandard == "characterization" ~ "cohort-characterization", 
-                                               categoryStandard == "pathway" ~ "pathway-analysis", 
-                                               categoryStandard == "incidenceRate" ~ "ir", 
-                                               categoryStandard == "estimation" ~ "estimation", 
-                                 categoryStandard == "prediction" ~ "prediction", TRUE ~ "")) %>% 
-  mutate(categoryUrlGetExpression = case_when(categoryStandard == "conceptSet" ~ "expression", 
-                                              categoryStandard == "characterization" ~ "design", TRUE ~ "")) %>%
-  mutate(categoryUrlGenerationInformation = case_when(categoryStandard == "cohort" ~ "info", 
-                                                      categoryStandard == "characterization" ~ "generation", 
-                                                      categoryStandard == "pathway" ~ "generation", 
-                                                      categoryStandard == "incidenceRate" ~ "info", TRUE ~ "")) %>% 
-  mutate(categoryUrlGeneration = case_when(categoryStandard == "cohort" ~ "generate", 
-                                           categoryStandard == "characterization" ~ "generation", 
-                                           categoryStandard == "pathway" ~ "generation", 
-                                           categoryStandard == "incidenceRate" ~ "execute", 
-                                           TRUE ~ "")) %>% 
-  mutate(categoryUrlCancel = dplyr::case_when(categoryStandard == "cohort" ~ "cancel", 
-                                              categoryStandard == "characterization" ~ "generation", 
-                                              categoryStandard == "pathway" ~ "generation", 
-                                              categoryStandard == "incidenceRate" ~ "execute", 
-                                              TRUE ~ "")) %>% 
-  mutate(categoryUrlPut = dplyr::case_when(categoryStandard == "conceptSet" ~ "items", TRUE ~ "")) %>% 
-  mutate(categoryUrlPostExpression = dplyr::case_when(categoryStandard == "conceptSet" ~ "items", 
-                                                      categoryStandard == "cohort" ~ "", 
-                                                      categoryStandard == "characterization" ~ "import", 
-                                                      categoryStandard == "pathway" ~ "", 
-                                                      categoryStandard == "incidenceRate" ~ "", 
-                                                      TRUE ~"")) 
-
-usethis::use_data(StandardCategories, internal = TRUE, overwrite = TRUE)
-
-
-
+# library(dplyr)
+# 
+# StandardCategories <- tibble(categoryStandard = c("conceptSet", "cohort", "incidenceRate", "estimation", "prediction", "characterization", "pathway")) %>% 
+#   mutate(categoryFirstUpper = paste0(toupper(substr(.data$categoryStandard, 1, 1)), 
+#                                      substr(.data$categoryStandard, 2, nchar(.data$categoryStandard)))) %>% 
+#   mutate(categoryUrl = case_when(categoryStandard == "conceptSet" ~ "conceptset", 
+#                                                categoryStandard == "cohort" ~ "cohortdefinition", 
+#                                                categoryStandard == "characterization" ~ "cohort-characterization", 
+#                                                categoryStandard == "pathway" ~ "pathway-analysis", 
+#                                                categoryStandard == "incidenceRate" ~ "ir", 
+#                                                categoryStandard == "estimation" ~ "estimation", 
+#                                  categoryStandard == "prediction" ~ "prediction", TRUE ~ "")) %>% 
+#   mutate(categoryUrlGetExpression = case_when(categoryStandard == "conceptSet" ~ "expression", 
+#                                               categoryStandard == "characterization" ~ "design", TRUE ~ "")) %>%
+#   mutate(categoryUrlGenerationInformation = case_when(categoryStandard == "cohort" ~ "info", 
+#                                                       categoryStandard == "characterization" ~ "generation", 
+#                                                       categoryStandard == "pathway" ~ "generation", 
+#                                                       categoryStandard == "incidenceRate" ~ "info", TRUE ~ "")) %>% 
+#   mutate(categoryUrlGeneration = case_when(categoryStandard == "cohort" ~ "generate", 
+#                                            categoryStandard == "characterization" ~ "generation", 
+#                                            categoryStandard == "pathway" ~ "generation", 
+#                                            categoryStandard == "incidenceRate" ~ "execute", 
+#                                            TRUE ~ "")) %>% 
+#   mutate(categoryUrlCancel = dplyr::case_when(categoryStandard == "cohort" ~ "cancel", 
+#                                               categoryStandard == "characterization" ~ "generation", 
+#                                               categoryStandard == "pathway" ~ "generation", 
+#                                               categoryStandard == "incidenceRate" ~ "execute", 
+#                                               TRUE ~ "")) %>% 
+#   mutate(categoryUrlPut = dplyr::case_when(categoryStandard == "conceptSet" ~ "items", TRUE ~ "")) %>% 
+#   mutate(categoryUrlPostExpression = dplyr::case_when(categoryStandard == "conceptSet" ~ "items", 
+#                                                       categoryStandard == "cohort" ~ "", 
+#                                                       categoryStandard == "characterization" ~ "import", 
+#                                                       categoryStandard == "pathway" ~ "", 
+#                                                       categoryStandard == "incidenceRate" ~ "", 
+#                                                       TRUE ~"")) 
+# 
+# usethis::use_data(StandardCategories, internal = TRUE, overwrite = TRUE)
+# 
+# 
+# 
 
 
 

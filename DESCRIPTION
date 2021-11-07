@@ -1,7 +1,7 @@
 Package: ROhdsiWebApi
 Type: Package
 Title: Interacting With an OHDSI WebApi Instance
-Version: 1.2.1
+Version: 1.2.2
 Date: 2021-11-07
 Authors@R: c(
     person("Gowtham", "Rao", email = "rao@ohdsi.org", role = c("aut", "cre")),

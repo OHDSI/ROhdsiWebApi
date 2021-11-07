@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -57,24 +57,24 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
+    </li>
+    <li>
       <a href="../articles/InsertCohortDefinitionsIntoPackage.html">Insert Cohort Definitions Into Package</a>
     </li>
     <li>
       <a href="../articles/UsingROhdsiWebApi.html">Using ROhdsiWebApi</a>
-    </li>
-    <li>
-      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
     </li>
   </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://ohdsi.github.io/Hades">hadesLogo</a>
+  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/ROhdsiWebApi/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -88,7 +88,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="authenticationSecurity_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using ROhdsiWebApi with security enabled Atlas/WebAPI</h1>
@@ -116,11 +116,10 @@ h1  {
 <li>Google (OAuth2)</li>
 </ol>
 <p>If you attempt to use ROhdsiWebApi on a security-enabled WebAPI instance without first authenticating you will see an http 401 error.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://ohdsi.github.io/ROhdsiWebApi">ROhdsiWebApi</a></span>)
-<span class="kw">baseUrl</span> <span class="op">&lt;-</span> <span class="st">"https://yourSecureAtlas.ohdsi.org/"</span>
-<span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span>(<span class="kw">baseUrl</span>)
-</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/ROhdsiWebApi/">ROhdsiWebApi</a></span><span class="op">)</span>
+<span class="va">baseUrl</span> <span class="op">&lt;-</span> <span class="st">"https://yourSecureAtlas.ohdsi.org/"</span>
+<span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span><span class="op">(</span><span class="va">baseUrl</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Error in eval(expr, envir, enclos): Error: http error 401: Unauthorized request. Try running `authorizeWebAPI()`</code></pre>
 <p>Supported login types will be visible on the ATLAS platform sign in page:</p>
 <p><img src="atlas-login-options.PNG"></p>
@@ -128,38 +127,33 @@ h1  {
 <h1 class="hasAnchor">
 <a href="#active-directory-windows-and-database-authentication" class="anchor"></a>Active Directory, Windows and database authentication</h1>
 <p>If you typically log in to Atlas using a username and password then WebAPI is likely using either Active Directory or database authentication. In this case it is easy to authorize ROhdsiWebApi by calling the <code>authorizeWebAPI()</code> function.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="../reference/authorizeWebApi.html">authorizeWebApi</a></span>(<span class="kw">baseUrl</span>, 
-                authMethod = <span class="st">"db"</span>, 
-                webApiUsername = <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span>(<span class="st">"WEBAPI_USERNAME"</span>), 
-                webApiPassword = <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span>(<span class="st">"WEBAPI_PASSWORD"</span>))
-</pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/authorizeWebApi.html">authorizeWebApi</a></span><span class="op">(</span><span class="va">baseUrl</span>, 
+                authMethod <span class="op">=</span> <span class="st">"db"</span>, 
+                webApiUsername <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"WEBAPI_USERNAME"</span><span class="op">)</span>, 
+                webApiPassword <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"WEBAPI_PASSWORD"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>This function does not return a value but instead has a side effect of retrieving the bearer token from WebAPI and saving it in the ROhdsiWebApi global package environment. If you are using Active Directory then set <code>authMethod = "ad"</code> and if you are using database authentication then set <code>authMethod = "db"</code>. Make sure that your password is stored in an environment variable defined in the .Renviron file (easily accessed by calling <code><a href="https://usethis.r-lib.org/reference/edit.html">usethis::edit_r_environ()</a></code>) or stored and retrieved using the <a href="https://cran.r-project.org/web/packages/keyring/readme/README.html">keyring package</a>. Never store passwords in your R code.</p>
 <p>If your client platform is windows, on a domain with NT authentication enabled, you may not need to enter a username and password.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="../reference/authorizeWebApi.html">authorizeWebApi</a></span>(<span class="kw">baseUrl</span>, authMethod = <span class="st">"windows"</span>)
-</pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/authorizeWebApi.html">authorizeWebApi</a></span><span class="op">(</span><span class="va">baseUrl</span>, authMethod <span class="op">=</span> <span class="st">"windows"</span><span class="op">)</span></code></pre></div>
 <p>If your client is linux, OSX or not logged in to an NT domain you will need to enter a username and password as for the above methods of authentication.</p>
 <p>If authorization was successful then the bearer token will be stored in the global package environment associated with its WebAPI base URL. If you are working with multiple WebAPI instances at the same time the correct token will be used with each instance since the base URL uniquely identifies the instance. Your username password are not saved or cached by the ROhdsiWebApi package.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span>(<span class="kw">ROhdsiWebApi</span>:::<span class="kw">ROWebApiEnv</span>)
-</pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="fu">ROhdsiWebApi</span><span class="fu">:::</span><span class="va">ROWebApiEnv</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; [1] "https://yourSecureAtlas.ohdsi.org/"</code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="kw">ROhdsiWebApi</span>:::<span class="kw">ROWebApiEnv</span>[[<span class="st">"https://yourSecureAtlas.ohdsi.org/"</span>]]
-</pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">ROhdsiWebApi</span><span class="fu">:::</span><span class="va">ROWebApiEnv</span><span class="op">[[</span><span class="st">"https://yourSecureAtlas.ohdsi.org/"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
 <pre><code>#&gt; $authHeader
 #&gt; [1] "Bearer gSyJhbzciOiJI0ZUxMiJ9.eyJzdWIiOIJhZGFtLx57wgSyJhb..."</code></pre>
 <p>This bearer token will then be added to the header all future requests sent by ROhdsiWebApi and all of the package API call functions should work.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span>(<span class="kw">baseUrl</span>)
-</pre></div>
-<pre><code>#&gt; # A tibble: 2 × 7
-#&gt;   sourceId sourceName  sourceKey sourceDialect cdmDatabaseSche… vocabDatabaseSc…
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span><span class="op">(</span><span class="va">baseUrl</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; # A tibble: 2 x 7
+#&gt;   sourceId sourceName  sourceKey sourceDialect cdmDatabaseSche~ vocabDatabaseSc~
 #&gt;      &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;           
-#&gt; 1      911 SynPUF 110k synpuf-1… postgresql    cdm_531          cdm_531         
+#&gt; 1      911 SynPUF 110k synpuf-1~ postgresql    cdm_531          cdm_531         
 #&gt; 2      912 SynPUF 2.3m synpuf-2m postgresql    cdm_531          cdm_531         
-#&gt; # … with 1 more variable: resultsDatabaseSchema &lt;chr&gt;</code></pre>
+#&gt; # ... with 1 more variable: resultsDatabaseSchema &lt;chr&gt;</code></pre>
 <p>You will need to run authorizeWebApi each time R is restarted or when the bearer token expires. The lifetime of a bearer token depends on your Atlas/WebAPI installation.</p>
 </div>
 <div id="google-authentication" class="section level1">
@@ -173,41 +167,39 @@ h1  {
 <li>Click Headers -&gt; Request Headers and copy the Authorization field that starts with “Bearer”</li>
 </ol>
 <p><img src="chrome-dev-tools-bearer-token.PNG"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="kw">baseUrl</span> <span class="op">&lt;-</span> <span class="st">"https://atlas.ohdsi.org/WebAPI"</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">baseUrl</span> <span class="op">&lt;-</span> <span class="st">"https://atlas.ohdsi.org/WebAPI"</span>
 
 <span class="co"># Bearer copied from Google developer tools</span>
-<span class="kw">token</span> <span class="op">&lt;-</span> <span class="st">"Bearer eyJsdfiem3Mcju7KRc4cCI6MTYxNDk5MTMxNX0.oVFpFnvhFK3SqYlRhdj"</span>
+<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"Bearer eyJsdfiem3Mcju7KRc4cCI6MTYxNDk5MTMxNX0.oVFpFnvhFK3SqYlRhdj"</span>
 
-<span class="fu"><a href="../reference/setAuthHeader.html">setAuthHeader</a></span>(<span class="kw">baseUrl</span>, authHeader = <span class="kw">token</span>)
+<span class="fu"><a href="../reference/setAuthHeader.html">setAuthHeader</a></span><span class="op">(</span><span class="va">baseUrl</span>, authHeader <span class="op">=</span> <span class="va">token</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span>(<span class="kw">baseUrl</span>)
-</pre></div>
-<pre><code>#&gt; # A tibble: 1 × 7
-#&gt;   sourceId sourceName sourceKey  sourceDialect cdmDatabaseSche… vocabDatabaseSc…
+<span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span><span class="op">(</span><span class="va">baseUrl</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; # A tibble: 1 x 7
+#&gt;   sourceId sourceName sourceKey  sourceDialect cdmDatabaseSche~ vocabDatabaseSc~
 #&gt;      &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;           
-#&gt; 1        1 SYNPUF 5%  SYNPUF5PCT postgresql    synpuf5pct       unrestricted_vo…
-#&gt; # … with 1 more variable: resultsDatabaseSchema &lt;chr&gt;</code></pre>
+#&gt; 1        1 SYNPUF 5%  SYNPUF5PCT postgresql    synpuf5pct       unrestricted_vo~
+#&gt; # ... with 1 more variable: resultsDatabaseSchema &lt;chr&gt;</code></pre>
 </div>
 <div id="webapi-authentication-in-a-shiny-app" class="section level1">
 <h1 class="hasAnchor">
 <a href="#webapi-authentication-in-a-shiny-app" class="anchor"></a>WebAPI authentication in a Shiny app</h1>
 <p>There may be cases where ROhdsiWebApi will be used in a Shiny application with an instance of WebAPI that is using security. In that case the shiny app author will either want to prompt the user for their Atlas username and password or use a service account to connect to WebAPI.</p>
 <p>To avoid errors due to token expiration <code>tryCatch</code> can be used to automatically re-authorize ROhdsiWebApi. However be sure to securely store passwords and not include them in plain text in the Shiny app.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/conditions.html">tryCatch</a></span>(<span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span>(<span class="kw">baseUrl</span>),
-         error = <span class="fu">function</span>(<span class="kw">s</span>) {
-           <span class="co">if</span>(<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span>(<span class="st">"http error 401"</span>, <span class="kw">e</span>)) {
-             <span class="fu"><a href="../reference/authorizeWebApi.html">authorizeWebApi</a></span>(<span class="kw">baseUrl</span>, 
-                authMethod = <span class="st">"db"</span>, 
-                webApiUsername = <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span>(<span class="st">"WEBAPI_USERNAME"</span>), 
-                webApiPassword = <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span>(<span class="st">"WEBAPI_PASSWORD"</span>))
-             <span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span>(<span class="kw">baseUrl</span>)
-           } <span class="co">else</span> {
-             <span class="fu"><a href="https://rdrr.io/r/base/stop.html">stop</a></span>(<span class="kw">e</span>)
-           }
-         })
-</pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/conditions.html">tryCatch</a></span><span class="op">(</span><span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span><span class="op">(</span><span class="va">baseUrl</span><span class="op">)</span>,
+         error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">s</span><span class="op">)</span> <span class="op">{</span>
+           <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"http error 401"</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+             <span class="fu"><a href="../reference/authorizeWebApi.html">authorizeWebApi</a></span><span class="op">(</span><span class="va">baseUrl</span>, 
+                authMethod <span class="op">=</span> <span class="st">"db"</span>, 
+                webApiUsername <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"WEBAPI_USERNAME"</span><span class="op">)</span>, 
+                webApiPassword <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"WEBAPI_PASSWORD"</span><span class="op">)</span><span class="op">)</span>
+             <span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span><span class="op">(</span><span class="va">baseUrl</span><span class="op">)</span>
+           <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+             <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span>
+           <span class="op">}</span>
+         <span class="op">}</span><span class="op">)</span></code></pre></div>
 <div style="margin-bottom:100px;">
 
 </div>
