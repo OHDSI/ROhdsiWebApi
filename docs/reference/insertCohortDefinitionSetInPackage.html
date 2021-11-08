@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,13 +98,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
-    </li>
-    <li>
       <a href="../articles/InsertCohortDefinitionsIntoPackage.html">Insert Cohort Definitions Into Package</a>
     </li>
     <li>
       <a href="../articles/UsingROhdsiWebApi.html">Using ROhdsiWebApi</a>
+    </li>
+    <li>
+      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
     </li>
   </ul>
 </li>
@@ -115,7 +115,7 @@
 </li>
 <li>
   <a href="https://github.com/OHDSI/ROhdsiWebApi/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -141,17 +141,17 @@
     <p>Insert a set of cohort definitions into package</p>
     </div>
 
-    <pre class="usage"><span class='fu'>insertCohortDefinitionSetInPackage</span><span class='op'>(</span>
-  fileName <span class='op'>=</span> <span class='st'>"inst/settings/CohortsToCreate.csv"</span>,
-  <span class='va'>baseUrl</span>,
-  jsonFolder <span class='op'>=</span> <span class='st'>"inst/cohorts"</span>,
-  sqlFolder <span class='op'>=</span> <span class='st'>"inst/sql/sql_server"</span>,
-  rFileName <span class='op'>=</span> <span class='st'>"R/CreateCohorts.R"</span>,
-  insertTableSql <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  insertCohortCreationR <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  generateStats <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>packageName</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>insertCohortDefinitionSetInPackage</span>(
+  fileName = <span class='st'>"inst/settings/CohortsToCreate.csv"</span>,
+  <span class='kw'>baseUrl</span>,
+  jsonFolder = <span class='st'>"inst/cohorts"</span>,
+  sqlFolder = <span class='st'>"inst/sql/sql_server"</span>,
+  rFileName = <span class='st'>"R/CreateCohorts.R"</span>,
+  insertTableSql = <span class='fl'>TRUE</span>,
+  insertCohortCreationR = <span class='fl'>TRUE</span>,
+  generateStats = <span class='fl'>FALSE</span>,
+  <span class='kw'>packageName</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
