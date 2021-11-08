@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
       <h1 data-toc-skip>Using ROhdsiWebApi</h1>
                         <h4 class="author">Gowtham Rao</h4>
             
-            <h4 class="date">2021-11-08</h4>
+            <h4 class="date">2021-11-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/OHDSI/ROhdsiWebApi/blob/master/vignettes/UsingROhdsiWebApi.Rmd"><code>vignettes/UsingROhdsiWebApi.Rmd</code></a></small>
       <div class="hidden name"><code>UsingROhdsiWebApi.Rmd</code></div>
@@ -688,14 +688,14 @@
   <span class="fu">rename_all</span>(.funs = <span class="kw">SqlRender</span>::<span class="kw"><a href="https://rdrr.io/pkg/SqlRender/man/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>() 
 <span class="co">#&gt; # A tibble: 6 × 8</span>
-<span class="co">#&gt;        Id Name                 `Created Date`      `Has Write Acces… Description</span>
-<span class="co">#&gt;     &lt;int&gt; &lt;chr&gt;                &lt;dttm&gt;              &lt;lgl&gt;             &lt;chr&gt;      </span>
-<span class="co">#&gt; 1 1778014 MISC-BD              2021-11-05 09:03:02 FALSE             "MISC-BD"  </span>
-<span class="co">#&gt; 2 1778015 MIS-A Reporting      2021-11-05 09:09:41 FALSE              &lt;NA&gt;      </span>
-<span class="co">#&gt; 3 1778016 Orlistat for obesity 2021-11-06 11:52:54 FALSE              &lt;NA&gt;      </span>
-<span class="co">#&gt; 4 1778017 test_part_2          2021-11-08 01:58:00 FALSE              &lt;NA&gt;      </span>
-<span class="co">#&gt; 5 1778018 review misc bd       2021-11-08 06:23:57 FALSE              &lt;NA&gt;      </span>
-<span class="co">#&gt; 6 1778019 Test_Formation       2021-11-08 07:35:21 FALSE             "Cohorte d…</span>
+<span class="co">#&gt;        Id Name                `Created Date`      `Has Write Access` Description</span>
+<span class="co">#&gt;     &lt;int&gt; &lt;chr&gt;               &lt;dttm&gt;              &lt;lgl&gt;              &lt;chr&gt;      </span>
+<span class="co">#&gt; 1 1777984 AKTEST              2021-10-31 21:45:33 FALSE               &lt;NA&gt;      </span>
+<span class="co">#&gt; 2 1777985 FUNNEST EVER COHORT 2021-11-01 13:15:37 FALSE              " A VERY F…</span>
+<span class="co">#&gt; 3 1777986 hypotension         2021-11-01 14:03:28 FALSE               &lt;NA&gt;      </span>
+<span class="co">#&gt; 4 1777987 practise_use_dingyi 2021-11-02 02:43:08 FALSE               &lt;NA&gt;      </span>
+<span class="co">#&gt; 5 1777989 testy               2021-11-02 13:46:41 FALSE               &lt;NA&gt;      </span>
+<span class="co">#&gt; 6 1777990 MIS-C BD            2021-11-02 13:58:18 FALSE              ""         </span>
 <span class="co">#&gt; # … with 3 more variables: Modified Date &lt;dttm&gt;, Modified By &lt;list&gt;,</span>
 <span class="co">#&gt; #   Created By &lt;list&gt;</span>
 </pre></div>
@@ -707,14 +707,14 @@
   <span class="fu">rename_all</span>(.funs = <span class="kw">SqlRender</span>::<span class="kw"><a href="https://rdrr.io/pkg/SqlRender/man/camelCaseToTitleCase.html">camelCaseToTitleCase</a></span>) <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>() 
 <span class="co">#&gt; # A tibble: 6 × 8</span>
-<span class="co">#&gt;        Id Name                 `Created Date`      `Has Write Acces… Description</span>
-<span class="co">#&gt;     &lt;int&gt; &lt;chr&gt;                &lt;dttm&gt;              &lt;lgl&gt;             &lt;chr&gt;      </span>
-<span class="co">#&gt; 1 1778014 MISC-BD              2021-11-05 09:03:02 FALSE             "MISC-BD"  </span>
-<span class="co">#&gt; 2 1778015 MIS-A Reporting      2021-11-05 09:09:41 FALSE              &lt;NA&gt;      </span>
-<span class="co">#&gt; 3 1778016 Orlistat for obesity 2021-11-06 11:52:54 FALSE              &lt;NA&gt;      </span>
-<span class="co">#&gt; 4 1778017 test_part_2          2021-11-08 01:58:00 FALSE              &lt;NA&gt;      </span>
-<span class="co">#&gt; 5 1778018 review misc bd       2021-11-08 06:23:57 FALSE              &lt;NA&gt;      </span>
-<span class="co">#&gt; 6 1778019 Test_Formation       2021-11-08 07:35:21 FALSE             "Cohorte d…</span>
+<span class="co">#&gt;        Id Name                `Created Date`      `Has Write Access` Description</span>
+<span class="co">#&gt;     &lt;int&gt; &lt;chr&gt;               &lt;dttm&gt;              &lt;lgl&gt;              &lt;chr&gt;      </span>
+<span class="co">#&gt; 1 1777984 AKTEST              2021-10-31 21:45:33 FALSE               &lt;NA&gt;      </span>
+<span class="co">#&gt; 2 1777985 FUNNEST EVER COHORT 2021-11-01 13:15:37 FALSE              " A VERY F…</span>
+<span class="co">#&gt; 3 1777986 hypotension         2021-11-01 14:03:28 FALSE               &lt;NA&gt;      </span>
+<span class="co">#&gt; 4 1777987 practise_use_dingyi 2021-11-02 02:43:08 FALSE               &lt;NA&gt;      </span>
+<span class="co">#&gt; 5 1777989 testy               2021-11-02 13:46:41 FALSE               &lt;NA&gt;      </span>
+<span class="co">#&gt; 6 1777990 MIS-C BD            2021-11-02 13:58:18 FALSE              ""         </span>
 <span class="co">#&gt; # … with 3 more variables: Modified Date &lt;dttm&gt;, Modified By &lt;list&gt;,</span>
 <span class="co">#&gt; #   Created By &lt;list&gt;</span>
 </pre></div>

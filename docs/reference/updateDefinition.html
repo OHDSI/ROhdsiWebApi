@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,13 +98,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
+    </li>
+    <li>
       <a href="../articles/InsertCohortDefinitionsIntoPackage.html">Insert Cohort Definitions Into Package</a>
     </li>
     <li>
       <a href="../articles/UsingROhdsiWebApi.html">Using ROhdsiWebApi</a>
-    </li>
-    <li>
-      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
     </li>
   </ul>
 </li>
@@ -115,7 +115,7 @@
 </li>
 <li>
   <a href="https://github.com/OHDSI/ROhdsiWebApi/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -141,7 +141,7 @@
     <p>Update definition <a href='https://lifecycle.r-lib.org/articles/stages.html#maturing'><img src='figures/lifecycle-maturing.svg' alt='[Maturing]' /></a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>updateDefinition</span>(<span class='kw'>definition</span>, <span class='kw'>baseUrl</span>, <span class='kw'>category</span>)</pre>
+    <pre class="usage"><span class='fu'>updateDefinition</span><span class='op'>(</span><span class='va'>definition</span>, <span class='va'>baseUrl</span>, <span class='va'>category</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,11 +170,11 @@ Takes the definition as a parameter and converts it to json. This is the full de
 (i.e. including name and id fields)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='kw'>definition</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getDefinition.html'>getDefinition</a></span>(id = <span class='fl'>13242</span>, baseUrl = <span class='st'>"http://server.org:80/WebAPI"</span>, category = <span class='st'>"cohort"</span>)
-<span class='kw'>definition</span><span class='op'>$</span><span class='kw'>name</span> <span class='op'>&lt;-</span> <span class='st'>"My new name for this"</span>
-<span class='fu'>updateDefinition</span>(<span class='kw'>definition</span>, <span class='kw'>baseUrl</span>, category = <span class='st'>"cohort"</span>)
-}
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>definition</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getDefinition.html'>getDefinition</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>13242</span>, baseUrl <span class='op'>=</span> <span class='st'>"http://server.org:80/WebAPI"</span>, category <span class='op'>=</span> <span class='st'>"cohort"</span><span class='op'>)</span>
+<span class='va'>definition</span><span class='op'>$</span><span class='va'>name</span> <span class='op'>&lt;-</span> <span class='st'>"My new name for this"</span>
+<span class='fu'>updateDefinition</span><span class='op'>(</span><span class='va'>definition</span>, <span class='va'>baseUrl</span>, category <span class='op'>=</span> <span class='st'>"cohort"</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
