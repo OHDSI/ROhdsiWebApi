@@ -1,11 +1,3 @@
-
-ROhdsiWebApi 1.2.2
-==================
-
-Changes:
-
-1. Package maintenance
-
 ROhdsiWebApi 1.2.1
 ==================
 
