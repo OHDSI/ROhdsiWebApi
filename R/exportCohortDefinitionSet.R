@@ -13,34 +13,32 @@
 #' \item{logicDescription}{The cohort description.}}
 #'
 #' @export
-exportCohortDefinitionSet <- function(baseUrl, cohortIds = c(), generateStats) {
+exportCohortDefinitionSet <- function(baseUrl, cohortIds, generateStats = FALSE) {
   
   if (length(cohortIds) == 0) {
     stop("Must provide a non-zero length cohortIds vector.")
   }
-  cohortDefinitionSet <- data.frame(atlasId = integer(), 
+  cohortDefinitionSet <- dplyr::tibble(atlasId = integer(), 
                                     cohortId = integer(), 
                                     cohortName = character(), 
-                                    sql=character(), 
-                                    json=character(), 
-                                    logicDescription=character(), stringsAsFactors = FALSE)
+                                    sql = character(), 
+                                    json = character(), 
+                                    logicDescription = character())
   
-  for (i in 1:length(cohortIds)) {
-    cohortId = cohortIds[i];
-    writeLines(paste("Fetching cohortId:", cohortId));
+  for (i in (1:length(cohortIds))) {
+    cohortId <- cohortIds[i]
+    ParallelLogger::logInfo(paste("Fetching cohortId:", cohortId))
     object <- getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl)
     json <- .toJSON(object$expression, pretty = TRUE)
     sql <- getCohortSql(baseUrl = baseUrl, cohortDefinition = object, generateStats = generateStats)
-    cohortDefinitionSet <- rbind(cohortDefinitionSet, 
-                                 data.frame(atlasId = cohortId, 
+    cohortDefinitionSet <- dplyr::bind_rows(cohortDefinitionSet, 
+                                 dplyr::tibble(atlasId = cohortId, 
                                             cohortId = cohortId, 
                                             cohortName = object$name, 
                                             sql = sql, 
                                             json = json,
-                                            logicDescription = ifelse(is.null(object$description), NA, object$description),
-                                            stringsAsFactors = FALSE)
-                                 );
-  }  
-  
-  return(cohortDefinitionSet);
+                                            logicDescription = ifelse(is.null(object$description), NA, object$description))
+                                 )
+  }
+  return(cohortDefinitionSet)
 }
