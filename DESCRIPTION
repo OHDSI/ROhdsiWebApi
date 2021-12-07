@@ -28,6 +28,7 @@ Imports:
     RJSONIO,
     scales,
     SqlRender,
+    ParallelLogger,
     stringr,
     tibble,
     tidyr,

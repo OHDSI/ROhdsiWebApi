@@ -24,7 +24,8 @@ exportCohortDefinitionSet <-
       cohortName = character(),
       sql = character(),
       json = character(),
-      logicDescription = character()
+      logicDescription = character(),
+      generateStats = logical()
     )
     
     for (i in (1:length(cohortIds))) {
@@ -47,7 +48,8 @@ exportCohortDefinitionSet <-
           cohortName = object$name,
           sql = sql,
           json = json,
-          logicDescription = ifelse(is.null(object$description), NA, object$description)
+          logicDescription = ifelse(is.null(object$description), NA, object$description),
+          generateStats=as.logical(generateStats)
         )
       )
     }

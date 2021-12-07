@@ -4,7 +4,7 @@
 \alias{exportCohortDefinitionSet}
 \title{Export cohort definition set from WebAPI}
 \usage{
-exportCohortDefinitionSet(baseUrl, cohortIds = c(), generateStats)
+exportCohortDefinitionSet(baseUrl, cohortIds, generateStats = FALSE)
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
@@ -20,7 +20,7 @@ Export cohort definition set from WebAPI
 \details{
 Constructs a CohortDefinition set containing the following fields: \describe{
 \item{atlasId}{The cohort ID in
-ATLAS.} \item{cohortId}{a copy of the value in atlasId.} \item{cohortName}{The name of the cohort.} 
+ATLAS.} \item{cohortId}{a copy of the value in atlasId.} \item{cohortName}{The name of the cohort.}
 \item{sql}{The cohort generation sql.} \item{json}{The cohort definition JSON.}
 \item{logicDescription}{The cohort description.}}
 }
