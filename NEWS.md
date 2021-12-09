@@ -4,6 +4,7 @@ ROhdsiWebApi 1.3.0
 Changes:
 
 1. Added exportCohotSetDefinition
+2. Added getConceptSetDefinitionBySourceKey
 
 ROhdsiWebApi 1.2.1
 ==================
