@@ -5,7 +5,6 @@ Changes:
 
 1. Added exportCohotSetDefinition
 
-
 ROhdsiWebApi 1.2.1
 ==================
 
