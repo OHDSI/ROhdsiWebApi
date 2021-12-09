@@ -1,0 +1,9 @@
+{
+    "id": 4,
+    "name": "rEXuzeKnHs",
+    "createdDate": 1626276161045,
+    "modifiedDate": 1636399457042,
+    "hasWriteAccess": false,
+    "expression": "{\"cdmVersionRange\":\">=5.0.0\",\"PrimaryCriteria\":{\"CriteriaList\":[{\"ConditionOccurrence\":{\"ConditionTypeExclude\":false,\"Age\":{\"Value\":6,\"Op\":\"bt\",\"Extent\":7}}}],\"ObservationWindow\":{\"PriorDays\":0,\"PostDays\":0},\"PrimaryCriteriaLimit\":{\"Type\":\"First\"}},\"ConceptSets\":[],\"QualifiedLimit\":{\"Type\":\"First\"},\"ExpressionLimit\":{\"Type\":\"First\"},\"InclusionRules\":[],\"CensoringCriteria\":[],\"CollapseSettings\":{\"CollapseType\":\"ERA\",\"EraPad\":0},\"CensorWindow\":{}}",
+    "expressionType": "SIMPLE_EXPRESSION"
+}
