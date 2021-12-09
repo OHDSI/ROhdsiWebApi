@@ -30,7 +30,7 @@ exportCohortDefinitionSet <-
     
     for (i in (1:length(cohortIds))) {
       cohortId <- cohortIds[i]
-      ParallelLogger::logInfo(paste("Fetching cohortId:", cohortId))
+      message(paste("Fetching cohortId:", cohortId))
       object <-
         getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl)
       json <- .toJSON(object$expression, pretty = TRUE)
