@@ -1,0 +1,17 @@
+structure(list(url = "http://atlas-dev.ohdsi.org/WebAPI/conceptset/-2", 
+    status_code = 404L, headers = structure(list(vary = "Accept-Encoding", 
+        `content-encoding` = "gzip", `content-type` = "application/json", 
+        `content-length` = "479", date = "Fri, 10 Dec 2021 02:34:09 GMT"), class = c("insensitive", 
+    "list")), all_headers = list(list(status = 404L, version = "HTTP/1.1", 
+        headers = structure(list(vary = "Accept-Encoding", `content-encoding` = "gzip", 
+            `content-type` = "application/json", `content-length` = "479", 
+            date = "Fri, 10 Dec 2021 02:34:09 GMT"), class = c("insensitive", 
+        "list")))), cookies = structure(list(domain = logical(0), 
+        flag = logical(0), path = logical(0), secure = logical(0), 
+        expiration = structure(numeric(0), class = c("POSIXct", 
+        "POSIXt")), name = logical(0), value = logical(0)), row.names = integer(0), class = "data.frame"), 
+    content = charToRaw("{\"payload\":{\"cause\":null,\"stackTrace\":[],\"response\":{\"context\":{\"headers\":{},\"entity\":null,\"entityType\":null,\"entityAnnotations\":[],\"entityStream\":{\"closed\":false,\"committed\":false},\"requestCookies\":{},\"lengthLong\":-1,\"responseCookies\":{},\"lastModified\":null,\"date\":null,\"mediaType\":null,\"committed\":false,\"links\":[],\"entityClass\":null,\"allowedMethods\":[],\"stringHeaders\":{},\"acceptableLanguages\":[\"*\"],\"acceptableMediaTypes\":[{\"type\":\"*\",\"subtype\":\"*\",\"parameters\":{},\"quality\":1000,\"wildcardType\":true,\"wildcardSubtype\":true}],\"entityTag\":null,\"length\":-1,\"language\":null,\"location\":null},\"status\":404,\"entity\":null,\"lastModified\":null,\"date\":null,\"mediaType\":null,\"cookies\":{},\"metadata\":{},\"links\":[],\"allowedMethods\":[],\"statusInfo\":\"NOT_FOUND\",\"stringHeaders\":{},\"entityTag\":null,\"length\":-1,\"language\":null,\"location\":null,\"headers\":{}},\"message\":\"There is no concept set with id = -2.\",\"localizedMessage\":\"There is no concept set with id = -2.\",\"suppressed\":[]},\"headers\":{\"id\":\"19a737d0-1b17-60c2-19ba-addba4d2f6d3\",\"timestamp\":1639103649127}}"), 
+    date = structure(1639103649, class = c("POSIXct", "POSIXt"
+    ), tzone = "GMT"), times = c(redirect = 0, namelookup = 7.1e-05, 
+    connect = 7.3e-05, pretransfer = 0.000147, starttransfer = 0.070202, 
+    total = 0.070255)), class = "response")
