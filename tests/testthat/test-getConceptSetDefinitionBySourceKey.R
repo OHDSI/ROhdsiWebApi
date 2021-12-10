@@ -10,4 +10,8 @@ with_mock_dir("mocks/getConceptSetDefinitionBySourceKey", {
                                                                            vocabularySourceKey = "SYNPUF5PCT")
     expect_equal(length(conceptSetDefByKey$expression$items), 1)
   })
+  
+  test_that("getConceptSetDefinitionBySourceKey fails with invalid conceptId", {
+    expect_error(ROhdsiWebApi::getConceptSetDefinitionBySourceKey(baseUrl=baseUrl, conceptSetId=-2))
+  })
 })
