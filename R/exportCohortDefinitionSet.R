@@ -49,7 +49,7 @@ exportCohortDefinitionSet <-
           sql = sql,
           json = json,
           logicDescription = ifelse(is.null(object$description), NA, object$description),
-          generateStats = as.logical(generateStats)
+          generateStats=as.logical(generateStats)
         )
       )
     }
