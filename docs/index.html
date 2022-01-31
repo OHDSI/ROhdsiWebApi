@@ -21,6 +21,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -33,23 +35,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
-</li>
-<li>
-  <a href="news/index.html">Changelog</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -59,24 +52,27 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
+    </li>
+    <li>
       <a href="articles/InsertCohortDefinitionsIntoPackage.html">Insert Cohort Definitions Into Package</a>
     </li>
     <li>
       <a href="articles/UsingROhdsiWebApi.html">Using ROhdsiWebApi</a>
     </li>
-    <li>
-      <a href="articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
-    </li>
   </ul>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
 </li>
 <li>
-  <a href="https://github.com/OHDSI/ROhdsiWebApi/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/OHDSI/ROhdsiWebApi/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -92,30 +88,30 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="rohdsiwebapi" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#rohdsiwebapi" class="anchor"></a>ROhdsiWebApi</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="rohdsiwebapi">ROhdsiWebApi<a class="anchor" aria-label="anchor" href="#rohdsiwebapi"></a>
+</h1></div>
 
-<p>ROhdsiWebApi is part of <a href="https://ohdsi.github.io/Hades">HADES</a>.</p>
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>ROhdsiWebApi is a R based interface to <a href="https://github.com/ohdsi/webapi">‘WebApi’</a> (OHDSI RESTful services), and performs GET/PULL/POST/DELETE calls via the WebApi. All objects starting from R or output to R - are analysis ready R-objects like list and data.frame. The package handles the intermediary steps by converting R-objects to JSON and vice versa. To ensure r-objects are analysis ready, the objects are type converted where possible, e.g. date/date time are converted from string to POSIXct.</p>
+<p>ROhdsiWebApi is part of <a href="https://ohdsi.github.io/Hades" class="external-link">HADES</a>.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>ROhdsiWebApi is a R based interface to <a href="https://github.com/ohdsi/webapi" class="external-link">‘WebApi’</a> (OHDSI RESTful services), and performs GET/PULL/POST/DELETE calls via the WebApi. All objects starting from R or output to R - are analysis ready R-objects like list and data.frame. The package handles the intermediary steps by converting R-objects to JSON and vice versa. To ensure r-objects are analysis ready, the objects are type converted where possible, e.g. date/date time are converted from string to POSIXct.</p>
 <p>This package makes reproducible research easier, by offering ability to retrieve detailed study specifications, transport study specifications from one instance to another, programmatically invoke the generation of a sequence of steps that are part of a study, manage running studies in batch mode.</p>
-<p>An example of a WebApi endpoint is “<a href="http://server.org:80/WebAPI" class="uri">http://server.org:80/WebAPI</a>”.</p>
+<p>An example of a WebApi endpoint is “<a href="http://server.org:80/WebAPI" class="external-link uri">http://server.org:80/WebAPI</a>”.</p>
 </div>
-<div id="generic-design-pattern" class="section level2">
-<h2 class="hasAnchor">
-<a href="#generic-design-pattern" class="anchor"></a>Generic design pattern:</h2>
+<div class="section level2">
+<h2 id="generic-design-pattern">Generic design pattern:<a class="anchor" aria-label="anchor" href="#generic-design-pattern"></a>
+</h2>
 <ul>
 <li><p>Functions that go from WebApi to R: will return a R-object (e.g. list, data frame). The function will handle the conversion of non R-objects like JSON objects into R-objects in the background. The returned objects may be inspected in R. We have ensured that all returned objects are represented in the proper data types e.g. dates in are type date, instead of string, use of integer where appropriate etc.</p></li>
 <li><p>Functions that go from R into WebApi: will start with a R-object (e.g. list, data frame). If the WebApi requires a JSON object, the function will handle the conversion of R-object into JSON in the background.</p></li>
 </ul>
 <p>The package follows a consistent naming conventions - with the identifier for the functional category clearly in the name. There are no direct reference to ‘Atlas’, and instead ‘WebApi’ is used = because the package is designed to interface directly with WebApi.</p>
 </div>
-<div id="supported-webapi-functional-categories" class="section level2">
-<h2 class="hasAnchor">
-<a href="#supported-webapi-functional-categories" class="anchor"></a>Supported WebApi functional categories.</h2>
+<div class="section level2">
+<h2 id="supported-webapi-functional-categories">Supported WebApi functional categories.<a class="anchor" aria-label="anchor" href="#supported-webapi-functional-categories"></a>
+</h2>
 <table class="table">
 <colgroup>
 <col width="21%">
@@ -157,59 +153,58 @@
 </tbody>
 </table>
 </div>
-<div id="technology" class="section level2">
-<h2 class="hasAnchor">
-<a href="#technology" class="anchor"></a>Technology</h2>
-<p>ROhdsiWebApi is an R package. Note: ROhdsiWebApi relies on the availability of a <a href="https://github.com/ohdsi/webapi">WebApi</a>. The <a href="http://webapidoc.ohdsi.org/index.html">documentation of the WebApi</a> (OHDSI RESTful services).</p>
+<div class="section level2">
+<h2 id="technology">Technology<a class="anchor" aria-label="anchor" href="#technology"></a>
+</h2>
+<p>ROhdsiWebApi is an R package. Note: ROhdsiWebApi relies on the availability of a <a href="https://github.com/ohdsi/webapi" class="external-link">WebApi</a>. The <a href="http://webapidoc.ohdsi.org/index.html" class="external-link">documentation of the WebApi</a> (OHDSI RESTful services).</p>
 <p>Note: As of V1.0.0, we do not support WebApi that has security enabled. This is considered a road map item.</p>
 </div>
-<div id="system-requirements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#system-requirements" class="anchor"></a>System Requirements</h2>
+<div class="section level2">
+<h2 id="system-requirements">System Requirements<a class="anchor" aria-label="anchor" href="#system-requirements"></a>
+</h2>
 <p>Requires R. WebApi.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <ul>
 <li>In R, use the following commands to download and install ROhdsiWebApi:</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"OHDSI/ROhdsiWebApi"</span>)
-</pre></div>
+<!-- end list --><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"OHDSI/ROhdsiWebApi"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="user-documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#user-documentation" class="anchor"></a>User Documentation</h2>
-<p>Documentation can be found on the <a href="https://ohdsi.github.io/ROhdsiWebApi">package website</a>.</p>
+<div class="section level2">
+<h2 id="user-documentation">User Documentation<a class="anchor" aria-label="anchor" href="#user-documentation"></a>
+</h2>
+<p>Documentation can be found on the <a href="https://ohdsi.github.io/ROhdsiWebApi" class="external-link">package website</a>.</p>
 <p>PDF versions of the documentation are also available:</p>
 <ul>
-<li><p><a href="https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/UsingROhdsiWebApi.pdf">Vignette</a></p></li>
-<li><p><a href="https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/extras/ROhdsiWebApi.pdf">Package manual</a></p></li>
+<li><p><a href="https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/UsingROhdsiWebApi.pdf" class="external-link">Vignette</a></p></li>
+<li><p><a href="https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/extras/ROhdsiWebApi.pdf" class="external-link">Package manual</a></p></li>
 </ul>
 </div>
-<div id="support" class="section level2">
-<h2 class="hasAnchor">
-<a href="#support" class="anchor"></a>Support</h2>
+<div class="section level2">
+<h2 id="support">Support<a class="anchor" aria-label="anchor" href="#support"></a>
+</h2>
 <ul>
-<li>Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a>
+<li>Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers" class="external-link">OHDSI Forum</a>
 </li>
-<li>We use the <a href="https://github.com/OHDSI/ROhdsiWebApi/issues">GitHub issue tracker</a> for all bugs/issues/enhancements</li>
+<li>We use the <a href="https://github.com/OHDSI/ROhdsiWebApi/issues" class="external-link">GitHub issue tracker</a> for all bugs/issues/enhancements</li>
 </ul>
 </div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>Read <a href="https://ohdsi.github.io/Hades/contribute.html">here</a> how you can contribute to this package.</p>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
+<p>Read <a href="https://ohdsi.github.io/Hades/contribute.html" class="external-link">here</a> how you can contribute to this package.</p>
 </div>
-<div id="license" class="section level2">
-<h2 class="hasAnchor">
-<a href="#license" class="anchor"></a>License</h2>
+<div class="section level2">
+<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h2>
 <p>ROhdsiWebApi is licensed under Apache License 2.0</p>
 </div>
-<div id="development" class="section level2">
-<h2 class="hasAnchor">
-<a href="#development" class="anchor"></a>Development</h2>
+<div class="section level2">
+<h2 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
+</h2>
 <p>ROhdsiWebApi is being developed in R Studio.</p>
 </div>
 </div>
@@ -217,49 +212,59 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/OHDSI/ROhdsiWebApi/">https://​github.com/​OHDSI/​ROhdsiWebApi/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/OHDSI/ROhdsiWebApi/issues">https://​github.com/​OHDSI/​ROhdsiWebApi/​issues</a>
-</li>
-<li>Ask a question at <br><a href="http://forums.ohdsi.org">http://​forums.ohdsi.org</a>
-</li>
+<li><a href="https://github.com/OHDSI/ROhdsiWebApi/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/OHDSI/ROhdsiWebApi/issues" class="external-link">Report a bug</a></li>
+<li><a href="http://forums.ohdsi.org" class="external-link">Ask a question</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>Apache License 2.0</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing ROhdsiWebApi</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Gowtham Rao <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Martijn Schuemie <br><small class="roles"> Author </small>  </li>
 <li>Jamie Gilbert <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/OHDSI/ROhdsiWebApi/actions?query=workflow%3AR-CMD-check"><img src="https://github.com/OHDSI/ROhdsiWebApi/workflows/R-CMD-check/badge.svg" alt="Build Status"></a></li>
-<li><a href="https://codecov.io/github/OHDSI/ROhdsiWebApi?branch=master"><img src="https://codecov.io/github/OHDSI/ROhdsiWebApi/coverage.svg?branch=master" alt="codecov.io"></a></li>
+<li><a href="https://github.com/OHDSI/ROhdsiWebApi/actions?query=workflow%3AR-CMD-check" class="external-link"><img src="https://github.com/OHDSI/ROhdsiWebApi/workflows/R-CMD-check/badge.svg" alt="Build Status"></a></li>
+<li><a href="https://codecov.io/github/OHDSI/ROhdsiWebApi?branch=master" class="external-link"><img src="https://codecov.io/github/OHDSI/ROhdsiWebApi/coverage.svg?branch=master" alt="codecov.io"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Gowtham Rao, Martijn Schuemie, Jamie Gilbert.</p>
+  <p></p>
+<p>Developed by Gowtham Rao, Martijn Schuemie, Jamie Gilbert.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -267,6 +272,8 @@
 
   
 
+
+  
 
   </body>
 </html>
