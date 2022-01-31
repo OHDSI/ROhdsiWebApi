@@ -11,7 +11,7 @@ getWebApiVersion(baseUrl)
 "http://server.org:80/WebAPI".}
 }
 \value{
-The WebApi verions as a string.
+The WebApi versions as a string.
 }
 \description{
 Get the WebAPI version number \lifecycle{stable}

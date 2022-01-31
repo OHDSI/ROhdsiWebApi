@@ -1,6 +1,6 @@
 # @file WebApi
 #
-# Copyright 2021 Observational Health Data Sciences and Informatics
+# Copyright 2022 Observational Health Data Sciences and Informatics
 #
 # This file is part of ROhdsiWebApi
 #
@@ -43,7 +43,7 @@ getPriorityVocabularyKey <- function(baseUrl) {
 #' @template BaseUrl
 #'
 #' @return
-#' The WebApi verions as a string.
+#' The WebApi versions as a string.
 #' 
 #' @examples 
 #' \dontrun{
