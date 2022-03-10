@@ -36,18 +36,19 @@
 getDefinition <- function(id, baseUrl, category) {
   baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
-  
+
   arguments <- .getStandardCategories()
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
-  
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == category)
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(id, add = errorMessage)
   checkmate::assertChoice(x = category, choices = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
-  
+
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/", id)
   response <- .GET(url)
-  
+
   if (!response$status_code == 200) {
     definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
     if (!id %in% definitionsMetaData$id) {
@@ -58,7 +59,7 @@ getDefinition <- function(id, baseUrl, category) {
     stop(paste0(error, "Status code = ", httr::content(response)$status_code))
   }
   response <- httr::content(response)
-  
+
   if (is.null(response$expression)) {
     if (!is.null(response$specification)) {
       response$expression <- response$specification
@@ -91,7 +92,7 @@ getDefinition <- function(id, baseUrl, category) {
       for (i in (1:length(namesResponse))) {
         if (stringr::str_detect(string = tolower(namesResponse[[i]]), pattern = "date")) {
           if (length(namesResponse[[i]]) == 1) {
-            response[[namesResponse[[i]]]] <- .convertToDateTime(response[[namesResponse[[i]]]])
+          response[[namesResponse[[i]]]] <- .convertToDateTime(response[[namesResponse[[i]]]])
           }
         }
       }
@@ -122,26 +123,27 @@ getDefinition <- function(id, baseUrl, category) {
 #' definition <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
 #' postDefinition(name = "new name for expression in sdaddaddd",
 #'                baseUrl = "http://server.org:80/WebAPI",
-#'                expression = definition,
-#'                category = "cohort")
+#'
+#'   expression = definition, category = "cohort")
 #' }
 #' @export
 postDefinition <- function(baseUrl, name, category, definition) {
   baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   arguments <- .getStandardCategories()
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
-  
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == category)
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(name, add = errorMessage)
   checkmate::assertCharacter(category, add = errorMessage)
   checkmate::assertNames(x = category, subset.of = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
-  
+
   if (!category %in% c("cohort", "conceptSet")) {
     stop(paste0("Posting definitions of ", category, " is not supported."))
   }
-  
+
   if ("expression" %in% names(definition)) {
     expression <- definition$expression
   } else {
@@ -151,8 +153,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
   jsonExpression <- .toJSON(expression)
   # create json body
   json <- paste0("{\"name\":\"", as.character(name), "\",\"expressionType\": \"SIMPLE_EXPRESSION\", \"expression\":",
-                 jsonExpression,
-                 "}")
+    jsonExpression, "}")
   # POST Json
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/")
   if (category == "characterization") {
@@ -175,18 +176,20 @@ postDefinition <- function(baseUrl, name, category, definition) {
 
   # create expression in the structure required to POST or PUT
   if (category %in% c("conceptSet")) {
-    items <- convertConceptSetDefinitionToTable(conceptSetDefinition = definition) %>% dplyr::mutate(id = dplyr::row_number(),
-                                                                                                     conceptId = .data$conceptId,
-                                                                                                     conceptSetId = structureCreated$id,
-                                                                                                     isExcluded = as.integer(.data$isExcluded),
-                                                                                                     includeMapped = as.integer(.data$includeMapped),
-                                                                                                     includeDescendants = as.integer(.data$includeDescendants)) %>%
+    items <- convertConceptSetDefinitionToTable(conceptSetDefinition = definition) %>%
+      dplyr::mutate(id = dplyr::row_number(),
+                    conceptId = .data$conceptId,
+                    conceptSetId = structureCreated$id,
+
+        isExcluded = as.integer(.data$isExcluded), includeMapped = as.integer(.data$includeMapped),
+        includeDescendants = as.integer(.data$includeDescendants)) %>%
       dplyr::select(.data$id,
                     .data$conceptId,
                     .data$conceptSetId,
                     .data$isExcluded,
                     .data$includeMapped,
-                    .data$includeDescendants)
+
+        .data$includeDescendants)
 
     itemsTranspose <- apply(items, 1, function(item) {
       list(item)
@@ -198,73 +201,62 @@ postDefinition <- function(baseUrl, name, category, definition) {
                                          argument$categoryUrl,
                                          "/",
                                          structureCreated$id,
-                                         "/",
-                                         argument$categoryUrlPut), json = expression)
+
+      "/", argument$categoryUrlPut), json = expression)
     if (!responsePut$status_code == 200) {
-      stop(paste0("Failed to post ",
-                  argument$categoryFirstUpper,
-                  " definition. Status code = ",
-                  httr::content(responsePut)$status_code))
+      stop(paste0("Failed to post ", argument$categoryFirstUpper, " definition. Status code = ",
+        httr::content(responsePut)$status_code))
     }
   }
 
-  # TODO implement posting of characterization
-  # if (category %in% c("characterization")) {
-  #   characterizationPostObject <- structureCreated
-  #   characterizationPostObject$cohorts <- definition$expression$cohorts
-  #   characterizationPostObject$featureAnalyses <- definition$expression$featureAnalyses
-  #   characterizationPostObject$parameters <- definition$expression$parameters
-  #   characterizationPostObject$stratas <- definition$expression$stratas
-  #   characterizationPostObject$strataOnly <- definition$expression$strataOnly
-  #   characterizationPostObject$strataConceptSets <- definition$expression$strataConceptSets
-  #   characterizationPostObject$stratifiedBy <- definition$expression$stratifiedBy
-  #   
-  #   expressionCharacterization <- list()
-  #   expressionCharacterization$name <- characterizationPostObject$name
-  #   expressionCharacterization$cohorts <- characterizationPostObject$cohorts
-  #   expressionCharacterization$featureAnalyses <- characterizationPostObject$featureAnalyses
-  #   expressionCharacterization$parameters <- characterizationPostObject$parameters
-  #   expressionCharacterization$stratas <- characterizationPostObject$stratas
-  #   expressionCharacterization$strataOnly <- characterizationPostObject$strataOnly
-  #   expressionCharacterization$strataConceptSets <- characterizationPostObject$strataConceptSets
-  #   expressionCharacterization$createdAt <- characterizationPostObject$createdAt
-  #   expressionCharacterization$updatedAt <- characterizationPostObject$updatedAt
-  #   expressionCharacterization$skeletonType <- characterizationPostObject$skeletonType
-  #   expressionCharacterization$skeletonVersion <- characterizationPostObject$skeletonVersion
-  #   expressionCharacterization$packageName <- characterizationPostObject$packageName
-  #   expressionCharacterization$organizationName <- characterizationPostObject$organizationName
-  #   expressionCharacterization$stratifiedBy <- characterizationPostObject$stratifiedBy
-  #   
-  #   expressionCharacterization <- jsonlite::toJSON(x = expressionCharacterization,
-  #                                                  auto_unbox = TRUE,
-  #                                                  digits = 23)
-  #   
-  #   response <- .putJson(url = paste0(baseUrl,
-  #                                     "/",
-  #                                     argument$categoryUrl,
-  #                                     "/",
-  #                                     structureCreated$id,
-  #                                     "/",
-  #                                     argument$categoryUrlPut), json = expressionCharacterization)
-  # }
+  # TODO implement posting of characterization if (category %in% c('characterization')) {
+  # characterizationPostObject <- structureCreated characterizationPostObject$cohorts <-
+  # definition$expression$cohorts characterizationPostObject$featureAnalyses <-
+  # definition$expression$featureAnalyses characterizationPostObject$parameters <-
+  # definition$expression$parameters characterizationPostObject$stratas <-
+  # definition$expression$stratas characterizationPostObject$strataOnly <-
+  # definition$expression$strataOnly characterizationPostObject$strataConceptSets <-
+  # definition$expression$strataConceptSets characterizationPostObject$stratifiedBy <-
+  # definition$expression$stratifiedBy expressionCharacterization <- list()
+  # expressionCharacterization$name <- characterizationPostObject$name
+  # expressionCharacterization$cohorts <- characterizationPostObject$cohorts
+  # expressionCharacterization$featureAnalyses <- characterizationPostObject$featureAnalyses
+  # expressionCharacterization$parameters <- characterizationPostObject$parameters
+  # expressionCharacterization$stratas <- characterizationPostObject$stratas
+  # expressionCharacterization$strataOnly <- characterizationPostObject$strataOnly
+  # expressionCharacterization$strataConceptSets <- characterizationPostObject$strataConceptSets
+  # expressionCharacterization$createdAt <- characterizationPostObject$createdAt
+  # expressionCharacterization$updatedAt <- characterizationPostObject$updatedAt
+  # expressionCharacterization$skeletonType <- characterizationPostObject$skeletonType
+  # expressionCharacterization$skeletonVersion <- characterizationPostObject$skeletonVersion
+  # expressionCharacterization$packageName <- characterizationPostObject$packageName
+  # expressionCharacterization$organizationName <- characterizationPostObject$organizationName
+  # expressionCharacterization$stratifiedBy <- characterizationPostObject$stratifiedBy
+  # expressionCharacterization <- jsonlite::toJSON(x = expressionCharacterization, auto_unbox =
+  # TRUE, digits = 23) response <- .putJson(url = paste0(baseUrl, '/', argument$categoryUrl, '/',
+  # structureCreated$id, '/', argument$categoryUrlPut), json = expressionCharacterization) }
   writeLines(paste0("Post ", argument$categoryFirstUpper, " definition was successful"))
-  output <- response %>% list() %>% purrr::map_df(.f = purrr::flatten) %>% utils::type.convert(as.is = TRUE,
-                                                                                               dec = ".") %>% .normalizeDateAndTimeTypes()
+  output <- response %>%
+    list() %>%
+    purrr::map_df(.f = purrr::flatten) %>%
+    utils::type.convert(as.is = TRUE, dec = ".") %>%
+    .normalizeDateAndTimeTypes()
   return(output)
 }
 
 #' Update definition \lifecycle{maturing}
 #' @details
-#' Update a definition in WebAPI. Currently only cohorts are supported.
-#' Takes the definition as a parameter and converts it to json. This is the full definition
-#' (i.e. including name and id fields)
+#' Update a definition in WebAPI. Currently only cohorts are supported. Takes the definition as a
+#' parameter and converts it to json. This is the full definition (i.e. including name and id fields)
 #' @template BaseUrl
 #' @template Category
-#' @param definition        An R list object containing the expression for the specification. This will be
-#'                          converted to JSON expression by function and posted into the WebApi.
+#' @param definition   An R list object containing the expression for the specification. This will be
+#'                     converted to JSON expression by function and posted into the WebApi.
 #' @examples
 #' \dontrun{
-#' definition <- getDefinition(id = 13242, baseUrl = "http://server.org:80/WebAPI", category = "cohort")
+#' definition <- getDefinition(id = 13242,
+#'                             baseUrl = "http://server.org:80/WebAPI",
+#'                             category = "cohort")
 #' definition$name <- "My new name for this"
 #' updateDefinition(definition, baseUrl, category = "cohort")
 #' }
@@ -273,7 +265,8 @@ updateDefinition <- function(definition, baseUrl, category) {
   baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
   arguments <- .getStandardCategories()
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == category)
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(definition$name, add = errorMessage)
@@ -284,9 +277,9 @@ updateDefinition <- function(definition, baseUrl, category) {
 
   # Check entity exists - this will throw a meaningful error if it doesn't
   tryCatch({
-      getDefinition(definition$id, baseUrl, category)
+    getDefinition(definition$id, baseUrl, category)
   }, error = function(err) {
-      stop(paste("Could not find", category, "definition with this id"))
+    stop(paste("Could not find", category, "definition with this id"))
   })
   entryUrl <- paste(baseUrl, argument$categoryUrl, definition$id, sep = "/")
   # Check that name does not collide with other entities
@@ -306,12 +299,12 @@ updateDefinition <- function(definition, baseUrl, category) {
   if (category == "cohort") {
     jsonExpression <- .toJSON(definition$expression)
     checkUrl <- paste(baseUrl, argument$categoryUrl, "check", sep = "/")
-  
+
     tryCatch({
       response <- .postJson(checkUrl, jsonExpression)
       content <- httr::content(response)
-    }, error = function (error) {
-        stop(paste("Error with", category, "definition:", error))
+    }, error = function(error) {
+      stop(paste("Error with", category, "definition:", error))
     })
   }
 
@@ -319,8 +312,7 @@ updateDefinition <- function(definition, baseUrl, category) {
   response <- .putJson(entryUrl, jsonExpression)
 
   if (!response$status_code == 200) {
-    stop(paste("Error updating definition",
-               "Status code =", httr::status_code(response)))
+    stop(paste("Error updating definition", "Status code =", httr::status_code(response)))
   }
 
   writeLines(paste("Success: updated", argument$categoryFirstUpper, definition$id, definition$name))
@@ -345,18 +337,19 @@ updateDefinition <- function(definition, baseUrl, category) {
 deleteDefinition <- function(id, baseUrl, category) {
   baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
-  
+
   arguments <- .getStandardCategories()
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
-  
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == category)
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(id, add = errorMessage)
   checkmate::assertChoice(x = category, choices = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
-  
+
   url <- paste0(baseUrl, "/", argument$categoryUrl, "/", id)
   request <- .DELETE(url)
-  
+
   if (!request$status %in% c(200, 204)) {
     if (!isTRUE(isValidId(ids = id, baseUrl = baseUrl, category = category))) {
       error <- paste0(argument$categoryFirstUpper, " definition id: ", id, " not found. ")
@@ -370,7 +363,8 @@ deleteDefinition <- function(id, baseUrl, category) {
                       " definition id ",
                       id,
                       ". Request status code: ",
-                      httr::http_status(request)$message))
+
+      httr::http_status(request)$message))
   }
 }
 

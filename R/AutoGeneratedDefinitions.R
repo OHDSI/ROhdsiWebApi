@@ -127,7 +127,8 @@ deleteConceptSetDefinition <- function(conceptSetId, baseUrl) {
 existsConceptSetName <- function(conceptSetName, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getConceptSetDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(.data$name == conceptSetName)
+  matched <- definitionsMetaData %>%
+    dplyr::filter(.data$name == conceptSetName)
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -157,9 +158,8 @@ existsConceptSetName <- function(conceptSetName, baseUrl) {
 detectConceptSetsByName <- function(pattern, negate = FALSE, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getConceptSetDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
-                                                                       pattern = pattern,
-                                                                       negate = negate))
+  matched <- definitionsMetaData %>%
+    dplyr::filter(stringr::str_detect(string = .data$name, pattern = pattern, negate = negate))
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -340,7 +340,8 @@ deleteCohortDefinition <- function(cohortId, baseUrl) {
 existsCohortName <- function(cohortName, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getCohortDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(.data$name == cohortName)
+  matched <- definitionsMetaData %>%
+    dplyr::filter(.data$name == cohortName)
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -369,9 +370,8 @@ existsCohortName <- function(cohortName, baseUrl) {
 detectCohortsByName <- function(pattern, negate = FALSE, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getCohortDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
-                                                                       pattern = pattern,
-                                                                       negate = negate))
+  matched <- definitionsMetaData %>%
+    dplyr::filter(stringr::str_detect(string = .data$name, pattern = pattern, negate = negate))
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -438,9 +438,7 @@ postCohortDefinition <- function(name, cohortDefinition, baseUrl) {
 # Check name
 updateCohortDefinition <- function(cohortDefinition, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
-  result <- updateDefinition(baseUrl = baseUrl,
-                             definition = cohortDefinition,
-                             category = "cohort")
+  result <- updateDefinition(baseUrl = baseUrl, definition = cohortDefinition, category = "cohort")
   return(result)
 }
 
@@ -658,7 +656,8 @@ deleteIncidenceRateDefinition <- function(incidenceRateId, baseUrl) {
 existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(.data$name == incidenceRateName)
+  matched <- definitionsMetaData %>%
+    dplyr::filter(.data$name == incidenceRateName)
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -689,9 +688,8 @@ existsIncidenceRateName <- function(incidenceRateName, baseUrl) {
 detectIncidenceRatesByName <- function(pattern, negate = FALSE, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getIncidenceRateDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
-                                                                       pattern = pattern,
-                                                                       negate = negate))
+  matched <- definitionsMetaData %>%
+    dplyr::filter(stringr::str_detect(string = .data$name, pattern = pattern, negate = negate))
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -784,10 +782,8 @@ getIncidenceRateGenerationInformation <- function(incidenceRateId, baseUrl) {
 invokeIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
   baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
-  response <- invokeGeneration(id = incidenceRateId,
-                               baseUrl = baseUrl,
-                               category = "incidenceRate",
-                               sourceKey = sourceKey)
+  response <- invokeGeneration(id = incidenceRateId, baseUrl = baseUrl, category = "incidenceRate",
+    sourceKey = sourceKey)
   return(response)
 }
 
@@ -812,10 +808,8 @@ invokeIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
 #' @export
 cancelIncidenceRateGeneration <- function(incidenceRateId, baseUrl, sourceKey) {
   .checkBaseUrl(baseUrl)
-  response <- cancelGeneration(id = incidenceRateId,
-                               baseUrl = baseUrl,
-                               category = "incidenceRate",
-                               sourceKey = sourceKey)
+  response <- cancelGeneration(id = incidenceRateId, baseUrl = baseUrl, category = "incidenceRate",
+    sourceKey = sourceKey)
   return(response)
 }
 
@@ -950,7 +944,8 @@ deleteEstimationDefinition <- function(estimationId, baseUrl) {
 existsEstimationName <- function(estimationName, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getEstimationDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(.data$name == estimationName)
+  matched <- definitionsMetaData %>%
+    dplyr::filter(.data$name == estimationName)
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -980,9 +975,8 @@ existsEstimationName <- function(estimationName, baseUrl) {
 detectEstimationsByName <- function(pattern, negate = FALSE, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getEstimationDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
-                                                                       pattern = pattern,
-                                                                       negate = negate))
+  matched <- definitionsMetaData %>%
+    dplyr::filter(stringr::str_detect(string = .data$name, pattern = pattern, negate = negate))
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -1136,7 +1130,8 @@ deletePredictionDefinition <- function(predictionId, baseUrl) {
 existsPredictionName <- function(predictionName, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getPredictionDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(.data$name == predictionName)
+  matched <- definitionsMetaData %>%
+    dplyr::filter(.data$name == predictionName)
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -1166,9 +1161,8 @@ existsPredictionName <- function(predictionName, baseUrl) {
 detectPredictionsByName <- function(pattern, negate = FALSE, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getPredictionDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
-                                                                       pattern = pattern,
-                                                                       negate = negate))
+  matched <- definitionsMetaData %>%
+    dplyr::filter(stringr::str_detect(string = .data$name, pattern = pattern, negate = negate))
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -1327,7 +1321,8 @@ deleteCharacterizationDefinition <- function(characterizationId, baseUrl) {
 existsCharacterizationName <- function(characterizationName, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(.data$name == characterizationName)
+  matched <- definitionsMetaData %>%
+    dplyr::filter(.data$name == characterizationName)
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -1358,9 +1353,8 @@ existsCharacterizationName <- function(characterizationName, baseUrl) {
 detectCharacterizationsByName <- function(pattern, negate = FALSE, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getCharacterizationDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
-                                                                       pattern = pattern,
-                                                                       negate = negate))
+  matched <- definitionsMetaData %>%
+    dplyr::filter(stringr::str_detect(string = .data$name, pattern = pattern, negate = negate))
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -1447,7 +1441,8 @@ getCharacterizationGenerationInformation <- function(characterizationId, baseUrl
 #' \dontrun{
 #' invokeCharacterizationGeneration(characterizationId = 13242,
 #'                                  baseUrl = "http://server.org:80/WebAPI",
-#'                                  sourceKey = "HCUP")
+#'
+#'   sourceKey = "HCUP")
 #' }
 #' @export
 invokeCharacterizationGeneration <- function(characterizationId, baseUrl, sourceKey) {
@@ -1456,7 +1451,8 @@ invokeCharacterizationGeneration <- function(characterizationId, baseUrl, source
   response <- invokeGeneration(id = characterizationId,
                                baseUrl = baseUrl,
                                category = "characterization",
-                               sourceKey = sourceKey)
+
+    sourceKey = sourceKey)
   return(response)
 }
 
@@ -1476,7 +1472,8 @@ invokeCharacterizationGeneration <- function(characterizationId, baseUrl, source
 #' \dontrun{
 #' cancelCharacterizationGeneration(characterizationId = 13242,
 #'                                  baseUrl = "http://server.org:80/WebAPI",
-#'                                  sourceKey = "HCUP")
+#'
+#'   sourceKey = "HCUP")
 #' }
 #' @export
 cancelCharacterizationGeneration <- function(characterizationId, baseUrl, sourceKey) {
@@ -1484,7 +1481,8 @@ cancelCharacterizationGeneration <- function(characterizationId, baseUrl, source
   response <- cancelGeneration(id = characterizationId,
                                baseUrl = baseUrl,
                                category = "characterization",
-                               sourceKey = sourceKey)
+
+    sourceKey = sourceKey)
   return(response)
 }
 
@@ -1619,7 +1617,8 @@ deletePathwayDefinition <- function(pathwayId, baseUrl) {
 existsPathwayName <- function(pathwayName, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getPathwayDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(.data$name == pathwayName)
+  matched <- definitionsMetaData %>%
+    dplyr::filter(.data$name == pathwayName)
   if (nrow(matched) > 0) {
     return(matched)
   } else {
@@ -1648,9 +1647,8 @@ existsPathwayName <- function(pathwayName, baseUrl) {
 detectPathwaysByName <- function(pattern, negate = FALSE, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   definitionsMetaData <- getPathwayDefinitionsMetaData(baseUrl = baseUrl)
-  matched <- definitionsMetaData %>% dplyr::filter(stringr::str_detect(string = .data$name,
-                                                                       pattern = pattern,
-                                                                       negate = negate))
+  matched <- definitionsMetaData %>%
+    dplyr::filter(stringr::str_detect(string = .data$name, pattern = pattern, negate = negate))
   if (nrow(matched) > 0) {
     return(matched)
   } else {

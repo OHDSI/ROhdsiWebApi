@@ -43,20 +43,20 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
-    </li>
-    <li>
       <a href="../articles/InsertCohortDefinitionsIntoPackage.html">Insert Cohort Definitions Into Package</a>
     </li>
     <li>
       <a href="../articles/UsingROhdsiWebApi.html">Using ROhdsiWebApi</a>
+    </li>
+    <li>
+      <a href="../articles/authenticationSecurity.html">Using ROhdsiWebApi with security enabled Atlas/WebAPI</a>
     </li>
   </ul>
 </li>
@@ -119,9 +119,9 @@ h1  {
 <pre><code><span class="co">#&gt; Error in eval(expr, envir, enclos): Error: http error 401: Unauthorized request. Try running `authorizeWebAPI()`</span></code></pre>
 <p>Supported login types will be visible on the ATLAS platform sign in page:</p>
 <p><img src="atlas-login-options.PNG"></p>
-<div class="section level1">
-<h1 id="active-directory-windows-and-database-authentication">Active Directory, Windows and database authentication<a class="anchor" aria-label="anchor" href="#active-directory-windows-and-database-authentication"></a>
-</h1>
+<div class="section level2">
+<h2 id="active-directory-windows-and-database-authentication">Active Directory, Windows and database authentication<a class="anchor" aria-label="anchor" href="#active-directory-windows-and-database-authentication"></a>
+</h2>
 <p>If you typically log in to Atlas using a username and password then WebAPI is likely using either Active Directory or database authentication. In this case it is easy to authorize ROhdsiWebApi by calling the <code>authorizeWebAPI()</code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/authorizeWebApi.html">authorizeWebApi</a></span><span class="op">(</span><span class="va">baseUrl</span>, 
@@ -144,17 +144,17 @@ h1  {
 <p>This bearer token will then be added to the header all future requests sent by ROhdsiWebApi and all of the package API call functions should work.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span><span class="op">(</span><span class="va">baseUrl</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 x 7</span></span>
-<span class="co">#&gt;   sourceId sourceName  sourceKey sourceDialect cdmDatabaseSche~ vocabDatabaseSc~</span>
+<pre><code><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 7</span></span>
+<span class="co">#&gt;   sourceId sourceName  sourceKey sourceDialect cdmDatabaseSche… vocabDatabaseSc…</span>
 <span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      911 SynPUF 110k synpuf-1~ postgresql    cdm_531          cdm_531         </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      911 SynPUF 110k synpuf-1… postgresql    cdm_531          cdm_531         </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span>      912 SynPUF 2.3m synpuf-2m postgresql    cdm_531          cdm_531         </span>
-<span class="co">#&gt; <span style="color: #949494;"># ... with 1 more variable: resultsDatabaseSchema &lt;chr&gt;</span></span></code></pre>
+<span class="co">#&gt; <span style="color: #949494;"># … with 1 more variable: resultsDatabaseSchema &lt;chr&gt;</span></span></code></pre>
 <p>You will need to run authorizeWebApi each time R is restarted or when the bearer token expires. The lifetime of a bearer token depends on your Atlas/WebAPI installation.</p>
 </div>
-<div class="section level1">
-<h1 id="google-authentication">Google authentication<a class="anchor" aria-label="anchor" href="#google-authentication"></a>
-</h1>
+<div class="section level2">
+<h2 id="google-authentication">Google authentication<a class="anchor" aria-label="anchor" href="#google-authentication"></a>
+</h2>
 <p>Unfortunately there is currently no easy way to retrieve the bearer token from within R when using Google (OAuth2) authentication/authorization. However ROhdsiWebApi exposes a function that allows users to manually set the header that will be added to all future WebAPI requests.</p>
 <p>Retrieving the Bearer token from a web browser is not difficult but does require getting in the weeds of the Chrome developer tools and is not very convenient. The process is</p>
 <ol style="list-style-type: decimal">
@@ -172,15 +172,15 @@ h1  {
 <span class="fu"><a href="../reference/setAuthHeader.html">setAuthHeader</a></span><span class="op">(</span><span class="va">baseUrl</span>, authHeader <span class="op">=</span> <span class="va">token</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/getCdmSources.html">getCdmSources</a></span><span class="op">(</span><span class="va">baseUrl</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 7</span></span>
-<span class="co">#&gt;   sourceId sourceName sourceKey  sourceDialect cdmDatabaseSche~ vocabDatabaseSc~</span>
+<pre><code><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 7</span></span>
+<span class="co">#&gt;   sourceId sourceName sourceKey  sourceDialect cdmDatabaseSche… vocabDatabaseSc…</span>
 <span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>        1 SYNPUF 5%  SYNPUF5PCT postgresql    synpuf5pct       unrestricted_vo~</span>
-<span class="co">#&gt; <span style="color: #949494;"># ... with 1 more variable: resultsDatabaseSchema &lt;chr&gt;</span></span></code></pre>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>        1 SYNPUF 5%  SYNPUF5PCT postgresql    synpuf5pct       unrestricted_vo…</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 1 more variable: resultsDatabaseSchema &lt;chr&gt;</span></span></code></pre>
 </div>
-<div class="section level1">
-<h1 id="webapi-authentication-in-a-shiny-app">WebAPI authentication in a Shiny app<a class="anchor" aria-label="anchor" href="#webapi-authentication-in-a-shiny-app"></a>
-</h1>
+<div class="section level2">
+<h2 id="webapi-authentication-in-a-shiny-app">WebAPI authentication in a Shiny app<a class="anchor" aria-label="anchor" href="#webapi-authentication-in-a-shiny-app"></a>
+</h2>
 <p>There may be cases where ROhdsiWebApi will be used in a Shiny application with an instance of WebAPI that is using security. In that case the shiny app author will either want to prompt the user for their Atlas username and password or use a service account to connect to WebAPI.</p>
 <p>To avoid errors due to token expiration <code>tryCatch</code> can be used to automatically re-authorize ROhdsiWebApi. However be sure to securely store passwords and not include them in plain text in the Shiny app.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -219,7 +219,7 @@ h1  {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

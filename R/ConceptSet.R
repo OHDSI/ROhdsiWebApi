@@ -55,7 +55,9 @@ resolveConceptSet <- function(conceptSetDefinition, baseUrl, vocabularySourceKey
                 httr::content(response)$status_code))
   }
   response <- httr::content(response)
-  response <- unlist(response) %>% unique() %>% sort()
+  response <- unlist(response) %>%
+    unique() %>%
+    sort()
   return(response)
 }
 
@@ -82,12 +84,13 @@ convertConceptSetDefinitionToTable <- function(conceptSetDefinition) {
   } else {
     expression <- conceptSetDefinition
   }
-  simplify <- expression %>% jsonlite::toJSON() %>% jsonlite::fromJSON(simplifyVector = TRUE,
-                                                                       simplifyDataFrame = TRUE,
-                                                                       flatten = TRUE)
+  simplify <- expression %>%
+    jsonlite::toJSON() %>%
+    jsonlite::fromJSON(simplifyVector = TRUE, simplifyDataFrame = TRUE, flatten = TRUE)
 
-  df <- .removeStringFromDataFrameName(dataFrame = simplify$items,
-                                       string = "concept.") %>% dplyr::rename_at(dplyr::vars(dplyr::contains("_")), .funs = SqlRender::snakeCaseToCamelCase) %>% .normalizeDateAndTimeTypes()
+  df <- .removeStringFromDataFrameName(dataFrame = simplify$items, string = "concept.") %>%
+    dplyr::rename_at(dplyr::vars(dplyr::contains("_")), .funs = SqlRender::snakeCaseToCamelCase) %>%
+    .normalizeDateAndTimeTypes()
 
   df <- tidyr::unnest(data = df, colnames(df))
 
@@ -127,7 +130,8 @@ createConceptSetWorkbook <- function(conceptSetIds,
   conceptSetDefinitions <- lapply(conceptSetIds, getConceptSetDefinition, baseUrl = baseUrl)
 
   conceptSets <- data.frame(conceptSetId = sapply(conceptSetDefinitions, function(x) x$id),
-                            conceptSetName = sapply(conceptSetDefinitions, function(x) x$name))
+                            conceptSetName = sapply(conceptSetDefinitions,
+    function(x) x$name))
 
   wb <- openxlsx::createWorkbook()
   .createSheet(wb = wb, label = "conceptSetIds", contents = conceptSets)
@@ -143,13 +147,15 @@ createConceptSetWorkbook <- function(conceptSetIds,
       if (included) {
         .createSheet(wb = wb,
                      label = sprintf("included_%s", conceptSetDefinition$id),
-                     contents = getConcepts(standardConceptsIds, baseUrl))
+                     contents = getConcepts(standardConceptsIds,
+          baseUrl))
       }
 
       if (mapped) {
         .createSheet(wb = wb,
                      label = sprintf("mapped_%s", conceptSetDefinition$id),
-                     contents = getSourceConcepts(standardConceptsIds, baseUrl = baseUrl))
+                     contents = getSourceConcepts(standardConceptsIds,
+          baseUrl = baseUrl))
       }
     }
   }
@@ -158,12 +164,8 @@ createConceptSetWorkbook <- function(conceptSetIds,
 
 .createSheet <- function(wb, label, contents) {
   openxlsx::addWorksheet(wb = wb, sheetName = label)
-  openxlsx::writeDataTable(wb = wb,
-                           sheet = label,
-                           x = contents,
-                           colNames = TRUE,
-                           rowNames = FALSE,
-                           withFilter = FALSE)
+  openxlsx::writeDataTable(wb = wb, sheet = label, x = contents, colNames = TRUE, rowNames = FALSE,
+    withFilter = FALSE)
   openxlsx::setColWidths(wb = wb, sheet = label, cols = 1:ncol(contents), widths = "auto")
 }
 

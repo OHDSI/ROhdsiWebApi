@@ -75,8 +75,8 @@ getPersonProfile <- function(baseUrl, sourceKey, personId, indexCohortId = NULL)
   data$records$startDate <- .millisecondsToDate(data$records$startDate)
   data$records$startDate <- lubridate::as_datetime(data$records$startDate)
   data$records$endDate <- .millisecondsToDate(data$records$endDate)
-  data$records$endDate <- dplyr::case_when(is.na(data$records$endDate) ~ lubridate::as_datetime(data$records$startDate + (data$records$endDay - data$records$startDay)),
-                                           TRUE ~ lubridate::as_datetime(data$records$endDate))
+  data$records$endDate <- dplyr::case_when(is.na(data$records$endDate) ~ lubridate::as_datetime(data$records$startDate +
+    (data$records$endDay - data$records$startDay)), TRUE ~ lubridate::as_datetime(data$records$endDate))
 
   # cohorts
   data$cohorts$startDate <- .millisecondsToDate(data$cohorts$startDate)
@@ -95,12 +95,11 @@ getPersonProfile <- function(baseUrl, sourceKey, personId, indexCohortId = NULL)
   data$person <- dplyr::tibble(personId = personId,
                                gender = data$gender,
                                yearOfBirth = data$yearOfBirth,
-                               ageAtIndex = data$ageAtIndex,
-                               recordCount = data$recordCount,
-                               indexCohortId = indexCohortId)
-  data <- list(records = data$records %>% tidyr::tibble(),
-               cohorts = data$cohorts %>% tidyr::tibble(),
-               observationPeriods = data$observationPeriods %>% tidyr::tibble(),
-               person = data$person)
+
+    ageAtIndex = data$ageAtIndex, recordCount = data$recordCount, indexCohortId = indexCohortId)
+  data <- list(records = data$records %>%
+    tidyr::tibble(), cohorts = data$cohorts %>%
+    tidyr::tibble(), observationPeriods = data$observationPeriods %>%
+    tidyr::tibble(), person = data$person)
   return(data)
 }

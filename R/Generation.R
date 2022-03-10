@@ -37,24 +37,26 @@
 invokeGeneration <- function(id, baseUrl, sourceKey, category) {
   baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
-  
-  arguments <- .getStandardCategories() %>% dplyr::filter(.data$categoryStandard %in% c("cohort",
-                                                                                        "characterization",
-                                                                                        "pathway",
-                                                                                        "incidenceRate"))
-  
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
-  
+
+  arguments <- .getStandardCategories() %>%
+    dplyr::filter(.data$categoryStandard %in% c("cohort",
+                                                "characterization",
+                                                "pathway",
+                                                "incidenceRate"))
+
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == category)
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(id, add = errorMessage)
   checkmate::assertCharacter(category, add = errorMessage)
   checkmate::assertSubset(x = category, choices = argument$categoryStandard)
   checkmate::reportAssertions(errorMessage)
-  
+
   if (!all(isValidSourceKey(sourceKeys = sourceKey, baseUrl = baseUrl))) {
     stop(paste0(sourceKey, " is not present in WebApi."))
   }
-  
+
   urlRoot <- paste0(baseUrl,
                     "/",
                     argument$categoryUrl,
@@ -63,7 +65,7 @@ invokeGeneration <- function(id, baseUrl, sourceKey, category) {
                     "/",
                     argument$categoryUrlGeneration)
   url <- paste0(urlRoot, "/", sourceKey)
-  
+
   if (argument$categoryStandard %in% c("cohort", "incidenceRate")) {
     response <- .GET(url)
   }
@@ -79,25 +81,31 @@ invokeGeneration <- function(id, baseUrl, sourceKey, category) {
     stop(paste0(error, response$status_code))
   }
   response <- httr::content(response)
-  response <- response %>% purrr::map(function(x) {
-    purrr::map(x, function(y) {
-      ifelse(is.null(y), NA, y)
-    })
-  }) %>% unlist(recursive = TRUE,
-                use.names = TRUE) %>% as.matrix() %>% t() %>% tidyr::as_tibble() %>%
-    .removeStringFromDataFrameName(string = "jobInstance.") %>% .removeStringFromDataFrameName(string = "jobParameters.") %>%
-    dplyr::rename_at(dplyr::vars(dplyr::contains("_")),
-                     .funs = SqlRender::snakeCaseToCamelCase) %>%
-    utils::type.convert(as.is = TRUE, dec = ".") %>% .addSourceKeyToSourceId(baseUrl = baseUrl) %>%
-    .addSourceNameToSourceKey(baseUrl = baseUrl) %>% .normalizeDateAndTimeTypes()
-  
+  response <- response %>%
+    purrr::map(function(x) {
+      purrr::map(x, function(y) {
+        ifelse(is.null(y), NA, y)
+      })
+    }) %>%
+    unlist(recursive = TRUE, use.names = TRUE) %>%
+    as.matrix() %>%
+    t() %>%
+    tidyr::as_tibble() %>%
+    .removeStringFromDataFrameName(string = "jobInstance.") %>%
+    .removeStringFromDataFrameName(string = "jobParameters.") %>%
+    dplyr::rename_at(dplyr::vars(dplyr::contains("_")), .funs = SqlRender::snakeCaseToCamelCase) %>%
+    utils::type.convert(as.is = TRUE, dec = ".") %>%
+    .addSourceKeyToSourceId(baseUrl = baseUrl) %>%
+    .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
+    .normalizeDateAndTimeTypes()
+
   writeLines(paste0("Generation of ",
                     argument$categoryFirstUpper,
                     " definition id: ",
                     id,
                     " for sourceKey: ",
-                    sourceKey,
-                    " invoked."))
+
+    sourceKey, " invoked."))
   return(response)
 }
 
@@ -124,20 +132,22 @@ invokeGeneration <- function(id, baseUrl, sourceKey, category) {
 getGenerationInformation <- function(id, category, baseUrl) {
   baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
-  
-  arguments <- .getStandardCategories() %>% dplyr::filter(.data$categoryStandard %in% c("cohort",
-                                                                                        "characterization",
-                                                                                        "pathway",
-                                                                                        "incidenceRate"))
-  
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
-  
+
+  arguments <- .getStandardCategories() %>%
+    dplyr::filter(.data$categoryStandard %in% c("cohort",
+                                                "characterization",
+                                                "pathway",
+                                                "incidenceRate"))
+
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == category)
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(id, add = errorMessage)
   checkmate::assertCharacter(category, add = errorMessage)
   checkmate::assertSubset(x = category, choices = argument$categoryStandard)
   checkmate::reportAssertions(errorMessage)
-  
+
   urlRoot <- paste0(baseUrl,
                     "/",
                     argument$categoryUrl,
@@ -145,10 +155,13 @@ getGenerationInformation <- function(id, category, baseUrl) {
                     id,
                     "/",
                     argument$categoryUrlGenerationInformation)
-  
+
   cdmSources <- getCdmSources(baseUrl)
-  validSourceKeys <- cdmSources %>% dplyr::select(.data$sourceKey) %>% dplyr::distinct() %>% dplyr::pull(.data$sourceKey)
-  
+  validSourceKeys <- cdmSources %>%
+    dplyr::select(.data$sourceKey) %>%
+    dplyr::distinct() %>%
+    dplyr::pull(.data$sourceKey)
+
   ##### cohort/characterization/pathway ####
   if (argument$categoryStandard %in% c("cohort", "characterization", "pathway")) {
     url <- urlRoot
@@ -166,25 +179,33 @@ getGenerationInformation <- function(id, category, baseUrl) {
     if (!length(response) == 0) {
       responseAll <- list()
       for (i in (1:length(response))) {
-        responseAll[[i]] <- response[[i]] %>% purrr::map(function(x) {
+        responseAll[[i]] <- response[[i]] %>%
+          purrr::map(function(x) {
           purrr::map(x, function(y) {
             ifelse(is.null(y), NA, y)
           })
-        }) %>% unlist(recursive = TRUE,
-                      use.names = TRUE) %>% as.matrix() %>% t() %>% tidyr::as_tibble() %>%
-          .removeStringFromDataFrameName(string = "id.") %>% utils::type.convert(as.is = TRUE, dec = ".") %>% .addSourceKeyToSourceId(baseUrl = baseUrl) %>% .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
+          }) %>%
+          unlist(recursive = TRUE, use.names = TRUE) %>%
+          as.matrix() %>%
+          t() %>%
+          tidyr::as_tibble() %>%
+          .removeStringFromDataFrameName(string = "id.") %>%
+          utils::type.convert(as.is = TRUE, dec = ".") %>%
+          .addSourceKeyToSourceId(baseUrl = baseUrl) %>%
+          .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
           .normalizeDateAndTimeTypes()
       }
       response <- dplyr::bind_rows(responseAll)
       denominator <- nrow(response)
-      numerator <- nrow(response %>% dplyr::filter(.data$status %in% c("COMPLETE", "COMPLETED")))
+      numerator <- nrow(response %>%
+        dplyr::filter(.data$status %in% c("COMPLETE", "COMPLETED")))
     } else {
       denominator <- 0
       numerator <- 0
       response <- tidyr::tibble()
     }
   }
-  
+
   ##### incidence rate ####
   if (argument$categoryStandard == "incidenceRate") {
     executionInfo <- list()
@@ -204,13 +225,20 @@ getGenerationInformation <- function(id, category, baseUrl) {
       }
       response <- httr::content(response)
       if (length(response$executionInfo) > 0) {
-        executionInfo[[i]] <- response$executionInfo %>% purrr::map(function(x) {
+        executionInfo[[i]] <- response$executionInfo %>%
+          purrr::map(function(x) {
           purrr::map(x, function(y) {
             ifelse(is.null(y), NA, y)
           })
-        }) %>% unlist(recursive = TRUE,
-                      use.names = TRUE) %>% as.matrix() %>% t() %>% tidyr::as_tibble() %>%
-          .removeStringFromDataFrameName(string = "id.") %>% utils::type.convert(as.is = TRUE, dec = ".") %>% .addSourceKeyToSourceId(baseUrl = baseUrl) %>% .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
+          }) %>%
+          unlist(recursive = TRUE, use.names = TRUE) %>%
+          as.matrix() %>%
+          t() %>%
+          tidyr::as_tibble() %>%
+          .removeStringFromDataFrameName(string = "id.") %>%
+          utils::type.convert(as.is = TRUE, dec = ".") %>%
+          .addSourceKeyToSourceId(baseUrl = baseUrl) %>%
+          .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
           .normalizeDateAndTimeTypes()
       }
       if (length(response$summaryList) > 0) {
@@ -220,16 +248,16 @@ getGenerationInformation <- function(id, category, baseUrl) {
     response <- list(executionInfo = dplyr::bind_rows(executionInfo),
                      summaryList = dplyr::bind_rows(summaryList))
     denominator <- nrow(response$executionInfo)
-    numerator <- nrow(response$executionInfo %>% dplyr::filter(.data$status %in% c("COMPLETE",
-                                                                                   "COMPLETED")))
+    numerator <- nrow(response$executionInfo %>%
+      dplyr::filter(.data$status %in% c("COMPLETE", "COMPLETED")))
   }
   writeLines(paste0("Found ",
                     numerator,
                     " generations for ",
                     argument$categoryFirstUpper,
                     " of which ",
-                    scales::percent(x = numerator/denominator, accuracy = 0.1),
-                    " had a status = 'COMPLETED'"))
+
+    scales::percent(x = numerator/denominator, accuracy = 0.1), " had a status = 'COMPLETED'"))
   return(response)
 }
 
@@ -254,27 +282,29 @@ getGenerationInformation <- function(id, category, baseUrl) {
 cancelGeneration <- function(id, baseUrl, sourceKey, category) {
   baseUrl <- gsub("/$", "", baseUrl)
   .checkBaseUrl(baseUrl)
-  
-  arguments <- .getStandardCategories() %>% dplyr::filter(.data$categoryStandard %in% c("cohort",
-                                                                                        "characterization",
-                                                                                        "pathway",
-                                                                                        "incidenceRate"))
-  
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
-  
+
+  arguments <- .getStandardCategories() %>%
+    dplyr::filter(.data$categoryStandard %in% c("cohort",
+                                                "characterization",
+                                                "pathway",
+                                                "incidenceRate"))
+
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == category)
+
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertInt(id, add = errorMessage)
   checkmate::assertCharacter(category, add = errorMessage)
   checkmate::assertSubset(x = category, choices = argument$categoryStandard)
   checkmate::reportAssertions(errorMessage)
-  
+
   if (!all(isValidSourceKey(sourceKeys = sourceKey, baseUrl = baseUrl))) {
     stop(paste0(sourceKey, " is not present in WebApi."))
   }
-  
+
   urlRoot <- paste0(baseUrl, "/", argument$categoryUrl, "/", id, "/", argument$categoryUrlCancel)
   url <- paste0(urlRoot, "/", sourceKey)
-  
+
   if (argument$categoryStandard %in% c("cohort")) {
     response <- .GET(url)
   }
@@ -294,8 +324,8 @@ cancelGeneration <- function(id, baseUrl, sourceKey, category) {
                  " definition id: ",
                  id,
                  " for sourceKey: ",
-                 sourceKey,
-                 " requested to be stopped."))
+
+    sourceKey, " requested to be stopped."))
   # nothing to return.
 }
 

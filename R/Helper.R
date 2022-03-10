@@ -36,7 +36,8 @@ checkInputFileEncoding <- function(fileName) {
     stop("Illegal encoding found in file ",
          basename(fileName),
          ". Should be 'ASCII' or 'UTF-8', found:",
-         paste(paste0(encoding$encoding, " (", encoding$confidence, ")"), collapse = ", "))
+
+      paste(paste0(encoding$encoding, " (", encoding$confidence, ")"), collapse = ", "))
   }
   invisible(TRUE)
 }

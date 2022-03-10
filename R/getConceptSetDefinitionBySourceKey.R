@@ -18,11 +18,11 @@
 
 #' Fetch concept set definition from WebAPI by SourceKey \lifecycle{stable}
 #' @details
-#' Fetches a concept set definition from WebAPI by SourceKey. If SourceKey is not 
-#' specified, the priority vocabulary will be used.
+#' Fetches a concept set definition from WebAPI by SourceKey. If SourceKey is not specified, the
+#' priority vocabulary will be used.
 #'
 #' @template BaseUrl
-#' @param conceptSetId the id of the concept set to retrieve.
+#' @param conceptSetId   the id of the concept set to retrieve.
 #' @template vocabularySourceKey
 #' @return
 #' An R object representing the ConceptSet definition
@@ -30,8 +30,9 @@
 #' @examples
 #' \dontrun{
 #' conceptSetDefinition <- getConceptSetDefinitionBySourceKey(conceptSetId = 282,
-#'                                                 baseUrl = "http://server.org:80/WebAPI",
-#'                                                 vocabularySourceKey = "MY_VOCAB")
+#'                                                            baseUrl = "http://server.org:80/WebAPI",
+#'
+#'   vocabularySourceKey = "MY_VOCAB")
 #' conceptIds <- resolveConceptSet(conceptSetDefinition = conceptSetDefinition,
 #'                                 baseUrl = "http://server.org:80/WebAPI")
 #' }
@@ -39,27 +40,33 @@
 #' @export
 getConceptSetDefinitionBySourceKey <- function(conceptSetId, baseUrl, vocabularySourceKey = NULL) {
   .checkBaseUrl(baseUrl)
-  
+
   if (missing(vocabularySourceKey) || is.null(vocabularySourceKey)) {
     vocabularySourceKey <- getPriorityVocabularyKey(baseUrl = baseUrl)
   }
-  
+
   urlDef <- paste0(baseUrl, "/conceptset/", conceptSetId)
   urlExpresion <- paste0(baseUrl, "/conceptset/", conceptSetId, "/expression/", vocabularySourceKey)
-  
+
   responseDef <- .GET(url = urlDef)
-  if (!responseDef$status_code == 200 ) {
-    stop(paste0("Failed to load concept set definition: ",conceptSetId, " by the WebApi. Status code = ",
-                httr::content(responseDef)$status_code))
+  if (!responseDef$status_code == 200) {
+    stop(paste0("Failed to load concept set definition: ",
+                conceptSetId,
+                " by the WebApi. Status code = ",
+
+      httr::content(responseDef)$status_code))
   }
-    
+
   responseExpression <- .GET(url = urlExpresion)
   if (!responseExpression$status_code == 200) {
-    stop(paste0("Failed to load concept set expression: ",conceptSetId, " by the WebApi. Status code = ",
-                httr::content(responseDef)$status_code))
+    stop(paste0("Failed to load concept set expression: ",
+                conceptSetId,
+                " by the WebApi. Status code = ",
+
+      httr::content(responseDef)$status_code))
   }
-  
-  
+
+
   responseDef <- httr::content(responseDef)
   responseExpression <- httr::content(responseExpression)
   result <- responseDef
@@ -67,5 +74,3 @@ getConceptSetDefinitionBySourceKey <- function(conceptSetId, baseUrl, vocabulary
   return(result)
 
 }
-
-  

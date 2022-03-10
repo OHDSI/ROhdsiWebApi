@@ -21,9 +21,7 @@
   webApiVersion <- getWebApiVersion(baseUrl = baseUrl)
   if (is.null(webApiVersion) | length(webApiVersion) == 0) {
     stop(paste0("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
-                "Please verify\n",
-                "- is it in the form http://server.org:80/WebAPI,\n",
-                "- are you are connected to the network"))
+      "Please verify\n", "- is it in the form http://server.org:80/WebAPI,\n", "- are you are connected to the network"))
   }
 }
 
@@ -34,33 +32,49 @@
                                      "incidenceRate",
                                      "estimation",
                                      "prediction",
-                                     "characterization",
-                                     "pathway")) %>% dplyr::mutate(categoryFirstUpper = paste0(toupper(substr(.data$categoryStandard, 1, 1)), substr(.data$categoryStandard, 2, nchar(.data$categoryStandard)))) %>% dplyr::mutate(categoryUrl = dplyr::case_when(categoryStandard ==
-    "conceptSet" ~ "conceptset", categoryStandard == "cohort" ~ "cohortdefinition", categoryStandard ==
-    "characterization" ~ "cohort-characterization", categoryStandard == "pathway" ~ "pathway-analysis", categoryStandard == "incidenceRate" ~ "ir", categoryStandard == "estimation" ~ "estimation", categoryStandard == "prediction" ~ "prediction", TRUE ~ "")) %>% dplyr::mutate(categoryUrlGetExpression = dplyr::case_when(categoryStandard ==
-    "conceptSet" ~ "expression", categoryStandard == "characterization" ~ "design", TRUE ~ "")) %>%
+
+    "characterization", "pathway")) %>%
+    dplyr::mutate(categoryFirstUpper = paste0(toupper(substr(.data$categoryStandard, 1, 1)),
+                                              substr(.data$categoryStandard,
+      2, nchar(.data$categoryStandard)))) %>%
+    dplyr::mutate(categoryUrl = dplyr::case_when(categoryStandard == "conceptSet" ~ "conceptset",
+      categoryStandard == "cohort" ~ "cohortdefinition", categoryStandard == "characterization" ~
+        "cohort-characterization", categoryStandard == "pathway" ~ "pathway-analysis", categoryStandard ==
+        "incidenceRate" ~ "ir", categoryStandard == "estimation" ~ "estimation", categoryStandard ==
+        "prediction" ~ "prediction", TRUE ~ "")) %>%
+    dplyr::mutate(categoryUrlGetExpression = dplyr::case_when(categoryStandard == "conceptSet" ~
+      "expression", categoryStandard == "characterization" ~ "design", TRUE ~ "")) %>%
     dplyr::mutate(categoryUrlGenerationInformation = dplyr::case_when(categoryStandard == "cohort" ~
       "info", categoryStandard == "characterization" ~ "generation", categoryStandard == "pathway" ~
-      "generation", categoryStandard == "incidenceRate" ~ "info", TRUE ~ "")) %>% dplyr::mutate(categoryUrlGeneration = dplyr::case_when(categoryStandard ==
-    "cohort" ~ "generate", categoryStandard == "characterization" ~ "generation", categoryStandard ==
-    "pathway" ~ "generation", categoryStandard == "incidenceRate" ~ "execute", TRUE ~ "")) %>% dplyr::mutate(categoryUrlCancel = dplyr::case_when(categoryStandard ==
-    "cohort" ~ "cancel", categoryStandard == "characterization" ~ "generation", categoryStandard ==
-    "pathway" ~ "generation", categoryStandard == "incidenceRate" ~ "execute", TRUE ~ "")) %>% dplyr::mutate(categoryUrlPut = dplyr::case_when(categoryStandard ==
-    "conceptSet" ~ "items", TRUE ~ "")) %>% dplyr::mutate(categoryUrlPostExpression = dplyr::case_when(categoryStandard ==
-    "conceptSet" ~ "items", categoryStandard == "cohort" ~ "", categoryStandard == "characterization" ~
-    "import", categoryStandard == "pathway" ~ "", categoryStandard == "incidenceRate" ~ "", TRUE ~
-    "")) %>% return()
+      "generation", categoryStandard == "incidenceRate" ~ "info", TRUE ~ "")) %>%
+    dplyr::mutate(categoryUrlGeneration = dplyr::case_when(categoryStandard == "cohort" ~ "generate",
+      categoryStandard == "characterization" ~ "generation", categoryStandard == "pathway" ~ "generation",
+      categoryStandard == "incidenceRate" ~ "execute", TRUE ~ "")) %>%
+    dplyr::mutate(categoryUrlCancel = dplyr::case_when(categoryStandard == "cohort" ~ "cancel",
+                                                       categoryStandard ==
+      "characterization" ~ "generation", categoryStandard == "pathway" ~ "generation", categoryStandard ==
+      "incidenceRate" ~ "execute", TRUE ~ "")) %>%
+    dplyr::mutate(categoryUrlPut = dplyr::case_when(categoryStandard == "conceptSet" ~ "items",
+                                                    TRUE ~
+      "")) %>%
+    dplyr::mutate(categoryUrlPostExpression = dplyr::case_when(categoryStandard == "conceptSet" ~
+      "items", categoryStandard == "cohort" ~ "", categoryStandard == "characterization" ~ "import",
+      categoryStandard == "pathway" ~ "", categoryStandard == "incidenceRate" ~ "", TRUE ~ "")) %>%
+    return()
 }
 
 .standardizeColumnNames <- function(dataFrame) {
   if ("createdAt" %in% names(dataFrame)) {
-    dataFrame <- dataFrame %>% dplyr::rename(createdDate = .data$createdAt)
+    dataFrame <- dataFrame %>%
+      dplyr::rename(createdDate = .data$createdAt)
   }
   if ("updatedAt" %in% names(dataFrame)) {
-    dataFrame <- dataFrame %>% dplyr::rename(modifiedDate = .data$updatedAt)
+    dataFrame <- dataFrame %>%
+      dplyr::rename(modifiedDate = .data$updatedAt)
   }
   if ("updatedBy" %in% names(dataFrame)) {
-    dataFrame <- dataFrame %>% dplyr::rename(modifiedBy = .data$updatedBy)
+    dataFrame <- dataFrame %>%
+      dplyr::rename(modifiedBy = .data$updatedBy)
   }
   return(dataFrame)
 }
@@ -84,9 +98,7 @@
     x <- lubridate::as_datetime(x = x,
                                 tz = Sys.timezone(),
                                 lubridate::guess_formats(x = x, orders = c("y-m-d H:M",
-                                                                                                       "y-m-d H:M:S",
-                                                                                                       "ymdHMS",
-                                                                                                       "ymd HMS"))[1])
+      "y-m-d H:M:S", "ymdHMS", "ymd HMS"))[1])
   }
   return(x)
 }
@@ -94,8 +106,7 @@
 .normalizeDateAndTimeTypes <- function(df) {
   df <- dplyr::mutate_if(.tbl = df,
                          .predicate = (stringr::str_detect(string = tolower(colnames(df)),
-                                                           pattern = "date") | stringr::str_detect(string = tolower(colnames(df)), pattern = "time")),
-                         .funs = .convertToDateTime)
+    pattern = "date") | stringr::str_detect(string = tolower(colnames(df)), pattern = "time")), .funs = .convertToDateTime)
   return(df)
 }
 
@@ -116,18 +127,20 @@
 
 .addSourceKeyToSourceId <- function(dataFrame, baseUrl) {
   if ("sourceId" %in% colnames(dataFrame)) {
-    cdmDataSources <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(.data$sourceId,
-                                                                         .data$sourceKey)
-    dataFrame <- dataFrame %>% dplyr::left_join(y = cdmDataSources, by = c("sourceId"))
+    cdmDataSources <- getCdmSources(baseUrl = baseUrl) %>%
+      dplyr::select(.data$sourceId, .data$sourceKey)
+    dataFrame <- dataFrame %>%
+      dplyr::left_join(y = cdmDataSources, by = c("sourceId"))
   }
   return(dataFrame)
 }
 
 .addSourceNameToSourceKey <- function(dataFrame, baseUrl) {
   if ("sourceKey" %in% colnames(dataFrame)) {
-    cdmDataSources <- getCdmSources(baseUrl = baseUrl) %>% dplyr::select(.data$sourceKey,
-                                                                         .data$sourceName)
-    dataFrame <- dataFrame %>% dplyr::left_join(y = cdmDataSources, by = c("sourceKey"))
+    cdmDataSources <- getCdmSources(baseUrl = baseUrl) %>%
+      dplyr::select(.data$sourceKey, .data$sourceName)
+    dataFrame <- dataFrame %>%
+      dplyr::left_join(y = cdmDataSources, by = c("sourceKey"))
   }
   return(dataFrame)
 }

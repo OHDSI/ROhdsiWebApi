@@ -26,7 +26,13 @@ devtools::spell_check()
 
 # Create manual and vignette
 unlink("extras/ROhdsiWebApi.pdf")
-shell("R CMD Rd2pdf ./ --output=extras/ROhdsiWebApi.pdf")
+
+# use system command if Mac, else use shell
+if (Sys.info()["sysname"] == "Darwin") {
+  system("R CMD Rd2pdf ./ --output=extras/ROhdsiWebApi.pdf")
+} else {
+  shell("R CMD Rd2pdf ./ --output=extras/ROhdsiWebApi.pdf")
+}
 
 dir.create("inst/doc", recursive = TRUE, showWarnings = FALSE)
 rmarkdown::render("vignettes/UsingROhdsiWebApi.Rmd",

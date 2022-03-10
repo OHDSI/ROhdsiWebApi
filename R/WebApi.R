@@ -36,41 +36,37 @@ getPriorityVocabularyKey <- function(baseUrl) {
 
 #' Get the WebAPI version number \lifecycle{stable}
 #' @details
-#' Obtains the WebAPI version number. This function is used to check that 
-#' WebAPI baseUrl can be accessed and is a good first check to make sure 
-#' you can access a WebAPI endpoint.
+#' Obtains the WebAPI version number. This function is used to check that WebAPI baseUrl can be
+#' accessed and is a good first check to make sure you can access a WebAPI endpoint.
 #'
 #' @template BaseUrl
 #'
 #' @return
 #' The WebApi versions as a string.
-#' 
-#' @examples 
+#'
+#' @examples
 #' \dontrun{
 #' getWebApiVersion("http://server.org:80/WebAPI")
 #' }
 #' @export
 getWebApiVersion <- function(baseUrl) {
-  
+
   # TODO convert to checkmate
   stopifnot(is.character(baseUrl), nchar(baseUrl) > 0)
-  
+
   if (grepl("/$", baseUrl)) {
     rlang::abort(paste0("baseUrl '", baseUrl, "' should not end with a /"))
   }
-  
+
   url <- paste0(baseUrl, "/info")
-  
+
   response <- httr::GET(url)
   if (response$status %in% c(200)) {
     version <- (httr::content(response))$version
   } else {
     rlang::abort(paste0("Could not reach WebApi. Possibly the base URL is not valid or is not reachable?\n",
-                        "Please verify\n",
-                        "- is it in the form http://server.org:80/WebAPI,\n",
-                        "- are you are connected to the network",
-                        "Status code: ",
-                        response$status))
+      "Please verify\n", "- is it in the form http://server.org:80/WebAPI,\n", "- are you are connected to the network",
+      "Status code: ", response$status))
   }
   return(version)
 }
@@ -115,9 +111,8 @@ getCdmSources <- function(baseUrl) {
                    sourceName = s$sourceName,
                    sourceKey = s$sourceKey,
                    sourceDialect = s$sourceDialect,
-                   cdmDatabaseSchema = cdmDatabaseSchema,
-                   vocabDatabaseSchema = vocabDatabaseSchema,
-                   resultsDatabaseSchema = resultsDatabaseSchema)
+
+      cdmDatabaseSchema = cdmDatabaseSchema, vocabDatabaseSchema = vocabDatabaseSchema, resultsDatabaseSchema = resultsDatabaseSchema)
   })
 
   return(dplyr::bind_rows(sourceDetails))
@@ -143,16 +138,19 @@ getCdmSources <- function(baseUrl) {
 isValidId <- function(ids, baseUrl, category) {
   baseUrl <- gsub("/$", "", baseUrl)
   arguments <- .getStandardCategories()
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == !!category)
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == !!category)
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertIntegerish(ids, add = errorMessage)
   checkmate::assertChoice(x = category, choices = arguments$categoryStandard)
   checkmate::reportAssertions(errorMessage)
 
-  validIds <- getDefinitionsMetadata(baseUrl = baseUrl,
-                                     category = argument$categoryStandard) %>% dplyr::select(.data$id) %>%
-    dplyr::distinct() %>% dplyr::pull(.data$id) %>% as.integer()
+  validIds <- getDefinitionsMetadata(baseUrl = baseUrl, category = argument$categoryStandard) %>%
+    dplyr::select(.data$id) %>%
+    dplyr::distinct() %>%
+    dplyr::pull(.data$id) %>%
+    as.integer()
   return(as.integer(ids) %in% validIds)
 }
 
@@ -177,6 +175,42 @@ isValidId <- function(ids, baseUrl, category) {
 #' @export
 isValidSourceKey <- function(sourceKeys, baseUrl) {
   cdmSources <- getCdmSources(baseUrl)
-  validSourceKeys <- cdmSources %>% dplyr::select(.data$sourceKey) %>% dplyr::distinct() %>% dplyr::pull(.data$sourceKey)
+  validSourceKeys <- cdmSources %>%
+    dplyr::select(.data$sourceKey) %>%
+    dplyr::distinct() %>%
+    dplyr::pull(.data$sourceKey)
   return(sourceKeys %in% validSourceKeys)
+}
+
+
+#' Obtains users for a specific Atlas user role. Requires security enabled Atlas.
+#' \lifecycle{experimental}
+#' @details
+#' For a security enabled Atlas, obtains the user names for a specified Atlas user role. Role Id is
+#' set in WebAPI sec_role table
+#'
+#' @template BaseUrl
+#' @param roleId   The role id as defined in WebAPI sec_role table
+#' @return
+#' A data frame of user information for the Atlas role.
+#'
+#' @examples
+#' \dontrun{
+#' getUsersFromRole(baseUrl = "http://server.org:80/WebAPI", roleId = 10)
+#' }
+#' @export
+getUsersFromRole <- function(baseUrl, roleId) {
+
+  .checkBaseUrl(baseUrl)
+  url <- sprintf("%s/role/%s/users", baseUrl, roleId)
+  request <- .GET(url)
+  httr::stop_for_status(request)
+
+  json <- .GET(url)
+  users <- httr::content(json)
+
+  result <- lapply(users, function(u) {
+    data.frame(id = u$id, login = u$login, name = u$name)
+  })
+  return(do.call(rbind, result))
 }

@@ -42,7 +42,8 @@ getCohortSql <- function(cohortDefinition, baseUrl, generateStats = TRUE) {
   .checkBaseUrl(baseUrl)
 
   arguments <- .getStandardCategories()
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == "cohort")
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == "cohort")
 
   if (!"cohort" %in% c("cohort")) {
     stop(paste0("Retrieving SQL for ", argument$categoryFirstUpper, " is not supported"))

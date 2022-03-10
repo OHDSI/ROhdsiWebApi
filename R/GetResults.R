@@ -31,12 +31,14 @@
 #' }
 #' @export
 getResults <- function(id, baseUrl, category) {
-  arguments <- .getStandardCategories() %>% dplyr::filter(.data$categoryStandard %in% c("cohort",
-                                                                                        "characterization",
-                                                                                        "pathway",
-                                                                                        "incidenceRate"))
+  arguments <- .getStandardCategories() %>%
+    dplyr::filter(.data$categoryStandard %in% c("cohort",
+                                                "characterization",
+                                                "pathway",
+                                                "incidenceRate"))
   # create empty output that will be produced if results are not generated.
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == category)
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == category)
   if (category == "cohort") {
     response <- list(inclusionRuleStats = tidyr::tibble(),
                      treemapData = tidyr::tibble(),
@@ -62,18 +64,20 @@ getResults <- function(id, baseUrl, category) {
     executionInfo <- generationInformation$executionInfo
   }
   if (length(executionInfo) > 0) {
-    generatedSuccess <- executionInfo %>% dplyr::filter(.data$status %in% c("COMPLETE",
-                                                                            "COMPLETED")) %>%
+    generatedSuccess <- executionInfo %>%
+      dplyr::filter(.data$status %in% c("COMPLETE", "COMPLETED")) %>%
       dplyr::filter(!is.na(.data$sourceKey))
 
     if ("canceled" %in% colnames(generatedSuccess)) {
       if (!is.null(generatedSuccess$canceled)) {
-        generatedSuccess <- generatedSuccess %>% dplyr::filter(.data$canceled == "FALSE")
+        generatedSuccess <- generatedSuccess %>%
+          dplyr::filter(.data$canceled == "FALSE")
       }
     }
     if ("isCanceled" %in% colnames(generatedSuccess)) {
       if (!is.null(generatedSuccess$isCanceled)) {
-        generatedSuccess <- generatedSuccess %>% dplyr::filter(.data$isCanceled == "FALSE")
+        generatedSuccess <- generatedSuccess %>%
+          dplyr::filter(.data$isCanceled == "FALSE")
       }
     }
   } else {
@@ -83,10 +87,8 @@ getResults <- function(id, baseUrl, category) {
   writeLines(paste0("Found ",
                     scales::comma(nrow(generatedSuccess)),
                     " (",
-                    scales::percent(x = nrow(generatedSuccess)/nrow(executionInfo), accuracy = 0.1),
-                    " of ",
-                    scales::comma(nrow(executionInfo)),
-                    " result generations) to have configured source key in WebApi. Results will be retrieved for this subset."))
+                    scales::percent(x = nrow(generatedSuccess)/nrow(executionInfo),
+    accuracy = 0.1), " of ", scales::comma(nrow(executionInfo)), " result generations) to have configured source key in WebApi. Results will be retrieved for this subset."))
 
 
   # get results for cohort generation
@@ -96,7 +98,8 @@ getResults <- function(id, baseUrl, category) {
     summary <- list()
 
     for (i in (1:nrow(generatedSuccess))) {
-      generation <- generatedSuccess %>% dplyr::slice(i)
+      generation <- generatedSuccess %>%
+        dplyr::slice(i)
       writeLines(paste0("   Retrieving results for ", generation$sourceName))
       inclusionRuleStatsMode <- list()
       treemapDataMode <- list()
@@ -107,33 +110,27 @@ getResults <- function(id, baseUrl, category) {
         } else if (mode == 1) {
           modeLong <- "person"
         }
-        url <- paste0(baseUrl,
-                      "/",
-                      argument$categoryUrl,
-                      "/",
-                      id,
-                      "/report/",
-                      generation$sourceKey,
-                      "?mode=",
-                      mode)
+        url <- paste0(baseUrl, "/", argument$categoryUrl, "/", id, "/report/", generation$sourceKey,
+          "?mode=", mode)
         response <- .GET(url)
         if (response$status_code == "200") {
           response <- httr::content(response)
           if (is.null(response$summary$percentMatched)) {
           response$summary$percentMatched <- 0
           }
-          summaryMode[[mode + 1]] <- response$summary %>% tidyr::as_tibble() %>% dplyr::mutate(mode = mode,
-                                                                                               modeLong = modeLong) %>% dplyr::mutate(percentMatched = as.numeric(sub("%",
-                                                                                                                                                                      "",
-                                                                                                                                                                      .data$percentMatched))/100) %>%
+          summaryMode[[mode + 1]] <- response$summary %>%
+          tidyr::as_tibble() %>%
+          dplyr::mutate(mode = mode, modeLong = modeLong) %>%
+          dplyr::mutate(percentMatched = as.numeric(sub("%", "", .data$percentMatched))/100) %>%
           utils::type.convert(as.is = TRUE, dec = ".")
 
           if (length(response$inclusionRuleStats) > 0) {
-          inclusionRuleStat <- response$inclusionRuleStats %>% purrr::map(function(x) {
+          inclusionRuleStat <- response$inclusionRuleStats %>%
+            purrr::map(function(x) {
             purrr::map(x, function(y) {
-            ifelse(is.null(y), NA, y)
+              ifelse(is.null(y), NA, y)
             })
-          })
+            })
           inclusionRuleStatsMode[[mode + 1]] <- tidyr::tibble(inclusionRuleStat = inclusionRuleStat) %>%
             tidyr::unnest_wider(.data$inclusionRuleStat)
           } else {
@@ -141,14 +138,11 @@ getResults <- function(id, baseUrl, category) {
           }
 
           if (nrow(inclusionRuleStatsMode[[mode + 1]]) > 0) {
-          inclusionRuleStatsMode[[mode + 1]] <- inclusionRuleStatsMode[[mode + 1]] %>% dplyr::mutate(percentExcluded = as.numeric(sub("%",
-                                                                                                                                      "",
-                                                                                                                                      .data$percentExcluded))/100,
-                                                                                                     percentSatisfying = as.numeric(sub("%",
-                                                                                                                                        "",
-                                                                                                                                        .data$percentSatisfying))/100) %>%
-            utils::type.convert(as.is = TRUE,
-                                dec = ".") %>% dplyr::mutate(mode = mode, modeLong = modeLong)
+          inclusionRuleStatsMode[[mode + 1]] <- inclusionRuleStatsMode[[mode + 1]] %>%
+            dplyr::mutate(percentExcluded = as.numeric(sub("%", "", .data$percentExcluded))/100,
+            percentSatisfying = as.numeric(sub("%", "", .data$percentSatisfying))/100) %>%
+            utils::type.convert(as.is = TRUE, dec = ".") %>%
+            dplyr::mutate(mode = mode, modeLong = modeLong)
           }
 
           tMapData <- RJSONIO::fromJSON(response$treemapData,
@@ -162,8 +156,7 @@ getResults <- function(id, baseUrl, category) {
           treemapDataMode[[mode + 1]] <- dplyr::tibble(bits = treeMapResult$name,
                                                        size = treeMapResult$size) %>%
             dplyr::mutate(SatisfiedNumber = stringr::str_count(string = .data$bits, pattern = "1"),
-                          mode = mode,
-                          modeLong = modeLong)
+            mode = mode, modeLong = modeLong)
           }
 
         } else {
@@ -171,12 +164,12 @@ getResults <- function(id, baseUrl, category) {
           treemapData[[mode + 1]] <- tidyr::tibble()
           summary[[mode + 1]] <- tidyr::tibble()
         }
-        inclusionRuleStats[[i]] <- dplyr::bind_rows(inclusionRuleStatsMode) %>% dplyr::mutate(sourceKey = generation$sourceKey,
-                                                                                              sourceName = generation$sourceName)
-        treemapData[[i]] <- dplyr::bind_rows(treemapDataMode) %>% dplyr::mutate(sourceKey = generation$sourceKey,
-                                                                                sourceName = generation$sourceName)
-        summary[[i]] <- dplyr::bind_rows(summaryMode) %>% dplyr::mutate(sourceKey = generation$sourceKey,
-                                                                        sourceName = generation$sourceName)
+        inclusionRuleStats[[i]] <- dplyr::bind_rows(inclusionRuleStatsMode) %>%
+          dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName)
+        treemapData[[i]] <- dplyr::bind_rows(treemapDataMode) %>%
+          dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName)
+        summary[[i]] <- dplyr::bind_rows(summaryMode) %>%
+          dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName)
       }
     }
     inclusionRuleStats <- dplyr::bind_rows(inclusionRuleStats)
@@ -194,7 +187,8 @@ getResults <- function(id, baseUrl, category) {
   if (category == "characterization" & nrow(generatedSuccess) > 0) {
     responseAll <- list()
     for (i in (1:nrow(generatedSuccess))) {
-      generation <- generatedSuccess %>% dplyr::slice(i)
+      generation <- generatedSuccess %>%
+        dplyr::slice(i)
       writeLines(paste0("   Retrieving results for ",
                         argument$categoryFirstUpper,
                         " id:",
@@ -203,9 +197,11 @@ getResults <- function(id, baseUrl, category) {
       response <- .GET(url)
       if (response$status_code == "200") {
         response <- httr::content(response)
-        response <- response %>% tidyr::tibble(response = response) %>% tidyr::unnest_wider(.data$response) %>%
-          utils::type.convert(as.is = TRUE,
-                              dec = ".") %>% .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
+        response <- response %>%
+          tidyr::tibble(response = response) %>%
+          tidyr::unnest_wider(.data$response) %>%
+          utils::type.convert(as.is = TRUE, dec = ".") %>%
+          .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
           dplyr::mutate(generationId = generation$id)
         response$. <- NULL
       } else {
@@ -223,11 +219,13 @@ getResults <- function(id, baseUrl, category) {
     stratifyStats <- list()
     treemapData <- list()
     summary <- list()
-    generation <- tidyr::crossing(generatedSuccess %>% dplyr::select(.data$sourceKey),
-                                  generationInformation$summaryList %>%
-      dplyr::select(.data$targetId, .data$outcomeId)) %>% dplyr::distinct()
+    generation <- tidyr::crossing(generatedSuccess %>%
+      dplyr::select(.data$sourceKey), generationInformation$summaryList %>%
+      dplyr::select(.data$targetId, .data$outcomeId)) %>%
+      dplyr::distinct()
     for (i in (1:nrow(generation))) {
-      generationLoop <- generation %>% dplyr::slice(i)
+      generationLoop <- generation %>%
+        dplyr::slice(i)
       url <- paste0(baseUrl,
                     "/",
                     argument$categoryUrl,
@@ -235,38 +233,40 @@ getResults <- function(id, baseUrl, category) {
                     id,
                     "/report/",
                     generationLoop$sourceKey,
-                    "?targetId=",
-                    generationLoop$targetId,
-                    "&outcomeId=",
-                    generationLoop$outcomeId)
+
+        "?targetId=", generationLoop$targetId, "&outcomeId=", generationLoop$outcomeId)
       response <- .GET(url)
       if (response$status_code == "200") {
         response <- httr::content(response)
-        summary[[i]] <- response$summary %>% tidyr::as_tibble() %>% utils::type.convert(as.is = TRUE,
-                                                                                        dec = ".") %>% dplyr::mutate(sourceKey = generationLoop$sourceKey, targetId = generationLoop$targetId, outcomeId = generationLoop$outcomeId, incidenceRateId = id)
+        summary[[i]] <- response$summary %>%
+          tidyr::as_tibble() %>%
+          utils::type.convert(as.is = TRUE, dec = ".") %>%
+          dplyr::mutate(sourceKey = generationLoop$sourceKey, targetId = generationLoop$targetId,
+          outcomeId = generationLoop$outcomeId, incidenceRateId = id)
 
         if (length(response$stratifyStats) > 0) {
-          stratifyStat <- response$stratifyStats %>% purrr::map(function(x) {
-          purrr::map(x, function(y) {
+          stratifyStat <- response$stratifyStats %>%
+          purrr::map(function(x) {
+            purrr::map(x, function(y) {
             ifelse(is.null(y), NA, y)
+            })
           })
-          })
-          stratifyStats[[i]] <- tidyr::tibble(stratifyStat = stratifyStat) %>% tidyr::unnest_wider(.data$stratifyStat) %>%
-          utils::type.convert(as.is = TRUE,
-                              dec = ".") %>% dplyr::mutate(sourceKey = generationLoop$sourceKey, targetId = generationLoop$targetId, outcomeId = generationLoop$outcomeId, incidenceRateId = id)
+          stratifyStats[[i]] <- tidyr::tibble(stratifyStat = stratifyStat) %>%
+          tidyr::unnest_wider(.data$stratifyStat) %>%
+          utils::type.convert(as.is = TRUE, dec = ".") %>%
+          dplyr::mutate(sourceKey = generationLoop$sourceKey, targetId = generationLoop$targetId,
+            outcomeId = generationLoop$outcomeId, incidenceRateId = id)
         }
 
         if (length(response$treemapData) > 0) {
           tMapData <- jsonlite::fromJSON(response$treemapData, simplifyDataFrame = FALSE)
           treeMapResult <- list(name = c(), size = c())
-          treeMapResult <- .flattenTree(node = tMapData,
-                                        accumulated = treeMapResult) %>% tidyr::replace_na()
+          treeMapResult <- .flattenTree(node = tMapData, accumulated = treeMapResult) %>%
+          tidyr::replace_na()
           treemapData[[i]] <- dplyr::tibble(name = treeMapResult$name,
                                             size = treeMapResult$size) %>%
-          dplyr::mutate(sourceKey = generationLoop$sourceKey,
-                        targetId = generationLoop$targetId,
-                        outcomeId = generationLoop$outcomeId,
-                        incidenceRateId = id)
+          dplyr::mutate(sourceKey = generationLoop$sourceKey, targetId = generationLoop$targetId,
+            outcomeId = generationLoop$outcomeId, incidenceRateId = id)
         }
       } else {
         stratifyStats[[i]] <- tidyr::tibble()
@@ -286,33 +286,47 @@ getResults <- function(id, baseUrl, category) {
     eventCodes <- list()
     pathwayGroups <- list()
     for (i in (1:nrow(generatedSuccess))) {
-      generation <- generatedSuccess %>% dplyr::slice(i)
+      generation <- generatedSuccess %>%
+        dplyr::slice(i)
       writeLines(paste0("   Retrieving results for ",
                         argument$categoryFirstUpper,
                         " generation id:",
-                        generation$id))
+
+        generation$id))
       url <- paste0(baseUrl, "/", argument$categoryUrl, "/generation/", generation$id, "/result/")
       response <- .GET(url)
       if (response$status_code == "200") {
         response <- httr::content(response)
-        eventCodesLoop <- response$eventCodes %>% purrr::map(function(x) {
+        eventCodesLoop <- response$eventCodes %>%
+          purrr::map(function(x) {
           purrr::map(x, function(y) {
-          ifelse(is.null(y), NA, y)
+            ifelse(is.null(y), NA, y)
           })
-        })
-        eventCodes[[i]] <- eventCodesLoop %>% tidyr::tibble(eventCodesLoop = eventCodesLoop) %>%
-          tidyr::unnest_wider(.data$eventCodesLoop) %>% utils::type.convert(as.is = TRUE,
-                                                                            dec = ".") %>%
-          dplyr::mutate(generationId = generation$id) %>% dplyr::select(-".") %>% dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName, pathwayId = id)
+          })
+        eventCodes[[i]] <- eventCodesLoop %>%
+          tidyr::tibble(eventCodesLoop = eventCodesLoop) %>%
+          tidyr::unnest_wider(.data$eventCodesLoop) %>%
+          utils::type.convert(as.is = TRUE, dec = ".") %>%
+          dplyr::mutate(generationId = generation$id) %>%
+          dplyr::select(-".") %>%
+          dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName,
+          pathwayId = id)
 
         pathwayGroupsLoop <- response$pathwayGroups
-        pathwayGroups[[i]] <- pathwayGroupsLoop %>% tidyr::tibble(pathwayGroupsLoop = pathwayGroupsLoop) %>%
-          tidyr::unnest_wider(.data$pathwayGroupsLoop) %>% dplyr::mutate(generationId = generation$id) %>%
-          tidyr::unnest_longer(.data$pathways) %>% dplyr::select(-".") %>% dplyr::mutate(.id = dplyr::row_number()) %>%
-          tidyr::unnest_longer(.data$pathways) %>% dplyr::mutate(pathways = paste0(.data$pathways)) %>%
+        pathwayGroups[[i]] <- pathwayGroupsLoop %>%
+          tidyr::tibble(pathwayGroupsLoop = pathwayGroupsLoop) %>%
+          tidyr::unnest_wider(.data$pathwayGroupsLoop) %>%
+          dplyr::mutate(generationId = generation$id) %>%
+          tidyr::unnest_longer(.data$pathways) %>%
+          dplyr::select(-".") %>%
+          dplyr::mutate(.id = dplyr::row_number()) %>%
+          tidyr::unnest_longer(.data$pathways) %>%
+          dplyr::mutate(pathways = paste0(.data$pathways)) %>%
           tidyr::pivot_wider(names_from = .data$pathways_id, values_from = .data$pathways) %>%
-          utils::type.convert(as.is = TRUE,
-                              dec = ".") %>% dplyr::select(-.data$.id) %>% dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName, pathwayId = id)
+          utils::type.convert(as.is = TRUE, dec = ".") %>%
+          dplyr::select(-.data$.id) %>%
+          dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName,
+          pathwayId = id)
       } else {
         pathwayGroups[[i]] <- tidyr::tibble()
         eventCodes[[i]] <- tidyr::tibble()

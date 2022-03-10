@@ -34,20 +34,20 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
     webApiPassword <- ":"
   }
 
-  checkmate::assert(checkmate::checkCharacter(webApiUsername),
-                    checkmate::checkNull(webApiUsername),
-                    add = errorMessage)
-  checkmate::assert(checkmate::checkCharacter(webApiPassword),
-                    checkmate::checkNull(webApiPassword),
-                    add = errorMessage)
+  checkmate::assert(checkmate::checkCharacter(webApiUsername), checkmate::checkNull(webApiUsername),
+    add = errorMessage)
+  checkmate::assert(checkmate::checkCharacter(webApiPassword), checkmate::checkNull(webApiPassword),
+    add = errorMessage)
   checkmate::reportAssertions(errorMessage)
   .checkBaseUrl(baseUrl)
 
   # run appropriate auth. Each auth method must return a header to be added to WebAPI calls.
   authHeader <- switch(authMethod,
                        db = .authDb(baseUrl, webApiUsername, webApiPassword),
-                       ad = .authAd(baseUrl, webApiUsername, webApiPassword),
-                       windows = .authWindows(baseUrl, webApiUsername, webApiPassword))
+                       ad = .authAd(baseUrl,
+    webApiUsername, webApiPassword), windows = .authWindows(baseUrl,
+                                                            webApiUsername,
+                                                            webApiPassword))
 
   # store token in package environment
   setAuthHeader(baseUrl, authHeader)

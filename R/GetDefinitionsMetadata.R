@@ -40,7 +40,8 @@ getDefinitionsMetadata <- function(baseUrl, category) {
   .checkBaseUrl(baseUrl)
 
   arguments <- .getStandardCategories()
-  argument <- arguments %>% dplyr::filter(.data$categoryStandard == !!category)
+  argument <- arguments %>%
+    dplyr::filter(.data$categoryStandard == !!category)
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(category, min.len = 1, add = errorMessage)
@@ -48,7 +49,8 @@ getDefinitionsMetadata <- function(baseUrl, category) {
   checkmate::reportAssertions(errorMessage)
 
 
-  categoryUrl <- argument %>% dplyr::pull(.data$categoryUrl)
+  categoryUrl <- argument %>%
+    dplyr::pull(.data$categoryUrl)
   url <- paste(baseUrl, categoryUrl, "?size=100000000", sep = "/")
   request <- .GET(url)
 
@@ -57,9 +59,9 @@ getDefinitionsMetadata <- function(baseUrl, category) {
                 " definitions not found. Unable to retrieve meta data. Please try later."))
   }
 
-  # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis' the
-  # return are nested within 'content' group1 and group2 are categories that are different based on how
-  # WebApi is implemented.
+  # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis'
+  # the return are nested within 'content' group1 and group2 are categories that are different
+  # based on how WebApi is implemented.
   group1 <- c("conceptSet", "cohort", "incidenceRate", "estimation", "prediction")
   group2 <- c("characterization", "pathway")
   if (category %in% group1) {
@@ -67,7 +69,10 @@ getDefinitionsMetadata <- function(baseUrl, category) {
   } else if (category %in% group2) {
     request <- httr::content(request)$content
   }
-  request <- tidyr::tibble(request = request) %>% tidyr::unnest_wider(request) %>% utils::type.convert(as.is = TRUE,
-                                                                                                       dec = ".") %>% .standardizeColumnNames() %>% .normalizeDateAndTimeTypes()
+  request <- tidyr::tibble(request = request) %>%
+    tidyr::unnest_wider(request) %>%
+    utils::type.convert(as.is = TRUE, dec = ".") %>%
+    .standardizeColumnNames() %>%
+    .normalizeDateAndTimeTypes()
   return(request)
 }

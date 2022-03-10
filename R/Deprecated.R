@@ -47,7 +47,8 @@ getCohortDefinitionExpression <- function(cohortId, baseUrl) {
   1) validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = 15873)
   2) validJsonExpression <- RJSONIO::toJSON(cohortDefinition$expression)
   3) save validJsonExpression object
-  ", old = as.character(sys.call(sys.parent()))[1L])
+  ",
+    old = as.character(sys.call(sys.parent()))[1L])
   validJsonExpression <- getCohortDefinition(baseUrl = baseUrl, cohortId = cohortId)
   validJsonExpression <- RJSONIO::toJSON(validJsonExpression$expression)
   return(validJsonExpression)
@@ -73,7 +74,8 @@ getCohortDefinitionName <- function(baseUrl, cohortId, formatName = FALSE) {
   .Deprecated(new = "getCohortDefinition",
               package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use getCohortDefinition",
-              old = as.character(sys.call(sys.parent()))[1L])
+
+    old = as.character(sys.call(sys.parent()))[1L])
   name <- getCohortDefinition(baseUrl = baseUrl, cohortId = cohortId)$name
   if (formatName) {
     .formatName(name)
@@ -96,10 +98,12 @@ getCohortInclusionRulesAndCounts <- function(baseUrl, cohortId, sourceKey) {
   .Deprecated(new = "getCohortGenerationReport",
               package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use getCohortResults",
-              old = as.character(sys.call(sys.parent()))[1L])
+
+    old = as.character(sys.call(sys.parent()))[1L])
 
   resultsAll <- getCohortResults(cohortId = cohortId, baseUrl = baseUrl)
-  return(resultsAll$inclusionRuleStats %>% dplyr::filter(sourceKey == !!sourceKey))
+  return(resultsAll$inclusionRuleStats %>%
+    dplyr::filter(sourceKey == !!sourceKey))
 }
 
 
@@ -127,7 +131,8 @@ getCohortDefinitionSql <- function(cohortId, baseUrl, generateStats = TRUE) {
   .Deprecated(new = "getCohortDefinitionSql",
               package = "ROhdsiWebApi",
               msg = "This function has been deprecated. As an alternative please use getCohortSql",
-              old = as.character(sys.call(sys.parent()))[1L])
+
+    old = as.character(sys.call(sys.parent()))[1L])
 
   cohortDefinition <- getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl)
   sql <- getCohortSql(cohortDefinition = cohortDefinition,

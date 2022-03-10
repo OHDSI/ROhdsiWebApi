@@ -51,17 +51,19 @@ insertCohortDefinitionInPackage <- function(cohortId,
                                             name = NULL,
                                             jsonFolder = "inst/cohorts",
                                             sqlFolder = "inst/sql/sql_server",
-                                            baseUrl,
-                                            generateStats = FALSE) {
+
+  baseUrl, generateStats = FALSE) {
   .checkBaseUrl(baseUrl)
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertLogical(generateStats, add = errorMessage)
   checkmate::assertInt(cohortId, add = errorMessage)
   checkmate::reportAssertions(errorMessage)
-  
+
   object <- getCohortDefinition(cohortId = cohortId, baseUrl = baseUrl)
   if (is.null(name)) {
-    name <- object$name %>% as.character() %>% trimws()
+    name <- object$name %>%
+      as.character() %>%
+      trimws()
   }
   if (!file.exists(jsonFolder)) {
     dir.create(jsonFolder, recursive = TRUE)
@@ -69,9 +71,9 @@ insertCohortDefinitionInPackage <- function(cohortId,
   jsonFileName <- file.path(jsonFolder, paste(name, "json", sep = "."))
   json <- .toJSON(object$expression, pretty = TRUE)
   SqlRender::writeSql(sql = json, targetFile = jsonFileName)
-  
+
   writeLines(paste("- Created JSON file:", jsonFileName))
-  
+
   # Fetch SQL
   sql <- getCohortSql(baseUrl = baseUrl, cohortDefinition = object, generateStats = generateStats)
   if (!file.exists(sqlFolder)) {
@@ -109,21 +111,17 @@ insertCohortDefinitionInPackage <- function(cohortId,
 #' @export
 insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/CohortsToCreate.csv",
                                                baseUrl,
-                                               jsonFolder = "inst/cohorts",
-                                               sqlFolder = "inst/sql/sql_server",
-                                               rFileName = "R/CreateCohorts.R",
-                                               insertTableSql = TRUE,
-                                               insertCohortCreationR = TRUE,
-                                               generateStats = FALSE,
-                                               packageName) {
+
+  jsonFolder = "inst/cohorts", sqlFolder = "inst/sql/sql_server", rFileName = "R/CreateCohorts.R",
+  insertTableSql = TRUE, insertCohortCreationR = TRUE, generateStats = FALSE, packageName) {
   .checkBaseUrl(baseUrl)
-  
+
   if (insertCohortCreationR && !insertTableSql)
     stop("Need to insert table SQL in order to generate R code")
-  # if (insertCohortCreationR && generateStats && jsonFolder != "inst/cohorts")
-    # stop("When generating R code and generating stats, the jsonFolder must be 'inst/cohorts'")
-  # if (insertCohortCreationR && sqlFolder != "inst/sql/sql_server")
-    # stop("When generating R code, the sqlFolder must be 'inst/sql/sql_server'")
+  # if (insertCohortCreationR && generateStats && jsonFolder != 'inst/cohorts') stop('When
+  # generating R code and generating stats, the jsonFolder must be 'inst/cohorts'') if
+  # (insertCohortCreationR && sqlFolder != 'inst/sql/sql_server') stop('When generating R code, the
+  # sqlFolder must be 'inst/sql/sql_server'')
   if (insertCohortCreationR && !grepl("inst", fileName))
     stop("When generating R code, the input CSV file must be in the inst folder.")
   checkInputFileEncoding(fileName)
@@ -131,48 +129,51 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
                                      col_types = readr::cols(),
                                      guess_max = min(1e+07))
   colnamesInCohortsToCreate <- colnames(cohortsToCreate)
-  
+
   if (!"webApiCohortId" %in% colnamesInCohortsToCreate) {
     if (!"atlasId" %in% colnamesInCohortsToCreate) {
       stop("Cannot find either webApiCohortId or atlasId in Cohorts to create file.")
     } else {
-      cohortsToCreate <- cohortsToCreate %>% dplyr::mutate(webApiCohortId = .data$atlasId)
+      cohortsToCreate <- cohortsToCreate %>%
+        dplyr::mutate(webApiCohortId = .data$atlasId)
     }
   }
   if (!"atlasId" %in% colnamesInCohortsToCreate) {
-    cohortsToCreate <- cohortsToCreate %>% dplyr::mutate(atlasId = .data$webApiCohortId)
+    cohortsToCreate <- cohortsToCreate %>%
+      dplyr::mutate(atlasId = .data$webApiCohortId)
   }
-  
-  checkIfWebApiCohortIdAndAtlasIDAreSame <- cohortsToCreate %>% dplyr::filter(.data$webApiCohortId !=
-                                                                                .data$atlasId)
+
+  checkIfWebApiCohortIdAndAtlasIDAreSame <- cohortsToCreate %>%
+    dplyr::filter(.data$webApiCohortId != .data$atlasId)
   if (nrow(checkIfWebApiCohortIdAndAtlasIDAreSame) > 0) {
     stop("In CohortsToCreate file webApiCohortId and atlasId do not match. Please provide either webApiCohortId or atlasId.")
   }
-  
+
   if (!"name" %in% colnamesInCohortsToCreate) {
-    cohortsToCreate <- cohortsToCreate %>% dplyr::mutate(name = as.character(.data$webApiCohortId))
+    cohortsToCreate <- cohortsToCreate %>%
+      dplyr::mutate(name = as.character(.data$webApiCohortId))
   } else {
-    cohortsToCreate <- cohortsToCreate %>% dplyr::mutate(name = .data$name %>% as.character() %>%
-                                                           trimws())
+    cohortsToCreate <- cohortsToCreate %>%
+      dplyr::mutate(name = .data$name %>%
+        as.character() %>%
+        trimws())
   }
-  
+
   # Inserting cohort JSON and SQL
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Inserting cohort:", cohortsToCreate$name[i]))
     insertCohortDefinitionInPackage(cohortId = cohortsToCreate$webApiCohortId[i],
                                     name = cohortsToCreate$name[i],
-                                    baseUrl = baseUrl,
-                                    jsonFolder = jsonFolder,
-                                    sqlFolder = sqlFolder,
-                                    generateStats = generateStats)
+
+      baseUrl = baseUrl, jsonFolder = jsonFolder, sqlFolder = sqlFolder, generateStats = generateStats)
   }
-  
+
   # Insert SQL to create empty cohort table
   if (insertTableSql) {
     writeLines("Creating SQL to create empty cohort table")
     .insertSqlForCohortTableInPackage(statsTables = generateStats, sqlFolder = sqlFolder)
   }
-  
+
   # Store information on inclusion rules
   if (generateStats) {
     writeLines("Storing information on inclusion rules")
@@ -186,7 +187,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
     }
     writeLines(paste("- Inclusion rules not stored, as no rules found"))
   }
-  
+
   # Generate R code to create cohorts
   if (insertCohortCreationR) {
     writeLines("Generating R code to create cohorts")
@@ -205,9 +206,7 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
       rCode <- gsub("#stats_start#.*?#stats_end#", "", rCode)
     }
     readr::write_file(rCode, rFileName)
-    # fileConn <- file(rFileName)
-    # writeChar(rCode, fileConn, eos = NULL)
-    # close(fileConn)
+    # fileConn <- file(rFileName) writeChar(rCode, fileConn, eos = NULL) close(fileConn)
     writeLines(paste("- Created R file:", rFileName))
   }
 }
@@ -222,9 +221,8 @@ insertCohortDefinitionSetInPackage <- function(fileName = "inst/settings/Cohorts
       if (nrOfRules > 0) {
         cohortName <- sub(".json", "", file)
         for (i in 1:nrOfRules) {
-          rules <- dplyr::bind_rows(rules, tidyr::tibble(cohortName = cohortName,
-                                                         ruleSequence = i - 1,
-                                                         ruleName = definition$InclusionRules[[i]]$name))
+          rules <- dplyr::bind_rows(rules, tidyr::tibble(cohortName = cohortName, ruleSequence = i -
+          1, ruleName = definition$InclusionRules[[i]]$name))
         }
       }
     }
