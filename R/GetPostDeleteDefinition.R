@@ -102,7 +102,6 @@ getDefinition <- function(id, baseUrl, category) {
 
 
 #' Post a definition into WebApi \lifecycle{maturing}
-#' Bespoke modification by Jack Brewster for specific workflow from Capr output
 #' @details
 #' Post a definition into WebAPI. Currently only cohort and concept-set are supported.
 #'
