@@ -15,7 +15,7 @@
 # limitations under the License.
 
 #' Get concepts \lifecycle{stable}
-#' @template vocabularySourceKey
+#' @template VocabularySourceKey
 #'
 #' @template BaseUrl
 #' @template SnakeCaseToCamelCase
@@ -68,7 +68,7 @@ getConcepts <- function(conceptIds,
 
 
 #' Get source concepts that map to standard concepts \lifecycle{stable}
-#' @template vocabularySourceKey
+#' @template VocabularySourceKey
 #' @template BaseUrl
 #' @template SnakeCaseToCamelCase
 #' @param conceptIds   A list of concept IDs referring to standard concepts.

@@ -22,7 +22,7 @@
 #' profile in tables or visualization.
 #'
 #' @template BaseUrl
-#' @template sourceKey
+#' @template SourceKey
 #' @param personId        The personId of the person whose profile is being reviewed
 #' @param indexCohortId   <OPTIONAL> Do you want to use a particular cohortId as the index cohort? If
 #'                        left NULL, the WebApi will identify the earliest cohort for the person by
