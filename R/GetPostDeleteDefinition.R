@@ -175,11 +175,11 @@ postDefinition <- function(baseUrl, name, category, definition) {
   
   # create expression in the structure required to POST or PUT
   if (category %in% c("conceptSet")) {
-    items <- convertConceptSetDefinitionToTable(conceptSetDefinition = definition) 
+    items <- convertConceptSetDefinitionToTable(conceptSetDefinition = definition)
+    
+    # if some fields are missing, add them. https://github.com/OHDSI/ROhdsiWebApi/issues/245
     colCheck <- c("isExcluded", "includeMapped", "includeDescendants")
-    
     append <- colCheck[!(colCheck %in% colnames(items))]
-    
     items[,append] <- FALSE
     
     items <- items %>% dplyr::mutate(id = dplyr::row_number(),
