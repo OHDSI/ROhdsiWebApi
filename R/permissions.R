@@ -21,30 +21,50 @@
 #' @details
 #' The function will call the webservice to assign permissions to a cohort definition for the given userId.
 #'
-#' @param baseUrl     The URL to WebAPI
+#' @template baseUrl
 #' @param cohortId    The ID of the cohort definition
 #' @param userId      The userId to grant permission
-#' @param permission  The permission type to assign.  Can be READ or WRITE. Defaults to "WRITE".    
+#' @param permission  The permission type to assign.  Can be "READ" or "WRITE". Defaults to "WRITE".    
 #'
 #' @examples
 #' \dontrun{
-#' getCohortSql(CohortDefinition = (getCohortDefinition(cohortId = 13242, baseUrl = baseUrl)),
-#'              baseUrl = "http://server.org:80/WebAPI")
+#' setCohortPermission(baseUrl, cohortId, userId, permission = "WRITE") 
 #' }
 #' @export
-addCohortPermission <- function(baseUrl, cohortId, userId, permission="WRITE") {
+setCohortPermission <- function(baseUrl, cohortId, userId, permission = "WRITE") {
   
+  .checkBaseUrl(baseUrl)
   if (!permission %in% c("READ", "WRITE")) {
     stop(paste0("Invalid Permission Type:", permission, ".  Valid types are READ or WRITE."))
   }
   
   url <- paste0(baseUrl, "/permission/access/COHORT_DEFINITION/", cohortId, "/role/",userId)
-  payload <- paste0("{\"accessType\":\"", permission, "\"}")
-  httpheader <- c(Accept = "application/json; charset=UTF-8", `Content-Type` = "application/json")
-
-  response <- .postJson(url, payload)
+  response <- .postJson(url, paste0('{"accessType":"', permission, '"}'))
+  
   if (response$status_code != 204) {
     stop(paste0("Error: Failed to assign permissions"))
   }
-  invisible()
+  invisible(response)
+}
+
+#' Get user permission 
+#' 
+#' This function only applies to WebAPI instances with security enabled. If security is not
+#' emabled then it will return an error.
+#'
+#' @template baseUrl 
+#'
+#' @return A dataframe with user ID, user name, and permission information
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' getUserPermissions(baseUrl = "http://server.org:80/WebAPI")
+#' }
+getUserPermission <- function(baseUrl) {
+  .checkBaseUrl(baseUrl)
+  r <- .GET(paste0(baseUrl, "/user"))
+  
+  dplyr::tibble(user = httr::content(r)) %>% 
+    tidyr::unnest_wider(col = "user")
 }
