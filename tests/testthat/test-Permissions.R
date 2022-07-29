@@ -1,5 +1,5 @@
 
-testthat("get and set permsissions works", {
+test_that("get and set permsissions works", {
   baseUrl <- Sys.getenv("WEBAPI_TEST_SECURE_WEBAPI_URL") 
   
   authorizeWebApi(baseUrl = baseUrl,

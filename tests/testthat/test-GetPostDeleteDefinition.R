@@ -13,7 +13,7 @@ with_mock_dir("mocks/GetPostDeleteDefinition", {
     expect_s3_class(response, "data.frame")
     expect_equal(nrow(response), 1)
     expect_equal(response$name, "temporary test cohort")
-    # Delete the cohortran
+    # Delete the cohort
     expect_output(deleteDefinition(response$id, baseUrl, "cohort"), "Success")
     
   })
