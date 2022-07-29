@@ -34,6 +34,17 @@
 setCohortPermission <- function(baseUrl, cohortId, userId, permission = "WRITE") {
   
   .checkBaseUrl(baseUrl)
+  if(!securityEnabled(baseUrl)) {
+    message("Security is not enabled so permissions cannot be set.")
+    return(invisible(NULL))
+  } 
+  
+  if(getWebApiVersion(baseUrl) < "2.10") {
+    message("setCohortPermission can only be used with WebAPI version 2.10 and later")
+    return(invisible(NULL))
+  }
+  
+  
   if (!permission %in% c("READ", "WRITE")) {
     stop(paste0("Invalid Permission Type:", permission, ".  Valid types are READ or WRITE."))
   }
@@ -63,8 +74,32 @@ setCohortPermission <- function(baseUrl, cohortId, userId, permission = "WRITE")
 #' }
 getUserPermission <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
+  if(!securityEnabled(baseUrl)) {
+    message("Security is not enabled so there are no permissions to return.")
+    return(invisible(NULL))
+  } 
   r <- .GET(paste0(baseUrl, "/user"))
   
   dplyr::tibble(user = httr::content(r)) %>% 
     tidyr::unnest_wider(col = "user")
 }
+
+
+#' Is WebAPI using authentication/authorization
+#'
+#' @template baseUrl 
+#'
+#' @return TRUE or FALSE
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' securityEnabled(baseUrl = "http://server.org:80/WebAPI")
+#' }
+securityEnabled <- function(baseUrl) {
+  .checkBaseUrl(baseUrl)
+  url <- paste0(baseUrl, "/info")
+  response <- httr::GET(url)
+  httr::content(response)$configuration$security$enabled
+}
+
