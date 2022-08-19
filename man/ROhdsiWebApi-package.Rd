@@ -6,9 +6,7 @@
 \alias{ROhdsiWebApi-package}
 \title{ROhdsiWebApi: Interacting With an OHDSI WebApi Instance}
 \description{
-ROhdsiWebApi is an R based interface to OHDSI WebAPI services, and performs GET/PULL/POST/DELETE calls via the WebApi. 
-  All objects starting from R or output to R - are analysis ready R-objects like list and data.frame. 
-  The package handles the intermediary steps by converting R-objects to JSON and vice versa.
+ROhdsiWebApi is an R based interface to OHDSI WebAPI services, and performs GET/PULL/POST/DELETE calls via the WebApi. All objects starting from R or output to R - are analysis ready R-objects like list and data.frame. The package handles the intermediary steps by converting R-objects to JSON and vice versa.
 }
 \seealso{
 Useful links:

@@ -1,8 +1,8 @@
 ROhdsiWebApi
-================
+============
 
 [![Build Status](https://github.com/OHDSI/ROhdsiWebApi/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/ROhdsiWebApi/actions?query=workflow%3AR-CMD-check)
-[![codecov.io](https://codecov.io/github/OHDSI/ROhdsiWebApi/coverage.svg?branch=master)](https://codecov.io/github/OHDSI/ROhdsiWebApi?branch=master)
+[![codecov.io](https://codecov.io/github/OHDSI/ROhdsiWebApi/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/ROhdsiWebApi?branch=main)
 
 ROhdsiWebApi is part of [HADES](https://ohdsi.github.io/Hades).
 
@@ -89,10 +89,10 @@ website](https://ohdsi.github.io/ROhdsiWebApi).
 
 PDF versions of the documentation are also available:
 
-  - [Vignette](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/inst/doc/UsingROhdsiWebApi.pdf)
+  - [Vignette](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/main/inst/doc/UsingROhdsiWebApi.pdf)
 
   - [Package
-    manual](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/master/extras/ROhdsiWebApi.pdf)
+    manual](https://raw.githubusercontent.com/OHDSI/ROhdsiWebApi/main/extras/ROhdsiWebApi.pdf)
 
 ## Support
 
