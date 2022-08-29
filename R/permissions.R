@@ -100,3 +100,36 @@ securityEnabled <- function(baseUrl) {
   httr::content(response)$configuration$security$enabled
 }
 
+
+#' Obtains users for a specific WebAPI user role. Requires security enabled WebAPI
+#' \lifecycle{experimental}
+#' @details
+#' For a security enabled WebAPI, obtains the user names for a specified Atlas user role. Role Id is
+#' set in WebAPI sec_role table
+#'
+#' @template BaseUrl
+#' @param roleId   The role id as defined in WebAPI sec_role table
+#' @return
+#' A data frame of user information for the WebAPI role.
+#'
+#' @examples
+#' \dontrun{
+#' getUsersFromRole(baseUrl = "http://server.org:80/WebAPI", roleId = 10)
+#' }
+#' @export
+getUsersFromRole <- function(baseUrl, roleId) {
+  
+  .checkBaseUrl(baseUrl)
+  url <- sprintf("%s/role/%s/users", baseUrl, roleId)
+  request <- .GET(url)
+  httr::stop_for_status(request)
+  
+  json <- .GET(url)
+  users <- httr::content(json)
+  
+  result <- lapply(users, function(u) {
+    data.frame(id = u$id, login = u$login, name = u$name)
+  })
+  return(do.call(rbind, result) %>% 
+           dplyr::tibble())
+}

@@ -31,3 +31,18 @@ test_that("get my permissions", {
   expect_gt(nrow(df), 0)
   expect_true(all(c("id", "permission", "description") %in% names(df)))
 })
+
+test_that("get Users From Role", {
+  baseUrl <- Sys.getenv("WEBAPI_TEST_SECURE_WEBAPI_URL") 
+  
+  authorizeWebApi(baseUrl = baseUrl,
+                  authMethod = "db",
+                  webApiUsername = Sys.getenv("WEBAPI_TEST_ADMIN_USER_NAME"),
+                  webApiPassword = Sys.getenv("WEBAPI_TEST_ADMIN_USER_PASSWORD"))
+  
+  df <- getUsersFromRole(baseUrl = baseUrl, roleId = 10) 
+  
+  expect_s3_class(df, "data.frame")
+  expect_gt(nrow(df), 0)
+  expect_true(all(c("id", "login", "name") %in% names(df)))
+})
