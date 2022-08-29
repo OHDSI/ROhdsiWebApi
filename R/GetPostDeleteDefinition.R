@@ -301,22 +301,18 @@ updateDefinition <- function(definition, baseUrl, category) {
   if (content == 1) {
     stop(paste(definition$name, "Is not a valid cohort name."))
   }
+  
+  if (category == "cohort") {
+    jsonExpression <- .toJSON(definition$expression)
+    checkUrl <- paste(baseUrl, argument$categoryUrl, "check", sep = "/")
 
-  # # Check definition is ok 
-  
-  ## why??  can't you save a definition with errors?
-  
-  # if (category == "cohort") {
-  #   jsonExpression <- .toJSON(definition$expression)
-  #   checkUrl <- paste(baseUrl, argument$categoryUrl, "check", sep = "/")
-  # 
-  #   tryCatch({
-  #     response <- .postJson(checkUrl, jsonExpression)
-  #     content <- httr::content(response)
-  #   }, error = function (error) {
-  #       stop(paste("Error with", category, "definition:", error))
-  #   })
-  # }
+    tryCatch({
+      response <- .postJson(checkUrl, jsonExpression)
+      content <- httr::content(response)
+    }, error = function (error) {
+        stop(paste("Error with", category, "definition:", error))
+    })
+  }
 
   jsonExpression <- .toJSON(definition)
   response <- .putJson(entryUrl, jsonExpression)
