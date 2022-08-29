@@ -4,7 +4,7 @@
 \alias{setCohortPermission}
 \title{Assign cohort definition permissions to user. \lifecycle{experimental}}
 \usage{
-setCohortPermission(baseUrl, cohortId, userName, permission = "WRITE")
+setCohortPermission(baseUrl, cohortId, userId, permission = "READ")
 }
 \arguments{
 \item{baseUrl}{The base URL for the WebApi instance, for example:
@@ -12,7 +12,8 @@ setCohortPermission(baseUrl, cohortId, userName, permission = "WRITE")
 
 \item{cohortId}{The ID of the cohort definition}
 
-\item{userName}{The userName to grant permission}
+\item{userId}{The id to grant permission. You can find out the id from userName 
+as getUserIdFromUserName(baseUrl = baseUrl, userName = "myId")}
 
 \item{permission}{The permission type to assign.  Can be "READ" or "WRITE". Defaults to "WRITE".}
 }
@@ -24,6 +25,6 @@ The function will call the webservice to assign permissions to a cohort definiti
 }
 \examples{
 \dontrun{
-setCohortPermission(baseUrl, cohortId, userName, permission = "WRITE") 
+setCohortPermission(baseUrl, cohortId, userId = getUserIdFromUserName(baseUrl = baseUrl, userName = "myId"), permission = "READ")
 }
 }

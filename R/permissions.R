@@ -142,45 +142,75 @@ getUsersFromRole <- function(baseUrl, roleId) {
 #'
 #' @template baseUrl
 #' @param cohortId    The ID of the cohort definition
-#' @param userName      The userName to grant permission
-#' @param permission  The permission type to assign.  Can be "READ" or "WRITE". Defaults to "WRITE".    
+#' @param userId      The id to grant permission. You can find out the id from userName 
+#'                    as getUserIdFromUserName(baseUrl = baseUrl, userName = "myId")
+#' @param permission  The permission type to assign.  Can be "READ" or "WRITE". Defaults to "WRITE".
 #'
 #' @examples
 #' \dontrun{
-#' setCohortPermission(baseUrl, cohortId, userName, permission = "WRITE") 
+#' setCohortPermission(baseUrl, cohortId, userId = getUserIdFromUserName(baseUrl = baseUrl, userName = "myId"), permission = "READ")
 #' }
 #' @export
-setCohortPermission <- function(baseUrl, cohortId, userName, permission = "WRITE") {
-  
+setCohortPermission <-
+  function(baseUrl, cohortId, userId, permission = "READ") {
+    .checkBaseUrl(baseUrl)
+    if (!securityEnabled(baseUrl)) {
+      message("Security is not enabled so permissions cannot be set.")
+      return(invisible(NULL))
+    }
+    
+    if (getWebApiVersion(baseUrl) < "2.10") {
+      message("setCohortPermission can only be used with WebAPI version 2.10 and later")
+      return(invisible(NULL))
+    }
+    
+    if (!permission %in% c("READ", "WRITE")) {
+      stop(paste0(
+        "Invalid Permission Type:",
+        permission,
+        ".  Valid types are READ or WRITE."
+      ))
+    }
+    
+    url <-
+      paste0(baseUrl,
+             "/permission/access/COHORT_DEFINITION/",
+             cohortId,
+             "/role/",
+             userId)
+    response <-
+      .postJson(url, paste0('{"accessType":"', permission, '"}'))
+    
+    if (response$status_code != 204) {
+      stop(paste0("Error: Failed to assign permissions"))
+    }
+    invisible(response)
+  }
+
+
+#' Get the user id for a given user name. \lifecycle{stable}
+#'
+#' @details
+#' The function will call the WebApi. to assign permissions to a cohort definition for the given userId.
+#'
+#' @template baseUrl
+#' @param userName  A user name that is used to authenticate with WebApi.
+#'
+#' @examples
+#' \dontrun{
+#' getUserIdFromUserName(baseUrl, userName)
+#' }
+#' @export
+getUserIdFromUserName <- function(baseUrl, userName) {
   .checkBaseUrl(baseUrl)
-  if(!securityEnabled(baseUrl)) {
+  if (!securityEnabled(baseUrl)) {
     message("Security is not enabled so permissions cannot be set.")
     return(invisible(NULL))
-  } 
-  
-  if(getWebApiVersion(baseUrl) < "2.10") {
-    message("setCohortPermission can only be used with WebAPI version 2.10 and later")
-    return(invisible(NULL))
   }
   
+  userInformation <- getUserInformation(baseUrl = baseUrl) %>%
+    dplyr::filter(.data$login %in% c(userName)) %>% 
+    dplyr::pull(.data$id)
   
-  if (!permission %in% c("READ", "WRITE")) {
-    stop(paste0("Invalid Permission Type:", permission, ".  Valid types are READ or WRITE."))
-  }
-  
-  userInformation <- getUserInformation(baseUrl = baseUrl) %>% 
-    dplyr::filter(.data$login == userName)
-  
-  if (nrow(userInformation) == 0) {
-    stop(paste0(userName, " not found in webapi."))
-  }
-  userId <- userInformation$id
-  
-  url <- paste0(baseUrl, "/permission/access/COHORT_DEFINITION/", cohortId, "/role/",userId)
-  response <- .postJson(url, paste0('{"accessType":"', permission, '"}'))
-  
-  if (response$status_code != 204) {
-    stop(paste0("Error: Failed to assign permissions"))
-  }
-  invisible(response)
+  return(userInformation)
 }
