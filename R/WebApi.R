@@ -61,7 +61,7 @@ getWebApiVersion <- function(baseUrl) {
   
   url <- paste0(baseUrl, "/info")
   
-  response <- httr::GET(url)
+  response <- .GET(url)
   if (response$status %in% c(200)) {
     version <- (httr::content(response))$version
   } else {
