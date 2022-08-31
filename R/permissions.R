@@ -135,24 +135,23 @@ getUsersFromRole <- function(baseUrl, roleId) {
 }
 
 
-#' Assign cohort definition permissions to user. \lifecycle{experimental}
+#' Assign cohort definition permissions to a role \lifecycle{experimental}
 #'
 #' @details
-#' The function will call the webservice to assign permissions to a cohort definition for the given userId.
+#' The function will call the webservice to assign permissions to a cohort definition for a roleId.
 #'
 #' @template baseUrl
 #' @param cohortId    The ID of the cohort definition
-#' @param userId      The id to grant permission. You can find out the id from userName 
-#'                    as getUserIdFromUserName(baseUrl = baseUrl, userName = "myId")
+#' @param roleId      The role id to grant permission. 
 #' @param permission  The permission type to assign.  Can be "READ" or "WRITE". Defaults to "WRITE".
 #'
 #' @examples
 #' \dontrun{
-#' setCohortPermission(baseUrl, cohortId, userId = getUserIdFromUserName(baseUrl = baseUrl, userName = "myId"), permission = "READ")
+#' setCohortPermission(baseUrl, cohortId, roleId = 123, permission = "READ")
 #' }
 #' @export
 setCohortPermission <-
-  function(baseUrl, cohortId, userId, permission = "READ") {
+  function(baseUrl, cohortId, roleId, permission = "READ") {
     .checkBaseUrl(baseUrl)
     if (!securityEnabled(baseUrl)) {
       message("Security is not enabled so permissions cannot be set.")
@@ -177,7 +176,7 @@ setCohortPermission <-
              "/permission/access/COHORT_DEFINITION/",
              cohortId,
              "/role/",
-             userId)
+             roleId)
     response <-
       .postJson(url, paste0('{"accessType":"', permission, '"}'))
     
@@ -186,31 +185,3 @@ setCohortPermission <-
     }
     invisible(response)
   }
-
-
-#' Get the user id for a given user name. \lifecycle{stable}
-#'
-#' @details
-#' The function will call the WebApi. to assign permissions to a cohort definition for the given userId.
-#'
-#' @template baseUrl
-#' @param userName  A user name that is used to authenticate with WebApi.
-#'
-#' @examples
-#' \dontrun{
-#' getUserIdFromUserName(baseUrl, userName)
-#' }
-#' @export
-getUserIdFromUserName <- function(baseUrl, userName) {
-  .checkBaseUrl(baseUrl)
-  if (!securityEnabled(baseUrl)) {
-    message("Security is not enabled so permissions cannot be set.")
-    return(invisible(NULL))
-  }
-  
-  userInformation <- getUserInformation(baseUrl = baseUrl) %>%
-    dplyr::filter(.data$login %in% c(userName)) %>% 
-    dplyr::pull(.data$id)
-  
-  return(userInformation)
-}
