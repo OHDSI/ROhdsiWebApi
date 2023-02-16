@@ -26,7 +26,11 @@ Takes the definition as a parameter and converts it to json. This is the full de
 }
 \examples{
 \dontrun{
-definition <- getDefinition(id = 13242, baseUrl = "http://server.org:80/WebAPI", category = "cohort")
+definition <- getDefinition(
+  id = 13242, 
+  baseUrl = "http://server.org:80/WebAPI", 
+  category = "cohort"
+)
 definition$name <- "My new name for this"
 updateDefinition(definition, baseUrl, category = "cohort")
 }

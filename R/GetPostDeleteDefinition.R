@@ -264,7 +264,11 @@ postDefinition <- function(baseUrl, name, category, definition) {
 #'                          converted to JSON expression by function and posted into the WebApi.
 #' @examples
 #' \dontrun{
-#' definition <- getDefinition(id = 13242, baseUrl = "http://server.org:80/WebAPI", category = "cohort")
+#' definition <- getDefinition(
+#'   id = 13242, 
+#'   baseUrl = "http://server.org:80/WebAPI", 
+#'   category = "cohort"
+#' )
 #' definition$name <- "My new name for this"
 #' updateDefinition(definition, baseUrl, category = "cohort")
 #' }

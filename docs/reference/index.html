@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.2</span>
       </span>
     </div>
 
@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,118 +66,164 @@
     </div>
 
     <table class="ref-index"><colgroup><col class="alias"><col class="title"></colgroup><tbody><tr><th colspan="2">
-          <h2 id="webapi">WebAPI <a href="#webapi" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions for interfacing with WebAPI</p>
+          <h2 id="all-functions">All functions <a href="#all-functions" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="getPriorityVocabularyKey.html">getPriorityVocabularyKey()</a></code> </p>
+          <p><code><a href="authorizeWebApi.html">authorizeWebApi()</a></code> </p>
         </td>
-        <td><p>Get Priority Vocabulary Source Key <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Authorize ROhdsiWebApi to access a protected instance of WebAPI Authorize the ROhdsiWebApi package
+to access WebApi on behalf of the user. This can be done with any of the auth methods described
+below. authorizeWebApi will use attempt to retrieve, cache, and update a token which will grant
+access to webAPI by all subsequent requests made by the package.</p></td>
       </tr><tr><td>
-          <p><code><a href="getWebApiVersion.html">getWebApiVersion()</a></code> </p>
+          <p><code><a href="cancelCharacterizationGeneration.html">cancelCharacterizationGeneration()</a></code> </p>
         </td>
-        <td><p>Get the WebAPI version number <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Cancel generation of Characterization id.</p></td>
       </tr><tr><td>
-          <p><code><a href="getCdmSources.html">getCdmSources()</a></code> </p>
-        </td>
-        <td><p>Get the data sources in the WebAPI instance <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="postDefinition.html">postDefinition()</a></code> </p>
-        </td>
-        <td><p>Post a definition into WebApi <a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="conceps">Conceps <a href="#conceps" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions for interfacing with concepts in Atlas</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="getConcepts.html">getConcepts()</a></code> </p>
-        </td>
-        <td><p>Get concepts <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="getSourceConcepts.html">getSourceConcepts()</a></code> </p>
-        </td>
-        <td><p>Get source concepts that map to standard concepts <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="concept-set">Concept Set <a href="#concept-set" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions for interfacing with concept sets in Atlas</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="convertConceptSetDefinitionToTable.html">convertConceptSetDefinitionToTable()</a></code> </p>
-        </td>
-        <td><p>Convert a concept set definition to a table <a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="createConceptSetWorkbook.html">createConceptSetWorkbook()</a></code> </p>
-        </td>
-        <td><p>Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook
-<a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="deleteConceptSetDefinition.html">deleteConceptSetDefinition()</a></code> </p>
-        </td>
-        <td><p>Delete ConceptSet id definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="detectConceptSetsByName.html">detectConceptSetsByName()</a></code> </p>
-        </td>
-        <td><p>Detect the presence of string matched ConceptSet definitions. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="existsConceptSetName.html">existsConceptSetName()</a></code> </p>
-        </td>
-        <td><p>Check if ConceptSet definition name exists. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="getConceptSetDefinition.html">getConceptSetDefinition()</a></code> </p>
-        </td>
-        <td><p>Get ConceptSet id definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="getConceptSetDefinitionBySourceKey.html">getConceptSetDefinitionBySourceKey()</a></code> </p>
-        </td>
-        <td><p>Fetch concept set definition from WebAPI by SourceKey <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="getConceptSetDefinitionsMetaData.html">getConceptSetDefinitionsMetaData()</a></code> </p>
-        </td>
-        <td><p>Get the meta data for ConceptSet definitions. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="isValidConceptSetId.html">isValidConceptSetId()</a></code> </p>
-        </td>
-        <td><p>is ConceptSet id a valid definition in the WebApi. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="postConceptSetDefinition.html">postConceptSetDefinition()</a></code> </p>
-        </td>
-        <td><p>Post ConceptSet definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="resolveConceptSet.html">resolveConceptSet()</a></code> </p>
-        </td>
-        <td><p>Resolve a concept set to the included standard concept IDs <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="updateConceptSetDefinition.html">updateConceptSetDefinition()</a></code> </p>
-        </td>
-        <td><p>Update a ConceptSet definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="cohort-defintion">Cohort Defintion <a href="#cohort-defintion" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions for interfacing with cohort definitions in Atlas</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
           <p><code><a href="cancelCohortGeneration.html">cancelCohortGeneration()</a></code> </p>
         </td>
         <td><p>Cancel generation of Cohort id.</p></td>
       </tr><tr><td>
+          <p><code><a href="cancelGeneration.html">cancelGeneration()</a></code> </p>
+        </td>
+        <td><p>Invoke generation.</p></td>
+      </tr><tr><td>
+          <p><code><a href="cancelIncidenceRateGeneration.html">cancelIncidenceRateGeneration()</a></code> </p>
+        </td>
+        <td><p>Cancel generation of IncidenceRate id.</p></td>
+      </tr><tr><td>
+          <p><code><a href="cancelPathwayGeneration.html">cancelPathwayGeneration()</a></code> </p>
+        </td>
+        <td><p>Cancel generation of Pathway id.</p></td>
+      </tr><tr><td>
+          <p><code><a href="checkInputFileEncoding.html">checkInputFileEncoding()</a></code> </p>
+        </td>
+        <td><p>Check character encoding of input file</p></td>
+      </tr><tr><td>
+          <p><code><a href="convertConceptSetDefinitionToTable.html">convertConceptSetDefinitionToTable()</a></code> </p>
+        </td>
+        <td><p>Convert a concept set definition to a table</p></td>
+      </tr><tr><td>
+          <p><code><a href="createConceptSetWorkbook.html">createConceptSetWorkbook()</a></code> </p>
+        </td>
+        <td><p>Save a set of concept sets expressions, included concepts, and mapped concepts into a workbook</p></td>
+      </tr><tr><td>
+          <p><code><a href="deleteCharacterizationDefinition.html">deleteCharacterizationDefinition()</a></code> </p>
+        </td>
+        <td><p>Delete Characterization id definition.</p></td>
+      </tr><tr><td>
           <p><code><a href="deleteCohortDefinition.html">deleteCohortDefinition()</a></code> </p>
         </td>
-        <td><p>Delete Cohort id definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Delete Cohort id definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="deleteConceptSetDefinition.html">deleteConceptSetDefinition()</a></code> </p>
+        </td>
+        <td><p>Delete ConceptSet id definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="deleteDefinition.html">deleteDefinition()</a></code> </p>
+        </td>
+        <td><p>Delete a definition id of a chosen category.</p></td>
+      </tr><tr><td>
+          <p><code><a href="deleteEstimationDefinition.html">deleteEstimationDefinition()</a></code> </p>
+        </td>
+        <td><p>Delete Estimation id definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="deleteIncidenceRateDefinition.html">deleteIncidenceRateDefinition()</a></code> </p>
+        </td>
+        <td><p>Delete IncidenceRate id definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="deletePathwayDefinition.html">deletePathwayDefinition()</a></code> </p>
+        </td>
+        <td><p>Delete Pathway id definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="deletePredictionDefinition.html">deletePredictionDefinition()</a></code> </p>
+        </td>
+        <td><p>Delete Prediction id definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="detectCharacterizationsByName.html">detectCharacterizationsByName()</a></code> </p>
+        </td>
+        <td><p>Detect the presence of string matched Characterization definitions.</p></td>
       </tr><tr><td>
           <p><code><a href="detectCohortsByName.html">detectCohortsByName()</a></code> </p>
         </td>
-        <td><p>Detect the presence of string matched Cohort definitions. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Detect the presence of string matched Cohort definitions.</p></td>
+      </tr><tr><td>
+          <p><code><a href="detectConceptSetsByName.html">detectConceptSetsByName()</a></code> </p>
+        </td>
+        <td><p>Detect the presence of string matched ConceptSet definitions.</p></td>
+      </tr><tr><td>
+          <p><code><a href="detectEstimationsByName.html">detectEstimationsByName()</a></code> </p>
+        </td>
+        <td><p>Detect the presence of string matched Estimation definitions.</p></td>
+      </tr><tr><td>
+          <p><code><a href="detectIncidenceRatesByName.html">detectIncidenceRatesByName()</a></code> </p>
+        </td>
+        <td><p>Detect the presence of string matched IncidenceRate definitions.</p></td>
+      </tr><tr><td>
+          <p><code><a href="detectPathwaysByName.html">detectPathwaysByName()</a></code> </p>
+        </td>
+        <td><p>Detect the presence of string matched Pathway definitions.</p></td>
+      </tr><tr><td>
+          <p><code><a href="detectPredictionsByName.html">detectPredictionsByName()</a></code> </p>
+        </td>
+        <td><p>Detect the presence of string matched Prediction definitions.</p></td>
+      </tr><tr><td>
+          <p><code><a href="existsCharacterizationName.html">existsCharacterizationName()</a></code> </p>
+        </td>
+        <td><p>Check if Characterization definition name exists.</p></td>
       </tr><tr><td>
           <p><code><a href="existsCohortName.html">existsCohortName()</a></code> </p>
         </td>
-        <td><p>Check if Cohort definition name exists. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Check if Cohort definition name exists.</p></td>
+      </tr><tr><td>
+          <p><code><a href="existsConceptSetName.html">existsConceptSetName()</a></code> </p>
+        </td>
+        <td><p>Check if ConceptSet definition name exists.</p></td>
+      </tr><tr><td>
+          <p><code><a href="existsEstimationName.html">existsEstimationName()</a></code> </p>
+        </td>
+        <td><p>Check if Estimation definition name exists.</p></td>
+      </tr><tr><td>
+          <p><code><a href="existsIncidenceRateName.html">existsIncidenceRateName()</a></code> </p>
+        </td>
+        <td><p>Check if IncidenceRate definition name exists.</p></td>
+      </tr><tr><td>
+          <p><code><a href="existsPathwayName.html">existsPathwayName()</a></code> </p>
+        </td>
+        <td><p>Check if Pathway definition name exists.</p></td>
+      </tr><tr><td>
+          <p><code><a href="existsPredictionName.html">existsPredictionName()</a></code> </p>
+        </td>
+        <td><p>Check if Prediction definition name exists.</p></td>
       </tr><tr><td>
           <p><code><a href="exportCohortDefinitionSet.html">exportCohortDefinitionSet()</a></code> </p>
         </td>
         <td><p>Export cohort definition set from WebAPI</p></td>
       </tr><tr><td>
+          <p><code><a href="getCdmSources.html">getCdmSources()</a></code> </p>
+        </td>
+        <td><p>Get the data sources in the WebAPI instance</p></td>
+      </tr><tr><td>
+          <p><code><a href="getCharacterizationDefinition.html">getCharacterizationDefinition()</a></code> </p>
+        </td>
+        <td><p>Get Characterization id definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="getCharacterizationDefinitionsMetaData.html">getCharacterizationDefinitionsMetaData()</a></code> </p>
+        </td>
+        <td><p>Get the meta data for Characterization definitions.</p></td>
+      </tr><tr><td>
+          <p><code><a href="getCharacterizationGenerationInformation.html">getCharacterizationGenerationInformation()</a></code> </p>
+        </td>
+        <td><p>Get generation information for Characterization id.</p></td>
+      </tr><tr><td>
+          <p><code><a href="getCharacterizationResults.html">getCharacterizationResults()</a></code> </p>
+        </td>
+        <td><p>Get results for a Characterization Id.</p></td>
+      </tr><tr><td>
           <p><code><a href="getCohortDefinition.html">getCohortDefinition()</a></code> </p>
         </td>
-        <td><p>Get Cohort id definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Get Cohort id definition.</p></td>
       </tr><tr><td>
           <p><code><a href="getCohortDefinitionExpression.html">getCohortDefinitionExpression()</a></code> </p>
         </td>
@@ -189,7 +235,7 @@
       </tr><tr><td>
           <p><code><a href="getCohortDefinitionsMetaData.html">getCohortDefinitionsMetaData()</a></code> </p>
         </td>
-        <td><p>Get the meta data for Cohort definitions. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Get the meta data for Cohort definitions.</p></td>
       </tr><tr><td>
           <p><code><a href="getCohortDefinitionSql.html">getCohortDefinitionSql()</a></code> </p>
         </td>
@@ -211,93 +257,49 @@
         </td>
         <td><p>Get SQL query for Cohort definition.</p></td>
       </tr><tr><td>
-          <p><code><a href="insertCohortDefinitionInPackage.html">insertCohortDefinitionInPackage()</a></code> </p>
+          <p><code><a href="getConcepts.html">getConcepts()</a></code> </p>
         </td>
-        <td><p>Load a cohort definition and insert it into this package <a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
+        <td><p>Get concepts</p></td>
       </tr><tr><td>
-          <p><code><a href="insertCohortDefinitionSetInPackage.html">insertCohortDefinitionSetInPackage()</a></code> </p>
+          <p><code><a href="getConceptSetDefinition.html">getConceptSetDefinition()</a></code> </p>
         </td>
-        <td><p>Insert a set of cohort definitions into package</p></td>
+        <td><p>Get ConceptSet id definition.</p></td>
       </tr><tr><td>
-          <p><code><a href="invokeCohortGeneration.html">invokeCohortGeneration()</a></code> </p>
+          <p><code><a href="getConceptSetDefinitionBySourceKey.html">getConceptSetDefinitionBySourceKey()</a></code> </p>
         </td>
-        <td><p>Invoke generation of Cohort id.</p></td>
+        <td><p>Fetch concept set definition from WebAPI by SourceKey</p></td>
       </tr><tr><td>
-          <p><code><a href="isValidCohortId.html">isValidCohortId()</a></code> </p>
+          <p><code><a href="getConceptSetDefinitionsMetaData.html">getConceptSetDefinitionsMetaData()</a></code> </p>
         </td>
-        <td><p>is Cohort id a valid definition in the WebApi. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Get the meta data for ConceptSet definitions.</p></td>
       </tr><tr><td>
-          <p><code><a href="postCohortDefinition.html">postCohortDefinition()</a></code> </p>
+          <p><code><a href="getDefinition.html">getDefinition()</a></code> </p>
         </td>
-        <td><p>Post Cohort definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
+        <td><p>Get the definition for an id of chosen category in WebApi.</p></td>
       </tr><tr><td>
-          <p><code><a href="updateCohortDefinition.html">updateCohortDefinition()</a></code> </p>
+          <p><code><a href="getDefinitionsMetadata.html">getDefinitionsMetadata()</a></code> </p>
         </td>
-        <td><p>Update a Cohort definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="estimation">Estimation <a href="#estimation" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions for interfacing with estimation definitions in Atlas</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="deleteEstimationDefinition.html">deleteEstimationDefinition()</a></code> </p>
-        </td>
-        <td><p>Delete Estimation id definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="detectEstimationsByName.html">detectEstimationsByName()</a></code> </p>
-        </td>
-        <td><p>Detect the presence of string matched Estimation definitions. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="existsEstimationName.html">existsEstimationName()</a></code> </p>
-        </td>
-        <td><p>Check if Estimation definition name exists. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Retrieve the meta data for WebApi definitions of a certain category</p></td>
       </tr><tr><td>
           <p><code><a href="getEstimationDefinition.html">getEstimationDefinition()</a></code> </p>
         </td>
-        <td><p>Get Estimation id definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Get Estimation id definition.</p></td>
       </tr><tr><td>
           <p><code><a href="getEstimationDefinitionsMetaData.html">getEstimationDefinitionsMetaData()</a></code> </p>
         </td>
-        <td><p>Get the meta data for Estimation definitions. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Get the meta data for Estimation definitions.</p></td>
       </tr><tr><td>
-          <p><code><a href="isValidEstimationId.html">isValidEstimationId()</a></code> </p>
+          <p><code><a href="getGenerationInformation.html">getGenerationInformation()</a></code> </p>
         </td>
-        <td><p>is Estimation id a valid definition in the WebApi. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="postEstimationDefinition.html">postEstimationDefinition()</a></code> </p>
-        </td>
-        <td><p>Post Estimation definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="cohort-characterization">Cohort Characterization <a href="#cohort-characterization" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions for interfacing with cohort characterizations in Atlas</p>
-        </th>
-      </tr></tbody><tbody></tbody><tbody><tr><th colspan="2">
-          <h2 id="incidence-rates">Incidence Rates <a href="#incidence-rates" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions for interfacing with incidence rates in Atlas</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="cancelIncidenceRateGeneration.html">cancelIncidenceRateGeneration()</a></code> </p>
-        </td>
-        <td><p>Cancel generation of IncidenceRate id.</p></td>
-      </tr><tr><td>
-          <p><code><a href="deleteIncidenceRateDefinition.html">deleteIncidenceRateDefinition()</a></code> </p>
-        </td>
-        <td><p>Delete IncidenceRate id definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="detectIncidenceRatesByName.html">detectIncidenceRatesByName()</a></code> </p>
-        </td>
-        <td><p>Detect the presence of string matched IncidenceRate definitions. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
-      </tr><tr><td>
-          <p><code><a href="existsIncidenceRateName.html">existsIncidenceRateName()</a></code> </p>
-        </td>
-        <td><p>Check if IncidenceRate definition name exists. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Get generation information.</p></td>
       </tr><tr><td>
           <p><code><a href="getIncidenceRateDefinition.html">getIncidenceRateDefinition()</a></code> </p>
         </td>
-        <td><p>Get IncidenceRate id definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Get IncidenceRate id definition.</p></td>
       </tr><tr><td>
           <p><code><a href="getIncidenceRateDefinitionsMetaData.html">getIncidenceRateDefinitionsMetaData()</a></code> </p>
         </td>
-        <td><p>Get the meta data for IncidenceRate definitions. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>Get the meta data for IncidenceRate definitions.</p></td>
       </tr><tr><td>
           <p><code><a href="getIncidenceRateGenerationInformation.html">getIncidenceRateGenerationInformation()</a></code> </p>
         </td>
@@ -307,25 +309,167 @@
         </td>
         <td><p>Get results for a IncidenceRate Id.</p></td>
       </tr><tr><td>
+          <p><code><a href="getPathwayDefinition.html">getPathwayDefinition()</a></code> </p>
+        </td>
+        <td><p>Get Pathway id definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="getPathwayDefinitionsMetaData.html">getPathwayDefinitionsMetaData()</a></code> </p>
+        </td>
+        <td><p>Get the meta data for Pathway definitions.</p></td>
+      </tr><tr><td>
+          <p><code><a href="getPathwayGenerationInformation.html">getPathwayGenerationInformation()</a></code> </p>
+        </td>
+        <td><p>Get generation information for Pathway id.</p></td>
+      </tr><tr><td>
+          <p><code><a href="getPathwayResults.html">getPathwayResults()</a></code> </p>
+        </td>
+        <td><p>Get results for a Pathway Id.</p></td>
+      </tr><tr><td>
+          <p><code><a href="getPersonProfile.html">getPersonProfile()</a></code> </p>
+        </td>
+        <td><p>Get person profile data</p></td>
+      </tr><tr><td>
+          <p><code><a href="getPredictionDefinition.html">getPredictionDefinition()</a></code> </p>
+        </td>
+        <td><p>Get Prediction id definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="getPredictionDefinitionsMetaData.html">getPredictionDefinitionsMetaData()</a></code> </p>
+        </td>
+        <td><p>Get the meta data for Prediction definitions.</p></td>
+      </tr><tr><td>
+          <p><code><a href="getPriorityVocabularyKey.html">getPriorityVocabularyKey()</a></code> </p>
+        </td>
+        <td><p>Get Priority Vocabulary Source Key</p></td>
+      </tr><tr><td>
+          <p><code><a href="getResults.html">getResults()</a></code> </p>
+        </td>
+        <td><p>Get generation results</p></td>
+      </tr><tr><td>
+          <p><code><a href="getSourceConcepts.html">getSourceConcepts()</a></code> </p>
+        </td>
+        <td><p>Get source concepts that map to standard concepts</p></td>
+      </tr><tr><td>
+          <p><code><a href="getWebApiVersion.html">getWebApiVersion()</a></code> </p>
+        </td>
+        <td><p>Get the WebAPI version number</p></td>
+      </tr><tr><td>
+          <p><code><a href="insertCohortDefinitionInPackage.html">insertCohortDefinitionInPackage()</a></code> </p>
+        </td>
+        <td><p>Load a cohort definition and insert it into this package</p></td>
+      </tr><tr><td>
+          <p><code><a href="insertCohortDefinitionSetInPackage.html">insertCohortDefinitionSetInPackage()</a></code> </p>
+        </td>
+        <td><p>Insert a set of cohort definitions into package</p></td>
+      </tr><tr><td>
+          <p><code><a href="invokeCharacterizationGeneration.html">invokeCharacterizationGeneration()</a></code> </p>
+        </td>
+        <td><p>Invoke generation of Characterization id.</p></td>
+      </tr><tr><td>
+          <p><code><a href="invokeCohortGeneration.html">invokeCohortGeneration()</a></code> </p>
+        </td>
+        <td><p>Invoke generation of Cohort id.</p></td>
+      </tr><tr><td>
+          <p><code><a href="invokeGeneration.html">invokeGeneration()</a></code> </p>
+        </td>
+        <td><p>Invoke generation.</p></td>
+      </tr><tr><td>
           <p><code><a href="invokeIncidenceRateGeneration.html">invokeIncidenceRateGeneration()</a></code> </p>
         </td>
         <td><p>Invoke generation of IncidenceRate id.</p></td>
       </tr><tr><td>
+          <p><code><a href="invokePathwayGeneration.html">invokePathwayGeneration()</a></code> </p>
+        </td>
+        <td><p>Invoke generation of Pathway id.</p></td>
+      </tr><tr><td>
+          <p><code><a href="isValidCharacterizationId.html">isValidCharacterizationId()</a></code> </p>
+        </td>
+        <td><p>is Characterization id a valid definition in the WebApi.</p></td>
+      </tr><tr><td>
+          <p><code><a href="isValidCohortId.html">isValidCohortId()</a></code> </p>
+        </td>
+        <td><p>is Cohort id a valid definition in the WebApi.</p></td>
+      </tr><tr><td>
+          <p><code><a href="isValidConceptSetId.html">isValidConceptSetId()</a></code> </p>
+        </td>
+        <td><p>is ConceptSet id a valid definition in the WebApi.</p></td>
+      </tr><tr><td>
+          <p><code><a href="isValidEstimationId.html">isValidEstimationId()</a></code> </p>
+        </td>
+        <td><p>is Estimation id a valid definition in the WebApi.</p></td>
+      </tr><tr><td>
+          <p><code><a href="isValidId.html">isValidId()</a></code> </p>
+        </td>
+        <td><p>Check if an id is valid.</p></td>
+      </tr><tr><td>
           <p><code><a href="isValidIncidenceRateId.html">isValidIncidenceRateId()</a></code> </p>
         </td>
-        <td><p>is IncidenceRate id a valid definition in the WebApi. <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p></td>
+        <td><p>is IncidenceRate id a valid definition in the WebApi.</p></td>
+      </tr><tr><td>
+          <p><code><a href="isValidPathwayId.html">isValidPathwayId()</a></code> </p>
+        </td>
+        <td><p>is Pathway id a valid definition in the WebApi.</p></td>
+      </tr><tr><td>
+          <p><code><a href="isValidPredictionId.html">isValidPredictionId()</a></code> </p>
+        </td>
+        <td><p>is Prediction id a valid definition in the WebApi.</p></td>
+      </tr><tr><td>
+          <p><code><a href="isValidSourceKey.html">isValidSourceKey()</a></code> </p>
+        </td>
+        <td><p>Check if source key is valid.</p></td>
+      </tr><tr><td>
+          <p><code><a href="postCharacterizationDefinition.html">postCharacterizationDefinition()</a></code> </p>
+        </td>
+        <td><p>Post Characterization definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="postCohortDefinition.html">postCohortDefinition()</a></code> </p>
+        </td>
+        <td><p>Post Cohort definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="postConceptSetDefinition.html">postConceptSetDefinition()</a></code> </p>
+        </td>
+        <td><p>Post ConceptSet definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="postDefinition.html">postDefinition()</a></code> </p>
+        </td>
+        <td><p>Post a definition into WebApi</p></td>
+      </tr><tr><td>
+          <p><code><a href="postEstimationDefinition.html">postEstimationDefinition()</a></code> </p>
+        </td>
+        <td><p>Post Estimation definition.</p></td>
       </tr><tr><td>
           <p><code><a href="postIncidenceRateDefinition.html">postIncidenceRateDefinition()</a></code> </p>
         </td>
-        <td><p>Post IncidenceRate definition. <a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="person-profiles">Person Profiles <a href="#person-profiles" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions for interfacing with person profiles in Atlas</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="getPersonProfile.html">getPersonProfile()</a></code> </p>
+        <td><p>Post IncidenceRate definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="postPathwayDefinition.html">postPathwayDefinition()</a></code> </p>
         </td>
-        <td><p>Get person profile data <a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="figures/lifecycle-maturing.svg" alt="[Maturing]"></a></p></td>
+        <td><p>Post Pathway definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="postPredictionDefinition.html">postPredictionDefinition()</a></code> </p>
+        </td>
+        <td><p>Post Prediction definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="resolveConceptSet.html">resolveConceptSet()</a></code> </p>
+        </td>
+        <td><p>Resolve a concept set to the included standard concept IDs</p></td>
+      </tr><tr><td>
+          <p><code><a href="setAuthHeader.html">setAuthHeader()</a></code> </p>
+        </td>
+        <td><p>Manually set the authorization http header for a WebAPI baseUrl In some cases the user may want to
+manually set the authorization header. An authHeader is associated with a particular baseUrl and
+added to to the header of all http requests sent to that url by ROhdsiWebApi.</p></td>
+      </tr><tr><td>
+          <p><code><a href="updateCohortDefinition.html">updateCohortDefinition()</a></code> </p>
+        </td>
+        <td><p>Update a Cohort definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="updateConceptSetDefinition.html">updateConceptSetDefinition()</a></code> </p>
+        </td>
+        <td><p>Update a ConceptSet definition.</p></td>
+      </tr><tr><td>
+          <p><code><a href="updateDefinition.html">updateDefinition()</a></code> </p>
+        </td>
+        <td><p>Update definition</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -339,7 +483,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
