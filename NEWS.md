@@ -1,3 +1,10 @@
+ROhdsiWebApi 1.3.2
+==================
+
+Bugfixes:
+
+1. Fix R check.
+
 ROhdsiWebApi 1.3.1
 ==================
 

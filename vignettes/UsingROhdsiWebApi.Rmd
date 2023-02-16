@@ -3,10 +3,9 @@ title: "Using ROhdsiWebApi"
 author: "Gowtham Rao"
 date: "`r Sys.Date()`"
 output:
-  html_document:
-    number_sections: yes
-    toc: yes
   pdf_document: 
+    toc: yes     
+  html_document:
     number_sections: yes
     toc: yes
 vignette: >
@@ -29,14 +28,8 @@ knitr::opts_chunk$set(
 library(ROhdsiWebApi)
 library(dplyr)
 
-if (Sys.getenv("baseUrl") == '') {
-  server <- "ohdsiBaseUrl" 
-} else {server <- "baseUrl"}
-baseUrl <- Sys.getenv(server)
+baseUrl <- 'http://api.ohdsi.org:8080/WebAPI'
 
-if (baseUrl == '') {
-  baseUrl <- 'http://api.ohdsi.org:8080/WebAPI'
-}
 ```
 
 
