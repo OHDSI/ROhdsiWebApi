@@ -2,7 +2,7 @@
 % Please edit documentation in R/WebApi.R
 \name{getPriorityVocabularyKey}
 \alias{getPriorityVocabularyKey}
-\title{Get Priority Vocabulary Source Key \lifecycle{stable}}
+\title{Get Priority Vocabulary Source Key}
 \usage{
 getPriorityVocabularyKey(baseUrl)
 }
@@ -14,7 +14,7 @@ getPriorityVocabularyKey(baseUrl)
 A string.
 }
 \description{
-Get Priority Vocabulary Source Key \lifecycle{stable}
+Get Priority Vocabulary Source Key
 }
 \details{
 Obtains the source key of the default OMOP Vocabulary in WebApi.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetResults.R
 \name{getResults}
 \alias{getResults}
-\title{Get generation results \lifecycle{stable}}
+\title{Get generation results}
 \usage{
 getResults(id, baseUrl, category)
 }
@@ -20,7 +20,7 @@ definition for the category in a WebApi instance.}
 Returns the result objects for a given id and category from the WebApi.
 }
 \description{
-Get generation results \lifecycle{stable}
+Get generation results
 }
 \details{
 Get the results objects from WebApi for a definition of a certain category in WebApi.

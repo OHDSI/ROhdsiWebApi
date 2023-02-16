@@ -2,7 +2,7 @@
 % Please edit documentation in R/getConceptSetDefinitionBySourceKey.R
 \name{getConceptSetDefinitionBySourceKey}
 \alias{getConceptSetDefinitionBySourceKey}
-\title{Fetch concept set definition from WebAPI by SourceKey \lifecycle{stable}}
+\title{Fetch concept set definition from WebAPI by SourceKey}
 \usage{
 getConceptSetDefinitionBySourceKey(
   conceptSetId,
@@ -23,7 +23,7 @@ used.}
 An R object representing the ConceptSet definition
 }
 \description{
-Fetch concept set definition from WebAPI by SourceKey \lifecycle{stable}
+Fetch concept set definition from WebAPI by SourceKey
 }
 \details{
 Fetches a concept set definition from WebAPI by SourceKey. If SourceKey is not 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetPostDeleteDefinition.R
 \name{updateDefinition}
 \alias{updateDefinition}
-\title{Update definition \lifecycle{maturing}}
+\title{Update definition}
 \usage{
 updateDefinition(definition, baseUrl, category)
 }
@@ -17,7 +17,7 @@ converted to JSON expression by function and posted into the WebApi.}
 'cohort', 'characterization', 'pathway, 'incidenceRate', 'estimation', 'prediction'.}
 }
 \description{
-Update definition \lifecycle{maturing}
+Update definition
 }
 \details{
 Update a definition in WebAPI. Currently only cohorts are supported.
