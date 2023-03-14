@@ -1,3 +1,11 @@
+ROhdsiWebApi 1.3.3
+==================
+
+Bugfixes:
+
+1. Fix R check by showing first entries in public ATLAS, not latest (which can contain characters not supported by LaTeX).
+
+
 ROhdsiWebApi 1.3.2
 ==================
 

@@ -165,7 +165,7 @@ ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl,
                                      category = 'cohort') %>%
   arrange(.data$id) %>%
   rename_all(.funs = SqlRender::camelCaseToTitleCase) %>%
-  tail() 
+  head() 
 
 ```
 
@@ -176,7 +176,7 @@ The same output may be achieved using
 ROhdsiWebApi::getCohortDefinitionsMetaData(baseUrl = baseUrl) %>% 
   arrange(.data$id) %>% 
   rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  tail() 
+  head() 
 ```
 
 Similar approach may be used for all categories as follows:
@@ -187,7 +187,7 @@ ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl,
                                      category = 'estimation') %>% 
   arrange(.data$id) %>% 
   rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  tail()
+  head()
 ```
 
 
@@ -197,7 +197,7 @@ ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl,
 ROhdsiWebApi::getEstimationDefinitionsMetaData(baseUrl = baseUrl) %>% 
   arrange(.data$id) %>% 
   rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  tail()
+  head()
 ```
 
 This is a generic framework that applies to most WebApi categories, and supports different types of CRUD functionalities like deleteConceptSetDefinition() vs deleteDefinition(category = 'conceptSet').
