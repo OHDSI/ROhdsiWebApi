@@ -8,6 +8,7 @@
 #'                         \itemize{
 #'                           \item {"db"}{Database authentication using Atlas/WebAPI built in auth}
 #'                           \item {"ad"}{Active Directory}
+#'                           \item {"ldap"}{LDAP protocol}
 #'                           \item {"windows"}{Windows NT authentication}
 #'                         }
 #'                         The auth method must be enabled in the instance of WebAPI pointed to by
@@ -25,7 +26,7 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
   # check input
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(baseUrl, len = 1, min.chars = 1, add = errorMessage)
-  checkmate::assertChoice(authMethod, choices = c("db", "ad", "windows"), add = errorMessage)
+  checkmate::assertChoice(authMethod, choices = c("db", "ad", "ldap", "windows"), add = errorMessage)
 
   # With windows type we can try NT user authentication
   if (authMethod == "windows" & is.null(webApiUsername) & is.null(webApiPassword) & .Platform$OS.type ==
@@ -47,6 +48,7 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
   authHeader <- switch(authMethod,
                        db = .authDb(baseUrl, webApiUsername, webApiPassword),
                        ad = .authAd(baseUrl, webApiUsername, webApiPassword),
+                       ldap = .authLdap(baseUrl, webApiUsername, webApiPassword),
                        windows = .authWindows(baseUrl, webApiUsername, webApiPassword))
 
   # store token in package environment
@@ -73,6 +75,19 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
   checkmate::assertCharacter(webApiPassword, min.chars = 1, len = 1)
 
   authUrl <- paste0(baseUrl, "/user/login/ad")
+  login <- list(login = webApiUsername, password = webApiPassword)
+  r <- httr::POST(authUrl, body = login, encode = "form")
+  if (length(httr::headers(r)$bearer) < 1)
+    stop("Authentication failed.")
+  authHeader <- paste0("Bearer ", httr::headers(r)$bearer)
+  authHeader
+}
+
+.authLdap <- function(baseUrl, webApiUsername, webApiPassword) {
+  checkmate::assertCharacter(webApiUsername, min.chars = 1, len = 1)
+  checkmate::assertCharacter(webApiPassword, min.chars = 1, len = 1)
+
+  authUrl <- paste0(baseUrl, "/user/login/ldap")
   login <- list(login = webApiUsername, password = webApiPassword)
   r <- httr::POST(authUrl, body = login, encode = "form")
   if (length(httr::headers(r)$bearer) < 1)
