@@ -2,7 +2,7 @@
 % Please edit documentation in R/Concept.R
 \name{getConcepts}
 \alias{getConcepts}
-\title{Get concepts \lifecycle{stable}}
+\title{Get concepts}
 \usage{
 getConcepts(
   conceptIds,
@@ -26,7 +26,7 @@ used.}
 A tibble containing information on the concepts.
 }
 \description{
-Get concepts \lifecycle{stable}
+Get concepts
 }
 \examples{
 \dontrun{

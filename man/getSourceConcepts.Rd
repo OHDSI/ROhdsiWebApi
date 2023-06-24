@@ -2,7 +2,7 @@
 % Please edit documentation in R/Concept.R
 \name{getSourceConcepts}
 \alias{getSourceConcepts}
-\title{Get source concepts that map to standard concepts \lifecycle{stable}}
+\title{Get source concepts that map to standard concepts}
 \usage{
 getSourceConcepts(
   conceptIds,
@@ -26,7 +26,7 @@ used.}
 A tibble containing information on the source concepts.
 }
 \description{
-Get source concepts that map to standard concepts \lifecycle{stable}
+Get source concepts that map to standard concepts
 }
 \examples{
 \dontrun{

@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get Priority Vocabulary Source Key \lifecycle{stable}
+#' Get Priority Vocabulary Source Key 
 #' @details
 #' Obtains the source key of the default OMOP Vocabulary in WebApi.
 #'
@@ -34,7 +34,7 @@ getPriorityVocabularyKey <- function(baseUrl) {
   json$sourceKey
 }
 
-#' Get the WebAPI version number \lifecycle{stable}
+#' Get the WebAPI version number 
 #' @details
 #' Obtains the WebAPI version number. This function is used to check that 
 #' WebAPI baseUrl can be accessed and is a good first check to make sure 
@@ -61,7 +61,7 @@ getWebApiVersion <- function(baseUrl) {
   
   url <- paste0(baseUrl, "/info")
   
-  response <- httr::GET(url)
+  response <- .GET(url)
   if (response$status %in% c(200)) {
     version <- (httr::content(response))$version
   } else {
@@ -75,7 +75,7 @@ getWebApiVersion <- function(baseUrl) {
   return(version)
 }
 
-#' Get the data sources in the WebAPI instance \lifecycle{stable}
+#' Get the data sources in the WebAPI instance 
 #' @details
 #' Obtains the data sources configured in the WebAPI instance.
 #'
@@ -124,7 +124,7 @@ getCdmSources <- function(baseUrl) {
 }
 
 
-#' Check if an id is valid. \lifecycle{stable}
+#' Check if an id is valid. 
 #' @details
 #' Checks if a set of id for a category is valid, i.e. checks if all the ids exists in the WebApi i.e.
 #' valid.
@@ -151,13 +151,13 @@ isValidId <- function(ids, baseUrl, category) {
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl,
-                                     category = argument$categoryStandard) %>% dplyr::select(.data$id) %>%
-    dplyr::distinct() %>% dplyr::pull(.data$id) %>% as.integer()
+                                     category = argument$categoryStandard) %>% dplyr::select(id) %>%
+    dplyr::distinct() %>% dplyr::pull(id) %>% as.integer()
   return(as.integer(ids) %in% validIds)
 }
 
 
-#' Check if source key is valid. \lifecycle{stable}
+#' Check if source key is valid. 
 #' @details
 #' Checks if a set of sourceKey(s) are valid, i.e. checks if all the sourceKey(s) exists in the WebApi
 #' i.e. valid.

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.3</span>
       </span>
     </div>
 
@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -72,17 +72,17 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">insertCohortDefinitionSetInPackage</span><span class="op">(</span>
-  fileName <span class="op">=</span> <span class="st">"inst/settings/CohortsToCreate.csv"</span>,
-  <span class="va">baseUrl</span>,
-  jsonFolder <span class="op">=</span> <span class="st">"inst/cohorts"</span>,
-  sqlFolder <span class="op">=</span> <span class="st">"inst/sql/sql_server"</span>,
-  rFileName <span class="op">=</span> <span class="st">"R/CreateCohorts.R"</span>,
-  insertTableSql <span class="op">=</span> <span class="cn">TRUE</span>,
-  insertCohortCreationR <span class="op">=</span> <span class="cn">TRUE</span>,
-  generateStats <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">packageName</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">insertCohortDefinitionSetInPackage</span><span class="op">(</span></span>
+<span>  fileName <span class="op">=</span> <span class="st">"inst/settings/CohortsToCreate.csv"</span>,</span>
+<span>  <span class="va">baseUrl</span>,</span>
+<span>  jsonFolder <span class="op">=</span> <span class="st">"inst/cohorts"</span>,</span>
+<span>  sqlFolder <span class="op">=</span> <span class="st">"inst/sql/sql_server"</span>,</span>
+<span>  rFileName <span class="op">=</span> <span class="st">"R/CreateCohorts.R"</span>,</span>
+<span>  insertTableSql <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  insertCohortCreationR <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  generateStats <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">packageName</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,27 +90,44 @@
     <dl><dt>fileName</dt>
 <dd><p>Name of a CSV file specifying the cohorts to insert. See details for
 the expected file format.</p></dd>
+
+
 <dt>baseUrl</dt>
 <dd><p>The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".</p></dd>
+
+
 <dt>jsonFolder</dt>
 <dd><p>Path to the folder where the JSON representations will be saved.</p></dd>
+
+
 <dt>sqlFolder</dt>
 <dd><p>Path to the folder where the SQL representations will be saved.</p></dd>
+
+
 <dt>rFileName</dt>
 <dd><p>Name of R file to generate when <code>insertCohortCreationR = TRUE</code>.</p></dd>
+
+
 <dt>insertTableSql</dt>
 <dd><p>Should the SQL for creating the cohort table be inserted into the
 package as well? This file will be called CreateCohortTable.sql.</p></dd>
+
+
 <dt>insertCohortCreationR</dt>
 <dd><p>Insert R code that will create the cohort table and instantiate the
 cohorts? This will create a file called R/CreateCohorts.R containing
 a function called <code>.createCohorts</code>.</p></dd>
+
+
 <dt>generateStats</dt>
 <dd><p>Should cohort inclusion rule statistics be created?</p></dd>
+
+
 <dt>packageName</dt>
 <dd><p>The name of the package (only needed when inserting the R code as
 well).</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -138,7 +155,7 @@ generate file names, so please use letters and numbers only (no spaces).</p></dd
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get generation results \lifecycle{stable}
+#' Get generation results 
 #' @details
 #' Get the results objects from WebApi for a definition of a certain category in WebApi.
 #'
@@ -203,7 +203,7 @@ getResults <- function(id, baseUrl, category) {
       response <- .GET(url)
       if (response$status_code == "200") {
         response <- httr::content(response)
-        response <- response %>% tidyr::tibble(response = response) %>% tidyr::unnest_wider(.data$response) %>%
+        response <- response %>% tidyr::tibble(response = response) %>% tidyr::unnest_wider(response) %>%
           utils::type.convert(as.is = TRUE,
                               dec = ".") %>% .addSourceNameToSourceKey(baseUrl = baseUrl) %>%
           dplyr::mutate(generationId = generation$id)
@@ -301,18 +301,18 @@ getResults <- function(id, baseUrl, category) {
           })
         })
         eventCodes[[i]] <- eventCodesLoop %>% tidyr::tibble(eventCodesLoop = eventCodesLoop) %>%
-          tidyr::unnest_wider(.data$eventCodesLoop) %>% utils::type.convert(as.is = TRUE,
+          tidyr::unnest_wider(eventCodesLoop) %>% utils::type.convert(as.is = TRUE,
                                                                             dec = ".") %>%
           dplyr::mutate(generationId = generation$id) %>% dplyr::select(-".") %>% dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName, pathwayId = id)
 
         pathwayGroupsLoop <- response$pathwayGroups
         pathwayGroups[[i]] <- pathwayGroupsLoop %>% tidyr::tibble(pathwayGroupsLoop = pathwayGroupsLoop) %>%
-          tidyr::unnest_wider(.data$pathwayGroupsLoop) %>% dplyr::mutate(generationId = generation$id) %>%
-          tidyr::unnest_longer(.data$pathways) %>% dplyr::select(-".") %>% dplyr::mutate(.id = dplyr::row_number()) %>%
-          tidyr::unnest_longer(.data$pathways) %>% dplyr::mutate(pathways = paste0(.data$pathways)) %>%
-          tidyr::pivot_wider(names_from = .data$pathways_id, values_from = .data$pathways) %>%
+          tidyr::unnest_wider(pathwayGroupsLoop) %>% dplyr::mutate(generationId = generation$id) %>%
+          tidyr::unnest_longer(pathways) %>% dplyr::select(-".") %>% dplyr::mutate(.id = dplyr::row_number()) %>%
+          tidyr::unnest_longer(pathways) %>% dplyr::mutate(pathways = paste0(pathways)) %>%
+          tidyr::pivot_wider(names_from = pathways_id, values_from = pathways) %>%
           utils::type.convert(as.is = TRUE,
-                              dec = ".") %>% dplyr::select(-.data$.id) %>% dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName, pathwayId = id)
+                              dec = ".") %>% dplyr::select(-.id) %>% dplyr::mutate(sourceKey = generation$sourceKey, sourceName = generation$sourceName, pathwayId = id)
       } else {
         pathwayGroups[[i]] <- tidyr::tibble()
         eventCodes[[i]] <- tidyr::tibble()

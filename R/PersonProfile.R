@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Get person profile data \lifecycle{maturing}
+#' Get person profile data 
 #' @details
 #' Get a R object with person profile data. This function may be used for visualizing a patients
 #' profile in tables or visualization.

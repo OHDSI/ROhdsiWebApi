@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetPostDeleteDefinition.R
 \name{getDefinition}
 \alias{getDefinition}
-\title{Get the definition for an id of chosen category in WebApi. \lifecycle{stable}}
+\title{Get the definition for an id of chosen category in WebApi.}
 \usage{
 getDefinition(id, baseUrl, category)
 }
@@ -20,7 +20,7 @@ definition for the category in a WebApi instance.}
 An R object representing the definition
 }
 \description{
-Get the definition for an id of chosen category in WebApi. \lifecycle{stable}
+Get the definition for an id of chosen category in WebApi.
 }
 \details{
 Get the definition for an id of chosen category in WebApi. The return object will be a R

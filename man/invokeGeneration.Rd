@@ -2,7 +2,7 @@
 % Please edit documentation in R/Generation.R
 \name{invokeGeneration}
 \alias{invokeGeneration}
-\title{Invoke generation. \lifecycle{stable}}
+\title{Invoke generation.}
 \usage{
 invokeGeneration(id, baseUrl, sourceKey, category)
 }
@@ -23,7 +23,7 @@ Configuration page}
 A dataframe with generation information such as status, jobName, and time.
 }
 \description{
-Invoke generation. \lifecycle{stable}
+Invoke generation.
 }
 \details{
 Invoke generation (execution) information.

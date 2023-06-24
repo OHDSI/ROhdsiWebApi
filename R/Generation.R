@@ -17,7 +17,7 @@
 # limitations under the License.
 
 
-#' Invoke generation. \lifecycle{stable}
+#' Invoke generation. 
 #' @details
 #' Invoke generation (execution) information.
 #'
@@ -102,7 +102,7 @@ invokeGeneration <- function(id, baseUrl, sourceKey, category) {
 }
 
 
-#' Get generation information. \lifecycle{stable}
+#' Get generation information. 
 #' @details
 #' Get generation (execution) information.
 #'
@@ -234,7 +234,7 @@ getGenerationInformation <- function(id, category, baseUrl) {
 }
 
 
-#' Invoke generation. \lifecycle{stable}
+#' Invoke generation. 
 #' @details
 #' Invoke generation (execution) information.
 #'
