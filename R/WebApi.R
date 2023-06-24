@@ -151,8 +151,8 @@ isValidId <- function(ids, baseUrl, category) {
   checkmate::reportAssertions(errorMessage)
 
   validIds <- getDefinitionsMetadata(baseUrl = baseUrl,
-                                     category = argument$categoryStandard) %>% dplyr::select(.data$id) %>%
-    dplyr::distinct() %>% dplyr::pull(.data$id) %>% as.integer()
+                                     category = argument$categoryStandard) %>% dplyr::select(id) %>%
+    dplyr::distinct() %>% dplyr::pull(id) %>% as.integer()
   return(as.integer(ids) %in% validIds)
 }
 
