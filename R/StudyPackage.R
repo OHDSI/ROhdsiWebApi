@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Load a cohort definition and insert it into this package \lifecycle{maturing}
+#' Load a cohort definition and insert it into this package 
 #' @details
 #' Load a cohort definition from a WebApi instance and insert it into this package. This will fetch
 #' the JSON object and store it in a folder (defaults to 'the inst/cohorts' folder), and fetch the

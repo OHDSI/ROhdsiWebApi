@@ -26,7 +26,7 @@ access to webAPI by all subsequent requests made by the package."><!-- mathjax -
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ROhdsiWebApi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.3</span>
       </span>
     </div>
 
@@ -35,7 +35,7 @@ access to webAPI by all subsequent requests made by the package."><!-- mathjax -
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -87,12 +87,12 @@ access to webAPI by all subsequent requests made by the package.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">authorizeWebApi</span><span class="op">(</span>
-  <span class="va">baseUrl</span>,
-  <span class="va">authMethod</span>,
-  webApiUsername <span class="op">=</span> <span class="cn">NULL</span>,
-  webApiPassword <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">authorizeWebApi</span><span class="op">(</span></span>
+<span>  <span class="va">baseUrl</span>,</span>
+<span>  <span class="va">authMethod</span>,</span>
+<span>  webApiUsername <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  webApiPassword <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -100,19 +100,26 @@ access to webAPI by all subsequent requests made by the package.</p>
     <dl><dt>baseUrl</dt>
 <dd><p>The base URL for the WebApi instance, for example:
 "http://server.org:80/WebAPI".</p></dd>
+
+
 <dt>authMethod</dt>
 <dd><p>The method used for authentication to WebAPI. Options are</p><ul><li><p>"db"Database authentication using Atlas/WebAPI built in auth</p></li>
 <li><p>"ad"Active Directory</p></li>
 <li><p>"windows"Windows NT authentication</p></li>
 </ul><p>The auth method must be enabled in the instance of WebAPI pointed to by
 baseUrl.</p></dd>
+
+
 <dt>webApiUsername</dt>
 <dd><p>A character string containing the WebApi username passed on to
 authentication methods</p></dd>
+
+
 <dt>webApiPassword</dt>
 <dd><p>An character string containing a WebApi password passed on to authentication
 methods. By default the user will be prompted for their password when
 needed.</p></dd>
+
 </dl></div>
 
   </div>
@@ -127,7 +134,7 @@ needed.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

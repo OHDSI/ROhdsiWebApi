@@ -2,7 +2,7 @@
 % Please edit documentation in R/Generation.R
 \name{getGenerationInformation}
 \alias{getGenerationInformation}
-\title{Get generation information. \lifecycle{stable}}
+\title{Get generation information.}
 \usage{
 getGenerationInformation(id, category, baseUrl)
 }
@@ -20,7 +20,7 @@ category in a WebApi instance.}
 An R object with the generation information.
 }
 \description{
-Get generation information. \lifecycle{stable}
+Get generation information.
 }
 \details{
 Get generation (execution) information.

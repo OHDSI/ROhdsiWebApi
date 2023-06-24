@@ -1,6 +1,11 @@
 ---
 title: "Using ROhdsiWebApi with security enabled Atlas/WebAPI"
-output: rmarkdown::html_vignette
+output:
+  pdf_document: 
+    toc: yes     
+  html_document:
+    number_sections: yes
+    toc: yes
 vignette: >
   %\VignetteIndexEntry{Using ROhdsiWebApi with security enabled Atlas/WebAPI}
   %\VignetteEngine{knitr::rmarkdown}
