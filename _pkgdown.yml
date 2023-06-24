@@ -7,52 +7,6 @@ home:
   - text: Ask a question
     href: http://forums.ohdsi.org
 
-reference:
-  - title: "WebAPI"
-    desc: >
-      Functions for interfacing with WebAPI
-    contents:
-      - getPriorityVocabularyKey
-      - getWebApiVersion
-      - getCdmSources
-      - getMetadataForAllSpecifications
-      - postDefinition
-  - title: "Conceps"
-    desc: >
-      Functions for interfacing with concepts in Atlas
-    contents:
-      - matches("Concept[^S]")      
-  - title: "Concept Set"
-    desc: >
-      Functions for interfacing with concept sets in Atlas
-    contents:
-      - matches("ConceptSet")
-  - title: "Cohort Defintion"
-    desc: >
-      Functions for interfacing with cohort definitions in Atlas
-    contents:
-      - matches("Cohort[^C]")
-  - title: "Estimation"
-    desc: >
-      Functions for interfacing with estimation definitions in Atlas
-    contents:
-      - matches("Estimation")
-  - title: "Cohort Characterization"
-    desc: >
-      Functions for interfacing with cohort characterizations in Atlas
-    contents:
-      - matches("CohortCharacterization")
-  - title: "Incidence Rates"
-    desc: >
-      Functions for interfacing with incidence rates in Atlas
-    contents:
-      - matches("IncidenceRate")
-  - title: "Person Profiles"
-    desc: >
-      Functions for interfacing with person profiles in Atlas
-    contents:
-      - matches("PersonProfile")
-      
 navbar:
   structure:
     right: [hades, github]

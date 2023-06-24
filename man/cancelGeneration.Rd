@@ -2,7 +2,7 @@
 % Please edit documentation in R/Generation.R
 \name{cancelGeneration}
 \alias{cancelGeneration}
-\title{Invoke generation. \lifecycle{stable}}
+\title{Invoke generation.}
 \usage{
 cancelGeneration(id, baseUrl, sourceKey, category)
 }
@@ -23,7 +23,7 @@ Configuration page}
 Error message if invoke failed.
 }
 \description{
-Invoke generation. \lifecycle{stable}
+Invoke generation.
 }
 \details{
 Invoke generation (execution) information.
