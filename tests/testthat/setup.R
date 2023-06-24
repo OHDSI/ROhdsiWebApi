@@ -1,6 +1,7 @@
 ## Setup file for ROhdsiWebApi tests -----------------
 library(httptest)
 
+
 ## set up Environmental variables
 baseUrl <- Sys.getenv("WEBAPI_TEST_WEBAPI_URL") #nonsecure test environment
 sourceKeyVariable <- 'SYNPUF5PCT' #source db 
