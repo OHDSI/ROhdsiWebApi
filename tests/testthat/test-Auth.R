@@ -7,7 +7,6 @@ testOhdsiUser <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_NAME")
 testOhdsiPassword <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_PASSWORD") 
 
 test_that("Database authorization works", {
-  skip("Skipping authentication unit test until test server is back up")
   skip_if(testBaseUrl == "")
   setAuthHeader(testBaseUrl, "blah")
   expect_error(getPriorityVocabularyKey(testBaseUrl), "Unauthorized")
@@ -16,7 +15,6 @@ test_that("Database authorization works", {
 })
 
 test_that("Active Directory Authorization", {
-  skip("Skipping authentication unit test until test server is back up")
   skip_if(testBaseUrl == "")
   expect_error(authorizeWebApi(testBaseUrl, "ad", testOhdsiUser, testOhdsiPassword), "fail")
 })
