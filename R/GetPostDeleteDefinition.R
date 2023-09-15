@@ -17,7 +17,7 @@
 # limitations under the License.
 
 
-#' Get the definition for an id of chosen category in WebApi. \lifecycle{stable}
+#' Get the definition for an id of chosen category in WebApi. 
 #' @details
 #' Get the definition for an id of chosen category in WebApi. The return object will be a R
 #' representation of the definition, that may be reconverted to JSON.
@@ -101,7 +101,7 @@ getDefinition <- function(id, baseUrl, category) {
 }
 
 
-#' Post a definition into WebApi \lifecycle{maturing}
+#' Post a definition into WebApi 
 #' @details
 #' Post a definition into WebAPI. Currently only cohort and concept-set are supported.
 #'
@@ -261,7 +261,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
   return(output)
 }
 
-#' Update definition \lifecycle{maturing}
+#' Update definition 
 #' @details
 #' Update a definition in WebAPI. Currently only cohorts are supported.
 #' Takes the definition as a parameter and converts it to json. This is the full definition
@@ -272,7 +272,11 @@ postDefinition <- function(baseUrl, name, category, definition) {
 #'                          converted to JSON expression by function and posted into the WebApi.
 #' @examples
 #' \dontrun{
-#' definition <- getDefinition(id = 13242, baseUrl = "http://server.org:80/WebAPI", category = "cohort")
+#' definition <- getDefinition(
+#'   id = 13242, 
+#'   baseUrl = "http://server.org:80/WebAPI", 
+#'   category = "cohort"
+#' )
 #' definition$name <- "My new name for this"
 #' updateDefinition(definition, baseUrl, category = "cohort")
 #' }
@@ -335,7 +339,7 @@ updateDefinition <- function(definition, baseUrl, category) {
   invisible()
 }
 
-#' Delete a definition id of a chosen category. \lifecycle{stable}
+#' Delete a definition id of a chosen category. 
 #' @details
 #' Delete the definition for an id of chosen category in WebApi.
 #'

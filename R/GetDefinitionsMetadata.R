@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Retrieve the meta data for WebApi definitions of a certain category \lifecycle{stable}
+#' Retrieve the meta data for WebApi definitions of a certain category 
 #' @details
 #' Obtains the meta data of WebApi specifications such as id, name, created/modified details, hash
 #' object, etc for a certain category. The following function categories are supported. Concept-set,

@@ -16,7 +16,7 @@
 
 
 
-#' Fetch concept set definition from WebAPI by SourceKey \lifecycle{stable}
+#' Fetch concept set definition from WebAPI by SourceKey 
 #' @details
 #' Fetches a concept set definition from WebAPI by SourceKey. If SourceKey is not 
 #' specified, the priority vocabulary will be used.

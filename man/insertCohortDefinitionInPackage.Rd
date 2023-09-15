@@ -2,7 +2,7 @@
 % Please edit documentation in R/StudyPackage.R
 \name{insertCohortDefinitionInPackage}
 \alias{insertCohortDefinitionInPackage}
-\title{Load a cohort definition and insert it into this package \lifecycle{maturing}}
+\title{Load a cohort definition and insert it into this package}
 \usage{
 insertCohortDefinitionInPackage(
   cohortId,
@@ -32,7 +32,7 @@ Note that if TRUE, several additional tables are expected to exists as
 described in the details.}
 }
 \description{
-Load a cohort definition and insert it into this package \lifecycle{maturing}
+Load a cohort definition and insert it into this package
 }
 \details{
 Load a cohort definition from a WebApi instance and insert it into this package. This will fetch

@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetPostDeleteDefinition.R
 \name{postDefinition}
 \alias{postDefinition}
-\title{Post a definition into WebApi \lifecycle{maturing}}
+\title{Post a definition into WebApi}
 \usage{
 postDefinition(baseUrl, name, category, definition)
 }
@@ -26,7 +26,7 @@ This function will return a dataframe object with one row describing the posted 
 and its details. If unsuccessful a STOP message will be shown.
 }
 \description{
-Post a definition into WebApi \lifecycle{maturing}
+Post a definition into WebApi
 }
 \details{
 Post a definition into WebAPI. Currently only cohort and concept-set are supported.

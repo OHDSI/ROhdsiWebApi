@@ -2,7 +2,7 @@
 % Please edit documentation in R/WebApi.R
 \name{getWebApiVersion}
 \alias{getWebApiVersion}
-\title{Get the WebAPI version number \lifecycle{stable}}
+\title{Get the WebAPI version number}
 \usage{
 getWebApiVersion(baseUrl)
 }
@@ -14,7 +14,7 @@ getWebApiVersion(baseUrl)
 The WebApi versions as a string.
 }
 \description{
-Get the WebAPI version number \lifecycle{stable}
+Get the WebAPI version number
 }
 \details{
 Obtains the WebAPI version number. This function is used to check that 

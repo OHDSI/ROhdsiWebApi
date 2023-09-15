@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetPostDeleteDefinition.R
 \name{deleteDefinition}
 \alias{deleteDefinition}
-\title{Delete a definition id of a chosen category. \lifecycle{stable}}
+\title{Delete a definition id of a chosen category.}
 \usage{
 deleteDefinition(id, baseUrl, category)
 }
@@ -20,7 +20,7 @@ definition for the category in a WebApi instance.}
 None, unless error.
 }
 \description{
-Delete a definition id of a chosen category. \lifecycle{stable}
+Delete a definition id of a chosen category.
 }
 \details{
 Delete the definition for an id of chosen category in WebApi.
