@@ -159,7 +159,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
     url <- paste0(url, argument$categoryUrlPostExpression, "/")
   }
   response <- .postJson(url = url, json = json)
-
+  
   if (!response$status_code == 200) {
     definitionsMetaData <- getDefinitionsMetadata(baseUrl = baseUrl, category = category)
     if (name %in% definitionsMetaData$name) {
@@ -172,26 +172,33 @@ postDefinition <- function(baseUrl, name, category, definition) {
   response <- httr::content(response)
   structureCreated <- response
   response$expression <- NULL
-
+  
   # create expression in the structure required to POST or PUT
   if (category %in% c("conceptSet")) {
-    items <- convertConceptSetDefinitionToTable(conceptSetDefinition = definition) %>% dplyr::mutate(id = dplyr::row_number(),
-                                                                                                     conceptId = .data$conceptId,
-                                                                                                     conceptSetId = structureCreated$id,
-                                                                                                     isExcluded = as.integer(.data$isExcluded),
-                                                                                                     includeMapped = as.integer(.data$includeMapped),
-                                                                                                     includeDescendants = as.integer(.data$includeDescendants)) %>%
+    items <- convertConceptSetDefinitionToTable(conceptSetDefinition = definition)
+    
+    # if some fields are missing, add them. https://github.com/OHDSI/ROhdsiWebApi/issues/245
+    colCheck <- c("isExcluded", "includeMapped", "includeDescendants")
+    append <- colCheck[!(colCheck %in% colnames(items))]
+    items[,append] <- FALSE
+    
+    items <- items %>% dplyr::mutate(id = dplyr::row_number(),
+                                     conceptId = .data$conceptId,
+                                     conceptSetId = structureCreated$id,
+                                     isExcluded = as.integer(.data$isExcluded),
+                                     includeMapped = as.integer(.data$includeMapped),
+                                     includeDescendants = as.integer(.data$includeDescendants)) %>%
       dplyr::select(.data$id,
                     .data$conceptId,
                     .data$conceptSetId,
                     .data$isExcluded,
                     .data$includeMapped,
                     .data$includeDescendants)
-
+    
     itemsTranspose <- apply(items, 1, function(item) {
       list(item)
     })
-
+    
     expression <- .toJSON(x = purrr::flatten(itemsTranspose), pretty = TRUE)
     responsePut <- .putJson(url = paste0(baseUrl,
                                          "/",
@@ -207,6 +214,7 @@ postDefinition <- function(baseUrl, name, category, definition) {
                   httr::content(responsePut)$status_code))
     }
   }
+
 
   # TODO implement posting of characterization
   # if (category %in% c("characterization")) {
@@ -335,8 +343,8 @@ updateDefinition <- function(definition, baseUrl, category) {
 #' Delete the definition for an id of chosen category in WebApi.
 #'
 #' @template BaseUrl
-#' @template category
-#' @template id
+#' @template Category
+#' @template Id
 #' @return
 #' None, unless error.
 #'

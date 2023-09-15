@@ -23,7 +23,7 @@
 #'
 #' @template BaseUrl
 #' @param conceptSetId the id of the concept set to retrieve.
-#' @template vocabularySourceKey
+#' @template VocabularySourceKey
 #' @return
 #' An R object representing the ConceptSet definition
 #'

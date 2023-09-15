@@ -21,7 +21,7 @@
 #'
 #' @template BaseUrl
 #' @template ConceptSetDefinition
-#' @template vocabularySourceKey
+#' @template VocabularySourceKey
 #' @return
 #' A vector of standard concept ids.
 #'

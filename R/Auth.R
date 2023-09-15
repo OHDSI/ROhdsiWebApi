@@ -3,7 +3,7 @@
 #' below. authorizeWebApi will use attempt to retrieve, cache, and update a token which will grant
 #' access to webAPI by all subsequent requests made by the package.
 #'
-#' @template baseUrl
+#' @template BaseUrl
 #' @param authMethod       The method used for authentication to WebAPI. Options are
 #'                         \itemize{
 #'                           \item {"db"}{Database authentication using Atlas/WebAPI built in auth}
@@ -112,7 +112,7 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
 #' manually set the authorization header. An authHeader is associated with a particular baseUrl and
 #' added to to the header of all http requests sent to that url by ROhdsiWebApi.
 #'
-#' @template baseUrl
+#' @template BaseUrl
 #' @param authHeader   A character string containing a Bearer token that will be added to the header of
 #'                     all http requests sent to baseUrl. (e.g. "Bearer
 #'                     lxd9n2nsdsd2329km23mexjop02m23m23mmmsioxiis0")
