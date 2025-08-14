@@ -1,3 +1,11 @@
+ROhdsiWebApi 1.3.4
+==================
+
+Bugfixes:
+
+1. Issue #274: handle empty pathway results in GetResults.
+
+
 ROhdsiWebApi 1.3.3
 ==================
 

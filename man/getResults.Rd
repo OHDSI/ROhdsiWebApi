@@ -4,7 +4,7 @@
 \alias{getResults}
 \title{Get generation results}
 \usage{
-getResults(id, baseUrl, category)
+getResults(id, baseUrl, category, generationIds = c())
 }
 \arguments{
 \item{id}{An integer id representing the id that uniquely identifies a 
@@ -15,6 +15,8 @@ definition for the category in a WebApi instance.}
 
 \item{category}{These are the categories in WebApi. The valid string options are 'conceptSet', 
 'cohort', 'characterization', 'pathway, 'incidenceRate', 'estimation', 'prediction'.}
+
+\item{generationIds}{a list of generationIds to filter. Defaults to empty.}
 }
 \value{
 Returns the result objects for a given id and category from the WebApi.
