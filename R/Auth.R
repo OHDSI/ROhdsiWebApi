@@ -29,7 +29,7 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
   checkmate::assertChoice(authMethod, choices = c("db", "ad", "ldap", "windows"), add = errorMessage)
 
   # With windows type we can try NT user authentication
-  if (authMethod == "windows" & is.null(webApiUsername) & is.null(webApiPassword) & .Platform$OS.type ==
+  if (authMethod == "windows" && is.null(webApiUsername) && is.null(webApiPassword) && .Platform$OS.type ==
     "windows") {
     webApiUsername <- ":"
     webApiPassword <- ":"
@@ -57,6 +57,45 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
   invisible()
 }
 
+#' Parse LoginService.Result response from WebAPI authentication endpoints
+#'
+#' @param response An httr response object from an authentication endpoint
+#' @return A character string containing the Bearer token header value
+#' @keywords internal
+.parseLoginResult <- function(response) {
+  # Check HTTP status
+
+  if (httr::http_error(response)) {
+    # Try to parse error message from response body
+    tryCatch({
+      content <- httr::content(response, as = "parsed", type = "application/json")
+      if (!is.null(content$message)) {
+        stop(sprintf("Authentication failed (HTTP %d): %s", 
+                     httr::status_code(response), 
+                     content$message))
+      }
+    }, error = function(e) {
+      if (grepl("Authentication failed", e$message)) {
+        stop(e$message)
+      }
+    })
+    stop(sprintf("Authentication failed with HTTP status %d", httr::status_code(response)))
+  }
+  
+  # Parse JSON response body
+  content <- httr::content(response, as = "parsed", type = "application/json")
+  
+  # Validate JWT is present
+
+  if (is.null(content$jwt) || nchar(content$jwt) == 0) {
+    errorMsg <- if (!is.null(content$message)) content$message else "No JWT token in response"
+    stop(sprintf("Authentication failed: %s", errorMsg))
+  }
+  
+  # Return Bearer token header value
+  paste0("Bearer ", content$jwt)
+}
+
 .authDb <- function(baseUrl, webApiUsername, webApiPassword) {
   checkmate::assertCharacter(webApiUsername, min.chars = 1, len = 1)
   checkmate::assertCharacter(webApiPassword, min.chars = 1, len = 1)
@@ -64,36 +103,29 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
   authUrl <- paste0(baseUrl, "/user/login/db")
   login <- list(login = webApiUsername, password = webApiPassword)
   r <- httr::POST(authUrl, body = login, encode = "form")
-  if (length(httr::headers(r)$bearer) < 1)
-    stop("Authentication failed.")
-  authHeader <- paste0("Bearer ", httr::headers(r)$bearer)
-  authHeader
+  .parseLoginResult(r)
 }
 
 .authAd <- function(baseUrl, webApiUsername, webApiPassword) {
+  # Note: AD authentication endpoint requires future WebAPI implementation
   checkmate::assertCharacter(webApiUsername, min.chars = 1, len = 1)
   checkmate::assertCharacter(webApiPassword, min.chars = 1, len = 1)
 
   authUrl <- paste0(baseUrl, "/user/login/ad")
   login <- list(login = webApiUsername, password = webApiPassword)
   r <- httr::POST(authUrl, body = login, encode = "form")
-  if (length(httr::headers(r)$bearer) < 1)
-    stop("Authentication failed.")
-  authHeader <- paste0("Bearer ", httr::headers(r)$bearer)
-  authHeader
+  .parseLoginResult(r)
 }
 
 .authLdap <- function(baseUrl, webApiUsername, webApiPassword) {
+  # Note: LDAP authentication endpoint requires future WebAPI implementation
   checkmate::assertCharacter(webApiUsername, min.chars = 1, len = 1)
   checkmate::assertCharacter(webApiPassword, min.chars = 1, len = 1)
 
   authUrl <- paste0(baseUrl, "/user/login/ldap")
   login <- list(login = webApiUsername, password = webApiPassword)
   r <- httr::POST(authUrl, body = login, encode = "form")
-  if (length(httr::headers(r)$bearer) < 1)
-    stop("Authentication failed.")
-  authHeader <- paste0("Bearer ", httr::headers(r)$bearer)
-  authHeader
+  .parseLoginResult(r)
 }
 
 .authWindows <- function(baseUrl, webApiUsername, webApiPassword) {
@@ -102,10 +134,7 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
 
   authUrl <- paste0(baseUrl, "/user/login/windows")
   r <- httr::GET(authUrl, httr::authenticate(webApiUsername, webApiPassword, type = "ntlm"))
-  if (length(httr::headers(r)$bearer) < 1)
-    stop("Authentication failed.")
-  authHeader <- paste0("Bearer ", httr::headers(r)$bearer)
-  authHeader
+  .parseLoginResult(r)
 }
 
 #' Manually set the authorization http header for a WebAPI baseUrl In some cases the user may want to
