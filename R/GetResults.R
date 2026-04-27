@@ -114,6 +114,7 @@ getResults <- function(id, baseUrl, category) {
                       id,
                       "/report/",
                       generation$sourceKey,
+                      "/inclusion",
                       "?mode=",
                       mode)
         response <- .GET(url)
