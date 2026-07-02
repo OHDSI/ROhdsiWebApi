@@ -212,6 +212,70 @@ tryCatch(getCdmSources(baseUrl),
 
 
 
+# API token via environment variable
+
+In non-interactive or service-account scenarios you may already have a Bearer
+token provisioned externally (e.g. from a secrets manager or CI environment).
+In that case you can skip `authorizeWebApi()` entirely by setting the
+`WEBAPI_TOKEN` environment variable to the raw token value — without the
+`"Bearer "` prefix.
+
+ROhdsiWebApi checks the env var before looking up any cached JWT, so it
+takes precedence across **all** base URLs. By default the env var name is
+`WEBAPI_TOKEN`, but you can override this with the `ROhdsiWebApi.tokenEnvVar`
+option — useful when connecting to multiple WebAPI instances with different
+tokens in the same R session.
+
+## Option 1: .Renviron
+
+Add the following line to your `.Renviron` file (run `usethis::edit_r_environ()`
+to open it):
+
+```
+WEBAPI_TOKEN=eyJhbGciOiJIUzI1NiJ9...
+```
+
+Restart R for the change to take effect.
+
+## Option 2: Set at runtime
+
+```{r, eval=FALSE}
+Sys.setenv(WEBAPI_TOKEN = "eyJhbGciOiJIUzI1NiJ9...")
+getCdmSources(baseUrl)
+```
+
+To revert to JWT-based authentication in the same session, unset the variable:
+
+```{r, eval=FALSE}
+Sys.unsetenv("WEBAPI_TOKEN")
+```
+
+## Option 3: Custom env var name (multiple instances)
+
+If you need different tokens for different WebAPI instances in the same session,
+store each token in a differently-named env var and set
+`ROhdsiWebApi.tokenEnvVar` before each call:
+
+```{r, eval=FALSE}
+Sys.setenv(WEBAPI_TOKEN_PROD = "eyJprod...")
+Sys.setenv(WEBAPI_TOKEN_DEV  = "eyJdev...")
+
+options(ROhdsiWebApi.tokenEnvVar = "WEBAPI_TOKEN_PROD")
+getCdmSources(prodUrl)
+
+options(ROhdsiWebApi.tokenEnvVar = "WEBAPI_TOKEN_DEV")
+getCdmSources(devUrl)
+```
+
+> **Note:** For persistent multi-instance setups, `setAuthHeader()` is
+> generally more ergonomic since tokens are keyed by base URL and do not
+> require swapping an option before each call.
+
+> **Security note:** Treat the token as a password. Store it in `.Renviron` or
+> retrieve it from a secrets manager (e.g. the
+> [keyring package](https://cran.r-project.org/web/packages/keyring/readme/README.html)).
+> Never hard-code it in your R scripts.
+
 <div style="margin-bottom:100px;"></div>
 
 
