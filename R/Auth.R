@@ -1,5 +1,8 @@
-#' Authorize ROhdsiWebApi to access a protected instance of WebAPI Authorize the ROhdsiWebApi package
-#' to access WebApi on behalf of the user. This can be done with any of the auth methods described
+#' Authorize access to a WebApi instance
+#'
+#' @description
+#' Certain WebAPI endpoints require user authentication. The user must authorize
+#' access WebApi on behalf of the user. This can be done with any of the auth methods described
 #' below. authorizeWebApi will use attempt to retrieve, cache, and update a token which will grant
 #' access to webAPI by all subsequent requests made by the package.
 #'
@@ -146,6 +149,26 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
 #'                     all http requests sent to baseUrl. (e.g. "Bearer
 #'                     lxd9n2nsdsd2329km23mexjop02m23m23mmmsioxiis0")
 #'
+#' @details
+#' An alternative to calling this function is to set an environment variable containing a raw API
+#' token (without the \code{"Bearer "} prefix). By default ROhdsiWebApi reads the \code{WEBAPI_TOKEN}
+#' environment variable, but this name can be overridden by setting the R option
+#' \code{ROhdsiWebApi.tokenEnvVar}. For example, to use a variable named
+#' \code{MY_INSTANCE_TOKEN}:
+#'
+#' \preformatted{
+#' options(ROhdsiWebApi.tokenEnvVar = "MY_INSTANCE_TOKEN")
+#' Sys.setenv(MY_INSTANCE_TOKEN = "eyJ...")
+#' }
+#'
+#' When the env var is set, it takes precedence over any token stored via
+#' \code{setAuthHeader()} or \code{authorizeWebApi()} and is applied globally to all WebAPI
+#' base URLs. This is useful for service accounts or non-interactive environments where the
+#' token is provisioned externally. Store it in \code{.Renviron}
+#' (e.g. \code{WEBAPI_TOKEN=eyJ...}) or set it at runtime via \code{Sys.setenv()}.
+#'
+#' @seealso \code{\link{authorizeWebApi}} for interactive JWT-based authentication.
+#'
 #' @export
 setAuthHeader <- function(baseUrl, authHeader) {
   checkmate::assertCharacter(baseUrl, min.chars = 1, len = 1)
@@ -153,4 +176,71 @@ setAuthHeader <- function(baseUrl, authHeader) {
   if (is.null(ROWebApiEnv[[baseUrl]]))
     ROWebApiEnv[[baseUrl]] <- list()
   ROWebApiEnv[[baseUrl]]$authHeader <- authHeader
+}
+
+#' Create a personal API key in WebAPI
+#'
+#' Calls \code{POST /user/apikeys} to generate a new long-lived API key for the
+#' authenticated user. The \code{rawKey} value is printed to the console and
+#' returned invisibly — it is returned by WebAPI \strong{exactly once} and
+#' cannot be retrieved again. Store it securely immediately (e.g. in
+#' \code{.Renviron} as \code{WEBAPI_TOKEN=<rawKey>}).
+#'
+#' @template BaseUrl
+#' @param name          A short human-readable label for the key (required).
+#' @param description   An optional longer description (default \code{NULL}).
+#' @param expiresInDays Integer number of days until the key expires. Use
+#'   \code{NULL} or \code{0} for a non-expiring key (default \code{NULL}).
+#'
+#' @return Invisibly returns a list with elements \code{rawKey},
+#'   \code{keyIdentifier}, \code{name}, \code{createdAt}, and \code{expiresAt}.
+#'
+#' @details
+#' The caller must already be authenticated — either via
+#' \code{\link{authorizeWebApi}}, \code{\link{setAuthHeader}}, or the
+#' \code{WEBAPI_TOKEN} environment variable — before calling this function.
+#'
+#' The key is authenticated using the \code{X-API-KEY} request header on
+#' subsequent calls. See \code{\link{setAuthHeader}} for details on the
+#' \code{WEBAPI_TOKEN} env var approach.
+#'
+#' @seealso \code{\link{authorizeWebApi}}, \code{\link{setAuthHeader}}
+#'
+#' @export
+createApiKey <- function(baseUrl, name, description = NULL, expiresInDays = NULL) {
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertCharacter(baseUrl, len = 1, min.chars = 1, add = errorMessage)
+  checkmate::assertCharacter(name, len = 1, min.chars = 1, add = errorMessage)
+  checkmate::assert(checkmate::checkCharacter(description, len = 1),
+                    checkmate::checkNull(description),
+                    add = errorMessage)
+  checkmate::assert(checkmate::checkInt(expiresInDays, lower = 0),
+                    checkmate::checkNull(expiresInDays),
+                    add = errorMessage)
+  checkmate::reportAssertions(errorMessage)
+  .checkBaseUrl(baseUrl)
+
+  body <- list(name = name)
+  if (!is.null(description)) body$description <- description
+  if (!is.null(expiresInDays) && expiresInDays > 0) body$expiresInDays <- expiresInDays
+
+  url <- paste0(baseUrl, "/user/apikeys")
+  response <- .POST(url, body = body, encode = "json")
+
+  if (httr::status_code(response) != 201) {
+    httr::stop_for_status(response)
+  }
+
+  result <- httr::content(response, as = "parsed", type = "application/json")
+
+  message("API key created successfully.")
+  message("Key name:       ", result$name)
+  message("Key identifier: ", result$keyIdentifier)
+  message("Created at:     ", format(as.POSIXct(result$createdAt, origin = "1970-01-01", tz = "UTC"), "%Y-%m-%d %H:%M:%S UTC"))
+  message("Expires at:     ", if (is.null(result$expiresAt)) "never" else format(as.POSIXct(result$expiresAt, origin = "1970-01-01", tz = "UTC"), "%Y-%m-%d %H:%M:%S UTC"))
+  message("")
+  message("Raw key (store this now — it will not be shown again):")
+  message(result$rawKey)
+
+  invisible(result)
 }
