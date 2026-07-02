@@ -42,23 +42,24 @@
   baseUrls <- names(ROWebApiEnv)
   baseUrl <- baseUrls[stringr::str_detect(url, baseUrls)]
 
-  if (length(baseUrl) == 1 && !is.null(ROWebApiEnv[[baseUrl]]$authHeader)) {
-    authHeader <- ROWebApiEnv[[baseUrl]]$authHeader
-    response <- method(url = url,
-                       config = config,
-                       handle = handle,
-                       body = body,
-                       encode = encode,
-                       httr::add_headers(Authorization = authHeader),
-                       ...)
+  envVarName <- getOption("ROhdsiWebApi.tokenEnvVar", default = "WEBAPI_TOKEN")
+  envToken   <- Sys.getenv(envVarName, unset = "")
+
+  authHeader <- if (nchar(envToken) > 0) {
+    httr::add_headers(`X-Api-Key` = envToken)
+  } else if (length(baseUrl) == 1 && !is.null(ROWebApiEnv[[baseUrl]]$authHeader)) {
+    httr::add_headers(Authorization = ROWebApiEnv[[baseUrl]]$authHeader)
   } else {
-    response <- method(url = url,
-                       config = config,
-                       handle = handle,
-                       body = body,
-                       encode = encode,
-                       ...)
+    NULL
   }
+
+  response <- method(url = url,
+                     config = config,
+                     handle = handle,
+                     body = body,
+                     encode = encode,
+                     authHeader,
+                     ...)
 
   # centralized http error handling for all requests
   if (httr::status_code(response) == 401) {
