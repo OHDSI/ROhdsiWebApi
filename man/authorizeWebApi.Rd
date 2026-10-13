@@ -2,10 +2,7 @@
 % Please edit documentation in R/Auth.R
 \name{authorizeWebApi}
 \alias{authorizeWebApi}
-\title{Authorize ROhdsiWebApi to access a protected instance of WebAPI Authorize the ROhdsiWebApi package
-to access WebApi on behalf of the user. This can be done with any of the auth methods described
-below. authorizeWebApi will use attempt to retrieve, cache, and update a token which will grant
-access to webAPI by all subsequent requests made by the package.}
+\title{Authorize access to a WebApi instance}
 \usage{
 authorizeWebApi(
   baseUrl,
@@ -22,6 +19,7 @@ authorizeWebApi(
 \itemize{
   \item {"db"}{Database authentication using Atlas/WebAPI built in auth}
   \item {"ad"}{Active Directory}
+  \item {"ldap"}{LDAP protocol}
   \item {"windows"}{Windows NT authentication}
 }
 The auth method must be enabled in the instance of WebAPI pointed to by
@@ -35,8 +33,8 @@ methods. By default the user will be prompted for their password when
 needed.}
 }
 \description{
-Authorize ROhdsiWebApi to access a protected instance of WebAPI Authorize the ROhdsiWebApi package
-to access WebApi on behalf of the user. This can be done with any of the auth methods described
+Certain WebAPI endpoints require user authentication. The user must authorize
+access WebApi on behalf of the user. This can be done with any of the auth methods described
 below. authorizeWebApi will use attempt to retrieve, cache, and update a token which will grant
 access to webAPI by all subsequent requests made by the package.
 }

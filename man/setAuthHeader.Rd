@@ -21,3 +21,24 @@ Manually set the authorization http header for a WebAPI baseUrl In some cases th
 manually set the authorization header. An authHeader is associated with a particular baseUrl and
 added to to the header of all http requests sent to that url by ROhdsiWebApi.
 }
+\details{
+An alternative to calling this function is to set an environment variable containing a raw API
+token (without the \code{"Bearer "} prefix). By default ROhdsiWebApi reads the \code{WEBAPI_TOKEN}
+environment variable, but this name can be overridden by setting the R option
+\code{ROhdsiWebApi.tokenEnvVar}. For example, to use a variable named
+\code{MY_INSTANCE_TOKEN}:
+
+\preformatted{
+options(ROhdsiWebApi.tokenEnvVar = "MY_INSTANCE_TOKEN")
+Sys.setenv(MY_INSTANCE_TOKEN = "eyJ...")
+}
+
+When the env var is set, it takes precedence over any token stored via
+\code{setAuthHeader()} or \code{authorizeWebApi()} and is applied globally to all WebAPI
+base URLs. This is useful for service accounts or non-interactive environments where the
+token is provisioned externally. Store it in \code{.Renviron}
+(e.g. \code{WEBAPI_TOKEN=eyJ...}) or set it at runtime via \code{Sys.setenv()}.
+}
+\seealso{
+\code{\link{authorizeWebApi}} for interactive JWT-based authentication.
+}

@@ -1,11 +1,14 @@
 
 test_that("get and set permsissions works", {
   baseUrl <- Sys.getenv("WEBAPI_TEST_SECURE_WEBAPI_URL") 
+  webApiUsername <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_NAME")
+  webApiPassword <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_PASSWORD")
+  skip_if(!all(nzchar(c(baseUrl, webApiUsername, webApiPassword))))
   
   authorizeWebApi(baseUrl = baseUrl,
                   authMethod = "db",
-                  webApiUsername = Sys.getenv("WEBAPI_TEST_ADMIN_USER_NAME"),
-                  webApiPassword = Sys.getenv("WEBAPI_TEST_ADMIN_USER_PASSWORD"))
+                  webApiUsername = webApiUsername,
+                  webApiPassword = webApiPassword)
   
   df <- getUserInformation(baseUrl) 
   
@@ -19,11 +22,14 @@ test_that("get and set permsissions works", {
 
 test_that("get my permissions", {
   baseUrl <- Sys.getenv("WEBAPI_TEST_SECURE_WEBAPI_URL") 
+  webApiUsername <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_NAME")
+  webApiPassword <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_PASSWORD")
+  skip_if(!all(nzchar(c(baseUrl, webApiUsername, webApiPassword))))
   
   authorizeWebApi(baseUrl = baseUrl,
                   authMethod = "db",
-                  webApiUsername = Sys.getenv("WEBAPI_TEST_ADMIN_USER_NAME"),
-                  webApiPassword = Sys.getenv("WEBAPI_TEST_ADMIN_USER_PASSWORD"))
+                  webApiUsername = webApiUsername,
+                  webApiPassword = webApiPassword)
   
   df <- getMyPermissions(baseUrl) 
   
@@ -34,11 +40,14 @@ test_that("get my permissions", {
 
 test_that("get Users From Role", {
   baseUrl <- Sys.getenv("WEBAPI_TEST_SECURE_WEBAPI_URL") 
+  webApiUsername <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_NAME")
+  webApiPassword <- Sys.getenv("WEBAPI_TEST_ADMIN_USER_PASSWORD")
+  skip_if(!all(nzchar(c(baseUrl, webApiUsername, webApiPassword))))
   
   authorizeWebApi(baseUrl = baseUrl,
                   authMethod = "db",
-                  webApiUsername = Sys.getenv("WEBAPI_TEST_ADMIN_USER_NAME"),
-                  webApiPassword = Sys.getenv("WEBAPI_TEST_ADMIN_USER_PASSWORD"))
+                  webApiUsername = webApiUsername,
+                  webApiPassword = webApiPassword)
   
   df <- getUsersFromRole(baseUrl = baseUrl, roleId = 10) 
   

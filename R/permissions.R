@@ -82,6 +82,29 @@ getMyPermissions <- function(baseUrl) {
                           .data$permission))
 }
 
+#' Who am I
+#' 
+#' Calls the WebAPI /user/me endpoint and returns the login and name of the
+#' current user.
+#'
+#' @template baseUrl 
+#'
+#' @return A list with elements `login` and `name`.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' whoAmI(baseUrl = "http://server.org:80/WebAPI")
+#' }
+whoAmI <- function(baseUrl) {
+  .checkBaseUrl(baseUrl)
+  me <- .GET(paste0(baseUrl, "/user/me")) %>%
+    httr::content()
+  
+  return(list(login = me$user$login,
+              name = me$user$name))
+}
+
 #' Is WebAPI using authentication/authorization
 #'
 #' @template baseUrl 
@@ -94,10 +117,8 @@ getMyPermissions <- function(baseUrl) {
 #' securityEnabled(baseUrl = "http://server.org:80/WebAPI")
 #' }
 securityEnabled <- function(baseUrl) {
-  .checkBaseUrl(baseUrl)
-  url <- paste0(baseUrl, "/info")
-  response <- httr::GET(url)
-  httr::content(response)$configuration$security$enabled
+ # Security is always enabled in WebAPI 3.0, you may interact as 'anonymous' if you do not provide a auth context.
+ return(TRUE)
 }
 
 
