@@ -47,39 +47,27 @@ getUserInformation <- function(baseUrl) {
 
 #' Get my permissions
 #' 
-#' This function returns the authorized users permission for
-#' definitions like cohort, incidence rate, characterization..
+#' Returns the permissions granted to the current user (or the anonymous principal when not logged
+#' in), such as \code{read:cohort-definition} or \code{create:conceptset}.
 #'
 #' @template baseUrl 
 #'
-#' @return A tibble with user ID, user name, and permission information when available.
+#' @return A tibble with one row per permission and a single \code{permission} column, sorted
+#'         alphabetically.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' getUserInformations(baseUrl = "http://server.org:80/WebAPI")
+#' getMyPermissions(baseUrl = "http://server.org:80/WebAPI")
 #' }
 getMyPermissions <- function(baseUrl) {
   .checkBaseUrl(baseUrl)
-  if (!securityEnabled(baseUrl)) {
-    message("Security is not enabled so there are no permissions to return.")
-    return(invisible(NULL))
-  }
-  myPermissions <- .GET(paste0(baseUrl, "/user/me")) %>%
+  me <- .GET(paste0(baseUrl, "/user/me")) %>%
     httr::content()
   
-  myPermissions <- myPermissions$permissions
+  permissions <- as.character(unlist(me$authz$permissions))
   
-  permissions <- c()
-  for (i in (1:length(myPermissions))) {
-    data <- myPermissions[[i]] %>% purrr::flatten() %>% as.data.frame() %>% dplyr::tibble()
-    permissions <- dplyr::bind_rows(permissions,
-                                    data)
-  }
-  
-  return(permissions %>% 
-           dplyr::arrange(.data$id,
-                          .data$permission))
+  return(dplyr::tibble(permission = sort(permissions)))
 }
 
 #' Who am I

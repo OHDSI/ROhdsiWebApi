@@ -11,14 +11,15 @@ getMyPermissions(baseUrl)
 "http://server.org:80/WebAPI".}
 }
 \value{
-A tibble with user ID, user name, and permission information when available.
+A tibble with one row per permission and a single \code{permission} column, sorted
+        alphabetically.
 }
 \description{
-This function returns the authorized users permission for
-definitions like cohort, incidence rate, characterization..
+Returns the permissions granted to the current user (or the anonymous principal when not logged
+in), such as \code{read:cohort-definition} or \code{create:conceptset}.
 }
 \examples{
 \dontrun{
-getUserInformations(baseUrl = "http://server.org:80/WebAPI")
+getMyPermissions(baseUrl = "http://server.org:80/WebAPI")
 }
 }

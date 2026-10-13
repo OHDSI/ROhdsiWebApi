@@ -14,7 +14,7 @@ converted to JSON expression by function and posted into the WebApi.}
 "http://server.org:80/WebAPI".}
 
 \item{category}{These are the categories in WebApi. The valid string options are 'conceptSet', 
-'cohort', 'characterization', 'pathway, 'incidenceRate', 'estimation', 'prediction'.}
+'cohort', 'characterization', 'pathway, 'incidenceRate'.}
 }
 \description{
 Update definition

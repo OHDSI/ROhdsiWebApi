@@ -161,16 +161,14 @@ for (i in (1:nrow(arguments))) { #i = 1
 ## Create ROhdsiWebApi's internal package data ---------------------
 library(dplyr)
 
-StandardCategories <- tibble(categoryStandard = c("conceptSet", "cohort", "incidenceRate", "estimation", "prediction", "characterization", "pathway")) %>% 
+StandardCategories <- tibble(categoryStandard = c("conceptSet", "cohort", "incidenceRate", "characterization", "pathway")) %>% 
   mutate(categoryFirstUpper = paste0(toupper(substr(.data$categoryStandard, 1, 1)), 
                                      substr(.data$categoryStandard, 2, nchar(.data$categoryStandard)))) %>% 
   mutate(categoryUrl = case_when(categoryStandard == "conceptSet" ~ "conceptset", 
                                                categoryStandard == "cohort" ~ "cohortdefinition", 
                                                categoryStandard == "characterization" ~ "cohort-characterization", 
                                                categoryStandard == "pathway" ~ "pathway-analysis", 
-                                               categoryStandard == "incidenceRate" ~ "ir", 
-                                               categoryStandard == "estimation" ~ "estimation", 
-                                 categoryStandard == "prediction" ~ "prediction", TRUE ~ "")) %>% 
+                                               categoryStandard == "incidenceRate" ~ "ir", TRUE ~ "")) %>% 
   mutate(categoryUrlGetExpression = case_when(categoryStandard == "conceptSet" ~ "expression", 
                                               categoryStandard == "characterization" ~ "design", TRUE ~ "")) %>%
   mutate(categoryUrlGenerationInformation = case_when(categoryStandard == "cohort" ~ "info", 

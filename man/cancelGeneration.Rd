@@ -17,7 +17,7 @@ definition for the category in a WebApi instance.}
 Configuration page}
 
 \item{category}{These are the categories in WebApi. The valid string options are 'conceptSet', 
-'cohort', 'characterization', 'pathway, 'incidenceRate', 'estimation', 'prediction'.}
+'cohort', 'characterization', 'pathway, 'incidenceRate'.}
 }
 \value{
 Error message if invoke failed.

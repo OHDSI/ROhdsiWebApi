@@ -1,0 +1,39 @@
+{
+    "user": {
+        "id": 1000,
+        "login": "na\\testuser",
+        "name": "NA\\testuser"
+    },
+    "authz": {
+        "permissions": [
+            "create:cohort-definition",
+            "create:conceptset",
+            "list",
+            "read:cohort-definition",
+            "read:conceptset"
+        ],
+        "cohortDefinitionAccess": {
+            "2": {
+                "accessTypes": [],
+                "isOwner": true
+            }
+        },
+        "conceptSetAccess": {
+            "2": {
+                "accessTypes": [],
+                "isOwner": true
+            }
+        },
+        "cohortCharacterizationAccess": {},
+        "feAnalysisAccess": {},
+        "pathwayAccess": {},
+        "incidenceRateAccess": {},
+        "reusableAccess": {},
+        "sourceAccess": {
+            "3": [
+                "READ",
+                "WRITE"
+            ]
+        }
+    }
+}

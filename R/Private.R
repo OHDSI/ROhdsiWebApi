@@ -32,12 +32,10 @@
   dplyr::tibble(categoryStandard = c("conceptSet",
                                      "cohort",
                                      "incidenceRate",
-                                     "estimation",
-                                     "prediction",
                                      "characterization",
                                      "pathway")) %>% dplyr::mutate(categoryFirstUpper = paste0(toupper(substr(.data$categoryStandard, 1, 1)), substr(.data$categoryStandard, 2, nchar(.data$categoryStandard)))) %>% dplyr::mutate(categoryUrl = dplyr::case_when(categoryStandard ==
     "conceptSet" ~ "conceptset", categoryStandard == "cohort" ~ "cohortdefinition", categoryStandard ==
-    "characterization" ~ "cohort-characterization", categoryStandard == "pathway" ~ "pathway-analysis", categoryStandard == "incidenceRate" ~ "ir", categoryStandard == "estimation" ~ "estimation", categoryStandard == "prediction" ~ "prediction", TRUE ~ "")) %>% dplyr::mutate(categoryUrlGetExpression = dplyr::case_when(categoryStandard ==
+    "characterization" ~ "cohort-characterization", categoryStandard == "pathway" ~ "pathway-analysis", categoryStandard == "incidenceRate" ~ "ir", TRUE ~ "")) %>% dplyr::mutate(categoryUrlGetExpression = dplyr::case_when(categoryStandard ==
     "conceptSet" ~ "expression", categoryStandard == "characterization" ~ "design", TRUE ~ "")) %>%
     dplyr::mutate(categoryUrlGenerationInformation = dplyr::case_when(categoryStandard == "cohort" ~
       "info", categoryStandard == "characterization" ~ "generation", categoryStandard == "pathway" ~

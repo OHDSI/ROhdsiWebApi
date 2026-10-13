@@ -15,7 +15,7 @@ name of the definition. WebApi checks for validity, such as uniqueness, absence
 of unacceptable character etc. An error might be thrown.}
 
 \item{category}{These are the categories in WebApi. The valid string options are 'conceptSet', 
-'cohort', 'characterization', 'pathway, 'incidenceRate', 'estimation', 'prediction'.}
+'cohort', 'characterization', 'pathway, 'incidenceRate'.}
 
 \item{definition}{An R list object containing the expression for the specification. This will be
 converted to JSON expression by function and posted into the WebApi. Note: only

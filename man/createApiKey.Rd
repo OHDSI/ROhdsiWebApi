@@ -33,9 +33,20 @@ The caller must already be authenticated — either via
 \code{\link{authorizeWebApi}}, \code{\link{setAuthHeader}}, or the
 \code{WEBAPI_TOKEN} environment variable — before calling this function.
 
-The key is authenticated using the \code{X-API-KEY} request header on
-subsequent calls. See \code{\link{setAuthHeader}} for details on the
-\code{WEBAPI_TOKEN} env var approach.
+The key is sent in the \code{X-API-KEY} request header, not in an \code{Authorization} header.
+To use it, store it in the \code{WEBAPI_TOKEN} environment variable, for example in
+\code{.Renviron} (\code{WEBAPI_TOKEN=wa_<identifier>_<secret>}) or with \code{Sys.setenv()}. When
+set, it takes precedence over any JWT from \code{\link{authorizeWebApi}} or
+\code{\link{setAuthHeader}} and applies to all WebAPI base URLs. This suits service accounts and
+non-interactive environments.
+
+The variable name can be changed with the R option \code{ROhdsiWebApi.tokenEnvVar}, for example to
+keep keys for several WebAPI instances:
+
+\preformatted{
+options(ROhdsiWebApi.tokenEnvVar = "MY_INSTANCE_TOKEN")
+Sys.setenv(MY_INSTANCE_TOKEN = "wa_<identifier>_<secret>")
+}
 }
 \seealso{
 \code{\link{authorizeWebApi}}, \code{\link{setAuthHeader}}
