@@ -20,7 +20,5 @@ idCharacterization <- 2
 
 # Non-generatable categories
 idConceptSet <- 2
-# estimation
-# prediction
 
 

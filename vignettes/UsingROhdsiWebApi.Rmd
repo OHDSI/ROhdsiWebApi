@@ -28,7 +28,9 @@ knitr::opts_chunk$set(
 library(ROhdsiWebApi)
 library(dplyr)
 
-baseUrl <- 'http://api.ohdsi.org:8080/WebAPI'
+# Server-backed chunks only run when ROHDSIWEBAPI_VIGNETTE_URL is set, e.g. http://localhost:8080/WebAPI
+baseUrl <- Sys.getenv("ROHDSIWEBAPI_VIGNETTE_URL", unset = "")
+live <- nzchar(baseUrl)
 
 ```
 
@@ -48,7 +50,7 @@ This document will attempt to explain how ROhdsiWebApi maybe used to achieve rep
 To successfully use ROhdsiWebApi, it is necessary to have an active ['WebApi'](https://github.com/ohdsi/webapi) endpoint with a known baseUrl such as "http://server.org:80/WebAPI". ['WebApi'](https://github.com/ohdsi/webapi) has many functional categories. 
 
 To ensure reproducibility of work it is best to know the version of the WebApi (i.e. Atlas backend) being used. An easy way to do that is (and output maybe included in your study results)
-```{r eval=TRUE, echo = TRUE}
+```{r eval=live, echo = TRUE}
 
 version <- ROhdsiWebApi:::getWebApiVersion(baseUrl = baseUrl)
 message1 <- paste0('This Vignette was created using WebApi version: ', 
@@ -61,18 +63,18 @@ priorityVocabulary <- ROhdsiWebApi::getPriorityVocabularyKey(baseUrl = baseUrl)
 
 ```
 
-The object `version` will show your webApi version. Example: `r message1`. 
+The object `version` will show your webApi version. Example: `r if (live) message1`. 
 
-```{r eval=TRUE, echo = TRUE}
+```{r eval=live, echo = TRUE}
 
 cdmSources
 
 ```
-The priority vocabulary for the WebApi is `r priorityVocabulary`.
+The priority vocabulary for the WebApi is `r if (live) priorityVocabulary`.
 
 We can also perform checks on the WebApi, example - we may want to see if the 'HCUP' & 'SYNPUF1K' is a valid SourceKey in the current webApi.
 
-```{r eval=TRUE, echo = TRUE}
+```{r eval=live, echo = TRUE}
 
 ROhdsiWebApi::isValidSourceKey(sourceKeys = c('HCUP', 'SYNPUF1K'), baseUrl = baseUrl)
 
@@ -159,7 +161,7 @@ knitr::kable(verb)
 
 A function to get `Definition` is `getDefinitionMetaData` function. This is a general function that is able to get the Metadata for all specifications within a category.
 
-```{r eval=TRUE, echo = TRUE}
+```{r eval=live, echo = TRUE}
 
 ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, 
                                      category = 'cohort') %>%
@@ -171,33 +173,12 @@ ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl,
 
 The same output may be achieved using
 
-```{r eval=TRUE, echo = TRUE}
+```{r eval=live, echo = TRUE}
 
 ROhdsiWebApi::getCohortDefinitionsMetaData(baseUrl = baseUrl) %>% 
   arrange(.data$id) %>% 
   rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
   head() 
-```
-
-Similar approach may be used for all categories as follows:
-
-```{r eval=TRUE, echo = TRUE}
-
-ROhdsiWebApi::getDefinitionsMetadata(baseUrl = baseUrl, 
-                                     category = 'estimation') %>% 
-  arrange(.data$id) %>% 
-  rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  head()
-```
-
-
-
-```{r eval=TRUE, echo = TRUE}
-
-ROhdsiWebApi::getEstimationDefinitionsMetaData(baseUrl = baseUrl) %>% 
-  arrange(.data$id) %>% 
-  rename_all(.funs = SqlRender::camelCaseToTitleCase) %>% 
-  head()
 ```
 
 This is a generic framework that applies to most WebApi categories, and supports different types of CRUD functionalities like deleteConceptSetDefinition() vs deleteDefinition(category = 'conceptSet').
@@ -277,7 +258,7 @@ Lets call this concept set expression - '[ROhdsiWebApi Vignette] Rheumatoid Arth
 `r conceptSetName = '[ROhdsiWebApi Vignette] Rheumatoid Arthritis concept set'`
 
 We will need to check if there is a concept set by this name.
-```{r eval=TRUE, echo = TRUE, warning=FALSE, message = FALSE}
+```{r eval=live, echo = TRUE, warning=FALSE, message = FALSE}
 # check if there is a concept set by this name, if yes, delete it
 exists <- ROhdsiWebApi::existsConceptSetName(conceptSetName = conceptSetName, baseUrl = baseUrl)
 exists
@@ -287,7 +268,7 @@ exists
 If there is a concept set with this name, then we could either choose another name - or delete the old 
 concept set. For this vignette we have chosen to delete any matching concept set as follows:
 
-```{r eval=TRUE, echo = TRUE, warning=FALSE, message = FALSE}
+```{r eval=live, echo = TRUE, warning=FALSE, message = FALSE}
 if (!isFALSE(exists)) {
   ROhdsiWebApi::deleteConceptSetDefinition(conceptSetId = exists$id, baseUrl = baseUrl)
 }
@@ -367,10 +348,4 @@ Example: We may want to know if a certain cohort specification has been generate
 Please review ['Characterization - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/Characterization.html). 
 
 
-## Population Level Effect Estimation
-Please review ['Population Level Effect Estimation - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/PopulationLevelEstimation.html). 
-
-
-# Patient Level Prediction
-Please review ['Patient Level Prediction - The Book of OHDSI'](https://ohdsi.github.io/TheBookOfOhdsi/PatientLevelPrediction.html).
 

@@ -11,7 +11,7 @@ getDefinitionsMetadata(baseUrl, category)
 "http://server.org:80/WebAPI".}
 
 \item{category}{These are the categories in WebApi. The valid string options are 'conceptSet', 
-'cohort', 'characterization', 'pathway, 'incidenceRate', 'estimation', 'prediction'.}
+'cohort', 'characterization', 'pathway, 'incidenceRate'.}
 }
 \value{
 A tibble of specification metadata.
@@ -22,8 +22,8 @@ Retrieve the meta data for WebApi definitions of a certain category
 \details{
 Obtains the meta data of WebApi specifications such as id, name, created/modified details, hash
 object, etc for a certain category. The following function categories are supported. Concept-set,
-Cohort-definition, Cohort-characterization, Pathway-analysis, Incidence rate (ir), estimation and
-prediction. This function is useful to retrieve the current specifications.
+Cohort-definition, Cohort-characterization, Pathway-analysis and Incidence rate (ir). This function
+is useful to retrieve the current specifications.
 }
 \examples{
 \dontrun{

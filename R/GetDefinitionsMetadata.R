@@ -20,8 +20,8 @@
 #' @details
 #' Obtains the meta data of WebApi specifications such as id, name, created/modified details, hash
 #' object, etc for a certain category. The following function categories are supported. Concept-set,
-#' Cohort-definition, Cohort-characterization, Pathway-analysis, Incidence rate (ir), estimation and
-#' prediction. This function is useful to retrieve the current specifications.
+#' Cohort-definition, Cohort-characterization, Pathway-analysis and Incidence rate (ir). This function
+#' is useful to retrieve the current specifications.
 #'
 #' @template BaseUrl
 #' @template Category
@@ -60,7 +60,7 @@ getDefinitionsMetadata <- function(baseUrl, category) {
   # there is difference in how WebApi returns for 'cohort-characterization' and 'pathway-analysis' the
   # return are nested within 'content' group1 and group2 are categories that are different based on how
   # WebApi is implemented.
-  group1 <- c("conceptSet", "cohort", "incidenceRate", "estimation", "prediction")
+  group1 <- c("conceptSet", "cohort", "incidenceRate")
   group2 <- c("characterization", "pathway")
   if (category %in% group1) {
     request <- httr::content(request)

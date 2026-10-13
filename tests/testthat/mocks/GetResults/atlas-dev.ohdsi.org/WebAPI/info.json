@@ -1,11 +1,11 @@
 {
-    "version": "2.9.0",
+    "version": "3.0.0",
     "buildInfo": {
-        "artifactVersion": "WebAPI 2.9.0",
+        "artifactVersion": "WebAPI 3.0.0-SNAPSHOT",
         "build": "NA",
-        "timestamp": "Fri May 21 19:08:12 UTC 2021",
-        "branch": "origin/released",
-        "commitId": "e79dd6d",
+        "timestamp": "2026-10-12T12:00:00Z",
+        "branch": "origin/master",
+        "commitId": "0000000",
         "atlasRepositoryInfo": {
             "milestoneId": 22,
             "releaseTag": "*"
@@ -16,22 +16,11 @@
         }
     },
     "configuration": {
-        "security": {
-            "samlActivated": false,
-            "enabled": false,
-            "samlEnabled": false
-        },
-        "vocabulary": {
-            "solrEnabled": false
-        },
         "plugins": {
             "atlasgisEnabled": false
         },
         "person": {
             "viewDatesPermitted": false
-        },
-        "heracles": {
-            "smallCellCount": "5"
         }
     }
 }

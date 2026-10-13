@@ -212,35 +212,3 @@ pathwayResults2 <-
              category = 'pathway')
 # post
 
-
-
-# estimation ------------------------------------------------------------
-estimation_metaData <-
-  getEstimationDefinitionsMetaData(baseUrl = baseUrl)
-estimation_isValid <-
-  isValidEstimationId(estimationIds = c(1, 4242343), baseUrl = baseUrl)
-estimation_nameExists <-
-  existsEstimationName(estimationName = 'OHDSI Video Estimation', baseUrl = baseUrl)
-estimation_nameExists2 <-
-  existsEstimationName(estimationName = 'fdsdsfsdfdsfsdfsdweqjhjiu', baseUrl = baseUrl)
-estimationDefinition <-
-  getEstimationDefinition(baseUrl = baseUrl, estimationId = 1)
-estimationDefDelete <-
-  deleteEstimationDefinition(baseUrl = baseUrl, estimationId = 147)
-# post
-
-
-# prediction ------------------------------------------------------------
-prediction_metaData <-
-  getPredictionDefinitionsMetaData(baseUrl = baseUrl)
-prediction_isValid <-
-  isValidPredictionId(predictionIds = c(2, 4242343), baseUrl = baseUrl)
-prediction_nameExists <-
-  existsPredictionName(predictionName = 'OHDSI Video PLP', baseUrl = baseUrl)
-prediction_nameExists2 <-
-  existsPredictionName(predictionName = 'fdsdsfsdfdsfsdfsdweqjhjiu', baseUrl = baseUrl)
-predictionDefinition <-
-  getPredictionDefinition(baseUrl = baseUrl, predictionId = 1)
-predictionDefDelete <-
-  deletePredictionDefinition(baseUrl = baseUrl, predictionId = 182)
-# post

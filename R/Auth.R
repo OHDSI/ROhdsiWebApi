@@ -9,10 +9,10 @@
 #' @template BaseUrl
 #' @param authMethod       The method used for authentication to WebAPI. Options are
 #'                         \itemize{
-#'                           \item {"db"}{Database authentication using Atlas/WebAPI built in auth}
-#'                           \item {"ad"}{Active Directory}
-#'                           \item {"ldap"}{LDAP protocol}
-#'                           \item {"windows"}{Windows NT authentication}
+#'                           \item \code{"db"}: Database authentication using Atlas/WebAPI built in auth
+#'                           \item \code{"ad"}: Active Directory
+#'                           \item \code{"ldap"}: LDAP protocol
+#'                           \item \code{"windows"}: Windows NT authentication
 #'                         }
 #'                         The auth method must be enabled in the instance of WebAPI pointed to by
 #'                         baseUrl.
@@ -140,9 +140,11 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
   .parseLoginResult(r)
 }
 
-#' Manually set the authorization http header for a WebAPI baseUrl In some cases the user may want to
-#' manually set the authorization header. An authHeader is associated with a particular baseUrl and
-#' added to to the header of all http requests sent to that url by ROhdsiWebApi.
+#' Manually set the JWT authorization header for a WebAPI baseUrl
+#'
+#' Use this to bypass \code{\link{authorizeWebApi}} when you already have a JWT. The header is
+#' associated with a particular baseUrl and is sent as the \code{Authorization} header on all http
+#' requests ROhdsiWebApi makes to that url.
 #'
 #' @template BaseUrl
 #' @param authHeader   A character string containing a Bearer token that will be added to the header of
@@ -150,22 +152,8 @@ authorizeWebApi <- function(baseUrl, authMethod, webApiUsername = NULL, webApiPa
 #'                     lxd9n2nsdsd2329km23mexjop02m23m23mmmsioxiis0")
 #'
 #' @details
-#' An alternative to calling this function is to set an environment variable containing a raw API
-#' token (without the \code{"Bearer "} prefix). By default ROhdsiWebApi reads the \code{WEBAPI_TOKEN}
-#' environment variable, but this name can be overridden by setting the R option
-#' \code{ROhdsiWebApi.tokenEnvVar}. For example, to use a variable named
-#' \code{MY_INSTANCE_TOKEN}:
-#'
-#' \preformatted{
-#' options(ROhdsiWebApi.tokenEnvVar = "MY_INSTANCE_TOKEN")
-#' Sys.setenv(MY_INSTANCE_TOKEN = "eyJ...")
-#' }
-#'
-#' When the env var is set, it takes precedence over any token stored via
-#' \code{setAuthHeader()} or \code{authorizeWebApi()} and is applied globally to all WebAPI
-#' base URLs. This is useful for service accounts or non-interactive environments where the
-#' token is provisioned externally. Store it in \code{.Renviron}
-#' (e.g. \code{WEBAPI_TOKEN=eyJ...}) or set it at runtime via \code{Sys.setenv()}.
+#' If an API key is configured through the \code{WEBAPI_TOKEN} environment variable (see
+#' \code{\link{createApiKey}}), it is sent instead and the header set here is not used.
 #'
 #' @seealso \code{\link{authorizeWebApi}} for interactive JWT-based authentication.
 #'
@@ -182,7 +170,7 @@ setAuthHeader <- function(baseUrl, authHeader) {
 #'
 #' Calls \code{POST /user/apikeys} to generate a new long-lived API key for the
 #' authenticated user. The \code{rawKey} value is printed to the console and
-#' returned invisibly — it is returned by WebAPI \strong{exactly once} and
+#' returned invisibly - it is returned by WebAPI \strong{exactly once} and
 #' cannot be retrieved again. Store it securely immediately (e.g. in
 #' \code{.Renviron} as \code{WEBAPI_TOKEN=<rawKey>}).
 #'
@@ -196,13 +184,24 @@ setAuthHeader <- function(baseUrl, authHeader) {
 #'   \code{keyIdentifier}, \code{name}, \code{createdAt}, and \code{expiresAt}.
 #'
 #' @details
-#' The caller must already be authenticated — either via
+#' The caller must already be authenticated - either via
 #' \code{\link{authorizeWebApi}}, \code{\link{setAuthHeader}}, or the
-#' \code{WEBAPI_TOKEN} environment variable — before calling this function.
+#' \code{WEBAPI_TOKEN} environment variable - before calling this function.
 #'
-#' The key is authenticated using the \code{X-API-KEY} request header on
-#' subsequent calls. See \code{\link{setAuthHeader}} for details on the
-#' \code{WEBAPI_TOKEN} env var approach.
+#' The key is sent in the \code{X-API-KEY} request header, not in an \code{Authorization} header.
+#' To use it, store it in the \code{WEBAPI_TOKEN} environment variable, for example in
+#' \code{.Renviron} (\code{WEBAPI_TOKEN=wa_<identifier>_<secret>}) or with \code{Sys.setenv()}. When
+#' set, it takes precedence over any JWT from \code{\link{authorizeWebApi}} or
+#' \code{\link{setAuthHeader}} and applies to all WebAPI base URLs. This suits service accounts and
+#' non-interactive environments.
+#'
+#' The variable name can be changed with the R option \code{ROhdsiWebApi.tokenEnvVar}, for example to
+#' keep keys for several WebAPI instances:
+#'
+#' \preformatted{
+#' options(ROhdsiWebApi.tokenEnvVar = "MY_INSTANCE_TOKEN")
+#' Sys.setenv(MY_INSTANCE_TOKEN = "wa_<identifier>_<secret>")
+#' }
 #'
 #' @seealso \code{\link{authorizeWebApi}}, \code{\link{setAuthHeader}}
 #'
@@ -239,7 +238,7 @@ createApiKey <- function(baseUrl, name, description = NULL, expiresInDays = NULL
   message("Created at:     ", format(as.POSIXct(result$createdAt, origin = "1970-01-01", tz = "UTC"), "%Y-%m-%d %H:%M:%S UTC"))
   message("Expires at:     ", if (is.null(result$expiresAt)) "never" else format(as.POSIXct(result$expiresAt, origin = "1970-01-01", tz = "UTC"), "%Y-%m-%d %H:%M:%S UTC"))
   message("")
-  message("Raw key (store this now — it will not be shown again):")
+  message("Raw key (store this now - it will not be shown again):")
   message(result$rawKey)
 
   invisible(result)

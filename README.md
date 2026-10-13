@@ -52,8 +52,6 @@ package is designed to interface directly with WebApi.
 | ConceptSet       | Functions for interfacing with ConceptSet in WebApi       |
 | Cohort           | Functions for interfacing with Cohort in WebApi           |
 | IncidenceRate    | Functions for interfacing with IncidenceRate in WebApi    |
-| Estimation       | Functions for interfacing with Estimation in WebApi       |
-| Prediction       | Functions for interfacing with Prediction in WebApi       |
 | Characterization | Functions for interfacing with Characterization in WebApi |
 | Pathway          | Functions for interfacing with Pathway in WebApi          |
 

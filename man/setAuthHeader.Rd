@@ -2,9 +2,7 @@
 % Please edit documentation in R/Auth.R
 \name{setAuthHeader}
 \alias{setAuthHeader}
-\title{Manually set the authorization http header for a WebAPI baseUrl In some cases the user may want to
-manually set the authorization header. An authHeader is associated with a particular baseUrl and
-added to to the header of all http requests sent to that url by ROhdsiWebApi.}
+\title{Manually set the JWT authorization header for a WebAPI baseUrl}
 \usage{
 setAuthHeader(baseUrl, authHeader)
 }
@@ -17,27 +15,13 @@ all http requests sent to baseUrl. (e.g. "Bearer
 lxd9n2nsdsd2329km23mexjop02m23m23mmmsioxiis0")}
 }
 \description{
-Manually set the authorization http header for a WebAPI baseUrl In some cases the user may want to
-manually set the authorization header. An authHeader is associated with a particular baseUrl and
-added to to the header of all http requests sent to that url by ROhdsiWebApi.
+Use this to bypass \code{\link{authorizeWebApi}} when you already have a JWT. The header is
+associated with a particular baseUrl and is sent as the \code{Authorization} header on all http
+requests ROhdsiWebApi makes to that url.
 }
 \details{
-An alternative to calling this function is to set an environment variable containing a raw API
-token (without the \code{"Bearer "} prefix). By default ROhdsiWebApi reads the \code{WEBAPI_TOKEN}
-environment variable, but this name can be overridden by setting the R option
-\code{ROhdsiWebApi.tokenEnvVar}. For example, to use a variable named
-\code{MY_INSTANCE_TOKEN}:
-
-\preformatted{
-options(ROhdsiWebApi.tokenEnvVar = "MY_INSTANCE_TOKEN")
-Sys.setenv(MY_INSTANCE_TOKEN = "eyJ...")
-}
-
-When the env var is set, it takes precedence over any token stored via
-\code{setAuthHeader()} or \code{authorizeWebApi()} and is applied globally to all WebAPI
-base URLs. This is useful for service accounts or non-interactive environments where the
-token is provisioned externally. Store it in \code{.Renviron}
-(e.g. \code{WEBAPI_TOKEN=eyJ...}) or set it at runtime via \code{Sys.setenv()}.
+If an API key is configured through the \code{WEBAPI_TOKEN} environment variable (see
+\code{\link{createApiKey}}), it is sent instead and the header set here is not used.
 }
 \seealso{
 \code{\link{authorizeWebApi}} for interactive JWT-based authentication.

@@ -212,13 +212,13 @@ tryCatch(getCdmSources(baseUrl),
 
 
 
-# API token via environment variable
+# API key via environment variable
 
-In non-interactive or service-account scenarios you may already have a Bearer
-token provisioned externally (e.g. from a secrets manager or CI environment).
-In that case you can skip `authorizeWebApi()` entirely by setting the
-`WEBAPI_TOKEN` environment variable to the raw token value — without the
-`"Bearer "` prefix.
+In non-interactive or service-account scenarios you may already have a WebAPI
+API key provisioned (see `createApiKey()`, or a secrets manager or CI
+environment). In that case you can skip `authorizeWebApi()` entirely by setting
+the `WEBAPI_TOKEN` environment variable to the key (`wa_<identifier>_<secret>`).
+The key is sent in the `X-API-KEY` request header.
 
 ROhdsiWebApi checks the env var before looking up any cached JWT, so it
 takes precedence across **all** base URLs. By default the env var name is
@@ -232,7 +232,7 @@ Add the following line to your `.Renviron` file (run `usethis::edit_r_environ()`
 to open it):
 
 ```
-WEBAPI_TOKEN=eyJhbGciOiJIUzI1NiJ9...
+WEBAPI_TOKEN=wa_<identifier>_<secret>
 ```
 
 Restart R for the change to take effect.
@@ -240,7 +240,7 @@ Restart R for the change to take effect.
 ## Option 2: Set at runtime
 
 ```{r, eval=FALSE}
-Sys.setenv(WEBAPI_TOKEN = "eyJhbGciOiJIUzI1NiJ9...")
+Sys.setenv(WEBAPI_TOKEN = "wa_<identifier>_<secret>")
 getCdmSources(baseUrl)
 ```
 
@@ -257,8 +257,8 @@ store each token in a differently-named env var and set
 `ROhdsiWebApi.tokenEnvVar` before each call:
 
 ```{r, eval=FALSE}
-Sys.setenv(WEBAPI_TOKEN_PROD = "eyJprod...")
-Sys.setenv(WEBAPI_TOKEN_DEV  = "eyJdev...")
+Sys.setenv(WEBAPI_TOKEN_PROD = "wa_<prod identifier>_<secret>")
+Sys.setenv(WEBAPI_TOKEN_DEV  = "wa_<dev identifier>_<secret>")
 
 options(ROhdsiWebApi.tokenEnvVar = "WEBAPI_TOKEN_PROD")
 getCdmSources(prodUrl)

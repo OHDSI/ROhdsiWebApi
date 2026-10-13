@@ -30,7 +30,8 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    rlang
+    rlang,
+    lifecycle
 Suggests:
     testthat,
     knitr,
@@ -46,4 +47,5 @@ NeedsCompilation: no
 Encoding: UTF-8
 VignetteBuilder: knitr
 Language: en-US
+RdMacros: lifecycle
 Config/roxygen2/version: 8.0.0

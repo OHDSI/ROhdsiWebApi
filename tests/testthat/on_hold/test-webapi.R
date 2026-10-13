@@ -70,7 +70,7 @@ testthat::test_that(desc = "Test isValidSourceKey", code = {
 
 testthat::test_that(desc = "Test .getStandardCategories", code = {
   standardCategories <- ROhdsiWebApi:::.getStandardCategories() %>% dplyr::arrange() %>% dplyr::pull(categoryStandard)
-  testthat::expect_setequal(object = standardCategories, expected = c("conceptSet","cohort","incidenceRate","estimation", "prediction","characterization","pathway"))
+  testthat::expect_setequal(object = standardCategories, expected = c("conceptSet","cohort","incidenceRate","characterization","pathway"))
 })
 
 testthat::test_that(desc = "Test getDefinitionsMetadata1", code = {
@@ -128,7 +128,7 @@ testthat::test_that("Test getDefinitionsMetadata2", {
 testthat::test_that("Test isValid1...", {
   testthat::skip_if(baseUrl == "")
   categories <- c("conceptSet","cohort","incidenceRate",
-                  "estimation","prediction","characterization",
+                  "characterization",
                   "pathway")
   arguments <- list(ids = -1, baseUrl = baseUrl)
   for (category in categories) {

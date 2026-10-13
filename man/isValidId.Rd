@@ -13,7 +13,7 @@ isValidId(ids, baseUrl, category)
 "http://server.org:80/WebAPI".}
 
 \item{category}{These are the categories in WebApi. The valid string options are 'conceptSet', 
-'cohort', 'characterization', 'pathway, 'incidenceRate', 'estimation', 'prediction'.}
+'cohort', 'characterization', 'pathway, 'incidenceRate'.}
 }
 \value{
 A logical vector indicating if an ID is valid.
