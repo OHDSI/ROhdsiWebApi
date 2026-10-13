@@ -43,7 +43,7 @@ Suggests:
 URL: https://ohdsi.github.io/ROhdsiWebApi/, https://github.com/OHDSI/ROhdsiWebApi
 BugReports: https://github.com/OHDSI/ROhdsiWebApi/issues
 NeedsCompilation: no
-RoxygenNote: 7.2.3
 Encoding: UTF-8
 VignetteBuilder: knitr
 Language: en-US
+Config/roxygen2/version: 8.0.0
